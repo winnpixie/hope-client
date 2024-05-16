@@ -14,11 +14,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class MinecraftAPI {
-    public static String API_URL = "https://api.mojang.com";
-    private static Gson gson = new GsonBuilder().create();
+    public static final String API_URL = "https://api.mojang.com";
+    private static final Gson gson = new GsonBuilder().create();
 
     public static Profile getProfile(String username) throws Exception {
-        String body = String.join("\n", sendGet(API_URL + "/users/profiles/minecraft/" + username));
+        String body = String.join("\n", get(API_URL + "/users/profiles/minecraft/" + username));
         return gson.fromJson(body, Profile.class);
     }
 
@@ -28,7 +28,7 @@ public class MinecraftAPI {
 
     private static List<Profile.NameEntry> getNameHistory(String uuid) throws Exception {
         List<Profile.NameEntry> entries = new ArrayList<>();
-        String body = String.join("\n", sendGet(API_URL + "/user/profiles/" + uuid + "/names"));
+        String body = String.join("\n", get(API_URL + "/user/profiles/" + uuid + "/names"));
         JsonArray array = gson.fromJson(body, JsonArray.class);
         array.forEach(elem -> {
             JsonObject obj = elem.getAsJsonObject();
@@ -41,7 +41,7 @@ public class MinecraftAPI {
         return entries;
     }
 
-    private static List<String> sendGet(String url) throws Exception {
+    private static List<String> get(String url) throws Exception {
         HttpURLConnection conn = null;
         try {
             conn = (HttpURLConnection) new URL(url).openConnection();

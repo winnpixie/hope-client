@@ -17,6 +17,6 @@ public class LBYBreaker extends RotationMode {
             return;
         }
 
-        event.setYaw((float) MathHelper.clamp(event.getYaw() + MathHelper.randomf(-15f, 15f), -180f, 180f));
+        event.setYaw(MathHelper.clamp(event.getYaw() + MathHelper.randomf(-15f, 15f), -180f, 180f));
     }
 }

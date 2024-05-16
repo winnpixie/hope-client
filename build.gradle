@@ -1,0 +1,51 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+group 'io.github.alerithe'
+version '0.1-dev'
+
+repositories {
+    mavenCentral()
+    maven { url 'https://litarvan.github.io/maven' }
+}
+
+configurations {
+    shaded
+
+    implementation.extendsFrom shaded
+}
+
+dependencies {
+    shaded 'javax.vecmath:vecmath:1.5.2'
+    shaded 'org.yaml:snakeyaml:1.31'
+    shaded 'fr.litarvan:openauth:1.1.3'
+
+    implementation fileTree('libraries/')
+    shaded fileTree('include/')
+}
+
+test {
+    useJUnitPlatform()
+}
+
+jar {
+    manifest {
+        from file('src/main/resources/META-INF/MANIFEST.MF')
+    }
+
+    from configurations.shaded.collect { it.isDirectory() ? it : zipTree(it) }
+}
+
+application {
+    run {
+        workingDir = 'run'
+        jvmArgs = [
+                '-Xmx4G', '-Xms4G',
+                '-Djava.library.path=../natives',
+                '-Dmc.email=', '-Dmc.pass='
+        ]
+        main = 'Start'
+    }
+}

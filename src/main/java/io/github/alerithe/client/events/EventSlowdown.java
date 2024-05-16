@@ -1,6 +1,7 @@
 package io.github.alerithe.client.events;
 
 import io.github.alerithe.events.CancellableEvent;
+import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 
 public class EventSlowdown extends CancellableEvent {
@@ -16,10 +17,10 @@ public class EventSlowdown extends CancellableEvent {
         }
     }
 
-    public static class Block extends EventSlowdown {
+    public static class Environment extends EventSlowdown {
         private final Block block;
 
-        public Block(Block block) {
+        public Environment(Block block) {
             this.block = block;
         }
 

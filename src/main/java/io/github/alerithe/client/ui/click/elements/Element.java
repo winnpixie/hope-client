@@ -15,7 +15,7 @@ public class Element {
     private int height;
     private int textColor;
     private int backgroundColor;
-    private List<Element> children;
+    private final List<Element> children;
 
     public Element(String text, int x, int y, int width, int height) {
         this.text = text;

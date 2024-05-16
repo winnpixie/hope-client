@@ -2,7 +2,6 @@ package io.github.alerithe.client;
 
 import com.github.creeper123123321.viafabric.ViaFabric;
 import fr.litarvan.openauth.microsoft.MicrosoftAuthenticationException;
-import fr.litarvan.openauth.microsoft.MicrosoftAuthenticator;
 import io.github.alerithe.client.extensions.IngameGui;
 import io.github.alerithe.client.features.commands.CommandManager;
 import io.github.alerithe.client.features.friends.FriendManager;
@@ -11,22 +10,22 @@ import io.github.alerithe.client.features.modules.ModuleManager;
 import io.github.alerithe.client.features.plugins.PluginManager;
 import io.github.alerithe.client.utilities.TTSManager;
 import io.github.alerithe.client.utilities.Wrapper;
-import net.minecraft.util.Session;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.File;
-import java.util.logging.Logger;
 
 public class Client {
-    public static Logger LOGGER = Logger.getGlobal();
-    public static String NAME = "Hope";
-    public static String BUILD = "41821";
+    public static final Logger LOGGER = LogManager.getLogger(Client.class);
+    public static final String NAME = "Hope";
+    public static final String BUILD = "0.1-dev";
+    public static final CommandManager COMMAND_MANAGER = new CommandManager();
+    public static final ModuleManager MODULE_MANAGER = new ModuleManager();
+    public static final KeybindManager KEYBIND_MANAGER = new KeybindManager();
+    public static final FriendManager FRIEND_MANAGER = new FriendManager();
+    public static final PluginManager PLUGIN_MANAGER = new PluginManager();
+    public static final TTSManager TTS_MANAGER = new TTSManager();
     public static File DATA_DIR;
-    public static CommandManager COMMAND_MANAGER = new CommandManager();
-    public static ModuleManager MODULE_MANAGER = new ModuleManager();
-    public static KeybindManager KEYBIND_MANAGER = new KeybindManager();
-    public static FriendManager FRIEND_MANAGER = new FriendManager();
-    public static PluginManager PLUGIN_MANAGER = new PluginManager();
-    public static TTSManager TTS_MANAGER = new TTSManager();
 
     public static void load() {
         DATA_DIR = new File(Wrapper.getMC().mcDataDir, NAME);

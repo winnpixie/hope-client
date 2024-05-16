@@ -1,0 +1,19 @@
+# Gradle
+.gradle/
+build/
+
+# IntelliJ
+.idea/
+*.iml
+
+# VS Code
+.vscode/
+
+# Minecraft
+natives/
+libraries/
+run/
+
+# Legally Gray Area
+src/
+!src/main/java/io/github/alerithe/

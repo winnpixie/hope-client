@@ -22,9 +22,7 @@ import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import org.lwjgl.opengl.GL11;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 public class NameTags extends Module {
     private final Property<Boolean> players = new Property<>("Players", new String[0], true);
@@ -51,15 +49,13 @@ public class NameTags extends Module {
 
     @Register
     private void onOverlayDraw(EventDraw.Overlay event) {
-        List<Entity> sorted = new ArrayList<>();
-        for (Entity entity : Wrapper.getWorld().loadedEntityList) {
-            if (qualifies(entity)) sorted.add(entity);
-        }
-        sorted.sort(Comparator.comparingDouble(entity -> -Wrapper.getPlayer().getDistanceSqToEntity(entity)));
+        List<Entity> entities = new ArrayList<>();
+        Map<Entity, float[]> projections = new HashMap<>();
 
-        for (Entity entity : sorted) {
-            GL11.glPushMatrix();
-            Wrapper.getMC().entityRenderer.setupCameraTransform(event.getPartialTicks(), 0);
+        GL11.glPushMatrix();
+        Wrapper.getMC().entityRenderer.setupCameraTransform(event.getPartialTicks(), 0);
+        for (Entity entity : Wrapper.getWorld().loadedEntityList) {
+            if (!qualifies(entity)) continue;
 
             double x = (MathHelper.lerpd(entity.prevPosX, entity.posX, event.getPartialTicks())
                     - Wrapper.getMC().getRenderManager().viewerPosX);
@@ -68,58 +64,67 @@ public class NameTags extends Module {
             double z = (MathHelper.lerpd(entity.prevPosZ, entity.posZ, event.getPartialTicks())
                     - Wrapper.getMC().getRenderManager().viewerPosZ);
 
-            float[] vector = VisualHelper.project((float) x, (float) y, (float) z);
-            Wrapper.getMC().entityRenderer.setupOverlayRendering();
-            if (vector != null && !(vector[2] < 0 || vector[2] >= 1)) {
-                GL11.glTranslatef(vector[0], vector[1], 0);
-                GL11.glScaled(0.5, 0.5, 0.5);
+            float[] projection = VisualHelper.project((float) x, (float) y, (float) z);
 
-                String text = entity.getDisplayName().getFormattedText();
-                if (entity instanceof EntityItem) {
-                    text = ((EntityItem) entity).getEntityItem().getDisplayName();
-                } else {
-                    Friend friend = Client.FRIEND_MANAGER.get(entity.getName());
-                    if (friend != null) {
-                        text = String.format("\247b%s", friend.getAliases()[0]);
-                    }
+            if (projection == null) continue;
+            if (projection[2] < 0f) continue;
+            if (projection[2] >= 1f) continue;
+
+            entities.add(entity);
+            projections.put(entity, projection);
+        }
+        Wrapper.getMC().entityRenderer.setupOverlayRendering();
+        GL11.glPopMatrix();
+        entities.sort(Comparator.comparingDouble(entity -> -Wrapper.getPlayer().getDistanceSqToEntity(entity)));
+
+        for (Entity entity : entities) {
+            String text = entity.getDisplayName().getFormattedText();
+            if (entity instanceof EntityItem) {
+                text = ((EntityItem) entity).getEntityItem().getDisplayName();
+            } else {
+                Friend friend = Client.FRIEND_MANAGER.get(entity.getName());
+                if (friend != null) {
+                    text = String.format("\247b%s", friend.getAliases()[0]);
                 }
-
-                if (ping.getValue() && entity instanceof EntityPlayer) {
-                    EntityPlayer player = (EntityPlayer) entity;
-                    if (player.getGameProfile() != null) {
-                        NetworkPlayerInfo npi = Wrapper.getNetInfo(player.getGameProfile().getId());
-                        if (npi != null) {
-                            text = String.format("\247a%dms\247r %s", npi.getResponseTime(), text);
-                        }
-                    }
-                }
-
-                if (health.getValue() && entity instanceof EntityLivingBase) {
-                    EntityLivingBase elb = (EntityLivingBase) entity;
-                    float percent = (elb.getHealth() + elb.getAbsorptionAmount()) / elb.getMaxHealth();
-
-                    char color = '9';
-                    if (percent <= 0.25) {
-                        color = 'c';
-                    } else if (percent <= 0.5) {
-                        color = '6';
-                    } else if (percent <= 0.75) {
-                        color = 'e';
-                    } else if (percent <= 1) {
-                        color = 'a';
-                    }
-
-                    text += String.format(" \247%s%dHP", color, MathHelper.ceil(elb.getHealth() + elb.getAbsorptionAmount()));
-                }
-
-                int width = Wrapper.getFontRenderer().getStringWidth(text);
-                VisualHelper.drawRect(-width / 2f - 2, -1, width / 2f + 2, 9, 0x77000000);
-                Wrapper.getFontRenderer().drawStringWithShadow(text, -width / 2f, 0, -1);
             }
 
+            if (ping.getValue() && entity instanceof EntityPlayer) {
+                EntityPlayer player = (EntityPlayer) entity;
+                if (player.getGameProfile() != null) {
+                    NetworkPlayerInfo npi = Wrapper.getNetInfo(player.getGameProfile().getId());
+                    if (npi != null) {
+                        text = String.format("\247a%dms\247r %s", npi.getResponseTime(), text);
+                    }
+                }
+            }
+
+            if (health.getValue() && entity instanceof EntityLivingBase) {
+                EntityLivingBase elb = (EntityLivingBase) entity;
+                float percent = (elb.getHealth() + elb.getAbsorptionAmount()) / elb.getMaxHealth();
+
+                char color = '9';
+                if (percent <= 0.25) {
+                    color = 'c';
+                } else if (percent <= 0.5) {
+                    color = '6';
+                } else if (percent <= 0.75) {
+                    color = 'e';
+                } else if (percent <= 1) {
+                    color = 'a';
+                }
+
+                text += String.format(" \247%s%dHP", color, MathHelper.ceil(elb.getHealth() + elb.getAbsorptionAmount()));
+            }
+
+            float[] position = projections.get(entity);
+            GL11.glPushMatrix();
+            GL11.glTranslatef(position[0], position[1], 0);
+            GL11.glScaled(0.5, 0.5, 0.5);
+            int width = Wrapper.getFontRenderer().getStringWidth(text);
+            VisualHelper.drawRect(-width / 2f - 2, -1, width / 2f + 2, 9, 0x77000000);
+            Wrapper.getFontRenderer().drawStringWithShadow(text, -width / 2f, 0, -1);
             GL11.glPopMatrix();
         }
-
     }
 
     @Register

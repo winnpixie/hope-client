@@ -30,7 +30,7 @@ public class ModuleManager extends FeatureManager<Module> {
         moduleDataDir = new File(Client.DATA_DIR, "modules");
         if (!moduleDataDir.exists()) {
             if (!moduleDataDir.mkdir()) {
-                Client.LOGGER.warning("Could not create modules directory (does it already exist?)!");
+                Client.LOGGER.warn("Could not create modules directory (does it already exist?)!");
             }
         }
 
@@ -51,7 +51,7 @@ public class ModuleManager extends FeatureManager<Module> {
         add(new Flight());
         add(new InventoryMove());
         add(new LongJump());
-        add(new NoSlowdown()); // TODO: Soul Sand, Water
+        add(new NoSlowdown()); // TODO: Water
         add(new SafeWalk());
         add(new Speed());
         add(new Spider()); // TODO: Finish/Fix?
@@ -65,7 +65,6 @@ public class ModuleManager extends FeatureManager<Module> {
         add(new Blink());
         add(new FastUse());
         add(new Freecam());
-        add(new GameSpeed());
         add(new InventoryCleaner()); // TODO: Finish
         add(new NoFall());
         add(new NoRotate());
@@ -98,6 +97,7 @@ public class ModuleManager extends FeatureManager<Module> {
         add(new Crasher());
         add(new CreativeDrop());
         add(new FireUnwork());
+        add(new GameSpeed());
         add(new LogSpammer());
         add(new MiddleClickFriend());
         add(new NoHunger());

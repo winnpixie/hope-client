@@ -16,7 +16,7 @@ public class PluginManager extends FeatureManager<Plugin> {
         setConfigFile(new File(Client.DATA_DIR, "plugins"));
         if (!getConfigFile().exists()) {
             if (!getConfigFile().mkdir()) {
-                Client.LOGGER.warning("Could not create plugins directory (does it already exist?)!");
+                Client.LOGGER.warn("Could not create plugins directory (does it already exist?)!");
             }
         }
 

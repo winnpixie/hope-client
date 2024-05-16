@@ -23,13 +23,13 @@ public class Pillar extends EntityESPMode {
 
     @Override
     public void onWorldDraw(EventDraw.World event) {
-        List<Entity> sorted = new ArrayList<>();
+        List<Entity> entities = new ArrayList<>();
         for (Entity entity : Wrapper.getWorld().loadedEntityList) {
-            if (module.qualifies(entity)) sorted.add(entity);
+            if (module.qualifies(entity)) entities.add(entity);
         }
-        sorted.sort(Comparator.comparingDouble(entity -> -Wrapper.getPlayer().getDistanceSqToEntity(entity)));
+        entities.sort(Comparator.comparingDouble(entity -> -Wrapper.getPlayer().getDistanceSqToEntity(entity)));
 
-        for (Entity entity : sorted) {
+        for (Entity entity : entities) {
             GL11.glPushMatrix();
             GL11.glDisable(GL11.GL_TEXTURE_2D);
             GL11.glEnable(GL11.GL_LINE_SMOOTH);
@@ -53,9 +53,9 @@ public class Pillar extends EntityESPMode {
             int color = 0xFFFFFFFF;
             if (module.showHealth.getValue() && entity instanceof EntityLivingBase) {
                 EntityLivingBase elb = (EntityLivingBase) entity;
-
-                try {
-                    float percent = (elb.getHealth() + elb.getAbsorptionAmount()) / elb.getMaxHealth();
+                float health = elb.getHealth() + elb.getAbsorptionAmount();
+                if (health > 0f) {
+                    float percent = health / elb.getMaxHealth();
 
                     color = 0xFF0099FF;
                     if (percent <= 0.25) {
@@ -67,9 +67,6 @@ public class Pillar extends EntityESPMode {
                     } else if (percent <= 1) {
                         color = 0xFF00FF00;
                     }
-
-                } catch (Exception e) { // To handle Division by 0 and what not
-                    e.printStackTrace();
                 }
             }
 

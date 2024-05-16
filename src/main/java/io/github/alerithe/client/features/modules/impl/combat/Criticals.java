@@ -11,9 +11,9 @@ import net.minecraft.network.play.client.C03PacketPlayer;
 public class Criticals extends Module {
     private final Property<Boolean> packets = new Property<>("Packets", new String[0], true);
 
+    // FIXME: This module only works on Odie, what did I do SO wrong??
     private final double[] offsets = {0.0625, 0.0, 0.000011, 0.0};
 
-    // FIXME: This module only works on Odie, what did I do SO wrong??
     public Criticals() {
         super("Criticals", new String[]{"crits"}, Type.COMBAT);
 

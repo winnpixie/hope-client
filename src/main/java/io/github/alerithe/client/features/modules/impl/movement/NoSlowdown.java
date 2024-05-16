@@ -7,6 +7,8 @@ import io.github.alerithe.client.features.properties.Property;
 import io.github.alerithe.client.utilities.Wrapper;
 import io.github.alerithe.events.CallOrder;
 import io.github.alerithe.events.Register;
+import net.minecraft.block.BlockSoulSand;
+import net.minecraft.block.BlockWeb;
 import net.minecraft.network.play.client.C07PacketPlayerDigging;
 import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement;
 import net.minecraft.util.BlockPos;
@@ -26,6 +28,12 @@ public class NoSlowdown extends Module {
     @Register
     private void onItemSlowdown(EventSlowdown.Item event) {
         event.setCancelled(true);
+    }
+
+    @Register
+    private void onEnvironmentSlowdown(EventSlowdown.Environment event) {
+        if (event.getBlock() instanceof BlockWeb) event.setCancelled(true);
+        if (event.getBlock() instanceof BlockSoulSand) event.setCancelled(true);
     }
 
     @Register(CallOrder.LAST)
