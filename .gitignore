@@ -15,5 +15,7 @@ libraries/
 run/
 
 # Legally Gray Area
-src/
-!src/main/java/io/github/alerithe/
+src/main/java/net/minecraft
+src/main/java/net/minecraftforge
+src/main/java/optifine/
+src/main/resources/

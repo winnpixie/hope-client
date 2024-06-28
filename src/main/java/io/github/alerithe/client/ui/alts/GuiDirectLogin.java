@@ -1,6 +1,7 @@
 package io.github.alerithe.client.ui.alts;
 
 import com.mojang.authlib.exceptions.AuthenticationException;
+import fr.litarvan.openauth.microsoft.MicrosoftAuthenticationException;
 import io.github.alerithe.client.utilities.Wrapper;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiMainMenu;
@@ -106,11 +107,16 @@ public class GuiDirectLogin extends GuiScreen {
                 message = "\247aLogging in...";
                 new Thread(() -> {
                     try {
-                        mc.setSession(Wrapper.createMojangSession(username.getText(), password.getText()));
+                        if (isShiftKeyDown()) {
+                            mc.setSession(Wrapper.createMojangSession(username.getText(), password.getText()));
+                        } else {
+                            mc.setSession(Wrapper.createMicrosoftSession(username.getText(), password.getText()));
+                        }
+
                         message = String.format("\247eCurrent User : \247r%s", mc.getSession().getUsername());
-                    } catch (AuthenticationException e) {
-                        message = String.format("\247c%s", e.getMessage());
+                    } catch (AuthenticationException | MicrosoftAuthenticationException e) {
                         e.printStackTrace();
+                        message = String.format("\247c%s", e.getMessage());
                     }
                 }).start();
             } else {

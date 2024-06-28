@@ -12,14 +12,14 @@ public class Timer {
     }
 
     public long getElapsed() {
-        return getNow() - prevMs;
+        return getTime() - prevMs;
     }
 
     public void update() {
-        prevMs = getNow();
+        prevMs = getTime();
     }
 
-    public static long getNow() {
+    public static long getTime() {
         return System.nanoTime() / 1000000;
     }
 }

@@ -21,7 +21,9 @@ import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.network.login.server.S02PacketLoginSuccess;
+import net.minecraft.network.play.client.C16PacketClientStatus;
 import net.minecraft.network.play.server.S03PacketTimeUpdate;
+import net.minecraft.network.play.server.S37PacketStatistics;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 
@@ -34,6 +36,7 @@ import java.util.stream.Collectors;
 public class HUD extends Module {
     private final Property<Boolean> fps = new Property<>("FPS", new String[]{"showfps"}, true);
     private final Property<Boolean> ping = new Property<>("Ping", new String[]{"showping"}, true);
+    private final Property<Boolean> realPing = new Property<>("RealPing", new String[]{"showrealping"}, true);
     private final Property<Boolean> tps = new Property<>("TPS", new String[]{"showtps"}, true);
     private final Property<Boolean> arrayList = new Property<>("ArrayList", new String[]{"showenabled"}, true);
     private final Property<Boolean> potions = new Property<>("Effects", new String[]{"showpotions"}, true);
@@ -55,17 +58,22 @@ public class HUD extends Module {
     private final List<Long> rightClicks = new CopyOnWriteArrayList<>();
     private final List<Long> ticks = new CopyOnWriteArrayList<>();
 
+    private boolean awaitingStatResponse;
+    private long statRequestTime;
+    private long statResponseTime;
+
     public HUD() {
         super("HUD", new String[0], Type.VISUAL);
 
         getPropertyManager().add(fps);
         getPropertyManager().add(ping);
+        getPropertyManager().add(realPing);
         getPropertyManager().add(tps);
-        getPropertyManager().add(arrayList);
-        getPropertyManager().add(potions);
-        getPropertyManager().add(coords);
         getPropertyManager().add(cps);
         getPropertyManager().add(rcps);
+        getPropertyManager().add(arrayList);
+        getPropertyManager().add(coords);
+        getPropertyManager().add(potions);
     }
 
     @Override
@@ -87,16 +95,21 @@ public class HUD extends Module {
                 String text = String.format("\247o%s\247r", Client.NAME);
 
                 // FPS
-                if (fps.getValue()) {
-                    text += String.format(" \2477[\247f%d FPS\2477]", Minecraft.getDebugFPS());
-                }
+                if (fps.getValue()) text += String.format(" \2477[\247f%d FPS\2477]", Minecraft.getDebugFPS());
 
                 // Ping
                 if (ping.getValue()) {
+                    text += " \2477[\247f";
                     NetworkPlayerInfo npi = Wrapper.getNetInfo(Wrapper.getPlayer().getGameProfile().getId());
                     if (npi != null) {
-                        text += String.format(" \2477[\247f%dms\2477]", npi.getResponseTime());
+                        text += String.format("%dms", npi.getResponseTime());
                     }
+
+                    if (realPing.getValue()) {
+                        text += String.format(" : %dms", statResponseTime);
+                    }
+
+                    text += "\2477]";
                 }
 
                 // TPS
@@ -111,14 +124,11 @@ public class HUD extends Module {
                 // CPS
                 if (cps.getValue() || rcps.getValue()) {
                     text += " \2477[\247f";
-                    if (cps.getValue()) {
-                        text += leftClicks.size();
-                    }
+                    if (cps.getValue()) text += leftClicks.size();
 
                     if (rcps.getValue()) {
-                        if (cps.getValue()) {
-                            text += " : ";
-                        }
+                        if (cps.getValue()) text += " : ";
+
                         text += rightClicks.size();
                     }
                     text += "\2477]";
@@ -182,9 +192,17 @@ public class HUD extends Module {
 
     @Register
     private void onTick(EventTick event) {
+        if (realPing.getValue()) {
+            if (!awaitingStatResponse) {
+                Wrapper.sendPacket(new C16PacketClientStatus(C16PacketClientStatus.EnumState.REQUEST_STATS));
+                statRequestTime = Timer.getTime();
+                awaitingStatResponse = true;
+            }
+        }
+
         List<Long> old = new ArrayList<>();
         for (long ms : leftClicks) {
-            if (Timer.getNow() - ms >= 1000) {
+            if (Timer.getTime() - ms >= 1000) {
                 old.add(ms);
             }
         }
@@ -192,7 +210,7 @@ public class HUD extends Module {
 
         old.clear();
         for (long ms : rightClicks) {
-            if (Timer.getNow() - ms >= 1000) {
+            if (Timer.getTime() - ms >= 1000) {
                 old.add(ms);
             }
         }
@@ -205,12 +223,12 @@ public class HUD extends Module {
 
     @Register
     private void onLeftClick(EventInput.LeftClick event) {
-        leftClicks.add(Timer.getNow());
+        leftClicks.add(Timer.getTime());
     }
 
     @Register
     private void onRightClick(EventInput.RightClick event) {
-        rightClicks.add(Timer.getNow());
+        rightClicks.add(Timer.getTime());
     }
 
     @Register
@@ -220,7 +238,14 @@ public class HUD extends Module {
         }
 
         if (event.getPacket() instanceof S03PacketTimeUpdate) {
-            ticks.add(Timer.getNow());
+            ticks.add(Timer.getTime());
+        }
+
+        if (event.getPacket() instanceof S37PacketStatistics) {
+            if (awaitingStatResponse) {
+                statResponseTime = Timer.getTime() - statRequestTime;
+                awaitingStatResponse = false;
+            }
         }
     }
 }
