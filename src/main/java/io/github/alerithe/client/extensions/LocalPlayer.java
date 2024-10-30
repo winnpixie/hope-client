@@ -104,13 +104,14 @@ public class LocalPlayer extends EntityPlayerSP {
         float yaw = rotationYawHead;
         float forward = movementInput.moveForward;
         float strafe = movementInput.moveStrafe;
-        float factor = forward > 0 ? 0.5f : forward < 0 ? -0.5f : 1;
+        float strafeFactor = forward > 0 ? 0.5f : forward < 0 ? -0.5f : 1;
 
         if (strafe > 0) {
-            yaw -= 90f * factor;
+            yaw -= 90f * strafeFactor;
         } else if (strafe < 0) {
-            yaw += 90f * factor;
+            yaw += 90f * strafeFactor;
         }
+
         if (forward < 0) {
             yaw += 180f;
         }

@@ -60,12 +60,48 @@ public class Element {
         this.width = width;
     }
 
+    public int getMaxWidth() {
+        int minX = x;
+        int maxX = x + width;
+
+        for (Element child : children) {
+            minX = MathHelper.min(minX, child.x);
+            maxX = MathHelper.max(maxX, child.x + child.width);
+        }
+
+        if (minX > maxX) {
+            minX += maxX;
+            maxX = minX - maxX;
+            minX -= maxX;
+        }
+
+        return maxX - minX;
+    }
+
     public int getHeight() {
         return height;
     }
 
     public void setHeight(int height) {
         this.height = height;
+    }
+
+    public int getMaxHeight() {
+        int minY = y;
+        int maxY = y + height;
+
+        for (Element child : children) {
+            minY = MathHelper.min(minY, child.y);
+            maxY = MathHelper.max(maxY, child.y + child.height);
+        }
+
+        if (minY > maxY) {
+            minY += maxY;
+            maxY = minY - maxY;
+            minY -= maxY;
+        }
+
+        return maxY - minY;
     }
 
     public int getTextColor() {
@@ -86,24 +122,6 @@ public class Element {
 
     public List<Element> getChildren() {
         return children;
-    }
-
-    public int getTotalHeight() {
-        int minY = y;
-        int maxY = y + height;
-
-        for (Element child : children) {
-            minY = MathHelper.min(minY, child.y);
-            maxY = MathHelper.max(maxY, child.y + child.height);
-        }
-
-        if (minY > maxY) {
-            minY += maxY;
-            maxY = minY - maxY;
-            minY -= maxY;
-        }
-
-        return maxY - minY;
     }
 
     public boolean isInBounds(int x, int y) {

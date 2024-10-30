@@ -52,7 +52,7 @@ public class Window extends Element {
     }
 
     @Override
-    public int getTotalHeight() {
+    public int getMaxHeight() {
         if (!open) {
             int minY = getY();
             int maxY = getY() + getHeight();
@@ -66,7 +66,7 @@ public class Window extends Element {
             return maxY - minY;
         }
 
-        return super.getTotalHeight();
+        return super.getMaxHeight();
     }
 
     @Override
@@ -77,7 +77,7 @@ public class Window extends Element {
             int y = mouseY + offsetY;
 
             setX(MathHelper.clamp(x, 1, display.getScaledWidth() - getWidth() - 1));
-            setY(MathHelper.clamp(y, 1, display.getScaledHeight() - getTotalHeight() - 1));
+            setY(MathHelper.clamp(y, 1, display.getScaledHeight() - getMaxHeight() - 1));
         }
 
         int offset = getHeight();

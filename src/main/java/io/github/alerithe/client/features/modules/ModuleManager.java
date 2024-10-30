@@ -74,6 +74,7 @@ public class ModuleManager extends FeatureManager<Module> {
         add(new ChatPlus());
         add(new ClickUI());
         add(new EntityESP());
+        add(new F5360());
         add(new FullBright());
         add(new HUD());
         add(new NameTags());

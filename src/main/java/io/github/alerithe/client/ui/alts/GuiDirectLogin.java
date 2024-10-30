@@ -32,7 +32,7 @@ public class GuiDirectLogin extends GuiScreen {
         username.setFocused(true);
         password = new GuiPasswordField(1, fontRenderer, width / 2 - 100, height / 2 + 10, 200, 20);
         password.setMaxStringLength(32767);
-        buttonList.add(new GuiButton(0, width / 2 - 100, height / 2 + 35, "Log In"));
+        buttonList.add(new GuiButton(0, width / 2 - 100, height / 2 + 35, "Login w/ MS (Shift = MOJ)"));
         buttonList.add(new GuiButton(1, width / 2 - 100, height / 2 + 55, "Import USER:PASS"));
         buttonList.add(new GuiButton(2, width / 2 - 100, height / 2 + 75, "Exit"));
     }

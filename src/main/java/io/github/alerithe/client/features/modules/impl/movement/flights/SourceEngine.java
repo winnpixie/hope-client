@@ -12,16 +12,12 @@ public class SourceEngine extends FlightMode {
 
     @Override
     public void onPreUpdate(EventUpdate.Pre event) {
+        Wrapper.getPlayer().setSpeed(Wrapper.getPlayer().isUserMoving() ? module.moveSpeed.getValue() : 0);
 
-        if (!Wrapper.getPlayer().isUserMoving()) {
-            Wrapper.getPlayer().motionY = 0;
-            Wrapper.getPlayer().setSpeed(0);
-            return;
-        }
+        float forward = Math.signum(Wrapper.getPlayer().movementInput.moveForward);
+        Wrapper.getPlayer().motionY = -MathHelper.deg2Rad * Wrapper.getPlayer().rotationPitch * forward;
 
-        Wrapper.getPlayer().setSpeed(module.moveSpeed.getValue());
-        Wrapper.getPlayer().motionY = -MathHelper.deg2Rad * Wrapper.getPlayer().rotationPitch;
-
+        if (forward == 0F) return;
         if (Wrapper.getPlayer().rotationPitch >= 90.0 || Wrapper.getPlayer().rotationPitch <= -90.0) {
             Wrapper.getPlayer().setSpeed(0);
         }
