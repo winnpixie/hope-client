@@ -192,6 +192,8 @@ public class HUD extends Module {
 
     @Register
     private void onTick(EventTick event) {
+        if (!event.isInGame()) return;
+
         if (realPing.getValue()) {
             if (!awaitingStatResponse) {
                 Wrapper.sendPacket(new C16PacketClientStatus(C16PacketClientStatus.EnumState.REQUEST_STATS));
