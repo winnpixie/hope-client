@@ -3,8 +3,8 @@ package io.github.alerithe.client.features.modules.impl.miscellaneous;
 import io.github.alerithe.client.events.EventTick;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.features.modules.impl.combat.AntiBot;
-import io.github.alerithe.client.features.properties.Property;
-import io.github.alerithe.client.features.properties.impl.NumberProperty;
+import io.github.alerithe.client.features.properties.impl.BooleanProperty;
+import io.github.alerithe.client.features.properties.impl.IntProperty;
 import io.github.alerithe.client.utilities.Wrapper;
 import io.github.alerithe.events.Register;
 import net.minecraft.entity.player.EntityPlayer;
@@ -12,10 +12,10 @@ import net.minecraft.network.play.client.C03PacketPlayer;
 import net.minecraft.network.play.client.C0APacketAnimation;
 
 public class Crasher extends Module {
-    private final Property<Boolean> boxer = new Property<>("Boxer", new String[0], true);
-    private final NumberProperty<Integer> bpt = new NumberProperty<>("BoxersPerTick", new String[]{"bpt"}, 100, 1, Integer.MAX_VALUE);
-    private final Property<Boolean> paralyze = new Property<>("Paralyze", new String[0], true);
-    private final NumberProperty<Integer> ppt = new NumberProperty<>("ParaPerTick", new String[]{"ppt"}, 100, 1, Integer.MAX_VALUE);
+    private final BooleanProperty boxer = new BooleanProperty("Boxer", new String[0], true);
+    private final IntProperty bpt = new IntProperty("BoxersPerTick", new String[]{"bpt"}, 100, 1, Integer.MAX_VALUE);
+    private final BooleanProperty paralyze = new BooleanProperty("Paralyze", new String[0], true);
+    private final IntProperty ppt = new IntProperty("ParaPerTick", new String[]{"ppt"}, 100, 1, Integer.MAX_VALUE);
 
     public Crasher() {
         super("Crasher", new String[0], Type.MISCELLANEOUS);

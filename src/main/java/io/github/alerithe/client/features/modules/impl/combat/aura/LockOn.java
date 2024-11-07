@@ -3,10 +3,10 @@ package io.github.alerithe.client.features.modules.impl.combat.aura;
 import io.github.alerithe.client.events.EventUpdate;
 import io.github.alerithe.client.features.modules.impl.combat.KillAura;
 import io.github.alerithe.client.utilities.MathHelper;
-import io.github.alerithe.client.utilities.Timer;
+import io.github.alerithe.client.utilities.MsTimer;
 
 public class LockOn extends AuraMode {
-    private Timer timer = new Timer();
+    private final MsTimer timer = new MsTimer();
 
     public LockOn(KillAura module) {
         super("LockOn", new String[0], module);
@@ -19,7 +19,7 @@ public class LockOn extends AuraMode {
         if (!module.near.isEmpty() && module.target == null) module.target = module.near.get(0);
 
         if (module.target == null) return;
-        if (!timer.hasPassed(1000 / (long) MathHelper.randomd(module.minAps.getValue(), module.maxAps.getValue())))
+        if (!timer.hasPassed(1000 / MathHelper.getRandomInt(module.minAps.getValue(), module.maxAps.getValue())))
             return;
 
         module.attacking = true;

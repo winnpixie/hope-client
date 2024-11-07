@@ -2,12 +2,12 @@ package io.github.alerithe.client.features.modules.impl.movement;
 
 import io.github.alerithe.client.events.EventUpdate;
 import io.github.alerithe.client.features.modules.Module;
-import io.github.alerithe.client.features.properties.impl.NumberProperty;
+import io.github.alerithe.client.features.properties.impl.DoubleProperty;
 import io.github.alerithe.client.utilities.Wrapper;
 import io.github.alerithe.events.Register;
 
 public class LongJump extends Module {
-    private final NumberProperty<Double> strength = new NumberProperty<Double>("Boost", new String[0], 3.3d, 0.1d, Double.MAX_VALUE);
+    private final DoubleProperty strength = new DoubleProperty("Boost", new String[0], 3.3, 0.1, Double.MAX_VALUE);
 
     private boolean boost;
 

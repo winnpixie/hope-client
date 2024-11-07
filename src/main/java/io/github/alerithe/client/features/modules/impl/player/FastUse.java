@@ -2,14 +2,14 @@ package io.github.alerithe.client.features.modules.impl.player;
 
 import io.github.alerithe.client.events.EventUpdate;
 import io.github.alerithe.client.features.modules.Module;
-import io.github.alerithe.client.features.properties.impl.NumberProperty;
+import io.github.alerithe.client.features.properties.impl.IntProperty;
 import io.github.alerithe.client.utilities.Wrapper;
 import io.github.alerithe.events.Register;
 import net.minecraft.item.*;
 import net.minecraft.network.play.client.C03PacketPlayer;
 
 public class FastUse extends Module {
-    private final NumberProperty<Integer> useTicks = new NumberProperty<>("UseTicks", new String[]{"ticks"}, 15, 0, 32);
+    private final IntProperty useTicks = new IntProperty("UseTicks", new String[]{"ticks"}, 15, 0, 32);
 
     public FastUse() {
         super("FastUse", new String[]{"fasteat"}, Type.PLAYER);

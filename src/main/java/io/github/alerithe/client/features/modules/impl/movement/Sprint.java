@@ -2,14 +2,14 @@ package io.github.alerithe.client.features.modules.impl.movement;
 
 import io.github.alerithe.client.events.EventUpdate;
 import io.github.alerithe.client.features.modules.Module;
-import io.github.alerithe.client.features.properties.Property;
+import io.github.alerithe.client.features.properties.impl.BooleanProperty;
 import io.github.alerithe.client.utilities.Wrapper;
 import io.github.alerithe.events.CallOrder;
 import io.github.alerithe.events.Register;
 import net.minecraft.potion.Potion;
 
 public class Sprint extends Module {
-    private Property<Boolean> omniDir = new Property<>("OmniDir", new String[]{"omni"}, true);
+    private final BooleanProperty omniDir = new BooleanProperty("OmniDir", new String[]{"omni"}, true);
 
     public Sprint() {
         super("Sprint", new String[]{"autosprint"}, Type.MOVEMENT);

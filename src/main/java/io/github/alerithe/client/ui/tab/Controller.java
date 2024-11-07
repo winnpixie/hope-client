@@ -2,7 +2,9 @@ package io.github.alerithe.client.ui.tab;
 
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.features.properties.Property;
-import io.github.alerithe.client.features.properties.impl.NumberProperty;
+import io.github.alerithe.client.features.properties.impl.BooleanProperty;
+import io.github.alerithe.client.features.properties.impl.DoubleProperty;
+import io.github.alerithe.client.features.properties.impl.IntProperty;
 import io.github.alerithe.client.features.properties.impl.ObjectProperty;
 import io.github.alerithe.client.utilities.MathHelper;
 import org.lwjgl.input.Keyboard;
@@ -27,17 +29,15 @@ public class Controller extends Component {
                         break;
                     case PROPERTY:
                         Property<?> property = getContainer().getProperty();
-                        if (property.getValue() instanceof Boolean) {
-                            Property<Boolean> prop = (Property<Boolean>) property;
+                        if (property instanceof BooleanProperty) {
+                            BooleanProperty prop = (BooleanProperty) property;
                             prop.setValue(!prop.getValue());
-                        } else if (property instanceof NumberProperty) {
-                            if (property.getValue() instanceof Integer) {
-                                NumberProperty<Integer> prop = (NumberProperty<Integer>) property;
-                                prop.setValue(prop.getValue() - 1);
-                            } else if (property.getValue() instanceof Double) {
-                                NumberProperty<Double> prop = (NumberProperty<Double>) property;
-                                prop.setValue(MathHelper.formatd(prop.getValue() - 0.1, 1));
-                            }
+                        } else if (property instanceof IntProperty) {
+                            IntProperty prop = (IntProperty) property;
+                            prop.setValue(prop.getValue() - 1);
+                        } else if (property instanceof DoubleProperty) {
+                            DoubleProperty prop = (DoubleProperty) property;
+                            prop.setValue(MathHelper.truncate(prop.getValue() - 0.1, 1));
                         } else if (property instanceof ObjectProperty) {
                             ObjectProperty prop = (ObjectProperty) property;
                             int index = prop.getValues().indexOf(prop.getValue());
@@ -58,17 +58,15 @@ public class Controller extends Component {
                         break;
                     case PROPERTY:
                         Property<?> property = getContainer().getProperty();
-                        if (property.getValue() instanceof Boolean) {
-                            Property<Boolean> prop = (Property<Boolean>) property;
+                        if (property instanceof BooleanProperty) {
+                            BooleanProperty prop = (BooleanProperty) property;
                             prop.setValue(!prop.getValue());
-                        } else if (property instanceof NumberProperty) {
-                            if (property.getValue() instanceof Integer) {
-                                NumberProperty<Integer> prop = (NumberProperty<Integer>) property;
-                                prop.setValue(prop.getValue() + 1);
-                            } else if (property.getValue() instanceof Double) {
-                                NumberProperty<Double> prop = (NumberProperty<Double>) property;
-                                prop.setValue(MathHelper.formatd(prop.getValue() + 0.1, 1));
-                            }
+                        } else if (property instanceof IntProperty) {
+                            IntProperty prop = (IntProperty) property;
+                            prop.setValue(prop.getValue() + 1);
+                        } else if (property instanceof DoubleProperty) {
+                            DoubleProperty prop = (DoubleProperty) property;
+                            prop.setValue(MathHelper.truncate(prop.getValue() + 0.1, 1));
                         } else if (property instanceof ObjectProperty) {
                             ObjectProperty prop = (ObjectProperty) property;
                             int index = prop.getValues().indexOf(prop.getValue());

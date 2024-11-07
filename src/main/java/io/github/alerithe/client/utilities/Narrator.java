@@ -6,11 +6,11 @@ import com.sun.speech.freetts.VoiceManager;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class TTSManager {
-    private final List<String> speechQueue = new CopyOnWriteArrayList<>();
+public class Narrator {
+    private final List<String> messageQueue = new CopyOnWriteArrayList<>();
 
     private Voice voice;
-    private Thread speechThread;
+    private Thread narrationThread;
     private boolean running;
 
     public void load() {
@@ -18,37 +18,40 @@ public class TTSManager {
         voice = VoiceManager.getInstance().getVoice("kevin16");
         voice.allocate();
 
-        voice.setRate(130F);
-        voice.setPitch(60F);
-        (speechThread = new Thread(() -> {
+        // Theoretically, this is the most "average" man voice.
+        voice.setRate(150f);
+        voice.setPitch(130f);
+        voice.setPitchRange(50f);
+
+        (narrationThread = new Thread(() -> {
             running = true;
 
             while (running) {
-                if (!speechQueue.isEmpty()) {
-                    voice.speak(speechQueue.get(0));
-                    speechQueue.remove(0);
-                }
+                if (messageQueue.isEmpty()) continue;
+
+                voice.speak(messageQueue.get(0));
+                messageQueue.remove(0);
             }
         })).start();
     }
 
-    public String getCurrentMessage() {
-        return speechQueue.isEmpty() ? "" : speechQueue.get(0);
+    public String getActiveSpeech() {
+        return messageQueue.isEmpty() ? "" : messageQueue.get(0);
     }
 
-    public void queueText(String message) {
-        speechQueue.add(message);
+    public void narrate(String message) {
+        messageQueue.add(message);
     }
 
     public void unload() {
         running = false;
 
         try {
-            speechThread.join();
+            narrationThread.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
+        } finally {
+            voice.deallocate();
         }
-
-        voice.deallocate();
     }
 }

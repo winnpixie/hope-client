@@ -2,6 +2,7 @@ package io.github.alerithe.client.features.commands.impl;
 
 import io.github.alerithe.client.Client;
 import io.github.alerithe.client.features.commands.Command;
+import io.github.alerithe.client.features.commands.ErrorMessages;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.utilities.Wrapper;
 
@@ -13,13 +14,13 @@ public class CommandToggle extends Command {
     @Override
     public void execute(String[] args) {
         if (args.length < 1) {
-            Wrapper.printChat("\247cNot enough arguments.");
+            Wrapper.printChat(ErrorMessages.NOT_ENOUGH_ARGS);
             return;
         }
 
-        Module module = Client.MODULE_MANAGER.get(args[0]);
+        Module module = Client.MODULE_MANAGER.find(args[0]);
         if (module == null) {
-            Wrapper.printChat(String.format("\247cNo such module '%s'.", args[0]));
+            Wrapper.printChat(ErrorMessages.INVALID_TARGET);
             return;
         }
 

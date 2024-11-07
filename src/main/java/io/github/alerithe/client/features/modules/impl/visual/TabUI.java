@@ -24,11 +24,11 @@ public class TabUI extends Module {
 
     @Register(CallOrder.UNIMPORTANT)
     private void onOverlayDraw(EventDraw.Overlay event) {
-        if (!Wrapper.getGameSettings().showDebugInfo) container.getRenderer().draw(event.getPartialTicks());
+        if (!Wrapper.getSettings().showDebugInfo) container.getRenderer().draw(event.getPartialTicks());
     }
 
     @Register
     private void onKeyPress(EventInput.KeyPress event) {
-        if (!Wrapper.getGameSettings().showDebugInfo) container.getController().onKeyPress(event.getKey());
+        if (!Wrapper.getSettings().showDebugInfo) container.getController().onKeyPress(event.getKey());
     }
 }

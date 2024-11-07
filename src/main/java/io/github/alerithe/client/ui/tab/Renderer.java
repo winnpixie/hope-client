@@ -31,13 +31,13 @@ public class Renderer extends Component {
     private void drawCategories() {
         int width = 0;
         for (Module.Type type : Module.Type.values()) {
-            width = MathHelper.max(width, Wrapper.getFontRenderer().getStringWidth(type.getLabel().toUpperCase()) + 4);
+            width = MathHelper.max(width, Wrapper.getTextRenderer().getStringWidth(type.getLabel().toUpperCase()) + 4);
         }
 
         int y = 11;
         for (Module.Type type : Module.Type.values()) {
             VisualHelper.drawRect(1, y, 1 + width, y + 12, getContainer().getType() == type ? 0xFF990000 : 0xFF222222);
-            Wrapper.getFontRenderer().drawStringWithShadow(type.getLabel(), 3, y + 2, -1);
+            Wrapper.getTextRenderer().drawStringWithShadow(type.getLabel(), 3, y + 2, -1);
             y += 12;
         }
     }
@@ -46,13 +46,13 @@ public class Renderer extends Component {
         List<Module> modules = getContainer().getModules();
         int width = 0;
         for (Module module : modules) {
-            width = MathHelper.max(width, Wrapper.getFontRenderer().getStringWidth(module.getName().toUpperCase()) + 4);
+            width = MathHelper.max(width, Wrapper.getTextRenderer().getStringWidth(module.getName().toUpperCase()) + 4);
         }
 
         int y = 11;
         for (Module module : modules) {
             VisualHelper.drawRect(1, y, 1 + width, y + 12, getContainer().getModule() == module ? 0xFF990000 : 0xFF222222);
-            Wrapper.getFontRenderer().drawStringWithShadow(module.getName(), 3, y + 2, module.isEnabled() ? -1 : 0xFFAAAAAA);
+            Wrapper.getTextRenderer().drawStringWithShadow(module.getName(), 3, y + 2, module.isEnabled() ? -1 : 0xFFAAAAAA);
             y += 12;
         }
     }
@@ -61,13 +61,13 @@ public class Renderer extends Component {
         List<Property<?>> properties = getContainer().getProperties();
         int width = 0;
         for (Property<?> property : properties) {
-            width = MathHelper.max(width, Wrapper.getFontRenderer().getStringWidth(format(property).toUpperCase()) + 4);
+            width = MathHelper.max(width, Wrapper.getTextRenderer().getStringWidth(format(property).toUpperCase()) + 4);
         }
 
         int y = 11;
         for (Property<?> property : properties) {
             VisualHelper.drawRect(1, y, 1 + width, y + 12, getContainer().getProperty() == property ? 0xFF990000 : 0xFF222222);
-            Wrapper.getFontRenderer().drawStringWithShadow(format(property), 3, y + 2, 0xFFAAAAAA);
+            Wrapper.getTextRenderer().drawStringWithShadow(format(property), 3, y + 2, 0xFFAAAAAA);
             y += 12;
         }
     }

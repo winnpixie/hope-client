@@ -3,11 +3,11 @@ package io.github.alerithe.client.features.modules.impl.combat.aura;
 import io.github.alerithe.client.events.EventUpdate;
 import io.github.alerithe.client.features.modules.impl.combat.KillAura;
 import io.github.alerithe.client.utilities.MathHelper;
-import io.github.alerithe.client.utilities.Timer;
+import io.github.alerithe.client.utilities.MsTimer;
 
 public class Switch extends AuraMode {
-    private Timer timer = new Timer();
-    private Timer switchTimer = new Timer();
+    private final MsTimer timer = new MsTimer();
+    private final MsTimer switchTimer = new MsTimer();
     private int index;
 
     public Switch(KillAura module) {
@@ -26,7 +26,7 @@ public class Switch extends AuraMode {
         index %= module.near.size();
         module.target = module.near.get(index);
 
-        if (!timer.hasPassed(1000 / (long) MathHelper.randomd(module.minAps.getValue(), module.maxAps.getValue())))
+        if (!timer.hasPassed(1000 / MathHelper.getRandomInt(module.minAps.getValue(), module.maxAps.getValue())))
             return;
 
         module.attacking = true;

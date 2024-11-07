@@ -28,28 +28,28 @@ import java.util.UUID;
 public class Wrapper {
     private static final MicrosoftAuthenticator MICROSOFT_AUTHENTICATOR = new MicrosoftAuthenticator();
 
-    public static Minecraft getMC() {
+    public static Minecraft getGame() {
         return Minecraft.getMinecraft();
     }
 
-    public static FontRenderer getFontRenderer() {
-        return getMC().fontRenderer;
+    public static FontRenderer getTextRenderer() {
+        return getGame().fontRenderer;
     }
 
     public static PlayerControllerMP getPlayerController() {
-        return getMC().playerController;
+        return getGame().playerController;
     }
 
-    public static GameSettings getGameSettings() {
-        return getMC().gameSettings;
+    public static GameSettings getSettings() {
+        return getGame().gameSettings;
     }
 
     public static LocalPlayer getPlayer() {
-        return getMC().player;
+        return getGame().player;
     }
 
     public static WorldClient getWorld() {
-        return getMC().world;
+        return getGame().world;
     }
 
     public static NetworkPlayerInfo getNetInfo(UUID uuid) {
@@ -65,7 +65,7 @@ public class Wrapper {
     }
 
     public static void printChat(String message) {
-        getMC().ingameGUI.getChatGUI().printChatMessage(new ChatComponentText(message));
+        getGame().ingameGUI.getChatGUI().printChatMessage(new ChatComponentText(message));
     }
 
     public static Session createMicrosoftSession(String username, String password) throws MicrosoftAuthenticationException {
@@ -78,7 +78,7 @@ public class Wrapper {
     }
 
     public static Session createMojangSession(String username, String password) throws AuthenticationException {
-        YggdrasilAuthenticationService service = new YggdrasilAuthenticationService(getMC().getProxy(), "");
+        YggdrasilAuthenticationService service = new YggdrasilAuthenticationService(getGame().getProxy(), "");
         YggdrasilUserAuthentication auth = new YggdrasilUserAuthentication(service, Agent.MINECRAFT);
         auth.setUsername(username);
         auth.setPassword(password);

@@ -2,12 +2,12 @@ package io.github.alerithe.client.features.modules.impl.miscellaneous;
 
 import io.github.alerithe.client.events.EventTick;
 import io.github.alerithe.client.features.modules.Module;
-import io.github.alerithe.client.features.properties.impl.NumberProperty;
+import io.github.alerithe.client.features.properties.impl.DoubleProperty;
 import io.github.alerithe.client.utilities.Wrapper;
 import io.github.alerithe.events.Register;
 
 public class GameSpeed extends Module {
-    private final NumberProperty<Double> speed = new NumberProperty<>("Speed", new String[0], 2d, 0.1d, Double.MAX_VALUE);
+    private final DoubleProperty speed = new DoubleProperty("Speed", new String[0], 2, 0.1, Double.MAX_VALUE);
 
     public GameSpeed() {
         super("GameSpeed", new String[]{"timer"}, Type.MISCELLANEOUS);
@@ -19,11 +19,11 @@ public class GameSpeed extends Module {
     public void disable() {
         super.disable();
 
-        Wrapper.getMC().timer.timerSpeed = 1f;
+        Wrapper.getGame().timer.timerSpeed = 1f;
     }
 
     @Register
     private void onTick(EventTick event) {
-        Wrapper.getMC().timer.timerSpeed = speed.getValue().floatValue();
+        Wrapper.getGame().timer.timerSpeed = speed.getValue().floatValue();
     }
 }

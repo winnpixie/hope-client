@@ -21,7 +21,7 @@ public class PingSpoof extends Module {
 
     @Register
     private void onPacketRead(EventPacket.Read event) {
-        if (Wrapper.getMC().isSingleplayer()) return;
+        if (Wrapper.getGame().isSingleplayer()) return;
 
         mode.getValue().onPacketRead(event);
     }

@@ -2,8 +2,8 @@ package io.github.alerithe.client.features.modules;
 
 import io.github.alerithe.client.Client;
 import io.github.alerithe.client.features.Feature;
-import io.github.alerithe.client.features.properties.Property;
 import io.github.alerithe.client.features.properties.PropertyManager;
+import io.github.alerithe.client.features.properties.impl.BooleanProperty;
 import io.github.alerithe.events.EventBus;
 
 import java.io.File;
@@ -12,13 +12,13 @@ public class Module extends Feature {
     private final Type type;
     private final PropertyManager propertyManager;
     private boolean enabled;
-    public Property<Boolean> hidden = new Property<>("Hidden", new String[]{"hide"}, false);
+    public BooleanProperty hidden = new BooleanProperty("Hidden", new String[]{"hide"}, false);
 
     public Module(String name, String[] aliases, Type type) {
         super(name, aliases);
         this.type = type;
         this.propertyManager = new PropertyManager();
-        this.propertyManager.setConfigFile(new File(Client.MODULE_MANAGER.moduleDataDir, getName() + ".txt"));
+        this.propertyManager.setConfigurationFile(new File(Client.MODULE_MANAGER.getConfigurationFile(), getName() + ".txt"));
 
         hidden.setValue(type.equals(Type.VISUAL));
         propertyManager.add(hidden);

@@ -5,23 +5,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FeatureManager<T extends Feature> {
-    private File configFile;
-    private final List<T> elements;
+    private final List<T> elements = new ArrayList<>();
 
-    public FeatureManager() {
-        this.elements = new ArrayList<>();
-    }
-
-    public File getConfigFile() {
-        return configFile;
-    }
-
-    public void setConfigFile(File configFile) {
-        this.configFile = configFile;
-    }
+    private File configurationFile;
 
     public List<T> getElements() {
         return elements;
+    }
+
+    public File getConfigurationFile() {
+        return configurationFile;
+    }
+
+    public void setConfigurationFile(File configurationFile) {
+        this.configurationFile = configurationFile;
     }
 
     public void add(T feature) {
@@ -32,15 +29,15 @@ public class FeatureManager<T extends Feature> {
         elements.remove(feature);
     }
 
-    public <V extends T> V get(Class<V> cls) {
+    public <V extends T> V find(Class<V> cls) {
         for (T feature : elements) {
-            if (feature.getClass().equals(cls)) return (V) feature;
+            if (cls.isInstance(feature)) return cls.cast(feature);
         }
 
         return null;
     }
 
-    public T get(String handle) {
+    public T find(String handle) {
         for (T feature : elements) {
             if (feature.getName().equalsIgnoreCase(handle)) return feature;
 

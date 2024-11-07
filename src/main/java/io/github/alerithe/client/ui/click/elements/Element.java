@@ -130,9 +130,9 @@ public class Element {
 
     public void draw(int mouseX, int mouseY, float partialTicks) {
         VisualHelper.drawRect(x, y, x + width, y + height, backgroundColor);
-        Wrapper.getFontRenderer().drawString(text,
-                x + (width / 2f) - Wrapper.getFontRenderer().getStringWidth(text) / 2f,
-                y + (height / 2f) - Wrapper.getFontRenderer().FONT_HEIGHT / 2f, textColor);
+        Wrapper.getTextRenderer().drawString(text,
+                x + (width / 2f) - Wrapper.getTextRenderer().getStringWidth(text) / 2f,
+                y + (height / 2f) - Wrapper.getTextRenderer().FONT_HEIGHT / 2f, textColor);
     }
 
     public void update() {

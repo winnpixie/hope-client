@@ -3,8 +3,8 @@ package io.github.alerithe.client.features.modules.impl.visual;
 import io.github.alerithe.client.events.EventDraw;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.features.modules.impl.combat.AntiBot;
-import io.github.alerithe.client.features.properties.Property;
-import io.github.alerithe.client.features.properties.impl.NumberProperty;
+import io.github.alerithe.client.features.properties.impl.BooleanProperty;
+import io.github.alerithe.client.features.properties.impl.IntProperty;
 import io.github.alerithe.client.utilities.MathHelper;
 import io.github.alerithe.client.utilities.VisualHelper;
 import io.github.alerithe.client.utilities.Wrapper;
@@ -23,17 +23,17 @@ import org.lwjgl.opengl.GL11;
 import java.awt.*;
 
 public class Radar extends Module {
-    private final Property<Boolean> players = new Property<>("Players", new String[0], true);
-    private final Property<Boolean> monsters = new Property<>("Monsters", new String[]{"mobs"}, false);
-    private final Property<Boolean> animals = new Property<>("Animals", new String[0], false);
-    private final Property<Boolean> passive = new Property<>("Passive", new String[0], false);
-    private final Property<Boolean> invisibles = new Property<>("Invisibles", new String[]{"invis"}, true);
-    private final Property<Boolean> items = new Property<>("Items", new String[0], false);
-    private final NumberProperty<Integer> x = new NumberProperty<>("X", new String[0], 2, 0,
+    private final BooleanProperty players = new BooleanProperty("Players", new String[0], true);
+    private final BooleanProperty monsters = new BooleanProperty("Monsters", new String[]{"mobs"}, false);
+    private final BooleanProperty animals = new BooleanProperty("Animals", new String[0], false);
+    private final BooleanProperty passive = new BooleanProperty("Passive", new String[0], false);
+    private final BooleanProperty invisibles = new BooleanProperty("Invisibles", new String[]{"invis"}, true);
+    private final BooleanProperty items = new BooleanProperty("Items", new String[0], false);
+    private final IntProperty x = new IntProperty("X", new String[0], 2, 0,
             Toolkit.getDefaultToolkit().getScreenSize().width);
-    private final NumberProperty<Integer> y = new NumberProperty<>("Y", new String[0], 85, 0,
+    private final IntProperty y = new IntProperty("Y", new String[0], 85, 0,
             Toolkit.getDefaultToolkit().getScreenSize().height);
-    private final NumberProperty<Integer> size = new NumberProperty<>("Size", new String[0], 50, 25, Integer.MAX_VALUE);
+    private final IntProperty size = new IntProperty("Size", new String[0], 50, 25, Integer.MAX_VALUE);
 
     public Radar() {
         super("Radar", new String[0], Type.VISUAL);
@@ -51,7 +51,7 @@ public class Radar extends Module {
 
     @Register(CallOrder.LAST)
     private void onOverlayDraw(EventDraw.Overlay event) {
-        if (Wrapper.getGameSettings().showDebugInfo) return;
+        if (Wrapper.getSettings().showDebugInfo) return;
 
         int x = this.x.getValue();
         int y = this.y.getValue();

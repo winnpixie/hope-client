@@ -2,11 +2,11 @@ package io.github.alerithe.client.features.modules.impl.world;
 
 import io.github.alerithe.client.events.EventInput;
 import io.github.alerithe.client.features.modules.Module;
-import io.github.alerithe.client.features.properties.impl.NumberProperty;
+import io.github.alerithe.client.features.properties.impl.IntProperty;
 import io.github.alerithe.events.Register;
 
 public class FastPlace extends Module {
-    private final NumberProperty<Integer> speed = new NumberProperty<>("Speed", new String[0], 4, 0, 4);
+    private final IntProperty speed = new IntProperty("Speed", new String[0], 4, 0, 4);
 
     public FastPlace() {
         super("FastPlace", new String[0], Type.WORLD);

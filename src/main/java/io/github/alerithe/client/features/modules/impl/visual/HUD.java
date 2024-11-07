@@ -6,9 +6,9 @@ import io.github.alerithe.client.events.EventInput;
 import io.github.alerithe.client.events.EventPacket;
 import io.github.alerithe.client.events.EventTick;
 import io.github.alerithe.client.features.modules.Module;
-import io.github.alerithe.client.features.properties.Property;
+import io.github.alerithe.client.features.properties.impl.BooleanProperty;
 import io.github.alerithe.client.utilities.MathHelper;
-import io.github.alerithe.client.utilities.Timer;
+import io.github.alerithe.client.utilities.MsTimer;
 import io.github.alerithe.client.utilities.VisualHelper;
 import io.github.alerithe.client.utilities.Wrapper;
 import io.github.alerithe.events.CallOrder;
@@ -34,17 +34,17 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
 public class HUD extends Module {
-    private final Property<Boolean> fps = new Property<>("FPS", new String[]{"showfps"}, true);
-    private final Property<Boolean> ping = new Property<>("Ping", new String[]{"showping"}, true);
-    private final Property<Boolean> realPing = new Property<>("RealPing", new String[]{"showrealping"}, true);
-    private final Property<Boolean> tps = new Property<>("TPS", new String[]{"showtps"}, true);
-    private final Property<Boolean> arrayList = new Property<>("ArrayList", new String[]{"showenabled"}, true);
-    private final Property<Boolean> potions = new Property<>("Effects", new String[]{"showpotions"}, true);
-    private final Property<Boolean> coords = new Property<>("Coordinates", new String[]{"coords", "showcoords"}, true);
-    private final Property<Boolean> cps = new Property<>("ClicksPerSecond", new String[]{"cps", "showcps"}, true);
-    private final Property<Boolean> rcps = new Property<>("RightClicksPerSecond", new String[]{"rcps", "showrcps"}, true);
+    private final BooleanProperty fps = new BooleanProperty("FPS", new String[]{"showfps"}, true);
+    private final BooleanProperty ping = new BooleanProperty("Ping", new String[]{"showping"}, true);
+    private final BooleanProperty realPing = new BooleanProperty("RealPing", new String[]{"showrealping"}, true);
+    private final BooleanProperty tps = new BooleanProperty("TPS", new String[]{"showtps"}, true);
+    private final BooleanProperty arrayList = new BooleanProperty("ArrayList", new String[]{"showenabled"}, true);
+    private final BooleanProperty potions = new BooleanProperty("Effects", new String[]{"showpotions"}, true);
+    private final BooleanProperty coords = new BooleanProperty("Coordinates", new String[]{"coords", "showcoords"}, true);
+    private final BooleanProperty cps = new BooleanProperty("ClicksPerSecond", new String[]{"cps", "showcps"}, true);
+    private final BooleanProperty rcps = new BooleanProperty("RightClicksPerSecond", new String[]{"rcps", "showrcps"}, true);
 
-    private final Comparator<Module> moduleSorter = Comparator.comparingInt(module -> -Wrapper.getFontRenderer().getStringWidth(module.getName()));
+    private final Comparator<Module> moduleSorter = Comparator.comparingInt(module -> -Wrapper.getTextRenderer().getStringWidth(module.getName()));
     private final Comparator<PotionEffect> potionSorter = Comparator.comparingInt(effect -> {
         Potion potion = Potion.potionTypes[effect.getPotionID()];
 
@@ -52,7 +52,7 @@ public class HUD extends Module {
         String text = String.format("%s \2476%s \2477%s", I18n.format(potion.getName()), amp > 0 && amp < 11
                 ? I18n.format("enchantment.level." + amp) : amp, Potion.getDurationString(effect));
 
-        return -Wrapper.getFontRenderer().getStringWidth(text);
+        return -Wrapper.getTextRenderer().getStringWidth(text);
     });
     private final List<Long> leftClicks = new CopyOnWriteArrayList<>();
     private final List<Long> rightClicks = new CopyOnWriteArrayList<>();
@@ -89,7 +89,7 @@ public class HUD extends Module {
     private void onOverlayDraw(EventDraw.Overlay event) {
         ScaledResolution display = VisualHelper.getDisplay();
 
-        if (!Wrapper.getGameSettings().showDebugInfo) {
+        if (!Wrapper.getSettings().showDebugInfo) {
             // Client Info
             {
                 String text = String.format("\247o%s\247r", Client.NAME);
@@ -134,7 +134,7 @@ public class HUD extends Module {
                     text += "\2477]";
                 }
 
-                Wrapper.getFontRenderer().drawStringWithShadow(text, 1, 1, 0xFF990000);
+                Wrapper.getTextRenderer().drawStringWithShadow(text, 1, 1, 0xFF990000);
             }
 
             // ArrayList
@@ -143,19 +143,19 @@ public class HUD extends Module {
                 List<Module> enabled = Client.MODULE_MANAGER.getElements().stream().filter(Module::isEnabled)
                         .filter(module -> !module.hidden.getValue()).sorted(moduleSorter).collect(Collectors.toList());
                 for (Module module : enabled) {
-                    int x = display.getScaledWidth() - Wrapper.getFontRenderer().getStringWidth(module.getName());
+                    int x = display.getScaledWidth() - Wrapper.getTextRenderer().getStringWidth(module.getName());
                     VisualHelper.drawRect(x - 4, y - 2, display.getScaledWidth(), y
-                            + Wrapper.getFontRenderer().FONT_HEIGHT + 2, 0xFF990000);
+                            + Wrapper.getTextRenderer().FONT_HEIGHT + 2, 0xFF990000);
                     VisualHelper.drawRect(x - 3, y - 2, display.getScaledWidth(), y
-                            + Wrapper.getFontRenderer().FONT_HEIGHT + 1, 0xFF222222);
+                            + Wrapper.getTextRenderer().FONT_HEIGHT + 1, 0xFF222222);
 
-                    Wrapper.getFontRenderer().drawStringWithShadow(module.getName(), x - 1, y, -1);
+                    Wrapper.getTextRenderer().drawStringWithShadow(module.getName(), x - 1, y, -1);
                     y += 12;
                 }
             }
         }
 
-        int chatOffset = Wrapper.getMC().ingameGUI.getChatGUI().getChatOpen() ? 24 : 10;
+        int chatOffset = Wrapper.getGame().ingameGUI.getChatGUI().getChatOpen() ? 24 : 10;
         // Potions
         if (potions.getValue()) {
             int y = chatOffset + 4;
@@ -170,13 +170,13 @@ public class HUD extends Module {
                 String text = String.format("\2476%s \2477%s", amp > 0 && amp < 11
                         ? I18n.format("enchantment.level." + amp) : amp, Potion.getDurationString(effect));
 
-                Wrapper.getMC().getTextureManager().bindTexture(GuiInventory.inventoryBackground);
+                Wrapper.getGame().getTextureManager().bindTexture(GuiInventory.inventoryBackground);
                 int potionIndex = potion.getStatusIconIndex();
-                Gui.drawTexturedModalRect2(display.getScaledWidth() - Wrapper.getFontRenderer().getStringWidth(text) - 20,
+                Gui.drawTexturedModalRect2(display.getScaledWidth() - Wrapper.getTextRenderer().getStringWidth(text) - 20,
                         display.getScaledHeight() - y - 5, potionIndex % 8 * 18, 198 + potionIndex / 8 * 18, 18, 18);
 
-                Wrapper.getFontRenderer().drawStringWithShadow(text,
-                        display.getScaledWidth() - Wrapper.getFontRenderer().getStringWidth(text) - 1,
+                Wrapper.getTextRenderer().drawStringWithShadow(text,
+                        display.getScaledWidth() - Wrapper.getTextRenderer().getStringWidth(text) - 1,
                         display.getScaledHeight() - y, potion.getLiquidColor());
                 y += 16;
             }
@@ -186,7 +186,7 @@ public class HUD extends Module {
         if (coords.getValue()) {
             String text = String.format("\2477[\247r %.0f \2477/\247r %.0f \2477/\247r %.0f \2477]",
                     Wrapper.getPlayer().posX, Wrapper.getPlayer().posY, Wrapper.getPlayer().posZ);
-            Wrapper.getFontRenderer().drawStringWithShadow(text, 2, display.getScaledHeight() - chatOffset, -1);
+            Wrapper.getTextRenderer().drawStringWithShadow(text, 2, display.getScaledHeight() - chatOffset, -1);
         }
     }
 
@@ -197,14 +197,14 @@ public class HUD extends Module {
         if (realPing.getValue()) {
             if (!awaitingStatResponse) {
                 Wrapper.sendPacket(new C16PacketClientStatus(C16PacketClientStatus.EnumState.REQUEST_STATS));
-                statRequestTime = Timer.getTime();
+                statRequestTime = MsTimer.getNow();
                 awaitingStatResponse = true;
             }
         }
 
         List<Long> old = new ArrayList<>();
         for (long ms : leftClicks) {
-            if (Timer.getTime() - ms >= 1000) {
+            if (MsTimer.getNow() - ms >= 1000) {
                 old.add(ms);
             }
         }
@@ -212,7 +212,7 @@ public class HUD extends Module {
 
         old.clear();
         for (long ms : rightClicks) {
-            if (Timer.getTime() - ms >= 1000) {
+            if (MsTimer.getNow() - ms >= 1000) {
                 old.add(ms);
             }
         }
@@ -225,12 +225,12 @@ public class HUD extends Module {
 
     @Register
     private void onLeftClick(EventInput.LeftClick event) {
-        leftClicks.add(Timer.getTime());
+        leftClicks.add(MsTimer.getNow());
     }
 
     @Register
     private void onRightClick(EventInput.RightClick event) {
-        rightClicks.add(Timer.getTime());
+        rightClicks.add(MsTimer.getNow());
     }
 
     @Register
@@ -240,12 +240,12 @@ public class HUD extends Module {
         }
 
         if (event.getPacket() instanceof S03PacketTimeUpdate) {
-            ticks.add(Timer.getTime());
+            ticks.add(MsTimer.getNow());
         }
 
         if (event.getPacket() instanceof S37PacketStatistics) {
             if (awaitingStatResponse) {
-                statResponseTime = Timer.getTime() - statRequestTime;
+                statResponseTime = MsTimer.getNow() - statRequestTime;
                 awaitingStatResponse = false;
             }
         }

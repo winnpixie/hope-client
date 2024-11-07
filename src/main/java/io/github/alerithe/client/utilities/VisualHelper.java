@@ -34,11 +34,11 @@ public class VisualHelper {
 
     public static ScaledResolution getDisplay() {
         if (scaledResolution == null || previousWidth != Display.getWidth() || previousHeight != Display.getHeight()
-                || previousScale != Wrapper.getGameSettings().guiScale) {
+                || previousScale != Wrapper.getSettings().guiScale) {
             previousWidth = Display.getWidth();
             previousHeight = Display.getHeight();
-            previousScale = Wrapper.getGameSettings().guiScale;
-            scaledResolution = new ScaledResolution(Wrapper.getMC());
+            previousScale = Wrapper.getSettings().guiScale;
+            scaledResolution = new ScaledResolution(Wrapper.getGame());
         }
         return scaledResolution;
     }
@@ -65,7 +65,7 @@ public class VisualHelper {
     }
 
     public static boolean isInView(AxisAlignedBB aabb) {
-        Entity current = Wrapper.getMC().getRenderViewEntity();
+        Entity current = Wrapper.getGame().getRenderViewEntity();
 
         frustum.setPosition(current.posX, current.posY, current.posZ);
         return frustum.isBoundingBoxInFrustum(aabb);
@@ -74,21 +74,21 @@ public class VisualHelper {
     // Gui.drawRect
     public static void drawRect(float x, float y, float right, float bottom, int color) {
         if (x < right) {
-            float i = x;
+            float swp = x;
             x = right;
-            right = i;
+            right = swp;
         }
 
         if (y < bottom) {
-            float j = y;
+            float swp = y;
             y = bottom;
-            bottom = j;
+            bottom = swp;
         }
 
-        float a = (float) (color >> 24 & 255) / 255.0F;
-        float r = (float) (color >> 16 & 255) / 255.0F;
-        float g = (float) (color >> 8 & 255) / 255.0F;
-        float b = (float) (color & 255) / 255.0F;
+        float a = (float) (color >> 24 & 255) / 255F;
+        float r = (float) (color >> 16 & 255) / 255F;
+        float g = (float) (color >> 8 & 255) / 255F;
+        float b = (float) (color & 255) / 255F;
         Tessellator tessellator = Tessellator.getInstance();
         WorldRenderer worldrenderer = tessellator.getWorldRenderer();
         GlStateManager.enableBlend();

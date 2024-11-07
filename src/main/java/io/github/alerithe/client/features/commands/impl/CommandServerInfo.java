@@ -2,7 +2,8 @@ package io.github.alerithe.client.features.commands.impl;
 
 import io.github.alerithe.client.events.EventPacket;
 import io.github.alerithe.client.features.commands.Command;
-import io.github.alerithe.client.utilities.Timer;
+import io.github.alerithe.client.features.commands.ErrorMessages;
+import io.github.alerithe.client.utilities.MsTimer;
 import io.github.alerithe.client.utilities.Wrapper;
 import io.github.alerithe.events.EventBus;
 import io.github.alerithe.events.EventHandler;
@@ -19,15 +20,15 @@ public class CommandServerInfo extends Command {
 
     @Override
     public void execute(String[] args) {
-        if (Wrapper.getMC().getCurrentServerData() == null || Wrapper.getMC().isSingleplayer()) {
-            Wrapper.printChat("\247cNo server detected, are you in single-player?");
+        if (Wrapper.getGame().getCurrentServerData() == null || Wrapper.getGame().isSingleplayer()) {
+            Wrapper.printChat(ErrorMessages.format("No server detected, are you in single-player?"));
             return;
         }
 
         Wrapper.printChat("\247eServer Information:");
-        Wrapper.printChat(String.format("Name in List: \247e%s", Wrapper.getMC().getCurrentServerData().serverName));
+        Wrapper.printChat(String.format("Name in List: \247e%s", Wrapper.getGame().getCurrentServerData().serverName));
 
-        String[] ipAndPort = Wrapper.getMC().getCurrentServerData().serverIP.split(":");
+        String[] ipAndPort = Wrapper.getGame().getCurrentServerData().serverIP.split(":");
         String addr = ipAndPort[0];
         int port = ipAndPort.length > 1 ? Integer.parseInt(ipAndPort[1]) : 25565;
         Wrapper.printChat(String.format("IP: \247e%s", addr));
@@ -42,7 +43,7 @@ public class CommandServerInfo extends Command {
         }
 
         EventBus.register(new EventHandler<EventPacket.Read>() {
-            private final Timer timer = new Timer();
+            private final MsTimer timer = new MsTimer();
 
             @Override
             public void handle(EventPacket.Read event) {
@@ -60,7 +61,7 @@ public class CommandServerInfo extends Command {
                     EventBus.unregister(this);
                 } else if (timer.hasPassed(20000)) {
                     EventBus.unregister(this);
-                    Wrapper.printChat("\247cCould not receive plugin information within 20 seconds.");
+                    Wrapper.printChat(ErrorMessages.format("Could not receive plugin information within 20 seconds."));
                 }
             }
         });

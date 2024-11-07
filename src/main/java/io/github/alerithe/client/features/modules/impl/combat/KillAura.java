@@ -5,8 +5,9 @@ import io.github.alerithe.client.events.EventUpdate;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.features.modules.impl.combat.aura.*;
 import io.github.alerithe.client.features.modules.impl.movement.NoSlowdown;
-import io.github.alerithe.client.features.properties.Property;
-import io.github.alerithe.client.features.properties.impl.NumberProperty;
+import io.github.alerithe.client.features.properties.impl.BooleanProperty;
+import io.github.alerithe.client.features.properties.impl.DoubleProperty;
+import io.github.alerithe.client.features.properties.impl.IntProperty;
 import io.github.alerithe.client.features.properties.impl.ObjectProperty;
 import io.github.alerithe.client.utilities.MathHelper;
 import io.github.alerithe.client.utilities.Wrapper;
@@ -34,20 +35,20 @@ public class KillAura extends Module {
             new Tick(this), new Single(this), new LockOn(this));
     private final ObjectProperty<SortingMode> sortingMode = new ObjectProperty<>("SortingMode", new String[]{"sorting"},
             new SortingMode.AngleSort(), new SortingMode.DistanceSort());
-    private final Property<Boolean> look = new Property<>("Look", new String[0], false);
-    public final NumberProperty<Integer> minAps = new NumberProperty<>("MinHitsPerSecond", new String[]{"minaps", "mincps", "minspeed"},
+    private final BooleanProperty look = new BooleanProperty("Look", new String[0], false);
+    public final IntProperty minAps = new IntProperty("MinHitsPerSecond", new String[]{"minaps", "mincps", "minspeed"},
             8, 1, 20);
-    public final NumberProperty<Integer> maxAps = new NumberProperty<>("MaxHitsPerSecond", new String[]{"maxaps", "maxcps", "maxspeed"},
+    public final IntProperty maxAps = new IntProperty("MaxHitsPerSecond", new String[]{"maxaps", "maxcps", "maxspeed"},
             12, 1, 20);
-    public final NumberProperty<Double> distance = new NumberProperty<>("Distance", new String[]{"reach", "range", "dist", "distance"},
-            4d, 0.1d, 6d);
-    public final Property<Boolean> autoBlock = new Property<>("AutoBlock", new String[]{"ab"}, true);
-    private final Property<Boolean> players = new Property<>("Players", new String[0], true);
-    private final Property<Boolean> monsters = new Property<>("Monsters", new String[]{"mobs"}, false);
-    private final Property<Boolean> animals = new Property<>("Animals", new String[0], false);
-    private final Property<Boolean> passive = new Property<>("Passive", new String[0], false);
-    private final Property<Boolean> invisibles = new Property<>("Invisibles", new String[]{"invis"}, true);
-    private final Property<Boolean> attackFriends = new Property<>("AttackFriends", new String[]{"hitfriends"}, false);
+    public final DoubleProperty distance = new DoubleProperty("Distance", new String[]{"reach", "range", "dist", "distance"},
+            4, 0.1, 6);
+    public final BooleanProperty autoBlock = new BooleanProperty("AutoBlock", new String[]{"ab"}, true);
+    private final BooleanProperty players = new BooleanProperty("Players", new String[0], true);
+    private final BooleanProperty monsters = new BooleanProperty("Monsters", new String[]{"mobs"}, false);
+    private final BooleanProperty animals = new BooleanProperty("Animals", new String[0], false);
+    private final BooleanProperty passive = new BooleanProperty("Passive", new String[0], false);
+    private final BooleanProperty invisibles = new BooleanProperty("Invisibles", new String[]{"invis"}, true);
+    private final BooleanProperty attackFriends = new BooleanProperty("AttackFriends", new String[]{"hitfriends"}, false);
 
     public List<EntityLivingBase> near;
     public EntityLivingBase target;
@@ -79,8 +80,8 @@ public class KillAura extends Module {
         if (target == null) return;
 
         float[] angles = Wrapper.getPlayer().getRotationsToEntity(target);
-        event.setYaw(MathHelper.clamp(angles[0] + MathHelper.randomf(-4f, 4f), -360f, 360f));
-        event.setPitch(MathHelper.clamp(angles[1] + MathHelper.randomf(-4f, 4f), -90f, 90f));
+        event.setYaw(MathHelper.clamp(angles[0] + MathHelper.getRandomFloat(-4f, 4f), -360f, 360f));
+        event.setPitch(MathHelper.clamp(angles[1] + MathHelper.getRandomFloat(-4f, 4f), -90f, 90f));
 
         if (look.getValue()) {
             Wrapper.getPlayer().rotationYaw = event.getYaw();
@@ -98,8 +99,8 @@ public class KillAura extends Module {
             Wrapper.getPlayer().setItemInUse(Wrapper.getPlayer().getHeldItem(),
                     Wrapper.getPlayer().getHeldItem().getMaxItemUseDuration());
 
-            if (!Wrapper.getGameSettings().keyBindUseItem.isKeyDown()
-                    && !Client.MODULE_MANAGER.get(NoSlowdown.class).isEnabled()) {
+            if (!Wrapper.getSettings().keyBindUseItem.isKeyDown()
+                    && !Client.MODULE_MANAGER.find(NoSlowdown.class).isEnabled()) {
                 Wrapper.getPlayer().setSpeed(Wrapper.getPlayer().getSpeed() * 0.2);
                 Wrapper.getPlayer().setSprinting(false);
             }
@@ -137,7 +138,7 @@ public class KillAura extends Module {
                 || ((entity instanceof EntityVillager || entity instanceof EntityGolem) && this.passive.getValue()))
                 && (!entity.isInvisible() || this.invisibles.getValue()) && entity.isEntityAlive()
                 && Wrapper.getPlayer().getDistanceSqToEntity(entity) <= (distance.getValue() * distance.getValue())
-                && (attackFriends.getValue() || Client.FRIEND_MANAGER.get(entity.getName()) == null)
+                && (attackFriends.getValue() || Client.FRIEND_MANAGER.find(entity.getName()) == null)
                 && entity != Wrapper.getPlayer();
     }
 

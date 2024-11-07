@@ -1,6 +1,7 @@
 package io.github.alerithe.client.features.commands.impl;
 
 import io.github.alerithe.client.features.commands.Command;
+import io.github.alerithe.client.features.commands.ErrorMessages;
 import io.github.alerithe.client.utilities.Wrapper;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.GuiMultiplayer;
@@ -14,19 +15,19 @@ public class CommandRejoin extends Command {
 
     @Override
     public void execute(String[] args) {
-        if (Wrapper.getMC().getCurrentServerData() == null || Wrapper.getMC().isSingleplayer()) {
-            Wrapper.printChat("\247cNo server detected, are you in single-player?");
+        if (Wrapper.getGame().getCurrentServerData() == null || Wrapper.getGame().isSingleplayer()) {
+            Wrapper.printChat(ErrorMessages.format("No server detected, are you in single-player?"));
             return;
         }
 
-        ServerData serverData = Wrapper.getMC().getCurrentServerData();
+        ServerData serverData = Wrapper.getGame().getCurrentServerData();
 
         Wrapper.getWorld().sendQuittingDisconnectingPacket();
-        Wrapper.getMC().loadWorld(null);
-        Wrapper.getMC().displayGuiScreen(new GuiMultiplayer(new GuiMainMenu()));
-        Wrapper.getMC().displayGuiScreen(new GuiConnecting(new GuiMultiplayer(new GuiMainMenu()), Wrapper.getMC(),
+        Wrapper.getGame().loadWorld(null);
+        Wrapper.getGame().displayGuiScreen(new GuiMultiplayer(new GuiMainMenu()));
+        Wrapper.getGame().displayGuiScreen(new GuiConnecting(new GuiMultiplayer(new GuiMainMenu()), Wrapper.getGame(),
                 serverData));
 
-        Wrapper.getMC().setServerData(serverData);
+        Wrapper.getGame().setServerData(serverData);
     }
 }

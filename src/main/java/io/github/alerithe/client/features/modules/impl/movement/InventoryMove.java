@@ -25,10 +25,10 @@ public class InventoryMove extends Module {
 
     @Register
     private void onPreUpdate(EventUpdate.Pre event) {
-        if (Wrapper.getMC().currentScreen == null) return;
-        if (Wrapper.getMC().ingameGUI.getChatGUI().getChatOpen()) return;
-        if (Wrapper.getMC().currentScreen instanceof GuiEditSign) return;
-        if (Wrapper.getMC().currentScreen instanceof GuiScreenBook) return;
+        if (Wrapper.getGame().currentScreen == null) return;
+        if (Wrapper.getGame().ingameGUI.getChatGUI().getChatOpen()) return;
+        if (Wrapper.getGame().currentScreen instanceof GuiEditSign) return;
+        if (Wrapper.getGame().currentScreen instanceof GuiScreenBook) return;
 
         updateKeyStates();
 
@@ -49,22 +49,22 @@ public class InventoryMove extends Module {
 
     private void updateKeyStates() {
         // Forward
-        KeyBinding.setKeyBindState(Wrapper.getGameSettings().keyBindForward,
-                GameSettings.isKeyDown(Wrapper.getGameSettings().keyBindForward));
+        KeyBinding.setKeyBindState(Wrapper.getSettings().keyBindForward,
+                GameSettings.isKeyDown(Wrapper.getSettings().keyBindForward));
         // Back
-        KeyBinding.setKeyBindState(Wrapper.getGameSettings().keyBindBack,
-                GameSettings.isKeyDown(Wrapper.getGameSettings().keyBindBack));
+        KeyBinding.setKeyBindState(Wrapper.getSettings().keyBindBack,
+                GameSettings.isKeyDown(Wrapper.getSettings().keyBindBack));
         // Left
-        KeyBinding.setKeyBindState(Wrapper.getGameSettings().keyBindLeft,
-                GameSettings.isKeyDown(Wrapper.getGameSettings().keyBindLeft));
+        KeyBinding.setKeyBindState(Wrapper.getSettings().keyBindLeft,
+                GameSettings.isKeyDown(Wrapper.getSettings().keyBindLeft));
         // Right
-        KeyBinding.setKeyBindState(Wrapper.getGameSettings().keyBindRight,
-                GameSettings.isKeyDown(Wrapper.getGameSettings().keyBindRight));
+        KeyBinding.setKeyBindState(Wrapper.getSettings().keyBindRight,
+                GameSettings.isKeyDown(Wrapper.getSettings().keyBindRight));
         // Jump
-        KeyBinding.setKeyBindState(Wrapper.getGameSettings().keyBindJump,
-                GameSettings.isKeyDown(Wrapper.getGameSettings().keyBindJump));
+        KeyBinding.setKeyBindState(Wrapper.getSettings().keyBindJump,
+                GameSettings.isKeyDown(Wrapper.getSettings().keyBindJump));
         // Sneak
-        KeyBinding.setKeyBindState(Wrapper.getGameSettings().keyBindSneak,
-                GameSettings.isKeyDown(Wrapper.getGameSettings().keyBindSneak));
+        KeyBinding.setKeyBindState(Wrapper.getSettings().keyBindSneak,
+                GameSettings.isKeyDown(Wrapper.getSettings().keyBindSneak));
     }
 }

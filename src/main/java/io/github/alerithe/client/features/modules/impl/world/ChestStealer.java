@@ -3,17 +3,17 @@ package io.github.alerithe.client.features.modules.impl.world;
 import io.github.alerithe.client.events.EventGuiOpen;
 import io.github.alerithe.client.events.EventUpdate;
 import io.github.alerithe.client.features.modules.Module;
-import io.github.alerithe.client.features.properties.impl.NumberProperty;
-import io.github.alerithe.client.utilities.Timer;
+import io.github.alerithe.client.features.properties.impl.IntProperty;
+import io.github.alerithe.client.utilities.MsTimer;
 import io.github.alerithe.client.utilities.Wrapper;
 import io.github.alerithe.events.Register;
 import net.minecraft.client.gui.inventory.GuiChest;
 import net.minecraft.inventory.Slot;
 
 public class ChestStealer extends Module {
-    private final NumberProperty<Integer> cps = new NumberProperty<>("CPS", new String[0], 15, 1, 20);
+    private final IntProperty cps = new IntProperty("CPS", new String[0], 15, 1, 20);
 
-    private final Timer timer = new Timer();
+    private final MsTimer timer = new MsTimer();
 
     private int index;
 
@@ -33,9 +33,9 @@ public class ChestStealer extends Module {
 
     @Register
     private void onPreUpdate(EventUpdate.Pre event) {
-        if (!(Wrapper.getMC().currentScreen instanceof GuiChest)) return;
+        if (!(Wrapper.getGame().currentScreen instanceof GuiChest)) return;
 
-        GuiChest gui = (GuiChest) Wrapper.getMC().currentScreen;
+        GuiChest gui = (GuiChest) Wrapper.getGame().currentScreen;
         int slots = gui.inventoryRows * 9;
         if (index >= slots || Wrapper.getPlayer().isInventoryFull()) {
             Wrapper.getPlayer().closeScreen();

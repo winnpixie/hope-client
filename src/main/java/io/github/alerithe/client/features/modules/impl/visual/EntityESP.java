@@ -6,7 +6,7 @@ import io.github.alerithe.client.features.modules.impl.combat.AntiBot;
 import io.github.alerithe.client.features.modules.impl.visual.entityesp.EntityESPMode;
 import io.github.alerithe.client.features.modules.impl.visual.entityesp.Pillar;
 import io.github.alerithe.client.features.modules.impl.visual.entityesp.Rectangle;
-import io.github.alerithe.client.features.properties.Property;
+import io.github.alerithe.client.features.properties.impl.BooleanProperty;
 import io.github.alerithe.client.features.properties.impl.ObjectProperty;
 import io.github.alerithe.client.utilities.VisualHelper;
 import io.github.alerithe.client.utilities.Wrapper;
@@ -24,14 +24,14 @@ import net.minecraft.entity.player.EntityPlayer;
 public class EntityESP extends Module {
     private final ObjectProperty<EntityESPMode> mode = new ObjectProperty<>("Mode", new String[0], new Rectangle(this),
             new Pillar(this));
-    private final Property<Boolean> players = new Property<>("Players", new String[0], true);
-    private final Property<Boolean> monsters = new Property<>("Monsters", new String[]{"mobs"}, false);
-    private final Property<Boolean> animals = new Property<>("Animals", new String[0], false);
-    private final Property<Boolean> passive = new Property<>("Passive", new String[0], false);
-    private final Property<Boolean> invisibles = new Property<>("Invisibles", new String[]{"invis"}, true);
-    private final Property<Boolean> items = new Property<>("Items", new String[0], false);
-    public final Property<Boolean> showHealth = new Property<>("ShowHealth", new String[]{"healthbar", "health"}, true);
-    public final Property<Boolean> showNames = new Property<>("ShowNames", new String[]{"names"}, true);
+    private final BooleanProperty players = new BooleanProperty("Players", new String[0], true);
+    private final BooleanProperty monsters = new BooleanProperty("Monsters", new String[]{"mobs"}, false);
+    private final BooleanProperty animals = new BooleanProperty("Animals", new String[0], false);
+    private final BooleanProperty passive = new BooleanProperty("Passive", new String[0], false);
+    private final BooleanProperty invisibles = new BooleanProperty("Invisibles", new String[]{"invis"}, true);
+    private final BooleanProperty items = new BooleanProperty("Items", new String[0], false);
+    public final BooleanProperty showHealth = new BooleanProperty("ShowHealth", new String[]{"healthbar", "health"}, true);
+    public final BooleanProperty showNames = new BooleanProperty("ShowNames", new String[]{"names"}, true);
 
     public EntityESP() {
         super("ESP", new String[0], Type.VISUAL);

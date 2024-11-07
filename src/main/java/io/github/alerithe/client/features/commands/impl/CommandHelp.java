@@ -2,6 +2,7 @@ package io.github.alerithe.client.features.commands.impl;
 
 import io.github.alerithe.client.Client;
 import io.github.alerithe.client.features.commands.Command;
+import io.github.alerithe.client.features.commands.ErrorMessages;
 import io.github.alerithe.client.utilities.MathHelper;
 import io.github.alerithe.client.utilities.Wrapper;
 
@@ -14,11 +15,10 @@ public class CommandHelp extends Command {
 
     @Override
     public void execute(String[] args) {
-        int maxPages = (Client.COMMAND_MANAGER.getElements().size() - 1) / 7;
-        int page = 0;
+        int page = 1;
 
         if (args.length > 0) {
-            Command command = Client.COMMAND_MANAGER.get(args[0]);
+            Command command = Client.COMMAND_MANAGER.find(args[0]);
 
             if (command != null) {
                 Wrapper.printChat(String.format("\247eHelp for command '%s':", command.getName()));
@@ -27,23 +27,21 @@ public class CommandHelp extends Command {
                 return;
             } else if (MathHelper.isInt(args[0])) {
                 page = Integer.parseInt(args[0]);
-                if (page < 1) {
-                    page = 1;
-                }
-                if (page > maxPages + 1) {
-                    page = maxPages + 1;
-                }
-                page -= 1;
             } else {
-                Wrapper.printChat("\247cInvalid Argument Type.");
+                Wrapper.printChat(ErrorMessages.INVALID_ARG_TYPE);
+                return;
             }
         }
 
-        int endIndex = Math.min((page + 1) * 7, Client.COMMAND_MANAGER.getElements().size());
-        Wrapper.printChat(String.format("\247eCommands (Page %d/%d)", page + 1, maxPages + 1));
+        final int PER_PAGE = 7;
+        int pageCount = (Client.COMMAND_MANAGER.getElements().size() - 1) / PER_PAGE; // 7 COMMANDS PER PAGE
+        Wrapper.printChat(String.format("\247eCommands (Page %d/%d)", page, pageCount + 1));
         Wrapper.printChat("\2477<arg> = Required, [arg] = Optional");
-        for (int i = page * 7; i < endIndex; ++i) {
-            Command command = Client.COMMAND_MANAGER.getElements().get(i);
+        for (int i = 0; i < PER_PAGE; i++) {
+            int idx = i + ((page - 1) * PER_PAGE);
+            if (idx > Client.COMMAND_MANAGER.getElements().size() - 1) break;
+
+            Command command = Client.COMMAND_MANAGER.getElements().get(idx);
             Wrapper.printChat(String.format("\247a> \247r.%s %s", command.getName(), command.getUsage()));
         }
     }

@@ -37,11 +37,11 @@ public class Pillar extends EntityESPMode {
             GL11.glLineWidth(1f);
 
             double x = MathHelper.lerpd(entity.prevPosX, entity.posX, event.getPartialTicks())
-                    - Wrapper.getMC().getRenderManager().viewerPosX;
+                    - Wrapper.getGame().getRenderManager().viewerPosX;
             double y = MathHelper.lerpd(entity.prevPosY, entity.posY, event.getPartialTicks())
-                    - Wrapper.getMC().getRenderManager().viewerPosY;
+                    - Wrapper.getGame().getRenderManager().viewerPosY;
             double z = MathHelper.lerpd(entity.prevPosZ, entity.posZ, event.getPartialTicks())
-                    - Wrapper.getMC().getRenderManager().viewerPosZ;
+                    - Wrapper.getGame().getRenderManager().viewerPosZ;
 
             GL11.glTranslated(x, y, z);
             GL11.glRotatef(-MathHelper.lerpf(entity.prevRotationYaw, entity.rotationYaw, event.getPartialTicks()), 0, 1, 0);
@@ -70,7 +70,7 @@ public class Pillar extends EntityESPMode {
                 }
             }
 
-            if (Client.FRIEND_MANAGER.get(entity.getName()) != null) color = 0xFF00FFFF;
+            if (Client.FRIEND_MANAGER.find(entity.getName()) != null) color = 0xFF00FFFF;
 
             float[] rgba = VisualHelper.toARGBFloatArray(color, -1f);
             GL11.glColor4f(rgba[0], rgba[1], rgba[2], rgba[3]);

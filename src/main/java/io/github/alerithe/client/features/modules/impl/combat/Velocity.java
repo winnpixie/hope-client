@@ -2,7 +2,7 @@ package io.github.alerithe.client.features.modules.impl.combat;
 
 import io.github.alerithe.client.events.EventPacket;
 import io.github.alerithe.client.features.modules.Module;
-import io.github.alerithe.client.features.properties.impl.NumberProperty;
+import io.github.alerithe.client.features.properties.impl.IntProperty;
 import io.github.alerithe.client.utilities.Wrapper;
 import io.github.alerithe.events.Register;
 import net.minecraft.network.play.server.S12PacketEntityVelocity;
@@ -10,9 +10,9 @@ import net.minecraft.network.play.server.S27PacketExplosion;
 import net.minecraft.util.Vec3;
 
 public class Velocity extends Module {
-    private final NumberProperty<Integer> verticalPercent = new NumberProperty<>("VerticalPercent", new String[]{"vertical", "v"},
+    private final IntProperty verticalPercent = new IntProperty("VerticalPercent", new String[]{"vertical", "v"},
             0, 0, Integer.MAX_VALUE);
-    private final NumberProperty<Integer> horizontalPercent = new NumberProperty<>("HorizontalPercent", new String[]{"horizontal", "h"},
+    private final IntProperty horizontalPercent = new IntProperty("HorizontalPercent", new String[]{"horizontal", "h"},
             0, 0, Integer.MAX_VALUE);
 
     public Velocity() {

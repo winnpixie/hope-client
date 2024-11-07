@@ -19,7 +19,7 @@ public class EventBus {
             return;
         }
 
-        List<EventHandler<?>> list = cache.computeIfAbsent(parent, v -> new CopyOnWriteArrayList<>());
+        List<EventHandler<?>> cacheList = cache.computeIfAbsent(parent, v -> new CopyOnWriteArrayList<>());
 
         for (Method method : parent.getClass().getDeclaredMethods()) {
             if (!method.isAnnotationPresent(Register.class)) continue;
@@ -28,7 +28,7 @@ public class EventBus {
 
             MethodHandler eventHandler = new MethodHandler(parent, method);
             register(eventHandler);
-            list.add(eventHandler);
+            cacheList.add(eventHandler);
         }
 
         for (Field field : parent.getClass().getDeclaredFields()) {
@@ -39,7 +39,7 @@ public class EventBus {
             try {
                 EventHandler<?> eventHandler = (EventHandler<?>) field.get(parent);
                 register(eventHandler);
-                list.add(eventHandler);
+                cacheList.add(eventHandler);
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             }

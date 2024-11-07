@@ -22,16 +22,15 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class ModuleManager extends FeatureManager<Module> {
-    public File moduleDataDir;
+    private final File moduleStatesFile = new File(Client.DATA_DIR, "enabled.txt");
+
     private boolean toggledModules;
 
     @Override
     public void load() {
-        moduleDataDir = new File(Client.DATA_DIR, "modules");
-        if (!moduleDataDir.exists()) {
-            if (!moduleDataDir.mkdir()) {
-                Client.LOGGER.warn("Could not create modules directory (does it already exist?)!");
-            }
+        setConfigurationFile(new File(Client.DATA_DIR, "modules"));
+        if (!getConfigurationFile().exists() && !getConfigurationFile().mkdir()) {
+            Client.LOGGER.warn("Could not create modules directory (does it already exist?)!");
         }
 
         // Combat
@@ -105,7 +104,7 @@ public class ModuleManager extends FeatureManager<Module> {
         add(new PingSpoof());
         add(new TextSpammer()); // TODO: Finish
 
-        Client.LOGGER.info(String.format("Registered %d Modules", getElements().size()));
+        Client.LOGGER.info(String.format("Registered %d Module(s)", getElements().size()));
 
         getElements().forEach(module -> {
             Client.KEYBIND_MANAGER.add(new Keybind(module.getName(), module.getAliases(), Keyboard.KEY_NONE, module::toggle));
@@ -113,13 +112,12 @@ public class ModuleManager extends FeatureManager<Module> {
             module.getPropertyManager().load();
         });
 
-        setConfigFile(new File(Client.DATA_DIR, "modules.txt"));
         List<Module> toEnable = new ArrayList<>();
 
         try {
-            Files.readAllLines(getConfigFile().toPath()).forEach(line -> {
+            Files.readAllLines(moduleStatesFile.toPath()).forEach(line -> {
                 String[] data = line.split(":", 2);
-                Module module = get(data[0]);
+                Module module = find(data[0]);
                 if (module == null) return;
                 if (data[1].equalsIgnoreCase("false")) return;
 
@@ -155,7 +153,7 @@ public class ModuleManager extends FeatureManager<Module> {
                 .append(module.isEnabled()).append('\n'));
 
         try {
-            Files.write(getConfigFile().toPath(), builder.toString().getBytes());
+            Files.write(moduleStatesFile.toPath(), builder.toString().getBytes());
         } catch (IOException e) {
             e.printStackTrace();
         }

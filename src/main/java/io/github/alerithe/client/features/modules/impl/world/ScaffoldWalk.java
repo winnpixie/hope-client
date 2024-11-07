@@ -3,9 +3,9 @@ package io.github.alerithe.client.features.modules.impl.world;
 import io.github.alerithe.client.events.EventBlockEdgeCheck;
 import io.github.alerithe.client.events.EventUpdate;
 import io.github.alerithe.client.features.modules.Module;
-import io.github.alerithe.client.features.properties.Property;
-import io.github.alerithe.client.features.properties.impl.NumberProperty;
-import io.github.alerithe.client.utilities.Timer;
+import io.github.alerithe.client.features.properties.impl.BooleanProperty;
+import io.github.alerithe.client.features.properties.impl.IntProperty;
+import io.github.alerithe.client.utilities.MsTimer;
 import io.github.alerithe.client.utilities.Wrapper;
 import io.github.alerithe.events.Register;
 import net.minecraft.block.Block;
@@ -19,13 +19,13 @@ import java.util.Arrays;
 import java.util.List;
 
 public class ScaffoldWalk extends Module {
-    private final Property<Boolean> tower = new Property<>("Tower", new String[0], true);
-    private final NumberProperty<Integer> bps = new NumberProperty<>("BPS", new String[]{"cps", "speed"}, 20, 1, 20);
+    private final BooleanProperty tower = new BooleanProperty("Tower", new String[0], true);
+    private final IntProperty bps = new IntProperty("BPS", new String[]{"cps", "speed"}, 20, 1, 20);
 
     private final List<Block> blacklist = Arrays.asList(Blocks.cocoa, Blocks.water, Blocks.flowing_water, Blocks.lava,
             Blocks.flowing_lava, Blocks.air, Blocks.flower_pot, Blocks.red_flower, Blocks.yellow_flower,
             Blocks.tallgrass);
-    private final Timer timer = new Timer();
+    private final MsTimer timer = new MsTimer();
 
     private Data data;
     private int blocksPlaced;

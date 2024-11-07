@@ -26,16 +26,16 @@ public class Rectangle extends EntityESPMode {
         Map<Entity, float[]> projections = new HashMap<>();
 
         GL11.glPushMatrix();
-        Wrapper.getMC().entityRenderer.setupCameraTransform(event.getPartialTicks(), 0);
+        Wrapper.getGame().entityRenderer.setupCameraTransform(event.getPartialTicks(), 0);
         for (Entity entity : Wrapper.getWorld().loadedEntityList) {
             if (!module.qualifies(entity)) continue;
 
             double x = (MathHelper.lerpd(entity.prevPosX, entity.posX, event.getPartialTicks())
-                    - Wrapper.getMC().getRenderManager().viewerPosX);
+                    - Wrapper.getGame().getRenderManager().viewerPosX);
             double y = (MathHelper.lerpd(entity.prevPosY, entity.posY, event.getPartialTicks())
-                    - Wrapper.getMC().getRenderManager().viewerPosY);
+                    - Wrapper.getGame().getRenderManager().viewerPosY);
             double z = (MathHelper.lerpd(entity.prevPosZ, entity.posZ, event.getPartialTicks())
-                    - Wrapper.getMC().getRenderManager().viewerPosZ);
+                    - Wrapper.getGame().getRenderManager().viewerPosZ);
 
             AxisAlignedBB aabb = new AxisAlignedBB(x - entity.width / 2d, y, z - entity.width / 2d,
                     x + entity.width / 2d, y + entity.height + 0.2, z + entity.width / 2d);
@@ -63,7 +63,7 @@ public class Rectangle extends EntityESPMode {
             entities.add(entity);
             projections.put(entity, position);
         }
-        Wrapper.getMC().entityRenderer.setupOverlayRendering();
+        Wrapper.getGame().entityRenderer.setupOverlayRendering();
         GL11.glPopMatrix();
         entities.sort(Comparator.comparingDouble(entity -> -Wrapper.getPlayer().getDistanceSqToEntity(entity)));
 
@@ -82,21 +82,21 @@ public class Rectangle extends EntityESPMode {
                 if (entity instanceof EntityItem) {
                     text = ((EntityItem) entity).getEntityItem().getDisplayName();
                 } else {
-                    Friend friend = Client.FRIEND_MANAGER.get(entity.getName());
+                    Friend friend = Client.FRIEND_MANAGER.find(entity.getName());
                     if (friend != null) {
                         text = String.format("\247b%s", friend.getAliases()[0]);
                     }
                 }
 
-                Wrapper.getFontRenderer().drawStringWithShadow(text,
-                        width - (Wrapper.getFontRenderer().getStringWidth(text) / 2f),
-                        -Wrapper.getFontRenderer().FONT_HEIGHT - 2, -1);
+                Wrapper.getTextRenderer().drawStringWithShadow(text,
+                        width - (Wrapper.getTextRenderer().getStringWidth(text) / 2f),
+                        -Wrapper.getTextRenderer().FONT_HEIGHT - 2, -1);
                 GL11.glScaled(2, 2, 2);
             }
 
             VisualHelper.drawBorderedRect(0.5f, 0.5f, width - 0.5f, height - 0.5f, 1.5f, 0, 0xff000000);
             VisualHelper.drawBorderedRect(0, 0, width, height, 0.5f, 0,
-                    Client.FRIEND_MANAGER.get(entity.getName()) == null ? -1 : 0xFF00FFFF);
+                    Client.FRIEND_MANAGER.find(entity.getName()) == null ? -1 : 0xFF00FFFF);
 
             if (module.showHealth.getValue() && entity instanceof EntityLivingBase) {
                 EntityLivingBase elb = (EntityLivingBase) entity;

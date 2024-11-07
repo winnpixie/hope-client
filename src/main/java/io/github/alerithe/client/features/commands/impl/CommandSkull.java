@@ -1,6 +1,7 @@
 package io.github.alerithe.client.features.commands.impl;
 
 import io.github.alerithe.client.features.commands.Command;
+import io.github.alerithe.client.features.commands.ErrorMessages;
 import io.github.alerithe.client.utilities.Wrapper;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -15,12 +16,12 @@ public class CommandSkull extends Command {
     @Override
     public void execute(String[] args) {
         if (!Wrapper.getPlayer().capabilities.isCreativeMode) {
-            Wrapper.printChat("\247cYou must be in Creative mode to use this.");
+            Wrapper.printChat(ErrorMessages.format("You must be in Creative mode to use this."));
             return;
         }
 
         if (args.length < 1) {
-            Wrapper.printChat("\247cNot enough arguments.");
+            Wrapper.printChat(ErrorMessages.NOT_ENOUGH_ARGS);
             return;
         }
 

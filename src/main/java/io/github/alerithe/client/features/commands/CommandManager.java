@@ -13,8 +13,9 @@ import java.util.Arrays;
 public class CommandManager extends FeatureManager<Command> {
     @Override
     public void load() {
-        add(new CommandBind());
         add(new CommandBadItem());
+        add(new CommandBind());
+        add(new CommandEntityInfo());
         add(new CommandForward());
         add(new CommandHClip());
         add(new CommandHelp());
@@ -29,7 +30,7 @@ public class CommandManager extends FeatureManager<Command> {
         add(new CommandVClip());
         add(new CommandWhois());
 
-        Client.LOGGER.info(String.format("Registered %d Commands", getElements().size()));
+        Client.LOGGER.info(String.format("Registered %d command(s)", getElements().size()));
 
         EventBus.register(new EventHandler<EventChat>() {
             @Override
@@ -39,9 +40,9 @@ public class CommandManager extends FeatureManager<Command> {
 
                 event.setCancelled(true);
                 String[] args = event.getMessage().substring(1).split(" ");
-                Command command = get(args[0]);
+                Command command = find(args[0]);
                 if (command == null) {
-                    Wrapper.printChat(String.format("\247cNo such command '.%s'.", args[0]));
+                    Wrapper.printChat(ErrorMessages.INVALID_COMMAND);
                     return;
                 }
 

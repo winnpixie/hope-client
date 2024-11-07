@@ -5,7 +5,7 @@ import io.github.alerithe.client.events.EventDraw;
 import io.github.alerithe.client.features.friends.Friend;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.features.modules.impl.combat.AntiBot;
-import io.github.alerithe.client.features.properties.Property;
+import io.github.alerithe.client.features.properties.impl.BooleanProperty;
 import io.github.alerithe.client.utilities.MathHelper;
 import io.github.alerithe.client.utilities.VisualHelper;
 import io.github.alerithe.client.utilities.Wrapper;
@@ -25,14 +25,14 @@ import org.lwjgl.opengl.GL11;
 import java.util.*;
 
 public class NameTags extends Module {
-    private final Property<Boolean> players = new Property<>("Players", new String[0], true);
-    private final Property<Boolean> monsters = new Property<>("Monsters", new String[]{"mobs"}, false);
-    private final Property<Boolean> animals = new Property<>("Animals", new String[0], false);
-    private final Property<Boolean> passive = new Property<>("Passive", new String[0], false);
-    private final Property<Boolean> invisibles = new Property<>("Invisibles", new String[]{"invis"}, true);
-    private final Property<Boolean> items = new Property<>("Items", new String[0], false);
-    private final Property<Boolean> ping = new Property<>("Ping", new String[0], true);
-    private final Property<Boolean> health = new Property<>("Health", new String[]{"hp"}, true);
+    private final BooleanProperty players = new BooleanProperty("Players", new String[0], true);
+    private final BooleanProperty monsters = new BooleanProperty("Monsters", new String[]{"mobs"}, false);
+    private final BooleanProperty animals = new BooleanProperty("Animals", new String[0], false);
+    private final BooleanProperty passive = new BooleanProperty("Passive", new String[0], false);
+    private final BooleanProperty invisibles = new BooleanProperty("Invisibles", new String[]{"invis"}, true);
+    private final BooleanProperty items = new BooleanProperty("Items", new String[0], false);
+    private final BooleanProperty ping = new BooleanProperty("Ping", new String[0], true);
+    private final BooleanProperty health = new BooleanProperty("Health", new String[]{"hp"}, true);
 
     public NameTags() {
         super("NameTags", new String[]{"tags"}, Type.VISUAL);
@@ -53,16 +53,16 @@ public class NameTags extends Module {
         Map<Entity, float[]> projections = new HashMap<>();
 
         GL11.glPushMatrix();
-        Wrapper.getMC().entityRenderer.setupCameraTransform(event.getPartialTicks(), 0);
+        Wrapper.getGame().entityRenderer.setupCameraTransform(event.getPartialTicks(), 0);
         for (Entity entity : Wrapper.getWorld().loadedEntityList) {
             if (!qualifies(entity)) continue;
 
             double x = (MathHelper.lerpd(entity.prevPosX, entity.posX, event.getPartialTicks())
-                    - Wrapper.getMC().getRenderManager().viewerPosX);
+                    - Wrapper.getGame().getRenderManager().viewerPosX);
             double y = (MathHelper.lerpd(entity.prevPosY, entity.posY, event.getPartialTicks())
-                    + entity.height + 0.2 - Wrapper.getMC().getRenderManager().viewerPosY);
+                    + entity.height + 0.2 - Wrapper.getGame().getRenderManager().viewerPosY);
             double z = (MathHelper.lerpd(entity.prevPosZ, entity.posZ, event.getPartialTicks())
-                    - Wrapper.getMC().getRenderManager().viewerPosZ);
+                    - Wrapper.getGame().getRenderManager().viewerPosZ);
 
             float[] projection = VisualHelper.project((float) x, (float) y, (float) z);
 
@@ -73,7 +73,7 @@ public class NameTags extends Module {
             entities.add(entity);
             projections.put(entity, projection);
         }
-        Wrapper.getMC().entityRenderer.setupOverlayRendering();
+        Wrapper.getGame().entityRenderer.setupOverlayRendering();
         GL11.glPopMatrix();
         entities.sort(Comparator.comparingDouble(entity -> -Wrapper.getPlayer().getDistanceSqToEntity(entity)));
 
@@ -82,7 +82,7 @@ public class NameTags extends Module {
             if (entity instanceof EntityItem) {
                 text = ((EntityItem) entity).getEntityItem().getDisplayName();
             } else {
-                Friend friend = Client.FRIEND_MANAGER.get(entity.getName());
+                Friend friend = Client.FRIEND_MANAGER.find(entity.getName());
                 if (friend != null) {
                     text = String.format("\247b%s", friend.getAliases()[0]);
                 }
@@ -120,9 +120,9 @@ public class NameTags extends Module {
             GL11.glPushMatrix();
             GL11.glTranslatef(position[0], position[1], 0);
             GL11.glScaled(0.5, 0.5, 0.5);
-            int width = Wrapper.getFontRenderer().getStringWidth(text);
+            int width = Wrapper.getTextRenderer().getStringWidth(text);
             VisualHelper.drawRect(-width / 2f - 2, -1, width / 2f + 2, 9, 0x77000000);
-            Wrapper.getFontRenderer().drawStringWithShadow(text, -width / 2f, 0, -1);
+            Wrapper.getTextRenderer().drawStringWithShadow(text, -width / 2f, 0, -1);
             GL11.glPopMatrix();
         }
     }

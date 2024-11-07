@@ -15,11 +15,11 @@ public class MiddleClickFriend extends Module {
 
     @Register
     private void onMiddleClick(EventInput.MiddleClick event) {
-        if (Wrapper.getMC().objectMouseOver == null) return;
-        if (Wrapper.getMC().objectMouseOver.entityHit == null) return;
+        if (Wrapper.getGame().objectMouseOver == null) return;
+        if (Wrapper.getGame().objectMouseOver.entityHit == null) return;
 
-        Entity entity = Wrapper.getMC().objectMouseOver.entityHit;
-        Friend friend = Client.FRIEND_MANAGER.get(entity.getName());
+        Entity entity = Wrapper.getGame().objectMouseOver.entityHit;
+        Friend friend = Client.FRIEND_MANAGER.find(entity.getName());
         if (friend != null) {
             Client.FRIEND_MANAGER.remove(friend);
             return;

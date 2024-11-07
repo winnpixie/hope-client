@@ -60,9 +60,8 @@ public class MethodHandler extends EventHandler {
                 return constructor.newInstance(owner, -1);
             } catch (Exception e) {
                 e.printStackTrace();
+                return MethodHandles.lookup();
             }
-
-            return MethodHandles.lookup();
         });
     }
 }

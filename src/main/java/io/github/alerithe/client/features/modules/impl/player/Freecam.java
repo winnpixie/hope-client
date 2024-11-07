@@ -17,7 +17,7 @@ public class Freecam extends Module {
 
     @Override
     public void enable() {
-        clone = new EntityOtherPlayerMP(Wrapper.getWorld(), Wrapper.getMC().getSession().getProfile());
+        clone = new EntityOtherPlayerMP(Wrapper.getWorld(), Wrapper.getGame().getSession().getProfile());
         clone.setEntityId(-1337);
         clone.copyDataFromOld(Wrapper.getPlayer());
         clone.copyLocationAndAnglesFrom(Wrapper.getPlayer());

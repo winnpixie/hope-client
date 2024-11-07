@@ -1,6 +1,7 @@
 package io.github.alerithe.client.features.commands.impl;
 
 import io.github.alerithe.client.features.commands.Command;
+import io.github.alerithe.client.features.commands.ErrorMessages;
 import io.github.alerithe.client.utilities.Wrapper;
 import io.github.alerithe.mojang.MinecraftAPI;
 import io.github.alerithe.mojang.Profile;
@@ -20,7 +21,7 @@ public class CommandWhois extends Command {
     @Override
     public void execute(String[] args) {
         if (args.length < 1) {
-            Wrapper.printChat("\247cNot enough arguments.");
+            Wrapper.printChat(ErrorMessages.NOT_ENOUGH_ARGS);
             return;
         }
 
@@ -45,7 +46,7 @@ public class CommandWhois extends Command {
             });
         } catch (Exception e) {
             e.printStackTrace();
-            Wrapper.printChat("\2474Error obtaining profile information.");
+            Wrapper.printChat(ErrorMessages.format("Error obtaining profile information."));
         }
     }
 

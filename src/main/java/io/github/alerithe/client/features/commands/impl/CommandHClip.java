@@ -1,6 +1,7 @@
 package io.github.alerithe.client.features.commands.impl;
 
 import io.github.alerithe.client.features.commands.Command;
+import io.github.alerithe.client.features.commands.ErrorMessages;
 import io.github.alerithe.client.utilities.MathHelper;
 import io.github.alerithe.client.utilities.Wrapper;
 
@@ -12,12 +13,12 @@ public class CommandHClip extends Command {
     @Override
     public void execute(String[] args) {
         if (args.length < 1) {
-            Wrapper.printChat("\247cNot enough arguments.");
+            Wrapper.printChat(ErrorMessages.NOT_ENOUGH_ARGS);
             return;
         }
 
         if (!MathHelper.isDouble(args[0])) {
-            Wrapper.printChat("\247c<distance> must be a number.");
+            Wrapper.printChat(ErrorMessages.INVALID_ARG_TYPE);
             return;
         }
 

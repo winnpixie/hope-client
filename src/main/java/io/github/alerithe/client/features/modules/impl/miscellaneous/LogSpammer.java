@@ -2,7 +2,7 @@ package io.github.alerithe.client.features.modules.impl.miscellaneous;
 
 import io.github.alerithe.client.events.EventTick;
 import io.github.alerithe.client.features.modules.Module;
-import io.github.alerithe.client.features.properties.Property;
+import io.github.alerithe.client.features.properties.impl.BooleanProperty;
 import io.github.alerithe.client.utilities.Wrapper;
 import io.github.alerithe.events.Register;
 import io.netty.buffer.Unpooled;
@@ -13,8 +13,8 @@ import net.minecraft.network.play.client.C11PacketEnchantItem;
 import net.minecraft.network.play.client.C17PacketCustomPayload;
 
 public class LogSpammer extends Module {
-    private final Property<Boolean> anvilSpam = new Property<>("Anvils", new String[0], true);
-    private final Property<Boolean> enchantTableSpam = new Property<>("EnchantTables", new String[0], true);
+    private final BooleanProperty anvilSpam = new BooleanProperty("Anvils", new String[0], true);
+    private final BooleanProperty enchantTableSpam = new BooleanProperty("EnchantTables", new String[0], true);
 
     public LogSpammer() {
         super("LogSpammer", new String[]{"logspam"}, Type.MISCELLANEOUS);
@@ -41,7 +41,7 @@ public class LogSpammer extends Module {
 
     private void sendAnvilSpam() {
         if (!anvilSpam.getValue()) return;
-        if (!(Wrapper.getMC().currentScreen instanceof GuiRepair)) return;
+        if (!(Wrapper.getGame().currentScreen instanceof GuiRepair)) return;
 
         // Throws an IndexOutOfBoundsException
         {
@@ -62,10 +62,10 @@ public class LogSpammer extends Module {
 
     private void sendEnchantSpam() {
         if (!enchantTableSpam.getValue()) return;
-        if (!(Wrapper.getMC().currentScreen instanceof GuiEnchantment)) return;
+        if (!(Wrapper.getGame().currentScreen instanceof GuiEnchantment)) return;
 
         // Throws an IndexOutOfBoundException
-        GuiEnchantment gui = (GuiEnchantment) Wrapper.getMC().currentScreen;
+        GuiEnchantment gui = (GuiEnchantment) Wrapper.getGame().currentScreen;
         if (gui.container.getLapisAmount() < 1) return;
 
         Wrapper.sendPacket(new C11PacketEnchantItem(gui.container.windowId, 3));

@@ -1,10 +1,9 @@
 package io.github.alerithe.client.utilities;
 
-import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class MathHelper {
-    private static final Random random = ThreadLocalRandom.current();
+    private static final ThreadLocalRandom LOCAL_RANDOM = ThreadLocalRandom.current();
 
     public static int min(int a, int b) {
         return a < b ? a : b;
@@ -90,8 +89,8 @@ public class MathHelper {
             return true;
         } catch (NumberFormatException e) {
             e.printStackTrace();
+            return false;
         }
-        return false;
     }
 
     public static boolean isFloat(String value) {
@@ -100,9 +99,8 @@ public class MathHelper {
             return true;
         } catch (NumberFormatException e) {
             e.printStackTrace();
+            return false;
         }
-
-        return false;
     }
 
     public static boolean isDouble(String value) {
@@ -111,24 +109,27 @@ public class MathHelper {
             return true;
         } catch (NumberFormatException e) {
             e.printStackTrace();
+            return false;
         }
-
-        return false;
     }
 
-    public static float formatf(float value, int places) {
+    public static float truncate(float value, int places) {
         return Float.parseFloat(String.format("%." + places + "f", value));
     }
 
-    public static double formatd(double value, int places) {
+    public static double truncate(double value, int places) {
         return Double.parseDouble(String.format("%." + places + "f", value));
     }
 
-    public static float randomf(float min, float max) {
-        return min + (random.nextFloat() * (max - min + 1));
+    public static int getRandomInt(int min, int max) {
+        return min + floor(LOCAL_RANDOM.nextFloat() * (max - min + 1));
     }
 
-    public static double randomd(double min, double max) {
-        return min + (random.nextDouble() * (max - min + 1));
+    public static float getRandomFloat(float min, float max) {
+        return min + (LOCAL_RANDOM.nextFloat() * (max - min));
+    }
+
+    public static double getRandomDouble(double min, double max) {
+        return min + (LOCAL_RANDOM.nextDouble() * (max - min));
     }
 }

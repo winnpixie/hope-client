@@ -2,14 +2,14 @@ package io.github.alerithe.client.features.modules.impl.combat;
 
 import io.github.alerithe.client.events.EventPacket;
 import io.github.alerithe.client.features.modules.Module;
-import io.github.alerithe.client.features.properties.impl.NumberProperty;
+import io.github.alerithe.client.features.properties.impl.IntProperty;
 import io.github.alerithe.client.utilities.Wrapper;
 import io.github.alerithe.events.Register;
 import net.minecraft.network.play.client.C02PacketUseEntity;
 import net.minecraft.network.play.client.C03PacketPlayer;
 
 public class SuperKnockback extends Module {
-    private final NumberProperty<Integer> packets = new NumberProperty<>("PacketsPerAttack", new String[]{"packets", "ppa"},
+    private final IntProperty packets = new IntProperty("PacketsPerAttack", new String[]{"packets", "ppa"},
             100, 1, Integer.MAX_VALUE);
 
     public SuperKnockback() {

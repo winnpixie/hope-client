@@ -15,7 +15,7 @@ public class ClickUI extends Module {
     public void enable() {
         if (controller == null) controller = new GuiClick();
 
-        Wrapper.getMC().displayGuiScreen(controller);
+        Wrapper.getGame().displayGuiScreen(controller);
         toggle();
     }
 }

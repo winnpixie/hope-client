@@ -14,12 +14,12 @@ import java.nio.file.Files;
 public class KeybindManager extends FeatureManager<Keybind> {
     @Override
     public void load() {
-        setConfigFile(new File(Client.DATA_DIR, "keybinds.txt"));
+        setConfigurationFile(new File(Client.DATA_DIR, "keybinds.txt"));
 
         try {
-            Files.readAllLines(getConfigFile().toPath()).forEach(line -> {
+            Files.readAllLines(getConfigurationFile().toPath()).forEach(line -> {
                 String[] data = line.split(":", 2);
-                Keybind kb = get(data[0]);
+                Keybind kb = find(data[0]);
                 if (kb == null) return;
 
                 kb.setKey(Keyboard.getKeyIndex(data[1].toUpperCase()));
@@ -45,7 +45,7 @@ public class KeybindManager extends FeatureManager<Keybind> {
                 .append(Keyboard.getKeyName(kb.getKey())).append('\n'));
 
         try {
-            Files.write(getConfigFile().toPath(), builder.toString().getBytes());
+            Files.write(getConfigurationFile().toPath(), builder.toString().getBytes());
         } catch (IOException e) {
             e.printStackTrace();
         }
