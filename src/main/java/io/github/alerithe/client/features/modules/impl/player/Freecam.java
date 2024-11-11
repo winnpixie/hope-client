@@ -22,6 +22,7 @@ public class Freecam extends Module {
         clone.copyDataFromOld(Wrapper.getPlayer());
         clone.copyLocationAndAnglesFrom(Wrapper.getPlayer());
         clone.rotationYawHead = Wrapper.getPlayer().rotationYawHead;
+        clone.onGround = Wrapper.getPlayer().onGround;
         Wrapper.getWorld().addEntityToWorld(clone.getEntityId(), clone);
 
         super.enable();
@@ -52,11 +53,24 @@ public class Freecam extends Module {
 
     @Register
     private void onPacketWrite(EventPacket.Write event) {
-        if (event.getPacket() instanceof C03PacketPlayer
-                || event.getPacket() instanceof C02PacketUseEntity || event.getPacket() instanceof C0BPacketEntityAction
+        if (event.getPacket() instanceof C02PacketUseEntity || event.getPacket() instanceof C0BPacketEntityAction
                 || event.getPacket() instanceof C07PacketPlayerDigging | event.getPacket() instanceof C0APacketAnimation
                 || event.getPacket() instanceof C08PacketPlayerBlockPlacement) {
             event.setCancelled(true);
+        }
+
+        if (event.getPacket() instanceof C03PacketPlayer.C06PacketPlayerPosLook) {
+            event.setPacket(new C03PacketPlayer.C06PacketPlayerPosLook(clone.posX, clone.posY, clone.posZ,
+                    clone.rotationYaw, clone.rotationPitch,
+                    clone.onGround));
+        } else if (event.getPacket() instanceof C03PacketPlayer.C05PacketPlayerLook) {
+            event.setPacket(new C03PacketPlayer.C05PacketPlayerLook(clone.rotationYaw, clone.rotationPitch,
+                    clone.onGround));
+        } else if (event.getPacket() instanceof C03PacketPlayer.C04PacketPlayerPosition) {
+            event.setPacket(new C03PacketPlayer.C04PacketPlayerPosition(clone.posX, clone.posY, clone.posZ,
+                    clone.onGround));
+        } else if (event.getPacket() instanceof C03PacketPlayer) {
+            event.setPacket(new C03PacketPlayer(clone.onGround));
         }
     }
 

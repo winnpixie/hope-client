@@ -8,7 +8,7 @@ import net.minecraft.entity.Entity;
 
 public class CommandEntityInfo extends Command {
     public CommandEntityInfo() {
-        super("entityinfo", new String[]{"ei"}, "<id/name|iname> <id|name>");
+        super("entityinfo", new String[]{"entity", "ei"}, "<id/name|iname> <id|name>");
     }
 
     @Override

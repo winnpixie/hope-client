@@ -10,6 +10,6 @@ public class SpinYaw extends RotationMode {
 
     @Override
     public void onPreUpdate(EventUpdate.Pre event) {
-        event.setYaw(System.currentTimeMillis() / 10 % 360);
+        event.setYaw(((float) (System.currentTimeMillis() / 5.0 % 360)));
     }
 }

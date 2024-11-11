@@ -9,38 +9,43 @@ import io.netty.buffer.Unpooled;
 import net.minecraft.client.gui.GuiEnchantment;
 import net.minecraft.client.gui.GuiRepair;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.play.client.C09PacketHeldItemChange;
 import net.minecraft.network.play.client.C11PacketEnchantItem;
 import net.minecraft.network.play.client.C17PacketCustomPayload;
 
 public class LogSpammer extends Module {
-    private final BooleanProperty anvilSpam = new BooleanProperty("Anvils", new String[0], true);
-    private final BooleanProperty enchantTableSpam = new BooleanProperty("EnchantTables", new String[0], true);
+    private final BooleanProperty anvilText = new BooleanProperty("Anvil", new String[0], true);
+    private final BooleanProperty enchantSlot = new BooleanProperty("EnchantTable", new String[0], true);
+    private final BooleanProperty nullHand = new BooleanProperty("NullHand", new String[0], true);
 
     public LogSpammer() {
         super("LogSpammer", new String[]{"logspam"}, Type.MISCELLANEOUS);
 
-        getPropertyManager().add(anvilSpam);
-        getPropertyManager().add(enchantTableSpam);
+        getPropertyManager().add(anvilText);
+        getPropertyManager().add(enchantSlot);
+        getPropertyManager().add(nullHand);
     }
 
     @Override
     public void enable() {
         Wrapper.printChat("\247eAnvils: \247rRight-click to activate.");
         Wrapper.printChat("\247eEnchantment Tables: \247rRight-click and place Lapis Lazuli to activate.");
+        Wrapper.printChat("\247eNull Hand: \247rUnlikely to work on modded (ie. Spigot, Paper, etc) servers.");
 
         super.enable();
     }
 
     @Register
     private void onTick(EventTick event) {
-        if (event.isInGame()) return;
+        if (!event.isInGame()) return;
 
-        sendAnvilSpam();
-        sendEnchantSpam();
+        sendInvalidAnvilText();
+        sendInvalidEnchantSlot();
+        sendInvalidHandSlot();
     }
 
-    private void sendAnvilSpam() {
-        if (!anvilSpam.getValue()) return;
+    private void sendInvalidAnvilText() {
+        if (!anvilText.getValue()) return;
         if (!(Wrapper.getGame().currentScreen instanceof GuiRepair)) return;
 
         // Throws an IndexOutOfBoundsException
@@ -60,8 +65,8 @@ public class LogSpammer extends Module {
         }
     }
 
-    private void sendEnchantSpam() {
-        if (!enchantTableSpam.getValue()) return;
+    private void sendInvalidEnchantSlot() {
+        if (!enchantSlot.getValue()) return;
         if (!(Wrapper.getGame().currentScreen instanceof GuiEnchantment)) return;
 
         // Throws an IndexOutOfBoundException
@@ -70,5 +75,13 @@ public class LogSpammer extends Module {
 
         Wrapper.sendPacket(new C11PacketEnchantItem(gui.container.windowId, 3));
         Wrapper.printChat("Sent IndexOutOfBounds payload.");
+    }
+
+    private void sendInvalidHandSlot() {
+        if (!nullHand.getValue()) return;
+
+        // Prints out "<Player> tried to set an invalid carried item"
+        Wrapper.sendPacket(new C09PacketHeldItemChange(-1));
+        Wrapper.printChat("Sent Null Hand");
     }
 }
