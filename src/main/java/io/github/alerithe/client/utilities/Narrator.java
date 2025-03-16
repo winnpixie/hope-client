@@ -47,7 +47,7 @@ public class Narrator {
         running = false;
 
         try {
-            narrationThread.join();
+            if (narrationThread != null) narrationThread.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } finally {

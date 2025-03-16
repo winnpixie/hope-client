@@ -7,7 +7,7 @@ import io.github.alerithe.client.utilities.Wrapper;
 
 public class CommandSpeak extends Command {
     public CommandSpeak() {
-        super("speak", new String[0], "<message>");
+        super("speak", new String[]{"talk"}, "<message>");
     }
 
     @Override

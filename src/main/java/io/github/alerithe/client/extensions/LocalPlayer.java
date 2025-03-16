@@ -96,6 +96,18 @@ public class LocalPlayer extends EntityPlayerSP {
         mc.playerController.windowClick(windowId, slot, button, mode, this);
     }
 
+    public boolean hasMoved() {
+        return prevPosX != posX
+                || prevPosY != posY
+                || prevPosZ != posZ;
+    }
+
+    public boolean hasTurned() {
+        return prevRotationYaw != rotationYaw
+                || prevRotationPitch != rotationPitch
+                || prevRotationYawHead != rotationYawHead;
+    }
+
     public boolean isUserMoving() {
         return movementInput.moveForward != 0 || movementInput.moveStrafe != 0;
     }

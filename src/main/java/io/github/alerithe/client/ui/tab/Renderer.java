@@ -31,7 +31,7 @@ public class Renderer extends Component {
     private void drawCategories() {
         int width = 0;
         for (Module.Type type : Module.Type.values()) {
-            width = MathHelper.max(width, Wrapper.getTextRenderer().getStringWidth(type.getLabel().toUpperCase()) + 4);
+            width = MathHelper.max(width, Wrapper.getTextRenderer().getStringWidth(type.getLabel().toUpperCase()) - 4);
         }
 
         int y = 11;

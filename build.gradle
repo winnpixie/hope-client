@@ -6,9 +6,13 @@ plugins {
 group 'io.github.alerithe'
 version '0.1-dev'
 
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
 repositories {
     mavenCentral()
     maven { url 'https://litarvan.github.io/maven' }
+    maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
 }
 
 configurations {
@@ -21,6 +25,9 @@ dependencies {
     shaded 'javax.vecmath:vecmath:1.5.2'
     shaded 'org.yaml:snakeyaml:1.31'
     shaded 'fr.litarvan:openauth:1.1.3'
+
+    shaded 'edu.cmu.sphinx:sphinx4-core:5prealpha-SNAPSHOT'
+    shaded 'edu.cmu.sphinx:sphinx4-data:5prealpha-SNAPSHOT'
 
     implementation fileTree('libraries/')
     shaded fileTree('include/')
@@ -42,6 +49,7 @@ application {
     run {
         workingDir = 'run'
         jvmArgs = [
+                '-Xmx4G', '-Xms4G',
                 '-Djava.library.path=../natives',
                 '-Dmc.email=', '-Dmc.pass='
         ]

@@ -2,6 +2,8 @@ package io.github.alerithe.client;
 
 import com.github.creeper123123321.viafabric.ViaFabric;
 import fr.litarvan.openauth.microsoft.MicrosoftAuthenticationException;
+import io.github.alerithe.client.events.EventBlockCollision;
+import io.github.alerithe.client.events.EventProgramExit;
 import io.github.alerithe.client.extensions.IngameGui;
 import io.github.alerithe.client.features.commands.CommandManager;
 import io.github.alerithe.client.features.friends.FriendManager;
@@ -10,7 +12,11 @@ import io.github.alerithe.client.features.modules.ModuleManager;
 import io.github.alerithe.client.features.plugins.PluginManager;
 import io.github.alerithe.client.utilities.IdentityHelper;
 import io.github.alerithe.client.utilities.Narrator;
+import io.github.alerithe.client.utilities.VoiceAttack;
 import io.github.alerithe.client.utilities.Wrapper;
+import io.github.alerithe.events.EventBus;
+import io.github.alerithe.events.EventHandler;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -27,6 +33,7 @@ public class Client {
     public static final FriendManager FRIEND_MANAGER = new FriendManager();
     public static final PluginManager PLUGIN_MANAGER = new PluginManager();
     public static final Narrator NARRATOR = new Narrator();
+    public static final VoiceAttack VOICE_ATTACK = new VoiceAttack();
 
     public static File DATA_DIR;
 
@@ -39,6 +46,9 @@ public class Client {
         }
 
         NARRATOR.load(); // TTS is very important, don't ask.
+        // FIXME: I'm pretty sure this is causing a memory leak, probably won't try to fix that, lol.
+        // VOICE_ATTACK.load(); // STT is also very important.
+
         COMMAND_MANAGER.load();
         MODULE_MANAGER.load();
         KEYBIND_MANAGER.load();
@@ -47,14 +57,17 @@ public class Client {
 
         Wrapper.getGame().ingameGUI = new IngameGui(Wrapper.getGame());
 
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            MODULE_MANAGER.save();
-            KEYBIND_MANAGER.save();
-            FRIEND_MANAGER.save();
-            PLUGIN_MANAGER.save();
-
-            NARRATOR.unload();
-        }));
+        EventBus.register(new EventHandler<EventProgramExit>() {
+            public void handle(EventProgramExit event) {
+                MODULE_MANAGER.save();
+                KEYBIND_MANAGER.save();
+                FRIEND_MANAGER.save();
+                PLUGIN_MANAGER.save();
+    
+                NARRATOR.unload();
+                VOICE_ATTACK.unload();
+            };
+        });
 
         // ViaVersion / ViaMCP
         try {

@@ -11,12 +11,13 @@ import java.security.NoSuchAlgorithmException;
 
 // This class is serves no purpose unless I go paid/private.
 public class IdentityHelper {
-    private static String IDENTIFICATION = "";
+    private static String RAW_ID = "";
+    private static String HASHED_ID = "";
 
     // TODO: Pick out information to deem as personally identifiable
     public static String getRawId() {
-        if (IDENTIFICATION.isEmpty()) {
-            IDENTIFICATION = System.getProperty("os.name")
+        if (RAW_ID.isEmpty()) {
+            RAW_ID = System.getProperty("os.name")
                     + ';' + System.getProperty("os.arch")
                     + '/' + System.getProperty("user.name")
                     + ';' + System.getProperty("user.home")
@@ -25,7 +26,7 @@ public class IdentityHelper {
                     + '/' + getPublicIPv4();
         }
 
-        return IDENTIFICATION;
+        return RAW_ID;
     }
 
     public static String getPublicIPv4() {
@@ -44,26 +45,30 @@ public class IdentityHelper {
     }
 
     public static String getId() {
-        MessageDigest md = null;
-        try {
-            md = MessageDigest.getInstance("SHA-256");
-            md.reset();
-            byte[] hash = md.digest(getRawId().getBytes(StandardCharsets.UTF_8));
-
-            StringBuilder builder = new StringBuilder();
-            for (byte b : hash) {
-                String hex = Integer.toString(b & 0xFF, 16);
-                if (hex.length() < 2) hex = '0' + hex;
-
-                builder.append(hex);
+        if (HASHED_ID.isEmpty()) {
+            MessageDigest md = null;
+            try {
+                md = MessageDigest.getInstance("SHA-256");
+                md.reset();
+                byte[] hash = md.digest(getRawId().getBytes(StandardCharsets.UTF_8));
+    
+                StringBuilder builder = new StringBuilder();
+                for (byte b : hash) {
+                    String hex = Integer.toString(b & 0xFF, 16);
+                    if (hex.length() < 2) hex = '0' + hex;
+    
+                    builder.append(hex);
+                }
+    
+                return builder.toString();
+            } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+                HASHED_ID = getRawId();
+            } finally {
+                if (md != null) md.reset();
             }
-
-            return builder.toString();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-            return getRawId();
-        } finally {
-            if (md != null) md.reset();
         }
+        
+        return HASHED_ID;
     }
 }

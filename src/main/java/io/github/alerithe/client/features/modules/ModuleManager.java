@@ -22,8 +22,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class ModuleManager extends FeatureManager<Module> {
-    private final File moduleStatesFile = new File(Client.DATA_DIR, "enabled.txt");
-
+    private File moduleStatesFile;
     private boolean toggledModules;
 
     @Override
@@ -32,6 +31,8 @@ public class ModuleManager extends FeatureManager<Module> {
         if (!getConfigurationFile().exists() && !getConfigurationFile().mkdir()) {
             Client.LOGGER.warn("Could not create modules directory (does it already exist?)!");
         }
+
+        moduleStatesFile = new File(getConfigurationFile(), "enabled.txt");
 
         // Combat
         add(new AntiBot());
@@ -100,6 +101,7 @@ public class ModuleManager extends FeatureManager<Module> {
         add(new GameSpeed());
         add(new LogSpammer());
         add(new MiddleClickFriend());
+        add(new NetPlus());
         add(new NoHunger());
         add(new PingSpoof());
         add(new TextSpammer()); // TODO: Finish
