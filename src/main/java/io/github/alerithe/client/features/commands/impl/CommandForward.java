@@ -14,12 +14,12 @@ public class CommandForward extends Command {
     @Override
     public void execute(String[] args) {
         if (args.length < 1) {
-            Wrapper.printChat(ErrorMessages.NOT_ENOUGH_ARGS);
+            Wrapper.printMessage(ErrorMessages.NOT_ENOUGH_ARGS);
             return;
         }
 
         if (!MathHelper.isDouble(args[0])) {
-            Wrapper.printChat(ErrorMessages.INVALID_ARG_TYPE);
+            Wrapper.printMessage(ErrorMessages.INVALID_ARG_TYPE);
             return;
         }
 

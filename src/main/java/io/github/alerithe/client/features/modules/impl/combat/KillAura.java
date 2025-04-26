@@ -35,6 +35,8 @@ public class KillAura extends Module {
             new Tick(this), new Single(this), new LockOn(this));
     private final ObjectProperty<SortingMode> sortingMode = new ObjectProperty<>("SortingMode", new String[]{"sorting"},
             new SortingMode.AngleSort(), new SortingMode.DistanceSort());
+    private final BooleanProperty smartAngles = new BooleanProperty("SmartAngles", new String[0], false);
+    private final DoubleProperty angleOffset = new DoubleProperty("AngleOffset", new String[0], 2.5, 0.0, 5.0);
     private final BooleanProperty look = new BooleanProperty("Look", new String[0], false);
     public final IntProperty minAps = new IntProperty("MinHitsPerSecond", new String[]{"minaps", "mincps", "minspeed"},
             8, 1, 20);
@@ -63,6 +65,8 @@ public class KillAura extends Module {
         getPropertyManager().add(distance);
         getPropertyManager().add(autoBlock);
         getPropertyManager().add(sortingMode);
+        getPropertyManager().add(smartAngles);
+        getPropertyManager().add(angleOffset);
         getPropertyManager().add(look);
         getPropertyManager().add(players);
         getPropertyManager().add(monsters);
@@ -79,9 +83,10 @@ public class KillAura extends Module {
         mode.getValue().onPreUpdate(event);
         if (target == null) return;
 
-        float[] angles = Wrapper.getPlayer().getRotationsToEntity(target);
-        event.setYaw(MathHelper.clamp(angles[0] + MathHelper.getRandomFloat(-4f, 4f), -360f, 360f));
-        event.setPitch(MathHelper.clamp(angles[1] + MathHelper.getRandomFloat(-4f, 4f), -90f, 90f));
+        float[] angles = getRotationsToTarget(target);
+        float offsetValue = angleOffset.getValue().floatValue();
+        event.setYaw(MathHelper.clamp(angles[0] + MathHelper.getRandomFloat(-offsetValue, offsetValue), -360f, 360f));
+        event.setPitch(MathHelper.clamp(angles[1] + MathHelper.getRandomFloat(-offsetValue, offsetValue), -90f, 90f));
 
         if (look.getValue()) {
             Wrapper.getPlayer().rotationYaw = event.getYaw();
@@ -140,6 +145,20 @@ public class KillAura extends Module {
                 && Wrapper.getPlayer().getDistanceSqToEntity(entity) <= (distance.getValue() * distance.getValue())
                 && (attackFriends.getValue() || Client.FRIEND_MANAGER.find(entity.getName()) == null)
                 && entity != Wrapper.getPlayer();
+    }
+
+    private float[] getRotationsToTarget(Entity target) {
+        if (!smartAngles.getValue()) return Wrapper.getPlayer().getRotationsToEntity(target);
+
+        double yDiff = target.posY - Wrapper.getPlayer().posY;
+        if (yDiff > 0.4) {
+            return Wrapper.getPlayer().getRotationToPosition(
+                    target.posX,
+                    target.posY + (target.getEyeHeight() / (yDiff / 0.4)),
+                    target.posZ);
+        }
+
+        return Wrapper.getPlayer().getRotationsToEntity(target);
     }
 
     public void attack(Entity entity) {

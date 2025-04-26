@@ -16,12 +16,12 @@ public class CommandSkull extends Command {
     @Override
     public void execute(String[] args) {
         if (!Wrapper.getPlayer().capabilities.isCreativeMode) {
-            Wrapper.printChat(ErrorMessages.format("You must be in Creative mode to use this."));
+            Wrapper.printMessage(ErrorMessages.format("You must be in Creative mode to use this."));
             return;
         }
 
         if (args.length < 1) {
-            Wrapper.printChat(ErrorMessages.NOT_ENOUGH_ARGS);
+            Wrapper.printMessage(ErrorMessages.NOT_ENOUGH_ARGS);
             return;
         }
 
@@ -31,6 +31,6 @@ public class CommandSkull extends Command {
         compound.setString("SkullOwner", args[0]);
         stack.setTagCompound(compound);
         Wrapper.sendPacket(new C10PacketCreativeInventoryAction(slot, stack));
-        Wrapper.printChat(String.format("Gave you the skull of %s", args[0]));
+        Wrapper.printMessage(String.format("Gave you the skull of %s", args[0]));
     }
 }

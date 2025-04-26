@@ -21,32 +21,32 @@ public class CommandWhois extends Command {
     @Override
     public void execute(String[] args) {
         if (args.length < 1) {
-            Wrapper.printChat(ErrorMessages.NOT_ENOUGH_ARGS);
+            Wrapper.printMessage(ErrorMessages.NOT_ENOUGH_ARGS);
             return;
         }
 
         try {
             Profile profile = MinecraftAPI.getProfile(args[0]);
-            Wrapper.printChat("\247eProfile Information:");
-            Wrapper.printChat("Username: \247e" + profile.name);
-            Wrapper.printChat("UUID: \247e" + profile.id);
-            Wrapper.printChat("Legacy: \247e" + profile.legacy);
-            Wrapper.printChat("Demo: \247e" + profile.demo);
-            Wrapper.printChat("Has OptiFine Cape? \247e" + hasOptiFineCape(profile.name));
-            Wrapper.printChat("\247eName History:");
+            Wrapper.printMessage("\247eProfile Information:");
+            Wrapper.printMessage("Username: \247e" + profile.name);
+            Wrapper.printMessage("UUID: \247e" + profile.id);
+            Wrapper.printMessage("Legacy: \247e" + profile.legacy);
+            Wrapper.printMessage("Demo: \247e" + profile.demo);
+            Wrapper.printMessage("Has OptiFine Cape? \247e" + hasOptiFineCape(profile.name));
+            Wrapper.printMessage("\247eName History:");
             List<Profile.NameEntry> history = MinecraftAPI.getNameHistory(profile);
-            Wrapper.printChat("\247e" + history.size() + " name(s)");
+            Wrapper.printMessage("\247e" + history.size() + " name(s)");
             history.sort(Comparator.comparingLong(entry -> entry.changedToAt));
             history.forEach(entry -> {
                 if (entry.changedToAt == 0) {
-                    Wrapper.printChat("\247e-\247r " + entry.name + " \247e(original)");
+                    Wrapper.printMessage("\247e-\247r " + entry.name + " \247e(original)");
                 } else {
-                    Wrapper.printChat("\247e-\247r " + entry.name + " \247e(" + new Date(entry.changedToAt) + ")");
+                    Wrapper.printMessage("\247e-\247r " + entry.name + " \247e(" + new Date(entry.changedToAt) + ")");
                 }
             });
         } catch (Exception e) {
             e.printStackTrace();
-            Wrapper.printChat(ErrorMessages.format("Error obtaining profile information."));
+            Wrapper.printMessage(ErrorMessages.format("Error obtaining profile information."));
         }
     }
 

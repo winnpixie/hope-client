@@ -21,24 +21,24 @@ public class CommandServerInfo extends Command {
     @Override
     public void execute(String[] args) {
         if (Wrapper.getGame().getCurrentServerData() == null || Wrapper.getGame().isSingleplayer()) {
-            Wrapper.printChat(ErrorMessages.format("No server detected, are you in single-player?"));
+            Wrapper.printMessage(ErrorMessages.format("No server detected, are you in single-player?"));
             return;
         }
 
-        Wrapper.printChat("\247eServer Information:");
-        Wrapper.printChat(String.format("Name in List: \247e%s", Wrapper.getGame().getCurrentServerData().serverName));
+        Wrapper.printMessage("\247eServer Information:");
+        Wrapper.printMessage(String.format("Name in List: \247e%s", Wrapper.getGame().getCurrentServerData().serverName));
 
         String[] ipAndPort = Wrapper.getGame().getCurrentServerData().serverIP.split(":");
         String addr = ipAndPort[0];
         int port = ipAndPort.length > 1 ? Integer.parseInt(ipAndPort[1]) : 25565;
-        Wrapper.printChat(String.format("IP: \247e%s", addr));
-        Wrapper.printChat(String.format("Port: \247e%s", port));
-        Wrapper.printChat(String.format("Brand: \247e%s", Wrapper.getPlayer().getClientBrand()));
+        Wrapper.printMessage(String.format("IP: \247e%s", addr));
+        Wrapper.printMessage(String.format("Port: \247e%s", port));
+        Wrapper.printMessage(String.format("Brand: \247e%s", Wrapper.getPlayer().getClientBrand()));
         if (args.length > 0) {
-            Wrapper.printChat(String.format("Searching for plugins that begin with '%s'...", args[0]));
+            Wrapper.printMessage(String.format("Searching for plugins that begin with '%s'...", args[0]));
             Wrapper.sendPacket(new C14PacketTabComplete("/" + args[0]));
         } else {
-            Wrapper.printChat("Searching for plugins...");
+            Wrapper.printMessage("Searching for plugins...");
             Wrapper.sendPacket(new C14PacketTabComplete("/"));
         }
 
@@ -56,12 +56,12 @@ public class CommandServerInfo extends Command {
                         plugins.add(match.substring(1).split(":")[0].toLowerCase());
                     }
 
-                    Wrapper.printChat(String.format("Detected \247a(%d)\247r Plugins", plugins.size()));
-                    Wrapper.printChat("\247a" + String.join("\247f, \247a", plugins));
+                    Wrapper.printMessage(String.format("Detected \247a(%d)\247r Plugins", plugins.size()));
+                    Wrapper.printMessage("\247a" + String.join("\247f, \247a", plugins));
                     EventBus.unregister(this);
                 } else if (timer.hasPassed(20000)) {
                     EventBus.unregister(this);
-                    Wrapper.printChat(ErrorMessages.format("Could not receive plugin information within 20 seconds."));
+                    Wrapper.printMessage(ErrorMessages.format("Could not receive plugin information within 20 seconds."));
                 }
             }
         });

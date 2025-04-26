@@ -2,7 +2,6 @@ package io.github.alerithe.client;
 
 import com.github.creeper123123321.viafabric.ViaFabric;
 import fr.litarvan.openauth.microsoft.MicrosoftAuthenticationException;
-import io.github.alerithe.client.events.EventBlockCollision;
 import io.github.alerithe.client.events.EventProgramExit;
 import io.github.alerithe.client.extensions.IngameGui;
 import io.github.alerithe.client.features.commands.CommandManager;
@@ -16,7 +15,6 @@ import io.github.alerithe.client.utilities.VoiceAttack;
 import io.github.alerithe.client.utilities.Wrapper;
 import io.github.alerithe.events.EventBus;
 import io.github.alerithe.events.EventHandler;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -63,10 +61,10 @@ public class Client {
                 KEYBIND_MANAGER.save();
                 FRIEND_MANAGER.save();
                 PLUGIN_MANAGER.save();
-    
+
                 NARRATOR.unload();
                 VOICE_ATTACK.unload();
-            };
+            }
         });
 
         // ViaVersion / ViaMCP
@@ -86,6 +84,9 @@ public class Client {
                 e.printStackTrace();
             }
         }
+
+        boolean silentBoot = System.getProperty("hope.silentboot", "false").equalsIgnoreCase("true");
+        if (silentBoot) return;
 
         NARRATOR.narrate("Hello, " + System.getProperty("user.name", Wrapper.getGame().getSession().getUsername()) + ".");
     }

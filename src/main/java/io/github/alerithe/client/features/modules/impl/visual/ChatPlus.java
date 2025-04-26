@@ -24,6 +24,6 @@ public class ChatPlus extends Module {
         super.disable();
 
         setEnabled(true);
-        Wrapper.printChat("\2474Chat+ can not be turned off.");
+        Wrapper.printMessage("\2474Chat+ can not be turned off.");
     }
 }

@@ -14,62 +14,72 @@ public class Renderer extends Component {
         super(container);
     }
 
+    // FIXME: Autism.
     public void draw(float partialTicks) {
-        switch (getContainer().getSection()) {
-            case TYPE:
-                drawCategories();
-                break;
-            case MODULE:
-                drawModules();
-                break;
-            case PROPERTY:
-                drawProperties();
-                break;
+        int xOffset = 0;
+        xOffset = drawCategories(xOffset) + 1;
+
+        if (getContainer().getSection() == Section.MODULE) {
+            drawModules(xOffset);
+        }
+
+        if (getContainer().getSection() == Section.PROPERTY) {
+            xOffset += drawModules(xOffset) + 1;
+            drawProperties(xOffset);
         }
     }
 
-    private void drawCategories() {
+    private int drawCategories(int xOffset) {
         int width = 0;
         for (Module.Type type : Module.Type.values()) {
-            width = MathHelper.max(width, Wrapper.getTextRenderer().getStringWidth(type.getLabel().toUpperCase()) - 4);
+            width = MathHelper.max(width, Wrapper.getTextRenderer().getStringWidth(type.getLabel()) + 4);
         }
 
+        int x = xOffset + 1;
         int y = 11;
         for (Module.Type type : Module.Type.values()) {
-            VisualHelper.drawRect(1, y, 1 + width, y + 12, getContainer().getType() == type ? 0xFF990000 : 0xFF222222);
-            Wrapper.getTextRenderer().drawStringWithShadow(type.getLabel(), 3, y + 2, -1);
+            VisualHelper.drawRect(x, y, x + width, y + 12, getContainer().getType() == type ? 0xFF990000 : 0xFF222222);
+            Wrapper.getTextRenderer().drawStringWithShadow(type.getLabel(), x + 2, y + 2, -1);
             y += 12;
         }
+
+        return width;
     }
 
-    private void drawModules() {
+    private int drawModules(int xOffset) {
         List<Module> modules = getContainer().getModules();
         int width = 0;
         for (Module module : modules) {
-            width = MathHelper.max(width, Wrapper.getTextRenderer().getStringWidth(module.getName().toUpperCase()) + 4);
+            width = MathHelper.max(width, Wrapper.getTextRenderer().getStringWidth(module.getName()) + 4);
         }
 
+        int x = xOffset + 1;
         int y = 11;
         for (Module module : modules) {
-            VisualHelper.drawRect(1, y, 1 + width, y + 12, getContainer().getModule() == module ? 0xFF990000 : 0xFF222222);
-            Wrapper.getTextRenderer().drawStringWithShadow(module.getName(), 3, y + 2, module.isEnabled() ? -1 : 0xFFAAAAAA);
+            VisualHelper.drawRect(x, y, x + width, y + 12, getContainer().getModule() == module ? 0xFF990000 : 0xFF222222);
+            Wrapper.getTextRenderer().drawStringWithShadow(module.getName(), x + 2, y + 2, module.isEnabled() ? -1 : 0xFFAAAAAA);
             y += 12;
         }
+
+        return width;
     }
 
-    private void drawProperties() {
+    private int drawProperties(int xOffset) {
         List<Property<?>> properties = getContainer().getProperties();
         int width = 0;
         for (Property<?> property : properties) {
-            width = MathHelper.max(width, Wrapper.getTextRenderer().getStringWidth(format(property).toUpperCase()) + 4);
+            width = MathHelper.max(width, Wrapper.getTextRenderer().getStringWidth(format(property)) + 4);
         }
 
+        int x = xOffset + 1;
         int y = 11;
         for (Property<?> property : properties) {
-            VisualHelper.drawRect(1, y, 1 + width, y + 12, getContainer().getProperty() == property ? 0xFF990000 : 0xFF222222);
-            Wrapper.getTextRenderer().drawStringWithShadow(format(property), 3, y + 2, 0xFFAAAAAA);
+            VisualHelper.drawRect(x, y, x + width, y + 12, getContainer().getProperty() == property ? 0xFF990000 : 0xFF222222);
+            Wrapper.getTextRenderer().drawStringWithShadow(format(property), x + 2, y + 2, 0xFFAAAAAA);
             y += 12;
         }
+
+        return width;
     }
 
     private String format(Property<?> property) {

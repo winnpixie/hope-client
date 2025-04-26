@@ -55,19 +55,32 @@ public class LocalPlayer extends EntityPlayerSP {
         return Config.zoomMode ? super.getFovModifier() / 4f : super.getFovModifier();
     }
 
-    public float[] getRotationsToEntity(Entity entity) {
-        double dx = entity.posX - this.posX;
-        double dz = entity.posZ - this.posZ;
-        double dy;
+    public float[] getRotationToPosition(Vec3 pos) {
+        return getRotationsToEntity(new EntitySnowball(worldObj, pos.xCoord, pos.yCoord, pos.zCoord));
+    }
 
+    public float[] getRotationsToEntity(Entity entity) {
         if (entity instanceof EntityLivingBase) {
-            EntityLivingBase elb = (EntityLivingBase) entity;
-            dy = elb.posY + elb.getEyeHeight() - (this.posY + this.getEyeHeight());
-        } else {
-            dy = (entity.getEntityBoundingBox().minY + entity.getEntityBoundingBox().maxY) / 2d - (this.posY + this.getEyeHeight());
+            EntityLivingBase ent = (EntityLivingBase) entity;
+            return getRotationToPosition(
+                    ent.posX,
+                    ent.posY + ent.getEyeHeight(),
+                    ent.posZ);
         }
 
+        return getRotationToPosition(
+                entity.posX,
+                (entity.getEntityBoundingBox().minY + entity.getEntityBoundingBox().maxY) / 2.0,
+                entity.posZ);
+    }
+
+    public float[] getRotationToPosition(double x, double y, double z) {
+        double dx = x - this.posX;
+        double dz = z - this.posZ;
+        double dy = y - (this.posY + this.getEyeHeight());
+
         double hypot = MathHelper.sqrt_double(dx * dx + dz * dz);
+
         return new float[]{
                 (float) (MathHelper.func_181159_b(dz, dx) * 180d / Math.PI) - 90f,
                 (float) (-(MathHelper.func_181159_b(dy, hypot) * 180d / Math.PI))
@@ -78,10 +91,6 @@ public class LocalPlayer extends EntityPlayerSP {
         return isInWater() || isInLava();
     }
 
-    public float[] getRotationsToPosition(Vec3 pos) {
-        EntitySnowball snowball = new EntitySnowball(worldObj, pos.xCoord, pos.yCoord, pos.zCoord);
-        return getRotationsToEntity(snowball);
-    }
 
     public boolean isInventoryFull() {
         for (int i = 0; i < 36; i++) {

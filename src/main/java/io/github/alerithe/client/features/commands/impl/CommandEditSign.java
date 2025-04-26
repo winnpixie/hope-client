@@ -18,7 +18,7 @@ public class CommandEditSign extends Command {
     @Override
     public void execute(String[] args) {
         if (args.length < 1) {
-            Wrapper.printChat(ErrorMessages.NOT_ENOUGH_ARGS);
+            Wrapper.printMessage(ErrorMessages.NOT_ENOUGH_ARGS);
             return;
         }
 
@@ -26,13 +26,13 @@ public class CommandEditSign extends Command {
 
         if (Wrapper.getGame().objectMouseOver == null
                 || Wrapper.getGame().objectMouseOver.typeOfHit != MovingObjectPosition.MovingObjectType.BLOCK) {
-            Wrapper.printChat("\247cYou must be hovering over a sign.");
+            Wrapper.printMessage("\247cYou must be hovering over a sign.");
             return;
         }
         BlockPos pos = Wrapper.getGame().objectMouseOver.getBlockPos();
         Block block = Wrapper.getBlock(pos);
         if (!(block instanceof BlockSign)) {
-            Wrapper.printChat("\247cYou must be hovering over a sign.");
+            Wrapper.printMessage("\247cYou must be hovering over a sign.");
             return;
         }
 

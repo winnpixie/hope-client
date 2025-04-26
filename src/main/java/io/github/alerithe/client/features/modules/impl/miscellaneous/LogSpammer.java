@@ -28,9 +28,9 @@ public class LogSpammer extends Module {
 
     @Override
     public void enable() {
-        Wrapper.printChat("\247eAnvils: \247rRight-click to activate.");
-        Wrapper.printChat("\247eEnchantment Tables: \247rRight-click and place Lapis Lazuli to activate.");
-        Wrapper.printChat("\247eNull Hand: \247rUnlikely to work on modded (ie. Spigot, Paper, etc) servers.");
+        Wrapper.printMessage("\247eAnvils: \247rRight-click to activate.");
+        Wrapper.printMessage("\247eEnchantment Tables: \247rRight-click and place Lapis Lazuli to activate.");
+        Wrapper.printMessage("\247eNull Hand: \247rUnlikely to work on modded (ie. Spigot, Paper, etc) servers.");
 
         super.enable();
     }
@@ -53,7 +53,7 @@ public class LogSpammer extends Module {
             PacketBuffer buffer = new PacketBuffer(Unpooled.buffer());
             buffer.writeVarIntToBuffer(1);
             Wrapper.sendPacket(new C17PacketCustomPayload("MC|ItemName", buffer));
-            Wrapper.printChat("Sent IndexOutOfBounds payload.");
+            Wrapper.printMessage("Sent IndexOutOfBounds payload.");
         }
 
         // Throws a DecoderException
@@ -61,7 +61,7 @@ public class LogSpammer extends Module {
             PacketBuffer buffer = new PacketBuffer(Unpooled.buffer());
             buffer.writeVarIntToBuffer(131069);
             Wrapper.sendPacket(new C17PacketCustomPayload("MC|ItemName", buffer));
-            Wrapper.printChat("Sent Decoder payload.");
+            Wrapper.printMessage("Sent Decoder payload.");
         }
     }
 
@@ -74,7 +74,7 @@ public class LogSpammer extends Module {
         if (gui.container.getLapisAmount() < 1) return;
 
         Wrapper.sendPacket(new C11PacketEnchantItem(gui.container.windowId, 3));
-        Wrapper.printChat("Sent IndexOutOfBounds payload.");
+        Wrapper.printMessage("Sent IndexOutOfBounds payload.");
     }
 
     private void sendInvalidHandSlot() {
@@ -82,6 +82,6 @@ public class LogSpammer extends Module {
 
         // Prints out "<Player> tried to set an invalid carried item"
         Wrapper.sendPacket(new C09PacketHeldItemChange(-1));
-        Wrapper.printChat("Sent Null Hand");
+        Wrapper.printMessage("Sent Null Hand");
     }
 }

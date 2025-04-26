@@ -16,7 +16,7 @@ public class CommandRejoin extends Command {
     @Override
     public void execute(String[] args) {
         if (Wrapper.getGame().getCurrentServerData() == null || Wrapper.getGame().isSingleplayer()) {
-            Wrapper.printChat(ErrorMessages.format("No server detected, are you in single-player?"));
+            Wrapper.printMessage(ErrorMessages.format("No server detected, are you in single-player?"));
             return;
         }
 

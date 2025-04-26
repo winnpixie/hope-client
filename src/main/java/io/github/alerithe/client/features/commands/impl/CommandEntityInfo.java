@@ -14,7 +14,7 @@ public class CommandEntityInfo extends Command {
     @Override
     public void execute(String[] args) {
         if (args.length < 2) {
-            Wrapper.printChat(ErrorMessages.NOT_ENOUGH_ARGS);
+            Wrapper.printMessage(ErrorMessages.NOT_ENOUGH_ARGS);
             return;
         }
 
@@ -22,7 +22,7 @@ public class CommandEntityInfo extends Command {
         switch (args[0].toLowerCase()) {
             case "id":
                 if (!MathHelper.isInt(args[1])) {
-                    Wrapper.printChat(ErrorMessages.INVALID_ARG_TYPE);
+                    Wrapper.printMessage(ErrorMessages.INVALID_ARG_TYPE);
                     return;
                 }
 
@@ -40,12 +40,12 @@ public class CommandEntityInfo extends Command {
                 }
                 break;
             default:
-                Wrapper.printChat(ErrorMessages.INVALID_ARG);
+                Wrapper.printMessage(ErrorMessages.INVALID_ARG);
                 return;
         }
 
         if (target == null) {
-            Wrapper.printChat(ErrorMessages.INVALID_TARGET);
+            Wrapper.printMessage(ErrorMessages.INVALID_TARGET);
             return;
         }
 
@@ -53,13 +53,13 @@ public class CommandEntityInfo extends Command {
     }
 
     private void printEntityInfo(Entity entity) {
-        Wrapper.printChat("\247eID: \247r" + entity.getEntityId());
-        Wrapper.printChat("\247eType: \247r" + entity.getClass().getSimpleName());
-        Wrapper.printChat("\247eName: \247r" + entity.getName());
-        Wrapper.printChat("\247eDisplay Name: \247r" + entity.getDisplayName().getFormattedText());
-        Wrapper.printChat("\247ePosition: \247r" + String.format("X %.1f Y %.1f Z %.1f",
+        Wrapper.printMessage("\247eID: \247r" + entity.getEntityId());
+        Wrapper.printMessage("\247eType: \247r" + entity.getClass().getSimpleName());
+        Wrapper.printMessage("\247eName: \247r" + entity.getName());
+        Wrapper.printMessage("\247eDisplay Name: \247r" + entity.getDisplayName().getFormattedText());
+        Wrapper.printMessage("\247ePosition: \247r" + String.format("X %.1f Y %.1f Z %.1f",
                 entity.posX, entity.posY, entity.posZ));
-        Wrapper.printChat("\247eRotation: \247r" + String.format("Yaw %.1f, Pitch %.1f",
+        Wrapper.printMessage("\247eRotation: \247r" + String.format("Yaw %.1f, Pitch %.1f",
                 entity.rotationYaw, entity.rotationPitch));
     }
 }

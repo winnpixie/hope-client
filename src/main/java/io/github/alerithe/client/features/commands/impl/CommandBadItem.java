@@ -26,12 +26,12 @@ public class CommandBadItem extends Command {
     @Override
     public void execute(String[] args) {
         if (!Wrapper.getPlayer().capabilities.isCreativeMode) {
-            Wrapper.printChat(ErrorMessages.format("You must be in Creative Mode to use this command."));
+            Wrapper.printMessage(ErrorMessages.format("You must be in Creative Mode to use this command."));
             return;
         }
 
         if (args.length < 1) {
-            Wrapper.printChat(ErrorMessages.NOT_ENOUGH_ARGS);
+            Wrapper.printMessage(ErrorMessages.NOT_ENOUGH_ARGS);
             return;
         }
 
@@ -41,14 +41,14 @@ public class CommandBadItem extends Command {
             case "anvil": {
                 ItemStack stack = new ItemStack(Blocks.anvil, 64, 3);
                 Wrapper.sendPacket(new C10PacketCreativeInventoryAction(slot, stack));
-                Wrapper.printChat("Make other players place this Anvil to crash their game.");
+                Wrapper.printMessage("Make other players place this Anvil to crash their game.");
                 break;
             }
             case "tag": {
                 ItemStack stack = new ItemStack(Items.name_tag, 64);
                 stack.setStackDisplayName(tagName);
                 Wrapper.sendPacket(new C10PacketCreativeInventoryAction(slot, stack));
-                Wrapper.printChat("Apply this tag to an entity to lag other players.");
+                Wrapper.printMessage("Apply this tag to an entity to lag other players.");
                 break;
             }
             case "stand": {
@@ -57,15 +57,15 @@ public class CommandBadItem extends Command {
                 NBTTagCompound tags = new NBTTagCompound();
                 tags.setInteger("Invisible", 1);
                 tags.setByte("NoGravity", (byte) 1);
-                tags.setDouble("x", 20);
-                tags.setDouble("y", 57);
-                tags.setDouble("z", 19);
+                tags.setDouble("x", 42);
+                tags.setDouble("y", 69);
+                tags.setDouble("z", 42);
                 Wrapper.sendPacket(new C10PacketCreativeInventoryAction(slot, stack));
-                Wrapper.printChat("Apply this tag to an entity to lag other players.");
+                Wrapper.printMessage("Apply this tag to an entity to lag other players.");
                 break;
             }
             default:
-                Wrapper.printChat(ErrorMessages.INVALID_ARG);
+                Wrapper.printMessage(ErrorMessages.INVALID_ARG);
                 break;
         }
     }

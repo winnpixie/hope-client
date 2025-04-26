@@ -15,18 +15,18 @@ public class CommandBind extends Command {
     @Override
     public void execute(String[] args) {
         if (args.length < 2) {
-            Wrapper.printChat(ErrorMessages.NOT_ENOUGH_ARGS);
+            Wrapper.printMessage(ErrorMessages.NOT_ENOUGH_ARGS);
             return;
         }
 
         Keybind keybind = Client.KEYBIND_MANAGER.find(args[0]);
         if (keybind == null) {
-            Wrapper.printChat(ErrorMessages.INVALID_TARGET);
+            Wrapper.printMessage(ErrorMessages.INVALID_TARGET);
             return;
         }
 
         int key = Keyboard.getKeyIndex(args[1].toUpperCase());
         keybind.setKey(key);
-        Wrapper.printChat(String.format("%s is now bound to %s.", keybind.getName(), Keyboard.getKeyName(key)));
+        Wrapper.printMessage(String.format("%s is now bound to %s.", keybind.getName(), Keyboard.getKeyName(key)));
     }
 }

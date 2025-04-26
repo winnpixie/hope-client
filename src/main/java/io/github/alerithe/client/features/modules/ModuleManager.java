@@ -71,6 +71,7 @@ public class ModuleManager extends FeatureManager<Module> {
         add(new Regen());
 
         // Visual
+        add(new Breadcrumbs()); // TODO: Finish
         add(new ChatPlus());
         add(new ClickUI());
         add(new EntityESP());

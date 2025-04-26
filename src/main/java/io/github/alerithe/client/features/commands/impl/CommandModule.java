@@ -19,19 +19,19 @@ public class CommandModule extends Command {
     @Override
     public void execute(String[] args) {
         if (args.length < 3) {
-            Wrapper.printChat(ErrorMessages.NOT_ENOUGH_ARGS);
+            Wrapper.printMessage(ErrorMessages.NOT_ENOUGH_ARGS);
             return;
         }
 
         Module module = Client.MODULE_MANAGER.find(args[0]);
         if (module == null) {
-            Wrapper.printChat(ErrorMessages.INVALID_TARGET);
+            Wrapper.printMessage(ErrorMessages.INVALID_TARGET);
             return;
         }
 
         Property<?> property = module.getPropertyManager().find(args[1]);
         if (property == null) {
-            Wrapper.printChat(ErrorMessages.INVALID_TARGET);
+            Wrapper.printMessage(ErrorMessages.INVALID_TARGET);
             return;
         }
 
@@ -49,6 +49,6 @@ public class CommandModule extends Command {
             ((StringProperty) property).setValue(String.join(" ", Arrays.copyOfRange(args, 2, args.length)));
         }
 
-        Wrapper.printChat(String.format("%s is now %s.", property.getName(), property.getValue().toString()));
+        Wrapper.printMessage(String.format("%s is now %s.", property.getName(), property.getValue().toString()));
     }
 }

@@ -59,7 +59,7 @@ public class ScaffoldWalk extends Module {
         data = makeData(pos);
         if (data == null) return;
 
-        float[] angles = Wrapper.getPlayer().getRotationsToPosition(new Vec3(data.pos));
+        float[] angles = Wrapper.getPlayer().getRotationToPosition(new Vec3(data.pos));
         event.setYaw(angles[0]);
         event.setPitch(angles[1]);
     }

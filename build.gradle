@@ -51,7 +51,8 @@ application {
         jvmArgs = [
                 '-Xmx4G', '-Xms4G',
                 '-Djava.library.path=../natives',
-                '-Dmc.email=', '-Dmc.pass='
+                '-Dmc.email=', '-Dmc.pass=',
+                '-Dhope.silentboot=true'
         ]
         main = 'Start'
     }

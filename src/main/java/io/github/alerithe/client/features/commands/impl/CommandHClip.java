@@ -13,12 +13,12 @@ public class CommandHClip extends Command {
     @Override
     public void execute(String[] args) {
         if (args.length < 1) {
-            Wrapper.printChat(ErrorMessages.NOT_ENOUGH_ARGS);
+            Wrapper.printMessage(ErrorMessages.NOT_ENOUGH_ARGS);
             return;
         }
 
         if (!MathHelper.isDouble(args[0])) {
-            Wrapper.printChat(ErrorMessages.INVALID_ARG_TYPE);
+            Wrapper.printMessage(ErrorMessages.INVALID_ARG_TYPE);
             return;
         }
 
@@ -26,6 +26,6 @@ public class CommandHClip extends Command {
         float[] vector = Wrapper.getPlayer().getMoveVector();
         Wrapper.getPlayer().setPosition(Wrapper.getPlayer().posX + (vector[0] * distance), Wrapper.getPlayer().posY,
                 Wrapper.getPlayer().posZ + (vector[1] * distance));
-        Wrapper.printChat(String.format("Teleported %f blocks horizontally.", distance));
+        Wrapper.printMessage(String.format("Teleported %f blocks horizontally.", distance));
     }
 }

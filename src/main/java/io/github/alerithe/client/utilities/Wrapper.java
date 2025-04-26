@@ -18,6 +18,7 @@ import net.minecraft.client.settings.GameSettings;
 import net.minecraft.network.Packet;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.IChatComponent;
 import net.minecraft.util.Session;
 
 import java.util.UUID;
@@ -64,8 +65,12 @@ public class Wrapper {
         getPlayer().sendQueue.addToSendQueue(packet);
     }
 
-    public static void printChat(String message) {
-        getGame().ingameGUI.getChatGUI().printChatMessage(new ChatComponentText(message));
+    public static void printMessage(String message) {
+        printMessage(new ChatComponentText(message));
+    }
+
+    public static void printMessage(IChatComponent component) {
+        getGame().ingameGUI.getChatGUI().printChatMessage(component);
     }
 
     public static Session createMicrosoftSession(String username, String password) throws MicrosoftAuthenticationException {

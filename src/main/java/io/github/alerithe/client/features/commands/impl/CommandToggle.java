@@ -14,17 +14,17 @@ public class CommandToggle extends Command {
     @Override
     public void execute(String[] args) {
         if (args.length < 1) {
-            Wrapper.printChat(ErrorMessages.NOT_ENOUGH_ARGS);
+            Wrapper.printMessage(ErrorMessages.NOT_ENOUGH_ARGS);
             return;
         }
 
         Module module = Client.MODULE_MANAGER.find(args[0]);
         if (module == null) {
-            Wrapper.printChat(ErrorMessages.INVALID_TARGET);
+            Wrapper.printMessage(ErrorMessages.INVALID_TARGET);
             return;
         }
 
         module.toggle();
-        Wrapper.printChat(String.format("%s is now %s.", module.getName(), module.isEnabled() ? "ON" : "OFF"));
+        Wrapper.printMessage(String.format("%s is now %s.", module.getName(), module.isEnabled() ? "ON" : "OFF"));
     }
 }

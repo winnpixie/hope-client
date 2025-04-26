@@ -43,7 +43,7 @@ public class CommandManager extends FeatureManager<Command> {
                 String[] args = event.getMessage().substring(1).split(" ");
                 Command command = find(args[0]);
                 if (command == null) {
-                    Wrapper.printChat(ErrorMessages.INVALID_COMMAND);
+                    Wrapper.printMessage(ErrorMessages.INVALID_COMMAND);
                     return;
                 }
 

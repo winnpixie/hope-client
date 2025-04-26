@@ -39,7 +39,7 @@ public class Blink extends Module {
         Wrapper.getWorld().removeEntityFromWorld(clone.getEntityId());
         clone = null;
         packetQueue.forEach(Wrapper::sendPacket);
-        Wrapper.printChat(String.format("%dms elapsed, %d packets captured.",
+        Wrapper.printMessage(String.format("%dms elapsed, %d packets captured.",
                 System.currentTimeMillis() - startTime, packetQueue.size()));
         packetQueue.clear();
     }

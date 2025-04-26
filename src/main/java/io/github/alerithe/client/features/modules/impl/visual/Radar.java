@@ -33,7 +33,7 @@ public class Radar extends Module {
             Toolkit.getDefaultToolkit().getScreenSize().width);
     private final IntProperty y = new IntProperty("Y", new String[0], 85, 0,
             Toolkit.getDefaultToolkit().getScreenSize().height);
-    private final IntProperty size = new IntProperty("Size", new String[0], 50, 25, Integer.MAX_VALUE);
+    private final IntProperty size = new IntProperty("Size", new String[0], 70, 25, Integer.MAX_VALUE);
 
     public Radar() {
         super("Radar", new String[0], Type.VISUAL);

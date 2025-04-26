@@ -31,14 +31,14 @@ public class FriendManager extends FeatureManager<Friend> {
                 final int PER_PAGE = 7;
                 int pageCount = (getElements().size() - 1) / PER_PAGE; // 7 FRIENDS PER PAGE
 
-                Wrapper.printChat(String.format("\247eFriends (Page %d/%d)", page, pageCount + 1));
-                Wrapper.printChat("\2477Name (Alias)");
+                Wrapper.printMessage(String.format("\247eFriends (Page %d/%d)", page, pageCount + 1));
+                Wrapper.printMessage("\2477Name (Alias)");
                 for (int i = 0; i < PER_PAGE; i++) {
                     int idx = i + ((page - 1) * PER_PAGE);
                     if (idx > getElements().size() - 1) break;
 
                     Friend friend = getElements().get(idx);
-                    Wrapper.printChat(String.format("%s (%s)", friend.getName(), friend.getAliases()[0]));
+                    Wrapper.printMessage(String.format("%s (%s)", friend.getName(), friend.getAliases()[0]));
                 }
             }
 
@@ -52,58 +52,58 @@ public class FriendManager extends FeatureManager<Friend> {
                 switch (args[0].toLowerCase()) {
                     case "add": {
                         if (find(args[1]) != null) {
-                            Wrapper.printChat(String.format("\247cFriend '%s' already exists.", args[1]));
+                            Wrapper.printMessage(String.format("\247cFriend '%s' already exists.", args[1]));
                             break;
                         }
 
                         Friend friend = new Friend(args[1], args.length > 2 ? args[2] : args[1]);
                         add(friend);
-                        Wrapper.printChat(String.format("Added friend '%s' under the alias '%s'.",
+                        Wrapper.printMessage(String.format("Added friend '%s' under the alias '%s'.",
                                 friend.getName(), friend.getAliases()[0]));
                         break;
                     }
                     case "remove": {
                         Friend friend = find(args[1]);
                         if (friend == null) {
-                            Wrapper.printChat(String.format("\247cNo such friend '%s'.", args[1]));
+                            Wrapper.printMessage(String.format("\247cNo such friend '%s'.", args[1]));
                             break;
                         }
 
                         remove(friend);
-                        Wrapper.printChat(String.format("Removed friend '%s'.", friend.getName()));
+                        Wrapper.printMessage(String.format("Removed friend '%s'.", friend.getName()));
                         break;
                     }
                     case "rename": {
                         Friend friend = find(args[1]);
                         if (friend == null) {
-                            Wrapper.printChat(String.format("\247cNo such friend '%s'.", args[1]));
+                            Wrapper.printMessage(String.format("\247cNo such friend '%s'.", args[1]));
                             break;
                         }
 
                         if (args.length < 3) {
-                            Wrapper.printChat("\247cNot enough arguments.");
+                            Wrapper.printMessage("\247cNot enough arguments.");
                             break;
                         }
 
                         friend.setAliases(new String[]{args[2]});
-                        Wrapper.printChat(String.format("'%s' is now known as '%s'.", friend.getName(),
+                        Wrapper.printMessage(String.format("'%s' is now known as '%s'.", friend.getName(),
                                 friend.getAliases()[0]));
                         break;
                     }
                     case "get": {
                         Friend friend = find(args[1]);
                         if (friend == null) {
-                            Wrapper.printChat(String.format("\247cNo such friend '%s'.", args[1]));
+                            Wrapper.printMessage(String.format("\247cNo such friend '%s'.", args[1]));
                             break;
                         }
 
-                        Wrapper.printChat(String.format("'%s' is known as '%s'.", friend.getName(),
+                        Wrapper.printMessage(String.format("'%s' is known as '%s'.", friend.getName(),
                                 friend.getAliases()[0]));
                         break;
                     }
                     case "list": {
                         if (!MathHelper.isInt(args[1])) {
-                            Wrapper.printChat("\247cInvalid Argument Type.");
+                            Wrapper.printMessage("\247cInvalid Argument Type.");
                             break;
                         }
 
@@ -111,7 +111,7 @@ public class FriendManager extends FeatureManager<Friend> {
                         break;
                     }
                     default:
-                        Wrapper.printChat(ErrorMessages.INVALID_ARG);
+                        Wrapper.printMessage(ErrorMessages.INVALID_ARG);
                         break;
                 }
             }

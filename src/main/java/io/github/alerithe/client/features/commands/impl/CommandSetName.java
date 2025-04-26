@@ -13,17 +13,17 @@ public class CommandSetName extends Command {
     @Override
     public void execute(String[] args) {
         if (args.length < 1) {
-            Wrapper.printChat(ErrorMessages.NOT_ENOUGH_ARGS);
+            Wrapper.printMessage(ErrorMessages.NOT_ENOUGH_ARGS);
             return;
         }
 
         if (!args[0].equalsIgnoreCase(Wrapper.getGame().getSession().getUsername())) {
-            Wrapper.printChat(ErrorMessages.format("<name> must match your current name (case-insensitive)."));
+            Wrapper.printMessage(ErrorMessages.format("<name> must match your current name (case-insensitive)."));
             return;
         }
 
         Session old = Wrapper.getGame().getSession();
         Wrapper.getGame().setSession(new Session(args[0], old.getPlayerID(), old.getToken(), old.getSessionType().getName()));
-        Wrapper.printChat(String.format("Your name is now %s, reconnect for it to take effect.", args[0]));
+        Wrapper.printMessage(String.format("Your name is now %s, reconnect for it to take effect.", args[0]));
     }
 }
