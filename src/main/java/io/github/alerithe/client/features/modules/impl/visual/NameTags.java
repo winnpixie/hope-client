@@ -119,8 +119,10 @@ public class NameTags extends Module {
             float[] position = projections.get(entity);
             GL11.glPushMatrix();
             GL11.glTranslatef(position[0], position[1], 0);
-            GL11.glScaled(0.5, 0.5, 0.5);
+            GL11.glScalef(0.5f, 0.5f, 1f);
             int width = Wrapper.getTextRenderer().getStringWidth(text);
+
+            // TODO: Convert to drawSquare
             VisualHelper.drawRect(-width / 2f - 2, -1, width / 2f + 2, 9, 0x77000000);
             Wrapper.getTextRenderer().drawStringWithShadow(text, -width / 2f, 0, -1);
             GL11.glPopMatrix();

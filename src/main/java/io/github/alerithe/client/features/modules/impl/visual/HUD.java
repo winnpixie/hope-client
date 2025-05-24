@@ -143,11 +143,13 @@ public class HUD extends Module {
                 List<Module> enabled = Client.MODULE_MANAGER.getElements().stream().filter(Module::isEnabled)
                         .filter(module -> !module.hidden.getValue()).sorted(moduleSorter).collect(Collectors.toList());
                 for (Module module : enabled) {
-                    int x = display.getScaledWidth() - Wrapper.getTextRenderer().getStringWidth(module.getName());
-                    VisualHelper.drawRect(x - 4, y - 2, display.getScaledWidth(), y
-                            + Wrapper.getTextRenderer().FONT_HEIGHT + 2, 0xFF990000);
-                    VisualHelper.drawRect(x - 3, y - 2, display.getScaledWidth(), y
-                            + Wrapper.getTextRenderer().FONT_HEIGHT + 1, 0xFF222222);
+                    int textWidth = Wrapper.getTextRenderer().getStringWidth(module.getName());
+                    int x = display.getScaledWidth() - textWidth;
+
+                    VisualHelper.drawSquare(x - 4, y - 2, textWidth + 4, Wrapper.getTextRenderer().FONT_HEIGHT + 4,
+                            0xFF990000);
+                    VisualHelper.drawSquare(x - 3, y - 2, textWidth + 3, Wrapper.getTextRenderer().FONT_HEIGHT + 3,
+                            0xFF222222);
 
                     Wrapper.getTextRenderer().drawStringWithShadow(module.getName(), x - 1, y, -1);
                     y += 12;

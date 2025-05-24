@@ -63,9 +63,9 @@ public class Radar extends Module {
         GL11.glPushMatrix();
 
         VisualHelper.drawBorderedRect(x, y, x + width, y + height, 1, 0xFF222222, 0xFF444444);
-        VisualHelper.drawRectSized(x + (width / 2f) - 0.5f, y, 1, height, 0xFF444444);
-        VisualHelper.drawRectSized(x, y + (height / 2f) - 0.5f, width, 1, 0xFF444444);
-        VisualHelper.drawRectSized(cx - 1, cy - 1, 2, 2, 0xFFFFFF00);
+        VisualHelper.drawSquare(x + (width / 2f) - 0.5f, y, 1, height, 0xFF444444);
+        VisualHelper.drawSquare(x, y + (height / 2f) - 0.5f, width, 1, 0xFF444444);
+        VisualHelper.drawSquare(cx - 1, cy - 1, 2, 2, 0xFFFFFF00);
 
         int maxDist = size.getValue() / 2;
         for (Entity entity : Wrapper.getWorld().loadedEntityList) {
@@ -85,7 +85,7 @@ public class Radar extends Module {
                         Wrapper.getPlayer().getRotationsToEntity(entity)[0]
                                 - MathHelper.lerpf(Wrapper.getPlayer().prevRotationYawHead,
                                 Wrapper.getPlayer().rotationYawHead, event.getPartialTicks()));
-                VisualHelper.drawRectSized(cx - 1 - (vector[0] * dist), cy - 1 - (vector[1] * dist), 2, 2,
+                VisualHelper.drawSquare(cx - 1 - (vector[0] * dist), cy - 1 - (vector[1] * dist), 2, 2,
                         0xFFFF0000);
             }
         }

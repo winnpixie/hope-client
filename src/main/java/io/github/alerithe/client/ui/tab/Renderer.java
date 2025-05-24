@@ -38,7 +38,7 @@ public class Renderer extends Component {
         int x = xOffset + 1;
         int y = 11;
         for (Module.Type type : Module.Type.values()) {
-            VisualHelper.drawRect(x, y, x + width, y + 12, getContainer().getType() == type ? 0xFF990000 : 0xFF222222);
+            VisualHelper.drawSquare(x, y, width, 12, getContainer().getType() == type ? 0xFF990000 : 0xFF222222);
             Wrapper.getTextRenderer().drawStringWithShadow(type.getLabel(), x + 2, y + 2, -1);
             y += 12;
         }
@@ -56,7 +56,7 @@ public class Renderer extends Component {
         int x = xOffset + 1;
         int y = 11;
         for (Module module : modules) {
-            VisualHelper.drawRect(x, y, x + width, y + 12, getContainer().getModule() == module ? 0xFF990000 : 0xFF222222);
+            VisualHelper.drawSquare(x, y, width, 12, getContainer().getModule() == module ? 0xFF990000 : 0xFF222222);
             Wrapper.getTextRenderer().drawStringWithShadow(module.getName(), x + 2, y + 2, module.isEnabled() ? -1 : 0xFFAAAAAA);
             y += 12;
         }
@@ -74,7 +74,7 @@ public class Renderer extends Component {
         int x = xOffset + 1;
         int y = 11;
         for (Property<?> property : properties) {
-            VisualHelper.drawRect(x, y, x + width, y + 12, getContainer().getProperty() == property ? 0xFF990000 : 0xFF222222);
+            VisualHelper.drawSquare(x, y, width, 12, getContainer().getProperty() == property ? 0xFF990000 : 0xFF222222);
             Wrapper.getTextRenderer().drawStringWithShadow(format(property), x + 2, y + 2, 0xFFAAAAAA);
             y += 12;
         }

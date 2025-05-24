@@ -105,7 +105,7 @@ public class VisualHelper {
         GlStateManager.disableBlend();
     }
 
-    public static void drawRectSized(float x, float y, float width, float height, int color) {
+    public static void drawSquare(float x, float y, float width, float height, int color) {
         drawRect(x, y, x + width, y + height, color);
     }
 

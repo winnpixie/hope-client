@@ -2,46 +2,111 @@ package io.github.alerithe.client.ui.click;
 
 import io.github.alerithe.client.Client;
 import io.github.alerithe.client.features.modules.Module;
-import io.github.alerithe.client.ui.click.elements.impl.Button;
-import io.github.alerithe.client.ui.click.elements.impl.Window;
+import io.github.alerithe.client.features.properties.Property;
+import io.github.alerithe.client.features.properties.impl.BooleanProperty;
+import io.github.alerithe.client.ui.click.elements.Element;
+import io.github.alerithe.client.ui.click.elements.impl.*;
+import io.github.alerithe.client.ui.click.elements.styling.Style;
+import io.github.alerithe.client.ui.click.elements.styling.TextAlignment;
+import io.github.alerithe.client.ui.click.elements.styling.TextPosition;
 import net.minecraft.client.gui.GuiScreen;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class GuiClick extends GuiScreen {
-    private List<Window> windows = new ArrayList<>();
+    private final Root root = new Root(0, 0, 8192, 8192);
 
     public GuiClick() {
+        root.getRenderer().showBackground = false;
+
         int typeY = 1;
         for (Module.Type type : Module.Type.values()) {
-            Window window = new Window(type.getLabel(), 1, typeY, 100, 15);
+            Window typeWin = new Window(type.getLabel(), 1, typeY, 100, 15);
+            typeWin.setStyle(new Style() {
+                {
+                    backgroundColor = 0xFFB00B1E;
+                    textColor = 0xFFFFFFFF;
+                    textAlignment = TextAlignment.CENTER;
+                    textPosition = TextPosition.MIDDLE;
+                }
+            });
 
-            int modY = typeY + 15;
+            int modY = 15;
             for (Module module : Client.MODULE_MANAGER.getAllInType(type)) {
-                Button button = new Button(module.getName(), window.getX(), modY, 98, 15) {
+                Button moduleBtn = new Button(module.getName(), 1, modY, 98, 15) {
                     @Override
                     public void onClick(int mouseX, int mouseY, int button) {
-                        if (isInBounds(mouseX, mouseY) && button == 0) module.toggle();
+                        if (button == 0) module.toggle();
                     }
 
                     @Override
-                    public void update() {
-                        setTextColor(module.isEnabled() ? -1 : 0xFFAAAAAA);
+                    public void onUpdate() {
+                        getStyle().textColor = module.isEnabled() ? 0xFFFFFFFF : 0xFFAAAAAA;
                     }
 
                     @Override
-                    public void draw(int mouseX, int mouseY, float partialTicks) {
-                        setBackgroundColor(isInBounds(mouseX, mouseY) ? 0xFF111111 : 0xFF222222);
-                        super.draw(mouseX, mouseY, partialTicks);
+                    public void onDraw(int mouseX, int mouseY, float partialTicks) {
+                        getStyle().backgroundColor = isInBounds(mouseX, mouseY) ? 0xEE222222 : 0xEE111111;
                     }
                 };
 
-                window.getChildren().add(button);
+                moduleBtn.setStyle(new Style() {
+                    {
+                        textAlignment = TextAlignment.CENTER;
+                        textPosition = TextPosition.MIDDLE;
+                    }
+                });
+
+                moduleBtn.getController().closeable = true;
+                moduleBtn.getController().expanded = false;
+
+                moduleBtn.addChild(new Label("Settings", 98, 0, 100, 15) {
+                    {
+                        setStyle(new Style() {
+                            {
+                                backgroundColor = 0xFF222222;
+                                textColor = 0xFFFFFFFF;
+                                textAlignment = TextAlignment.CENTER;
+                                textPosition = TextPosition.MIDDLE;
+                            }
+                        });
+                    }
+                });
+
+                int propY = 15;
+                for (Property<?> property : module.getPropertyManager().getElements()) {
+                    Element propElem = null;
+
+                    if (property instanceof BooleanProperty) {
+                        BooleanProperty boolProp = (BooleanProperty) property;
+                        propElem = new CheckBox(boolProp.getName(), 98, propY, 100, 15) {
+                            @Override
+                            public void onValueChanged(boolean newValue) {
+                                boolProp.setValue(newValue);
+                            }
+                        };
+                    }
+
+                    if (propElem != null) {
+                        propElem.setStyle(new Style() {
+                            {
+                                backgroundColor = 0xEE111111;
+                                foregroundColor = 0xFFB00B1E;
+                                textColor = 0xFFAAAAAA;
+                                textPosition = TextPosition.MIDDLE;
+                            }
+                        });
+
+                        moduleBtn.addChild(propElem);
+                        propY += 15;
+                    }
+                }
+
+                typeWin.addChild(moduleBtn);
+                modY += 15;
             }
 
-            windows.add(window);
+            root.addChild(typeWin);
             typeY += 20;
         }
     }
@@ -53,28 +118,21 @@ public class GuiClick extends GuiScreen {
 
     @Override
     public void updateScreen() {
-        windows.forEach(Window::update);
+        root.update();
     }
 
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
-        for (Window window : windows) {
-            window.onClick(mouseX, mouseY, mouseButton);
-            if (window.isDragging()) break;
-        }
+        root.click(mouseX, mouseY, mouseButton);
     }
 
     @Override
     protected void mouseReleased(int mouseX, int mouseY, int releaseButton) {
-        for (Window window : windows) {
-            window.onRelease(mouseX, mouseY, releaseButton);
-        }
+        root.release(mouseX, mouseY, releaseButton);
     }
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        for (Window window : windows) {
-            window.draw(mouseX, mouseY, partialTicks);
-        }
+        root.draw(mouseX, mouseY, partialTicks);
     }
 }
