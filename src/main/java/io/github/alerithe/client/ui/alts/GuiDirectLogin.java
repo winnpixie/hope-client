@@ -1,6 +1,6 @@
 package io.github.alerithe.client.ui.alts;
 
-import io.github.alerithe.client.utilities.SessionBuilders;
+import io.github.alerithe.client.utilities.sessions.SessionHelper;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.GuiScreen;
@@ -106,9 +106,9 @@ public class GuiDirectLogin extends GuiScreen {
                 new Thread(() -> {
                     try {
                         if (isShiftKeyDown()) {
-                            mc.setSession(SessionBuilders.MOJANG.createSession(username.getText(), password.getText()));
+                            mc.setSession(SessionHelper.MOJANG.createSession(username.getText(), password.getText()));
                         } else {
-                            mc.setSession(SessionBuilders.MICROSOFT.createSession(username.getText(), password.getText()));
+                            mc.setSession(SessionHelper.MICROSOFT.createSession(username.getText(), password.getText()));
                         }
 
                         message = String.format("\247eCurrent User : \247r%s", mc.getSession().getUsername());

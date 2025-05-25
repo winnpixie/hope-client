@@ -9,7 +9,7 @@ import io.github.alerithe.client.features.keybinds.KeybindManager;
 import io.github.alerithe.client.features.modules.ModuleManager;
 import io.github.alerithe.client.features.plugins.PluginManager;
 import io.github.alerithe.client.utilities.IdentityHelper;
-import io.github.alerithe.client.utilities.SessionBuilders;
+import io.github.alerithe.client.utilities.sessions.SessionHelper;
 import io.github.alerithe.client.utilities.Wrapper;
 import io.github.alerithe.client.utilities.speech.SpeechRecognition;
 import io.github.alerithe.client.utilities.speech.TextToSpeech;
@@ -81,7 +81,7 @@ public class Client {
         String password = System.getProperty("mc.pass", "");
         if (!username.isEmpty() && !password.isEmpty()) {
             try {
-                Wrapper.getGame().setSession(SessionBuilders.MICROSOFT.createSession(username, password));
+                Wrapper.getGame().setSession(SessionHelper.MICROSOFT.createSession(username, password));
             } catch (Exception e) {
                 e.printStackTrace();
             }
