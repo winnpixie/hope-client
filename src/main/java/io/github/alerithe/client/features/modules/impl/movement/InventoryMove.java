@@ -1,6 +1,6 @@
 package io.github.alerithe.client.features.modules.impl.movement;
 
-import io.github.alerithe.client.events.EventUpdate;
+import io.github.alerithe.client.events.game.EventUpdate;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.utilities.MathHelper;
 import io.github.alerithe.client.utilities.Wrapper;

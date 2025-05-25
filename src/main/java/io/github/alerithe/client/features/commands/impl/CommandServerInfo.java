@@ -1,6 +1,6 @@
 package io.github.alerithe.client.features.commands.impl;
 
-import io.github.alerithe.client.events.EventPacket;
+import io.github.alerithe.client.events.game.EventPacket;
 import io.github.alerithe.client.features.commands.Command;
 import io.github.alerithe.client.features.commands.ErrorMessages;
 import io.github.alerithe.client.utilities.MsTimer;

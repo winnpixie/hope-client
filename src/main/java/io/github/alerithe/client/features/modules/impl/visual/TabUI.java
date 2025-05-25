@@ -1,7 +1,7 @@
 package io.github.alerithe.client.features.modules.impl.visual;
 
-import io.github.alerithe.client.events.EventDraw;
-import io.github.alerithe.client.events.EventInput;
+import io.github.alerithe.client.events.game.EventDraw;
+import io.github.alerithe.client.events.game.EventInput;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.ui.tab.Container;
 import io.github.alerithe.client.utilities.Wrapper;

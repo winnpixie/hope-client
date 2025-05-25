@@ -1,6 +1,7 @@
 package io.github.alerithe.client.features.modules;
 
 import io.github.alerithe.client.Client;
+import io.github.alerithe.client.events.client.ModuleToggleEvent;
 import io.github.alerithe.client.features.Feature;
 import io.github.alerithe.client.features.properties.PropertyManager;
 import io.github.alerithe.client.features.properties.impl.BooleanProperty;
@@ -36,6 +37,9 @@ public class Module extends Feature {
         } else {
             disable();
         }
+
+        // EVENT
+        EventBus.dispatch(new ModuleToggleEvent(this));
     }
 
     public Type getType() {

@@ -1,9 +1,9 @@
 package io.github.alerithe.client.features.modules.impl.world;
 
-import io.github.alerithe.client.events.EventBlockCollision;
-import io.github.alerithe.client.events.EventBlockPush;
-import io.github.alerithe.client.events.EventOpaqueCheck;
-import io.github.alerithe.client.events.EventUpdate;
+import io.github.alerithe.client.events.game.EventBlockCollision;
+import io.github.alerithe.client.events.game.EventBlockPush;
+import io.github.alerithe.client.events.game.EventOpaqueCheck;
+import io.github.alerithe.client.events.game.EventUpdate;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.features.modules.impl.world.phase.Latest;
 import io.github.alerithe.client.features.modules.impl.world.phase.NullAABB;

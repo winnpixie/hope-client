@@ -1,7 +1,7 @@
 package io.github.alerithe.client.extensions;
 
 import io.github.alerithe.events.EventBus;
-import io.github.alerithe.client.events.EventDraw;
+import io.github.alerithe.client.events.game.EventDraw;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiIngame;
 import org.lwjgl.opengl.GL11;

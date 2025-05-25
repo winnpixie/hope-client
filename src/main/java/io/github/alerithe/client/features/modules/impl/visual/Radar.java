@@ -1,12 +1,12 @@
 package io.github.alerithe.client.features.modules.impl.visual;
 
-import io.github.alerithe.client.events.EventDraw;
+import io.github.alerithe.client.events.game.EventDraw;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.features.modules.impl.combat.AntiBot;
 import io.github.alerithe.client.features.properties.impl.BooleanProperty;
 import io.github.alerithe.client.features.properties.impl.IntProperty;
 import io.github.alerithe.client.utilities.MathHelper;
-import io.github.alerithe.client.utilities.VisualHelper;
+import io.github.alerithe.client.utilities.graphics.VisualHelper;
 import io.github.alerithe.client.utilities.Wrapper;
 import io.github.alerithe.events.CallOrder;
 import io.github.alerithe.events.Register;

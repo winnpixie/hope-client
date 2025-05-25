@@ -1,8 +1,8 @@
 package io.github.alerithe.client.extensions;
 
-import io.github.alerithe.client.events.EventBlockPush;
-import io.github.alerithe.client.events.EventChat;
-import io.github.alerithe.client.events.EventOpaqueCheck;
+import io.github.alerithe.client.events.game.EventBlockPush;
+import io.github.alerithe.client.events.game.EventChat;
+import io.github.alerithe.client.events.game.EventOpaqueCheck;
 import io.github.alerithe.events.EventBus;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;

@@ -1,6 +1,6 @@
 package io.github.alerithe.client.features.modules.impl.combat.aura;
 
-import io.github.alerithe.client.events.EventUpdate;
+import io.github.alerithe.client.events.game.EventUpdate;
 import io.github.alerithe.client.features.modules.impl.combat.KillAura;
 import io.github.alerithe.client.utilities.MathHelper;
 import io.github.alerithe.client.utilities.MsTimer;

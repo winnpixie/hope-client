@@ -1,7 +1,7 @@
 package io.github.alerithe.client.features.keybinds;
 
 import io.github.alerithe.client.Client;
-import io.github.alerithe.client.events.EventInput;
+import io.github.alerithe.client.events.game.EventInput;
 import io.github.alerithe.client.features.FeatureManager;
 import io.github.alerithe.events.EventBus;
 import io.github.alerithe.events.EventHandler;

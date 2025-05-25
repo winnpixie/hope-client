@@ -1,48 +1,59 @@
 package io.github.alerithe.client.ui.click.elements;
 
+import io.github.alerithe.client.ui.click.elements.handlers.EventHandler;
+
 public class Controller {
     private final Element element;
-
-    public boolean closeable;
-    public boolean expanded = true;
-
-    public boolean draggable;
-    public boolean dragging;
-
-    public int dragX;
-    public int dragY;
 
     public Controller(Element element) {
         this.element = element;
     }
 
     public void update() {
+        if (!element.getNormalStyle().isVisible()) return;
+
+        for (EventHandler handler : element.getHandlers()) handler.onUpdate();
+
         element.onUpdate();
-        if (expanded) element.updateChildren();
+
+        for (Element child : element.getChildren()) child.update();
     }
 
     public void click(int mouseX, int mouseY, int button) {
+        if (!element.getNormalStyle().isVisible()) return;
+
         if (element.isInBounds(mouseX, mouseY)) {
-            if (draggable && button == 0) {
-                dragX = element.getX() - mouseX;
-                dragY = element.getY() - mouseY;
-                dragging = true;
-            }
+            element.setFocused(true);
 
-            if (closeable && button == 1) {
-                expanded = !expanded;
-            }
+            for (EventHandler handler : element.getHandlers()) handler.onClicked(mouseX, mouseY, button);
 
-            element.onClick(mouseX, mouseY, button);
+            element.onClicked(mouseX, mouseY, button);
+        } else {
+            element.setFocused(false);
         }
 
-        if (expanded) element.clickChildren(mouseX, mouseY, button);
+        for (Element child : element.getChildren()) child.click(mouseX, mouseY, button);
     }
 
     public void release(int mouseX, int mouseY, int button) {
-        if (button == 0) dragging = false;
+        if (!element.getNormalStyle().isVisible()) return;
+
+        for (EventHandler handler : element.getHandlers()) handler.onRelease(mouseX, mouseY, button);
 
         element.onRelease(mouseX, mouseY, button);
-        if (expanded) element.releaseChildren(mouseX, mouseY, button);
+
+        for (Element child : element.getChildren()) child.release(mouseX, mouseY, button);
+    }
+
+    public void pressKey(char charCode, int keyCode) {
+        if (!element.getNormalStyle().isVisible()) return;
+
+        if (element.isFocused()) {
+            for (EventHandler handler : element.getHandlers()) handler.onKeyPressed(charCode, keyCode);
+
+            element.onKeyPressed(charCode, keyCode);
+        }
+
+        for (Element child : element.getChildren()) child.pressKey(charCode, keyCode);
     }
 }

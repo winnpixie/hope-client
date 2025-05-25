@@ -30,19 +30,19 @@ public class Controller extends Component {
                     case PROPERTY:
                         Property<?> property = getContainer().getProperty();
                         if (property instanceof BooleanProperty) {
-                            BooleanProperty prop = (BooleanProperty) property;
-                            prop.setValue(!prop.getValue());
+                            BooleanProperty boolProp = (BooleanProperty) property;
+                            boolProp.setValue(!boolProp.getValue());
                         } else if (property instanceof IntProperty) {
-                            IntProperty prop = (IntProperty) property;
-                            prop.setValue(prop.getValue() - 1);
+                            IntProperty intProp = (IntProperty) property;
+                            intProp.setValue(intProp.getValue() - 1);
                         } else if (property instanceof DoubleProperty) {
-                            DoubleProperty prop = (DoubleProperty) property;
-                            prop.setValue(MathHelper.truncate(prop.getValue() - 0.1, 1));
+                            DoubleProperty dblProp = (DoubleProperty) property;
+                            dblProp.setValue(MathHelper.truncate(dblProp.getValue() - 0.1, 1));
                         } else if (property instanceof ObjectProperty) {
-                            ObjectProperty prop = (ObjectProperty) property;
-                            int index = prop.getValues().indexOf(prop.getValue());
-                            index = ((index - 1) + prop.getValues().size()) % prop.getValues().size();
-                            prop.setValue(prop.getValues().get(index));
+                            ObjectProperty objProp = (ObjectProperty) property;
+                            int index = objProp.getValues().indexOf(objProp.getValue());
+                            index = ((index - 1) + objProp.getValues().size()) % objProp.getValues().size();
+                            objProp.setValue(objProp.getValues().get(index));
                         }
                         break;
                 }
@@ -59,19 +59,19 @@ public class Controller extends Component {
                     case PROPERTY:
                         Property<?> property = getContainer().getProperty();
                         if (property instanceof BooleanProperty) {
-                            BooleanProperty prop = (BooleanProperty) property;
-                            prop.setValue(!prop.getValue());
+                            BooleanProperty boolProp = (BooleanProperty) property;
+                            boolProp.setValue(!boolProp.getValue());
                         } else if (property instanceof IntProperty) {
-                            IntProperty prop = (IntProperty) property;
-                            prop.setValue(prop.getValue() + 1);
+                            IntProperty intProp = (IntProperty) property;
+                            intProp.setValue(intProp.getValue() + 1);
                         } else if (property instanceof DoubleProperty) {
-                            DoubleProperty prop = (DoubleProperty) property;
-                            prop.setValue(MathHelper.truncate(prop.getValue() + 0.1, 1));
+                            DoubleProperty dblProp = (DoubleProperty) property;
+                            dblProp.setValue(MathHelper.truncate(dblProp.getValue() + 0.1, 1));
                         } else if (property instanceof ObjectProperty) {
-                            ObjectProperty prop = (ObjectProperty) property;
-                            int index = prop.getValues().indexOf(prop.getValue());
-                            index = (index + 1) % prop.getValues().size();
-                            prop.setValue(prop.getValues().get(index));
+                            ObjectProperty objProp = (ObjectProperty) property;
+                            int index = objProp.getValues().indexOf(objProp.getValue());
+                            index = (index + 1) % objProp.getValues().size();
+                            objProp.setValue(objProp.getValues().get(index));
                         }
                         break;
                 }

@@ -1,6 +1,6 @@
 package io.github.alerithe.client.features.modules.impl.visual;
 
-import io.github.alerithe.client.events.EventDraw;
+import io.github.alerithe.client.events.game.EventDraw;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.features.modules.impl.combat.AntiBot;
 import io.github.alerithe.client.features.modules.impl.visual.entityesp.EntityESPMode;
@@ -8,7 +8,7 @@ import io.github.alerithe.client.features.modules.impl.visual.entityesp.Pillar;
 import io.github.alerithe.client.features.modules.impl.visual.entityesp.Rectangle;
 import io.github.alerithe.client.features.properties.impl.BooleanProperty;
 import io.github.alerithe.client.features.properties.impl.ObjectProperty;
-import io.github.alerithe.client.utilities.VisualHelper;
+import io.github.alerithe.client.utilities.graphics.VisualHelper;
 import io.github.alerithe.client.utilities.Wrapper;
 import io.github.alerithe.events.CallOrder;
 import io.github.alerithe.events.Register;

@@ -1,6 +1,6 @@
 package io.github.alerithe.client.features.modules.impl.movement.flights;
 
-import io.github.alerithe.client.events.EventUpdate;
+import io.github.alerithe.client.events.game.EventUpdate;
 import io.github.alerithe.client.features.modules.impl.movement.Flight;
 import io.github.alerithe.client.features.properties.impl.ObjectProperty;
 

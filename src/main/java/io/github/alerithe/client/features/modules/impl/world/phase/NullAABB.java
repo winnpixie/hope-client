@@ -1,7 +1,6 @@
 package io.github.alerithe.client.features.modules.impl.world.phase;
 
-import io.github.alerithe.client.events.EventBlockCollision;
-import io.github.alerithe.client.events.EventPacket;
+import io.github.alerithe.client.events.game.EventBlockCollision;
 import io.github.alerithe.client.utilities.Wrapper;
 
 public class NullAABB extends PhaseMode {

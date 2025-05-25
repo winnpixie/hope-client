@@ -17,6 +17,6 @@ public class CommandSpeak extends Command {
             return;
         }
 
-        Client.NARRATOR.narrate(String.join(" ", args));
+        Client.TEXT_TO_SPEECH.narrate(String.join(" ", args));
     }
 }

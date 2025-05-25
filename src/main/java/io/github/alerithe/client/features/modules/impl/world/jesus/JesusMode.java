@@ -1,7 +1,7 @@
 package io.github.alerithe.client.features.modules.impl.world.jesus;
 
-import io.github.alerithe.client.events.EventBlockCollision;
-import io.github.alerithe.client.events.EventUpdate;
+import io.github.alerithe.client.events.game.EventBlockCollision;
+import io.github.alerithe.client.events.game.EventUpdate;
 import io.github.alerithe.client.features.properties.impl.ObjectProperty;
 
 public class JesusMode extends ObjectProperty.Value {

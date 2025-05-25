@@ -1,119 +1,154 @@
 package io.github.alerithe.client.ui.click.elements;
 
-import io.github.alerithe.client.ui.click.elements.styling.Style;
-import io.github.alerithe.client.ui.click.elements.styling.TextAlignment;
-import io.github.alerithe.client.ui.click.elements.styling.TextPosition;
-import io.github.alerithe.client.utilities.MathHelper;
-import io.github.alerithe.client.utilities.VisualHelper;
+import io.github.alerithe.client.ui.click.elements.handlers.EventHandler;
+import io.github.alerithe.client.ui.click.elements.styling.BorderStyle;
+import io.github.alerithe.client.ui.click.elements.styling.ElementStyle;
+import io.github.alerithe.client.ui.click.elements.styling.text.TextAlignment;
+import io.github.alerithe.client.ui.click.elements.styling.text.TextPosition;
+import io.github.alerithe.client.ui.click.elements.styling.text.TextStyle;
+import io.github.alerithe.client.utilities.graphics.VisualHelper;
 import io.github.alerithe.client.utilities.Wrapper;
-import net.minecraft.client.gui.ScaledResolution;
+import org.lwjgl.opengl.GL11;
 
 public class Renderer {
     private final Element element;
-
-    public boolean showBackground = true;
-    public boolean showText = true;
 
     public Renderer(Element element) {
         this.element = element;
     }
 
     public void draw(int mouseX, int mouseY, float partialTicks) {
-        processDragging(mouseX, mouseY);
+        if (!element.getNormalStyle().isVisible()) return;
 
-        Style style = element.getStyle();
-        int eX = element.getX();
-        int eY = element.getY();
-        int eWidth = element.getWidth();
-        int eHeight = element.getHeight();
+        for (EventHandler handler : element.getHandlers()) handler.onDraw(mouseX, mouseY, partialTicks);
 
-        if (showBackground) {
-            VisualHelper.drawSquare(eX, eY, eWidth, eHeight, style.backgroundColor);
+        element.setHovered(element.isInBounds(mouseX, mouseY));
+        ElementStyle activeStyle = element.isHovered()
+                ? element.getHoveredStyle() : element.getNormalStyle();
 
-            if (style.borderTop > 0) {
-                VisualHelper.drawRect(eX,
-                        eY - style.borderTop,
-                        eX + eWidth + style.borderRight,
-                        eY,
-                        style.borderColorTop);
-            }
-
-            if (style.borderBottom > 0) {
-                VisualHelper.drawRect(eX - style.borderLeft,
-                        eY + eHeight,
-                        eX + eWidth,
-                        eY + eHeight + style.borderBottom,
-                        style.borderColorBottom);
-            }
-
-            if (style.borderLeft > 0) {
-                VisualHelper.drawRect(eX - style.borderLeft,
-                        eY - style.borderTop,
-                        eX,
-                        eY + eHeight,
-                        style.borderColorLeft);
-            }
-
-            if (style.borderRight > 0) {
-                VisualHelper.drawRect(eX + eWidth,
-                        eY,
-                        eX + eWidth + style.borderRight,
-                        eY + eHeight + style.borderBottom,
-                        style.borderColorRight);
-            }
-        }
-
-        if (showText) {
-            String text = element.getText();
-            if (text != null && !text.isEmpty()) {
-                if (style.textItalic) text = "\247o" + text;
-                if (style.textBold) text = "\247l" + text;
-
-                int textWidth = 0;
-                if (style.textAlignment != TextAlignment.LEFT) {
-                    textWidth = Wrapper.getTextRenderer().getStringWidth(text);
-                }
-
-                float textXOffset = style.textXOffset;
-                if (style.textAlignment == TextAlignment.CENTER) {
-                    textXOffset += (eWidth / 2f) - (textWidth / 2f);
-                } else if (style.textAlignment == TextAlignment.RIGHT) {
-                    textXOffset = eWidth - textWidth - textXOffset;
-                }
-
-                int fontHeight = Wrapper.getTextRenderer().FONT_HEIGHT;
-                float textYOffset = style.textYOffset;
-                if (style.textPosition == TextPosition.MIDDLE) {
-                    textYOffset += (eHeight / 2f) - (fontHeight / 2f);
-                } else if (style.textPosition == TextPosition.BOTTOM) {
-                    textYOffset = eHeight - fontHeight - textYOffset;
-                }
-
-                Wrapper.getTextRenderer().drawString(text,
-                        eX + textXOffset,
-                        eY + textYOffset,
-                        style.textColor,
-                        style.textShadow);
-            }
-        }
+        drawBackground(activeStyle);
+        drawBorders(activeStyle.borderStyle);
+        drawText(activeStyle.textStyle);
 
         element.onDraw(mouseX, mouseY, partialTicks);
 
-        if (element.getController().expanded) element.drawChildren(mouseX, mouseY, partialTicks);
+        for (Element child : element.getChildren()) child.draw(mouseX, mouseY, partialTicks);
     }
 
-    private void processDragging(int mouseX, int mouseY) {
-        Controller controller = element.getController();
-        if (controller.dragging) {
-            ScaledResolution display = VisualHelper.getDisplay();
-            int newX = mouseX + controller.dragX;
-            int newY = mouseY + controller.dragY;
+    private void drawBackground(ElementStyle style) {
+        if (!style.isShowBackground()) return;
 
-            newX = MathHelper.clamp(newX, 1, display.getScaledWidth() - element.getTotalWidth() - 1);
-            newY = MathHelper.clamp(newY, 1, display.getScaledHeight() - element.getTotalHeight() - 1);
+        float eX = element.getX();
+        float eY = element.getY();
+        float eWidth = element.getWidth();
+        float eHeight = element.getHeight();
 
-            element.setX(newX);
-            element.setY(newY);
+        VisualHelper.drawSquare(eX, eY, eWidth, eHeight, style.getBackgroundColor());
+    }
+
+    private void drawBorders(BorderStyle style) {
+        float eX = element.getX();
+        float eY = element.getY();
+        float eWidth = element.getWidth();
+        float eHeight = element.getHeight();
+
+        float borderTop = style.getTop();
+        float borderBottom = style.getBottom();
+        float borderLeft = style.getLeft();
+        float borderRight = style.getRight();
+
+        if (borderTop > 0) {
+            VisualHelper.drawRect(eX,
+                    eY - borderTop,
+                    eX + eWidth + borderRight,
+                    eY,
+                    style.getColorTop());
         }
+
+        if (borderBottom > 0) {
+            VisualHelper.drawRect(eX - borderLeft,
+                    eY + eHeight,
+                    eX + eWidth,
+                    eY + eHeight + borderBottom,
+                    style.getColorBottom());
+        }
+
+        if (borderLeft > 0) {
+            VisualHelper.drawRect(eX - borderLeft,
+                    eY - borderTop,
+                    eX,
+                    eY + eHeight,
+                    style.getColorLeft());
+        }
+
+        if (borderRight > 0) {
+            VisualHelper.drawRect(eX + eWidth,
+                    eY,
+                    eX + eWidth + borderRight,
+                    eY + eHeight + borderBottom,
+                    style.getColorRight());
+        }
+    }
+
+    private void drawText(TextStyle style) {
+        String text = element.getText();
+        if (text == null) return;
+        if (text.isEmpty()) return;
+
+        if (!style.isVisible()) return;
+
+        float eX = element.getX();
+        float eY = element.getY();
+        float eWidth = element.getWidth();
+        float eHeight = element.getHeight();
+
+        TextAlignment alignment = style.getAlignment();
+        TextPosition position = style.getPosition();
+
+        if (style.isItalic()) text = "\247o" + text;
+        if (style.isBold()) text = "\247l" + text;
+
+        float textWidth = 0;
+        if (alignment != TextAlignment.LEFT) {
+            textWidth = VisualHelper.MC_FONT.getStringWidth(text);
+        }
+
+        float xOffset = style.getOffsetX();
+        if (alignment == TextAlignment.CENTER) {
+            xOffset += (eWidth / 2f) - (textWidth / 2f);
+        } else if (alignment == TextAlignment.RIGHT) {
+            xOffset = eWidth - textWidth - xOffset;
+        }
+
+        float fontHeight = VisualHelper.MC_FONT.getFontHeight();
+        float yOffset = style.getOffsetY();
+        if (position == TextPosition.MIDDLE) {
+            yOffset += (eHeight / 2f) - (fontHeight / 2f);
+        } else if (position == TextPosition.BOTTOM) {
+            yOffset = eHeight - fontHeight - yOffset;
+        }
+
+        GL11.glPushMatrix();
+        GL11.glTranslatef(eX + xOffset, eY + yOffset, 0f);
+        GL11.glScalef(style.getScaleX(), style.getScaleY(), 1f);
+        GL11.glTranslatef(-(eX + xOffset), -(eY + yOffset), 0f);
+
+        if (style.isLineWrap()) {
+            // FIXME: Develop own way to handle this instead of lazily depending on Minecraft's built-in way.
+            Wrapper.getGame().fontRenderer.drawSplitString(text,
+                    eX + xOffset,
+                    eY + yOffset,
+                    eWidth,
+                    style.getColor(),
+                    style.isShadow());
+        } else {
+            VisualHelper.MC_FONT.drawString(text,
+                    eX + xOffset,
+                    eY + yOffset,
+                    style.getColor(),
+                    style.isShadow());
+        }
+
+        GL11.glPopMatrix();
     }
 }

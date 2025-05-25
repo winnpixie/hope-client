@@ -1,7 +1,7 @@
 package io.github.alerithe.client.features.modules.impl.world.phase;
 
-import io.github.alerithe.client.events.EventBlockCollision;
-import io.github.alerithe.client.events.EventUpdate;
+import io.github.alerithe.client.events.game.EventBlockCollision;
+import io.github.alerithe.client.events.game.EventUpdate;
 import io.github.alerithe.client.utilities.Wrapper;
 import net.minecraft.block.BlockAir;
 import net.minecraft.network.play.client.C03PacketPlayer;

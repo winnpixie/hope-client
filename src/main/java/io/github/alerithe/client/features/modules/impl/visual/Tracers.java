@@ -1,15 +1,16 @@
 package io.github.alerithe.client.features.modules.impl.visual;
 
-import io.github.alerithe.client.events.EventDraw;
+import io.github.alerithe.client.events.game.EventDraw;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.features.modules.impl.combat.AntiBot;
 import io.github.alerithe.client.features.properties.impl.BooleanProperty;
 import io.github.alerithe.client.utilities.MathHelper;
-import io.github.alerithe.client.utilities.VisualHelper;
+import io.github.alerithe.client.utilities.graphics.VisualHelper;
 import io.github.alerithe.client.utilities.Wrapper;
 import io.github.alerithe.events.CallOrder;
 import io.github.alerithe.events.Register;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityGolem;
 import net.minecraft.entity.monster.EntityMob;
@@ -19,8 +20,6 @@ import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import org.lwjgl.opengl.GL11;
 
-import java.awt.*;
-import java.util.List;
 import java.util.*;
 
 public class Tracers extends Module {
@@ -69,8 +68,6 @@ public class Tracers extends Module {
         GL11.glPopMatrix();
         entities.sort(Comparator.comparingDouble(entity -> Wrapper.getPlayer().getRotationsToEntity(entity)[0]));
 
-        int h = 0;
-        long now = System.currentTimeMillis() / 42;
         for (Entity entity : entities) {
             GL11.glPushMatrix();
             GL11.glDisable(GL11.GL_TEXTURE_2D);
@@ -78,8 +75,29 @@ public class Tracers extends Module {
             GL11.glEnable(GL11.GL_BLEND);
             GL11.glLineWidth(1f);
 
-            float[] colorArray = VisualHelper.toARGBFloatArray(Color.HSBtoRGB((int) ((now + h) % 255) / 255f, 1, 1), 1);
-            GL11.glColor3f(colorArray[0], colorArray[1], colorArray[2]);
+            int color = 0xFFFFFFFF;
+            if (entity instanceof EntityLivingBase) {
+                EntityLivingBase elb = (EntityLivingBase) entity;
+                float health = elb.getHealth() + elb.getAbsorptionAmount();
+                float maxHealth = elb.getMaxHealth();
+                if (maxHealth <= 0f) maxHealth = health + 1;
+
+                float percent = health / maxHealth;
+
+                color = 0xFF0099FF;
+                if (percent <= 0.25) {
+                    color = 0xFF990000;
+                } else if (percent <= 0.5) {
+                    color = 0xFFFF6600;
+                } else if (percent <= 0.75) {
+                    color = 0xFFFFFF00;
+                } else if (percent <= 1) {
+                    color = 0xFF00FF00;
+                }
+            }
+
+            float[] rgba = VisualHelper.toRGBAFloatArray(color, 1);
+            GL11.glColor3f(rgba[0], rgba[1], rgba[2]);
 
             float[] position = projections.get(entity);
             if (position[2] < 0f || position[2] >= 1f) {
@@ -97,7 +115,6 @@ public class Tracers extends Module {
             GL11.glEnable(GL11.GL_TEXTURE_2D);
             GL11.glPopMatrix();
 
-            h -= 1;
         }
     }
 

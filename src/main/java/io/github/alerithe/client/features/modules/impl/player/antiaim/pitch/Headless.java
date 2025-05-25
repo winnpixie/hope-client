@@ -1,6 +1,6 @@
 package io.github.alerithe.client.features.modules.impl.player.antiaim.pitch;
 
-import io.github.alerithe.client.events.EventUpdate;
+import io.github.alerithe.client.events.game.EventUpdate;
 import io.github.alerithe.client.features.modules.impl.player.antiaim.RotationMode;
 
 public class Headless extends RotationMode {

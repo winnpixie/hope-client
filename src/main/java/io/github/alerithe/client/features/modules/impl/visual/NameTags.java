@@ -1,13 +1,13 @@
 package io.github.alerithe.client.features.modules.impl.visual;
 
 import io.github.alerithe.client.Client;
-import io.github.alerithe.client.events.EventDraw;
+import io.github.alerithe.client.events.game.EventDraw;
 import io.github.alerithe.client.features.friends.Friend;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.features.modules.impl.combat.AntiBot;
 import io.github.alerithe.client.features.properties.impl.BooleanProperty;
 import io.github.alerithe.client.utilities.MathHelper;
-import io.github.alerithe.client.utilities.VisualHelper;
+import io.github.alerithe.client.utilities.graphics.VisualHelper;
 import io.github.alerithe.client.utilities.Wrapper;
 import io.github.alerithe.events.Register;
 import net.minecraft.client.network.NetworkPlayerInfo;
@@ -31,8 +31,8 @@ public class NameTags extends Module {
     private final BooleanProperty passive = new BooleanProperty("Passive", new String[0], false);
     private final BooleanProperty invisibles = new BooleanProperty("Invisibles", new String[]{"invis"}, true);
     private final BooleanProperty items = new BooleanProperty("Items", new String[0], false);
-    private final BooleanProperty ping = new BooleanProperty("Ping", new String[0], true);
-    private final BooleanProperty health = new BooleanProperty("Health", new String[]{"hp"}, true);
+    private final BooleanProperty ping = new BooleanProperty("ShowPing", new String[0], true);
+    private final BooleanProperty showHealth = new BooleanProperty("ShowHealth", new String[]{"hp"}, true);
 
     public NameTags() {
         super("NameTags", new String[]{"tags"}, Type.VISUAL);
@@ -44,7 +44,7 @@ public class NameTags extends Module {
         getPropertyManager().add(invisibles);
         getPropertyManager().add(items);
         getPropertyManager().add(ping);
-        getPropertyManager().add(health);
+        getPropertyManager().add(showHealth);
     }
 
     @Register
@@ -98,9 +98,13 @@ public class NameTags extends Module {
                 }
             }
 
-            if (health.getValue() && entity instanceof EntityLivingBase) {
+            if (showHealth.getValue() && entity instanceof EntityLivingBase) {
                 EntityLivingBase elb = (EntityLivingBase) entity;
-                float percent = (elb.getHealth() + elb.getAbsorptionAmount()) / elb.getMaxHealth();
+                float health = elb.getHealth();
+                float maxHealth = elb.getMaxHealth();
+                if (maxHealth <= 0f) maxHealth = health + 1;
+
+                float percent = health / maxHealth;
 
                 char color = '9';
                 if (percent <= 0.25) {
@@ -120,11 +124,11 @@ public class NameTags extends Module {
             GL11.glPushMatrix();
             GL11.glTranslatef(position[0], position[1], 0);
             GL11.glScalef(0.5f, 0.5f, 1f);
-            int width = Wrapper.getTextRenderer().getStringWidth(text);
+            float width = VisualHelper.MC_FONT.getStringWidth(text);
 
             // TODO: Convert to drawSquare
             VisualHelper.drawRect(-width / 2f - 2, -1, width / 2f + 2, 9, 0x77000000);
-            Wrapper.getTextRenderer().drawStringWithShadow(text, -width / 2f, 0, -1);
+            VisualHelper.MC_FONT.drawStringWithShadow(text, -width / 2f, 0, -1);
             GL11.glPopMatrix();
         }
     }

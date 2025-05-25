@@ -1,11 +1,11 @@
 package io.github.alerithe.client.features.modules.impl.visual.entityesp;
 
 import io.github.alerithe.client.Client;
-import io.github.alerithe.client.events.EventDraw;
+import io.github.alerithe.client.events.game.EventDraw;
 import io.github.alerithe.client.features.friends.Friend;
 import io.github.alerithe.client.features.modules.impl.visual.EntityESP;
 import io.github.alerithe.client.utilities.MathHelper;
-import io.github.alerithe.client.utilities.VisualHelper;
+import io.github.alerithe.client.utilities.graphics.VisualHelper;
 import io.github.alerithe.client.utilities.Wrapper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -88,9 +88,9 @@ public class Rectangle extends EntityESPMode {
                     }
                 }
 
-                Wrapper.getTextRenderer().drawStringWithShadow(text,
-                        width - (Wrapper.getTextRenderer().getStringWidth(text) / 2f),
-                        -Wrapper.getTextRenderer().FONT_HEIGHT - 2, -1);
+                VisualHelper.MC_FONT.drawStringWithShadow(text,
+                        width - (VisualHelper.MC_FONT.getStringWidth(text) / 2f),
+                        -VisualHelper.MC_FONT.getFontHeight() - 2, -1);
                 GL11.glScaled(2, 2, 2);
             }
 
@@ -101,23 +101,24 @@ public class Rectangle extends EntityESPMode {
             if (module.showHealth.getValue() && entity instanceof EntityLivingBase) {
                 EntityLivingBase elb = (EntityLivingBase) entity;
                 float health = elb.getHealth() + elb.getAbsorptionAmount();
-                if (health > 0f) {
-                    float percent = health / elb.getMaxHealth();
+                float maxHealth = elb.getMaxHealth();
+                if (maxHealth <= 0f) maxHealth = health + 1;
 
-                    int color = 0xFF0099FF;
-                    if (percent <= 0.25) {
-                        color = 0xFF990000;
-                    } else if (percent <= 0.5) {
-                        color = 0xFFFF6600;
-                    } else if (percent <= 0.75) {
-                        color = 0xFFFFFF00;
-                    } else if (percent <= 1) {
-                        color = 0xFF00FF00;
-                    }
+                float percent = health / maxHealth;
 
-                    VisualHelper.drawBorderedRect(-2.5f, height + 0.5f, -2, height - 0.5f - (height * MathHelper.clamp(percent, 0f, 1f)),
-                            0.5f, color, 0xFF000000);
+                int color = 0xFF0099FF;
+                if (percent <= 0.25) {
+                    color = 0xFF990000;
+                } else if (percent <= 0.5) {
+                    color = 0xFFFF6600;
+                } else if (percent <= 0.75) {
+                    color = 0xFFFFFF00;
+                } else if (percent <= 1) {
+                    color = 0xFF00FF00;
                 }
+
+                VisualHelper.drawBorderedRect(-2.5f, height + 0.5f, -2, height - 0.5f - (height * MathHelper.clamp(percent, 0f, 1f)),
+                        0.5f, color, 0xFF000000);
             }
 
             GL11.glPopMatrix();

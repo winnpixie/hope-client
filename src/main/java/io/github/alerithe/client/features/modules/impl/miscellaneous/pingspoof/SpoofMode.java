@@ -1,6 +1,6 @@
 package io.github.alerithe.client.features.modules.impl.miscellaneous.pingspoof;
 
-import io.github.alerithe.client.events.EventPacket;
+import io.github.alerithe.client.events.game.EventPacket;
 import io.github.alerithe.client.features.properties.impl.ObjectProperty;
 
 public class SpoofMode extends ObjectProperty.Value {

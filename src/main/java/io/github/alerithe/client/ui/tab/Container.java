@@ -7,8 +7,9 @@ import io.github.alerithe.client.features.properties.Property;
 import java.util.List;
 
 public class Container {
-    private Controller controller;
-    private Renderer renderer;
+    private final Controller controller;
+    private final Renderer renderer;
+    
     private Section section;
 
     public Container() {

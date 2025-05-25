@@ -1,6 +1,6 @@
 package io.github.alerithe.client.features.modules.impl.miscellaneous.pingspoof;
 
-import io.github.alerithe.client.events.EventPacket;
+import io.github.alerithe.client.events.game.EventPacket;
 import net.minecraft.network.play.server.S00PacketKeepAlive;
 
 public class ZeroPing extends SpoofMode {

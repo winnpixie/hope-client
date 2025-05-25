@@ -1,7 +1,7 @@
 package io.github.alerithe.client.features.modules.impl.combat;
 
 import io.github.alerithe.client.Client;
-import io.github.alerithe.client.events.EventUpdate;
+import io.github.alerithe.client.events.game.EventUpdate;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.features.modules.impl.combat.aura.*;
 import io.github.alerithe.client.features.modules.impl.movement.NoSlowdown;

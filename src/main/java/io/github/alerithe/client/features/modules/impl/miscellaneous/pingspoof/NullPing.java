@@ -1,6 +1,6 @@
 package io.github.alerithe.client.features.modules.impl.miscellaneous.pingspoof;
 
-import io.github.alerithe.client.events.EventPacket;
+import io.github.alerithe.client.events.game.EventPacket;
 import net.minecraft.network.Packet;
 import net.minecraft.network.login.server.S02PacketLoginSuccess;
 import net.minecraft.network.play.client.C00PacketKeepAlive;

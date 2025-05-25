@@ -1,7 +1,7 @@
 package io.github.alerithe.client.features.modules.impl.visual;
 
 import io.github.alerithe.events.Register;
-import io.github.alerithe.client.events.EventTick;
+import io.github.alerithe.client.events.game.EventTick;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.utilities.Wrapper;
 import net.minecraft.potion.Potion;

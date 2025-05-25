@@ -1,7 +1,7 @@
 package io.github.alerithe.client.features.modules.impl.miscellaneous;
 
 import io.github.alerithe.client.Client;
-import io.github.alerithe.client.events.EventInput;
+import io.github.alerithe.client.events.game.EventInput;
 import io.github.alerithe.client.features.friends.Friend;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.utilities.Wrapper;

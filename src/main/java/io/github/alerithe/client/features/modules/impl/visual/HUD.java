@@ -1,16 +1,16 @@
 package io.github.alerithe.client.features.modules.impl.visual;
 
 import io.github.alerithe.client.Client;
-import io.github.alerithe.client.events.EventDraw;
-import io.github.alerithe.client.events.EventInput;
-import io.github.alerithe.client.events.EventPacket;
-import io.github.alerithe.client.events.EventTick;
+import io.github.alerithe.client.events.game.EventDraw;
+import io.github.alerithe.client.events.game.EventInput;
+import io.github.alerithe.client.events.game.EventPacket;
+import io.github.alerithe.client.events.game.EventTick;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.features.properties.impl.BooleanProperty;
 import io.github.alerithe.client.utilities.MathHelper;
 import io.github.alerithe.client.utilities.MsTimer;
-import io.github.alerithe.client.utilities.VisualHelper;
 import io.github.alerithe.client.utilities.Wrapper;
+import io.github.alerithe.client.utilities.graphics.VisualHelper;
 import io.github.alerithe.events.CallOrder;
 import io.github.alerithe.events.Register;
 import net.minecraft.client.Minecraft;
@@ -44,15 +44,15 @@ public class HUD extends Module {
     private final BooleanProperty cps = new BooleanProperty("ClicksPerSecond", new String[]{"cps", "showcps"}, true);
     private final BooleanProperty rcps = new BooleanProperty("RightClicksPerSecond", new String[]{"rcps", "showrcps"}, true);
 
-    private final Comparator<Module> moduleSorter = Comparator.comparingInt(module -> -Wrapper.getTextRenderer().getStringWidth(module.getName()));
-    private final Comparator<PotionEffect> potionSorter = Comparator.comparingInt(effect -> {
+    private final Comparator<Module> moduleSorter = Comparator.comparingDouble(module -> -VisualHelper.MC_FONT.getStringWidth(module.getName()));
+    private final Comparator<PotionEffect> potionSorter = Comparator.comparingDouble(effect -> {
         Potion potion = Potion.potionTypes[effect.getPotionID()];
 
         int amp = effect.getAmplifier() + 1;
         String text = String.format("%s \2476%s \2477%s", I18n.format(potion.getName()), amp > 0 && amp < 11
                 ? I18n.format("enchantment.level." + amp) : amp, Potion.getDurationString(effect));
 
-        return -Wrapper.getTextRenderer().getStringWidth(text);
+        return -VisualHelper.MC_FONT.getStringWidth(text);
     });
     private final List<Long> leftClicks = new CopyOnWriteArrayList<>();
     private final List<Long> rightClicks = new CopyOnWriteArrayList<>();
@@ -134,7 +134,7 @@ public class HUD extends Module {
                     text += "\2477]";
                 }
 
-                Wrapper.getTextRenderer().drawStringWithShadow(text, 1, 1, 0xFF990000);
+                VisualHelper.MC_FONT.drawStringWithShadow(text, 1, 1, Client.ACCENT_COLOR);
             }
 
             // ArrayList
@@ -143,15 +143,15 @@ public class HUD extends Module {
                 List<Module> enabled = Client.MODULE_MANAGER.getElements().stream().filter(Module::isEnabled)
                         .filter(module -> !module.hidden.getValue()).sorted(moduleSorter).collect(Collectors.toList());
                 for (Module module : enabled) {
-                    int textWidth = Wrapper.getTextRenderer().getStringWidth(module.getName());
-                    int x = display.getScaledWidth() - textWidth;
+                    float textWidth = VisualHelper.MC_FONT.getStringWidth(module.getName());
+                    float x = display.getScaledWidth() - textWidth;
 
-                    VisualHelper.drawSquare(x - 4, y - 2, textWidth + 4, Wrapper.getTextRenderer().FONT_HEIGHT + 4,
-                            0xFF990000);
-                    VisualHelper.drawSquare(x - 3, y - 2, textWidth + 3, Wrapper.getTextRenderer().FONT_HEIGHT + 3,
-                            0xFF222222);
+                    VisualHelper.drawSquare(x - 4, y - 2, textWidth + 4, VisualHelper.MC_FONT.getFontHeight() + 4,
+                            Client.ACCENT_COLOR);
+                    VisualHelper.drawSquare(x - 3, y - 2, textWidth + 3, VisualHelper.MC_FONT.getFontHeight() + 3,
+                            0xFF111111);
 
-                    Wrapper.getTextRenderer().drawStringWithShadow(module.getName(), x - 1, y, -1);
+                    VisualHelper.MC_FONT.drawStringWithShadow(module.getName(), x - 1, y, -1);
                     y += 12;
                 }
             }
@@ -174,11 +174,11 @@ public class HUD extends Module {
 
                 Wrapper.getGame().getTextureManager().bindTexture(GuiInventory.inventoryBackground);
                 int potionIndex = potion.getStatusIconIndex();
-                Gui.drawTexturedModalRect2(display.getScaledWidth() - Wrapper.getTextRenderer().getStringWidth(text) - 20,
+                Gui.drawTexturedModalRect2(display.getScaledWidth() - VisualHelper.MC_FONT.getStringWidth(text) - 20,
                         display.getScaledHeight() - y - 5, potionIndex % 8 * 18, 198 + potionIndex / 8 * 18, 18, 18);
 
-                Wrapper.getTextRenderer().drawStringWithShadow(text,
-                        display.getScaledWidth() - Wrapper.getTextRenderer().getStringWidth(text) - 1,
+                VisualHelper.MC_FONT.drawStringWithShadow(text,
+                        display.getScaledWidth() - VisualHelper.MC_FONT.getStringWidth(text) - 1,
                         display.getScaledHeight() - y, potion.getLiquidColor());
                 y += 16;
             }
@@ -188,7 +188,7 @@ public class HUD extends Module {
         if (coords.getValue()) {
             String text = String.format("\2477[\247r %.0f \2477/\247r %.0f \2477/\247r %.0f \2477]",
                     Wrapper.getPlayer().posX, Wrapper.getPlayer().posY, Wrapper.getPlayer().posZ);
-            Wrapper.getTextRenderer().drawStringWithShadow(text, 2, display.getScaledHeight() - chatOffset, -1);
+            VisualHelper.MC_FONT.drawStringWithShadow(text, 2, display.getScaledHeight() - chatOffset, -1);
         }
     }
 

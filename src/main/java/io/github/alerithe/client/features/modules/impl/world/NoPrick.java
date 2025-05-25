@@ -1,6 +1,6 @@
 package io.github.alerithe.client.features.modules.impl.world;
 
-import io.github.alerithe.client.events.EventBlockCollision;
+import io.github.alerithe.client.events.game.EventBlockCollision;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.features.properties.impl.BooleanProperty;
 import io.github.alerithe.events.Register;

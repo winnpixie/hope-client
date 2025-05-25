@@ -1,6 +1,6 @@
 package io.github.alerithe.client.features.modules.impl.combat;
 
-import io.github.alerithe.client.events.EventTick;
+import io.github.alerithe.client.events.game.EventTick;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.features.properties.impl.IntProperty;
 import io.github.alerithe.client.utilities.MathHelper;

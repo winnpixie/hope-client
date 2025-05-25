@@ -1,10 +1,10 @@
 package io.github.alerithe.client.features.modules.impl.visual.entityesp;
 
 import io.github.alerithe.client.Client;
-import io.github.alerithe.client.events.EventDraw;
+import io.github.alerithe.client.events.game.EventDraw;
 import io.github.alerithe.client.features.modules.impl.visual.EntityESP;
 import io.github.alerithe.client.utilities.MathHelper;
-import io.github.alerithe.client.utilities.VisualHelper;
+import io.github.alerithe.client.utilities.graphics.VisualHelper;
 import io.github.alerithe.client.utilities.Wrapper;
 import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.entity.Entity;
@@ -31,6 +31,7 @@ public class Pillar extends EntityESPMode {
 
         for (Entity entity : entities) {
             GL11.glPushMatrix();
+            GL11.glDisable(GL11.GL_DEPTH_TEST);
             GL11.glDisable(GL11.GL_TEXTURE_2D);
             GL11.glEnable(GL11.GL_LINE_SMOOTH);
             GL11.glEnable(GL11.GL_BLEND);
@@ -54,25 +55,26 @@ public class Pillar extends EntityESPMode {
             if (module.showHealth.getValue() && entity instanceof EntityLivingBase) {
                 EntityLivingBase elb = (EntityLivingBase) entity;
                 float health = elb.getHealth() + elb.getAbsorptionAmount();
-                if (health > 0f) {
-                    float percent = health / elb.getMaxHealth();
+                float maxHealth = elb.getMaxHealth();
+                if (maxHealth <= 0f) maxHealth = health + 1;
 
-                    color = 0xFF0099FF;
-                    if (percent <= 0.25) {
-                        color = 0xFF990000;
-                    } else if (percent <= 0.5) {
-                        color = 0xFFFF6600;
-                    } else if (percent <= 0.75) {
-                        color = 0xFFFFFF00;
-                    } else if (percent <= 1) {
-                        color = 0xFF00FF00;
-                    }
+                float percent = health / maxHealth;
+
+                color = 0xFF0099FF;
+                if (percent <= 0.25) {
+                    color = 0xFF990000;
+                } else if (percent <= 0.5) {
+                    color = 0xFFFF6600;
+                } else if (percent <= 0.75) {
+                    color = 0xFFFFFF00;
+                } else if (percent <= 1) {
+                    color = 0xFF00FF00;
                 }
             }
 
             if (Client.FRIEND_MANAGER.find(entity.getName()) != null) color = 0xFF00FFFF;
 
-            float[] rgba = VisualHelper.toARGBFloatArray(color, -1f);
+            float[] rgba = VisualHelper.toRGBAFloatArray(color, -1f);
             GL11.glColor4f(rgba[0], rgba[1], rgba[2], rgba[3]);
 
             RenderGlobal.func_181561_a(aabb);
@@ -80,6 +82,7 @@ public class Pillar extends EntityESPMode {
             GL11.glDisable(GL11.GL_BLEND);
             GL11.glDisable(GL11.GL_LINE_SMOOTH);
             GL11.glEnable(GL11.GL_TEXTURE_2D);
+            GL11.glEnable(GL11.GL_DEPTH_TEST);
             GL11.glPopMatrix();
         }
     }

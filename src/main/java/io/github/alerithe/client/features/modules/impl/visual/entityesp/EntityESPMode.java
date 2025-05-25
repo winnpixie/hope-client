@@ -1,6 +1,6 @@
 package io.github.alerithe.client.features.modules.impl.visual.entityesp;
 
-import io.github.alerithe.client.events.EventDraw;
+import io.github.alerithe.client.events.game.EventDraw;
 import io.github.alerithe.client.features.modules.impl.visual.EntityESP;
 import io.github.alerithe.client.features.properties.impl.ObjectProperty;
 

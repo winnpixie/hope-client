@@ -1,6 +1,6 @@
 package io.github.alerithe.client.features.modules.impl.world;
 
-import io.github.alerithe.client.events.EventInput;
+import io.github.alerithe.client.events.game.EventInput;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.features.properties.impl.IntProperty;
 import io.github.alerithe.events.Register;

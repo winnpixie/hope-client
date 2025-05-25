@@ -1,7 +1,7 @@
 package io.github.alerithe.client.features.commands;
 
 import io.github.alerithe.client.Client;
-import io.github.alerithe.client.events.EventChat;
+import io.github.alerithe.client.events.game.EventChat;
 import io.github.alerithe.client.features.FeatureManager;
 import io.github.alerithe.client.features.commands.impl.*;
 import io.github.alerithe.client.utilities.Wrapper;

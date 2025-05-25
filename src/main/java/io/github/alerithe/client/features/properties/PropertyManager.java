@@ -23,9 +23,9 @@ public class PropertyManager extends FeatureManager<Property<?>> {
                 } else if (property instanceof DoubleProperty) {
                     if (MathHelper.isDouble(data[1])) ((DoubleProperty) property).setValue(Double.parseDouble(data[1]));
                 } else if (property instanceof ObjectProperty) {
-                    ObjectProperty prop = (ObjectProperty) property;
-                    ObjectProperty.Value value = prop.get(data[1]);
-                    if (value != null) prop.setValue(value);
+                    ObjectProperty objProp = (ObjectProperty) property;
+                    ObjectProperty.Value value = objProp.get(data[1]);
+                    if (value != null) objProp.setValue(value);
                 } else if (property instanceof StringProperty) {
                     ((StringProperty) property).setValue(data[1]);
                 }
