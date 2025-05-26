@@ -272,6 +272,5 @@ public class Element {
     }
 
     public void onKeyPressed(char charCode, int keyCode) {
-
     }
 }

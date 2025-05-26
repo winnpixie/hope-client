@@ -7,8 +7,8 @@ import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.features.modules.impl.combat.AntiBot;
 import io.github.alerithe.client.features.properties.impl.BooleanProperty;
 import io.github.alerithe.client.utilities.MathHelper;
-import io.github.alerithe.client.utilities.graphics.VisualHelper;
 import io.github.alerithe.client.utilities.Wrapper;
+import io.github.alerithe.client.utilities.graphics.VisualHelper;
 import io.github.alerithe.events.Register;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.entity.Entity;
@@ -99,9 +99,9 @@ public class NameTags extends Module {
             }
 
             if (showHealth.getValue() && entity instanceof EntityLivingBase) {
-                EntityLivingBase elb = (EntityLivingBase) entity;
-                float health = elb.getHealth();
-                float maxHealth = elb.getMaxHealth();
+                EntityLivingBase living = (EntityLivingBase) entity;
+                float health = living.getHealth();
+                float maxHealth = living.getMaxHealth();
                 if (maxHealth <= 0f) maxHealth = health + 1;
 
                 float percent = health / maxHealth;
@@ -117,7 +117,7 @@ public class NameTags extends Module {
                     color = 'a';
                 }
 
-                text += String.format(" \247%s%dHP", color, MathHelper.ceil(elb.getHealth() + elb.getAbsorptionAmount()));
+                text += String.format(" \247%s%d\u2764", color, MathHelper.ceil(living.getHealth() + living.getAbsorptionAmount()));
             }
 
             float[] position = projections.get(entity);
@@ -126,8 +126,7 @@ public class NameTags extends Module {
             GL11.glScalef(0.5f, 0.5f, 1f);
             float width = VisualHelper.MC_FONT.getStringWidth(text);
 
-            // TODO: Convert to drawSquare
-            VisualHelper.drawRect(-width / 2f - 2, -1, width / 2f + 2, 9, 0x77000000);
+            VisualHelper.MC_GFX.drawBorderedSquare(-width / 2f - 1f, -1f, width + 2f, 10f, 1f, 0x69000000, 0x69AAAAAA);
             VisualHelper.MC_FONT.drawStringWithShadow(text, -width / 2f, 0, -1);
             GL11.glPopMatrix();
         }

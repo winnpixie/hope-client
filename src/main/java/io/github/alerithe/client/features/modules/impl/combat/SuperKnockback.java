@@ -10,7 +10,7 @@ import net.minecraft.network.play.client.C03PacketPlayer;
 
 public class SuperKnockback extends Module {
     private final IntProperty packets = new IntProperty("PacketsPerAttack", new String[]{"packets", "ppa"},
-            100, 1, Integer.MAX_VALUE);
+            100, 1, 1000);
 
     public SuperKnockback() {
         super("SuperKnockback", new String[]{"superkb"}, Type.COMBAT);

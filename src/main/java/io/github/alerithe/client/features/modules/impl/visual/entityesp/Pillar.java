@@ -4,8 +4,8 @@ import io.github.alerithe.client.Client;
 import io.github.alerithe.client.events.game.EventDraw;
 import io.github.alerithe.client.features.modules.impl.visual.EntityESP;
 import io.github.alerithe.client.utilities.MathHelper;
-import io.github.alerithe.client.utilities.graphics.VisualHelper;
 import io.github.alerithe.client.utilities.Wrapper;
+import io.github.alerithe.client.utilities.graphics.VisualHelper;
 import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -53,9 +53,9 @@ public class Pillar extends EntityESPMode {
 
             int color = 0xFFFFFFFF;
             if (module.showHealth.getValue() && entity instanceof EntityLivingBase) {
-                EntityLivingBase elb = (EntityLivingBase) entity;
-                float health = elb.getHealth() + elb.getAbsorptionAmount();
-                float maxHealth = elb.getMaxHealth();
+                EntityLivingBase living = (EntityLivingBase) entity;
+                float health = living.getHealth() + living.getAbsorptionAmount();
+                float maxHealth = living.getMaxHealth();
                 if (maxHealth <= 0f) maxHealth = health + 1;
 
                 float percent = health / maxHealth;
@@ -74,7 +74,7 @@ public class Pillar extends EntityESPMode {
 
             if (Client.FRIEND_MANAGER.find(entity.getName()) != null) color = 0xFF00FFFF;
 
-            float[] rgba = VisualHelper.toRGBAFloatArray(color, -1f);
+            float[] rgba = VisualHelper.toRGBAFloatArray(color, true);
             GL11.glColor4f(rgba[0], rgba[1], rgba[2], rgba[3]);
 
             RenderGlobal.func_181561_a(aabb);

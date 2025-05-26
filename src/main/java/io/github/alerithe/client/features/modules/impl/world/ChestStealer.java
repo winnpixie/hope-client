@@ -11,7 +11,8 @@ import net.minecraft.client.gui.inventory.GuiChest;
 import net.minecraft.inventory.Slot;
 
 public class ChestStealer extends Module {
-    private final IntProperty cps = new IntProperty("CPS", new String[0], 15, 1, 20);
+    private final IntProperty cps = new IntProperty("CPS", new String[0],
+            15, 1, 20);
 
     private final MsTimer timer = new MsTimer();
 

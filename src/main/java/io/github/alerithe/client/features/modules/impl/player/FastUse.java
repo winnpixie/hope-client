@@ -9,7 +9,8 @@ import net.minecraft.item.*;
 import net.minecraft.network.play.client.C03PacketPlayer;
 
 public class FastUse extends Module {
-    private final IntProperty useTicks = new IntProperty("UseTicks", new String[]{"ticks"}, 15, 0, 32);
+    private final IntProperty useTicks = new IntProperty("UseTicks", new String[]{"ticks"},
+            15, 0, 32);
 
     public FastUse() {
         super("FastUse", new String[]{"fasteat"}, Type.PLAYER);

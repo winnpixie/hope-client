@@ -6,7 +6,8 @@ import io.github.alerithe.client.features.properties.impl.IntProperty;
 import io.github.alerithe.events.Register;
 
 public class FastPlace extends Module {
-    private final IntProperty speed = new IntProperty("Speed", new String[0], 4, 0, 4);
+    private final IntProperty speed = new IntProperty("Speed", new String[0],
+            4, 0, 4);
 
     public FastPlace() {
         super("FastPlace", new String[0], Type.WORLD);

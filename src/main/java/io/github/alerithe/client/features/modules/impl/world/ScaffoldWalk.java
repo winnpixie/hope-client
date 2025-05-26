@@ -20,7 +20,8 @@ import java.util.List;
 
 public class ScaffoldWalk extends Module {
     private final BooleanProperty tower = new BooleanProperty("Tower", new String[0], true);
-    private final IntProperty bps = new IntProperty("BPS", new String[]{"cps", "speed"}, 20, 1, 20);
+    private final IntProperty bps = new IntProperty("BPS", new String[]{"cps", "speed"},
+            20, 1, 20);
 
     private final List<Block> blacklist = Arrays.asList(Blocks.cocoa, Blocks.water, Blocks.flowing_water, Blocks.lava,
             Blocks.flowing_lava, Blocks.air, Blocks.flower_pot, Blocks.red_flower, Blocks.yellow_flower,
@@ -38,11 +39,9 @@ public class ScaffoldWalk extends Module {
     }
 
     @Override
-    public void enable() {
+    public void onEnable() {
         blocksPlaced = 0;
         this.data = null;
-
-        super.enable();
     }
 
     @Register
@@ -59,7 +58,7 @@ public class ScaffoldWalk extends Module {
         data = makeData(pos);
         if (data == null) return;
 
-        float[] angles = Wrapper.getPlayer().getRotationToPosition(new Vec3(data.pos));
+        float[] angles = Wrapper.getPlayer().getRotationToBlock(data.pos);
         event.setYaw(angles[0]);
         event.setPitch(angles[1]);
     }

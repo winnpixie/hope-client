@@ -19,7 +19,7 @@ public class ClickUI extends Module {
     }
 
     @Override
-    public void enable() {
+    public void onEnable() {
         if (controller instanceof FreeFormUI) {
             if (newUI.getValue()) controller = new WindowedUI();
         } else if (controller instanceof WindowedUI) {

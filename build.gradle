@@ -52,7 +52,7 @@ application {
                 '-Xmx4G', '-Xms4G',
                 '-Djava.library.path=../natives',
                 '-Dmc.email=', '-Dmc.pass=',
-                '-Dhope.silentboot=false'
+                '-Dhope.silentboot=true'
         ]
         main = 'Start'
     }

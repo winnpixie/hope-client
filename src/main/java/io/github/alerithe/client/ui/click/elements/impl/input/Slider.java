@@ -69,14 +69,14 @@ public class Slider extends Element {
         ElementStyle style = isHovered() ? getNormalStyle() : getHoveredStyle();
 
         // Vertical bar
-        VisualHelper.drawSquare(getX() + xOffset,
+        VisualHelper.MC_GFX.drawSquare(getX() + xOffset,
                 getY() + (getHeight() / 2f) - (lineSize / 2f),
                 lineWidth,
                 lineSize,
                 style.getForegroundColor());
 
         // Horizontal Line
-        VisualHelper.drawSquare(getX() + 1,
+        VisualHelper.MC_GFX.drawSquare(getX() + 1,
                 getY() + (getHeight() / 2f) - halfSize,
                 getWidth() - 2,
                 lineWidth,

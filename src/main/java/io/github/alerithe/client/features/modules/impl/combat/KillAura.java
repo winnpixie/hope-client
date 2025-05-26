@@ -35,15 +35,16 @@ public class KillAura extends Module {
             new Tick(this), new Single(this), new LockOn(this));
     private final ObjectProperty<SortingMode> sortingMode = new ObjectProperty<>("SortingMode", new String[]{"sorting"},
             new SortingMode.AngleSort(), new SortingMode.DistanceSort());
-    private final BooleanProperty smartAngles = new BooleanProperty("SmartAngles", new String[0], false);
-    private final DoubleProperty angleOffset = new DoubleProperty("AngleOffset", new String[0], 2.5, 0.0, 5.0);
-    private final BooleanProperty look = new BooleanProperty("Look", new String[0], false);
     public final IntProperty minAps = new IntProperty("MinHitsPerSecond", new String[]{"minaps", "mincps", "minspeed"},
             8, 1, 20);
     public final IntProperty maxAps = new IntProperty("MaxHitsPerSecond", new String[]{"maxaps", "maxcps", "maxspeed"},
             12, 1, 20);
+    private final DoubleProperty angleOffset = new DoubleProperty("AngleOffset", new String[0],
+            2.5, 0.0, 5.0);
     public final DoubleProperty distance = new DoubleProperty("Distance", new String[]{"reach", "range", "dist", "distance"},
-            4, 0.1, 6);
+            4.0, 0.1, 6.0);
+    private final BooleanProperty smartAngles = new BooleanProperty("SmartAngles", new String[0], false);
+    private final BooleanProperty look = new BooleanProperty("Look", new String[0], false);
     public final BooleanProperty autoBlock = new BooleanProperty("AutoBlock", new String[]{"ab"}, true);
     private final BooleanProperty players = new BooleanProperty("Players", new String[0], true);
     private final BooleanProperty monsters = new BooleanProperty("Monsters", new String[]{"mobs"}, false);

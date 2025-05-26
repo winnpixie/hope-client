@@ -1,8 +1,8 @@
-package io.github.alerithe.client.utilities.graphics;
+package io.github.alerithe.client.utilities.graphics.text;
 
 import net.minecraft.client.Minecraft;
 
-public class MinecraftFontRenderer implements FontRenderer {
+public class MinecraftTextRenderer implements TextRenderer {
     @Override
     public float getFontHeight() {
         return Minecraft.getMinecraft().fontRenderer.FONT_HEIGHT;

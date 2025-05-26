@@ -5,8 +5,8 @@ import io.github.alerithe.client.events.game.EventDraw;
 import io.github.alerithe.client.features.friends.Friend;
 import io.github.alerithe.client.features.modules.impl.visual.EntityESP;
 import io.github.alerithe.client.utilities.MathHelper;
-import io.github.alerithe.client.utilities.graphics.VisualHelper;
 import io.github.alerithe.client.utilities.Wrapper;
+import io.github.alerithe.client.utilities.graphics.VisualHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
@@ -94,14 +94,14 @@ public class Rectangle extends EntityESPMode {
                 GL11.glScaled(2, 2, 2);
             }
 
-            VisualHelper.drawBorderedRect(0.5f, 0.5f, width - 0.5f, height - 0.5f, 1.5f, 0, 0xff000000);
-            VisualHelper.drawBorderedRect(0, 0, width, height, 0.5f, 0,
-                    Client.FRIEND_MANAGER.find(entity.getName()) == null ? -1 : 0xFF00FFFF);
+            VisualHelper.MC_GFX.drawBorderedSquare(0.5f, 0.5f, width - 1f, height - 1f, 1.5f, 0x00000000, 0xFF000000);
+            VisualHelper.MC_GFX.drawBorderedSquare(0f, 0f, width, height, 0.5f, 0x00000000,
+                    Client.FRIEND_MANAGER.find(entity.getName()) == null ? 0xFFFFFFFF : 0xFF00FFFF);
 
             if (module.showHealth.getValue() && entity instanceof EntityLivingBase) {
-                EntityLivingBase elb = (EntityLivingBase) entity;
-                float health = elb.getHealth() + elb.getAbsorptionAmount();
-                float maxHealth = elb.getMaxHealth();
+                EntityLivingBase living = (EntityLivingBase) entity;
+                float health = living.getHealth() + living.getAbsorptionAmount();
+                float maxHealth = living.getMaxHealth();
                 if (maxHealth <= 0f) maxHealth = health + 1;
 
                 float percent = health / maxHealth;
@@ -117,7 +117,8 @@ public class Rectangle extends EntityESPMode {
                     color = 0xFF00FF00;
                 }
 
-                VisualHelper.drawBorderedRect(-2.5f, height + 0.5f, -2, height - 0.5f - (height * MathHelper.clamp(percent, 0f, 1f)),
+                float healthBarHeight = height * MathHelper.clamp(percent, 0f, 1f);
+                VisualHelper.MC_GFX.drawBorderedSquare(-2.5f, height - healthBarHeight - 0.5f, 0.5f, healthBarHeight + 1f,
                         0.5f, color, 0xFF000000);
             }
 

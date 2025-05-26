@@ -5,8 +5,8 @@ import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.features.modules.impl.combat.AntiBot;
 import io.github.alerithe.client.features.properties.impl.BooleanProperty;
 import io.github.alerithe.client.utilities.MathHelper;
-import io.github.alerithe.client.utilities.graphics.VisualHelper;
 import io.github.alerithe.client.utilities.Wrapper;
+import io.github.alerithe.client.utilities.graphics.VisualHelper;
 import io.github.alerithe.events.CallOrder;
 import io.github.alerithe.events.Register;
 import net.minecraft.entity.Entity;
@@ -77,9 +77,9 @@ public class Tracers extends Module {
 
             int color = 0xFFFFFFFF;
             if (entity instanceof EntityLivingBase) {
-                EntityLivingBase elb = (EntityLivingBase) entity;
-                float health = elb.getHealth() + elb.getAbsorptionAmount();
-                float maxHealth = elb.getMaxHealth();
+                EntityLivingBase living = (EntityLivingBase) entity;
+                float health = living.getHealth() + living.getAbsorptionAmount();
+                float maxHealth = living.getMaxHealth();
                 if (maxHealth <= 0f) maxHealth = health + 1;
 
                 float percent = health / maxHealth;
@@ -96,7 +96,7 @@ public class Tracers extends Module {
                 }
             }
 
-            float[] rgba = VisualHelper.toRGBAFloatArray(color, 1);
+            float[] rgba = VisualHelper.toRGBAFloatArray(color, true);
             GL11.glColor3f(rgba[0], rgba[1], rgba[2]);
 
             float[] position = projections.get(entity);
@@ -114,7 +114,6 @@ public class Tracers extends Module {
             GL11.glDisable(GL11.GL_LINE_SMOOTH);
             GL11.glEnable(GL11.GL_TEXTURE_2D);
             GL11.glPopMatrix();
-
         }
     }
 

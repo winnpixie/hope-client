@@ -7,7 +7,8 @@ import io.github.alerithe.client.utilities.Wrapper;
 import io.github.alerithe.events.Register;
 
 public class GameSpeed extends Module {
-    private final DoubleProperty speed = new DoubleProperty("Speed", new String[0], 2, 0.1, Double.MAX_VALUE);
+    private final DoubleProperty speed = new DoubleProperty("Speed", new String[0],
+            2.0, 0.1, 100.0);
 
     public GameSpeed() {
         super("GameSpeed", new String[]{"timer"}, Type.MISCELLANEOUS);
@@ -16,9 +17,7 @@ public class GameSpeed extends Module {
     }
 
     @Override
-    public void disable() {
-        super.disable();
-
+    public void onDisable() {
         Wrapper.getGame().timer.timerSpeed = 1f;
     }
 

@@ -17,9 +17,7 @@ public class InventoryMove extends Module {
     }
 
     @Override
-    public void disable() {
-        super.disable();
-
+    public void onDisable() {
         updateKeyStates();
     }
 

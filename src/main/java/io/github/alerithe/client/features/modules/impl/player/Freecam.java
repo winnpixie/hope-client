@@ -16,7 +16,7 @@ public class Freecam extends Module {
     }
 
     @Override
-    public void enable() {
+    public void onEnable() {
         clone = new EntityOtherPlayerMP(Wrapper.getWorld(), Wrapper.getGame().getSession().getProfile());
         clone.setEntityId(-1337);
         clone.copyDataFromOld(Wrapper.getPlayer());
@@ -24,14 +24,10 @@ public class Freecam extends Module {
         clone.rotationYawHead = Wrapper.getPlayer().rotationYawHead;
         clone.onGround = Wrapper.getPlayer().onGround;
         Wrapper.getWorld().addEntityToWorld(clone.getEntityId(), clone);
-
-        super.enable();
     }
 
     @Override
-    public void disable() {
-        super.disable();
-
+    public void onDisable() {
         Wrapper.getPlayer().copyLocationAndAnglesFrom(clone);
         Wrapper.getPlayer().rotationYawHead = clone.rotationYawHead;
         Wrapper.getWorld().removeEntityFromWorld(clone.getEntityId());

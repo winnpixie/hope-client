@@ -10,7 +10,9 @@ import java.util.List;
 
 // TODO: Why do I insist on using a tab UI.
 public class Renderer extends Component {
-    private static final int BACKGROUND_COLOR = 0xEE111111;
+    private static final int BACKGROUND_COLOR = 0x69000000;
+
+    private static final int TEXT_COLOR = 0xFFAAAAAA;
 
     public Renderer(Container container) {
         super(container);
@@ -40,8 +42,11 @@ public class Renderer extends Component {
         float x = xOffset + 1;
         float y = 11;
         for (Module.Type type : Module.Type.values()) {
-            VisualHelper.drawSquare(x, y, width, 12, getContainer().getType() == type ? Client.ACCENT_COLOR : BACKGROUND_COLOR);
-            VisualHelper.MC_FONT.drawStringWithShadow(type.getLabel(), x + 2, y + 2, -1);
+            boolean active = getContainer().getType() == type;
+            VisualHelper.MC_GFX.drawSquare(x, y, width, 12,
+                    active ? Client.ACCENT_COLOR : BACKGROUND_COLOR);
+            VisualHelper.MC_FONT.drawStringWithShadow(type.getLabel(), x + 2, y + 2,
+                    active ? 0xFFFFFFFF : TEXT_COLOR);
             y += 12;
         }
 
@@ -58,8 +63,10 @@ public class Renderer extends Component {
         float x = xOffset + 1;
         float y = 11;
         for (Module module : modules) {
-            VisualHelper.drawSquare(x, y, width, 12, getContainer().getModule() == module ? Client.ACCENT_COLOR : BACKGROUND_COLOR);
-            VisualHelper.MC_FONT.drawStringWithShadow(module.getName(), x + 2, y + 2, module.isEnabled() ? -1 : 0xFFAAAAAA);
+            VisualHelper.MC_GFX.drawSquare(x, y, width, 12,
+                    getContainer().getModule() == module ? Client.ACCENT_COLOR : BACKGROUND_COLOR);
+            VisualHelper.MC_FONT.drawStringWithShadow(module.getName(), x + 2, y + 2,
+                    module.isEnabled() ? 0xFFFFFFFF : TEXT_COLOR);
             y += 12;
         }
 
@@ -76,8 +83,10 @@ public class Renderer extends Component {
         float x = xOffset + 1;
         float y = 11;
         for (Property<?> property : properties) {
-            VisualHelper.drawSquare(x, y, width, 12, getContainer().getProperty() == property ? Client.ACCENT_COLOR : BACKGROUND_COLOR);
-            VisualHelper.MC_FONT.drawStringWithShadow(format(property), x + 2, y + 2, 0xFFAAAAAA);
+            VisualHelper.MC_GFX.drawSquare(x, y, width, 12,
+                    getContainer().getProperty() == property ? Client.ACCENT_COLOR : BACKGROUND_COLOR);
+            VisualHelper.MC_FONT.drawStringWithShadow(format(property), x + 2, y + 2,
+                    TEXT_COLOR);
             y += 12;
         }
 

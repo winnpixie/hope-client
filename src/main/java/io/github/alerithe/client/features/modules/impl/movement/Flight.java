@@ -12,7 +12,7 @@ public class Flight extends Module {
     private final ObjectProperty<FlightMode> mode = new ObjectProperty<>("Mode", new String[0], new Creative(this),
             new SkyHigh(this), new OldNCP(this), new AncientNCP(this), new SourceEngine(this));
     public final DoubleProperty moveSpeed = new DoubleProperty("MoveSpeed", new String[]{"speed"},
-            1, 0.1, Double.MAX_VALUE);
+            1.0, 0.1, 10.0);
 
     public Flight() {
         super("Flight", new String[]{"fly"}, Type.MOVEMENT);
@@ -23,9 +23,7 @@ public class Flight extends Module {
 
 
     @Override
-    public void disable() {
-        super.disable();
-
+    public void onDisable() {
         Wrapper.getPlayer().setSpeed(0);
     }
 

@@ -11,9 +11,9 @@ import net.minecraft.util.Vec3;
 
 public class Velocity extends Module {
     private final IntProperty verticalPercent = new IntProperty("VerticalPercent", new String[]{"vertical", "v"},
-            0, 0, Integer.MAX_VALUE);
+            0, 0, 1000);
     private final IntProperty horizontalPercent = new IntProperty("HorizontalPercent", new String[]{"horizontal", "h"},
-            0, 0, Integer.MAX_VALUE);
+            0, 0, 1000);
 
     public Velocity() {
         super("Velocity", new String[]{"antikb", "nokb"}, Type.COMBAT);

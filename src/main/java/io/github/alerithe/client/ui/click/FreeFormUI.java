@@ -231,6 +231,27 @@ public class FreeFormUI extends GuiScreen {
 
             objContainer.addChildren(nameLbl, valueBtn);
             return objContainer;
+        } else if (property instanceof StringProperty) {
+            StringProperty strProp = (StringProperty) property;
+            Element txtContainer = new Element(x, y, width, height);
+
+            Label nameLbl = new Label(strProp.getName(), 0f, 0f, width, height);
+            nameLbl.getNormalStyle().setShowBackground(false);
+            nameLbl.getNormalStyle().textStyle.setColor(0xFFAAAAAA);
+            nameLbl.getNormalStyle().textStyle.setOffsetX(4);
+            nameLbl.getNormalStyle().textStyle.setPosition(TextPosition.MIDDLE);
+
+            TextArea valueArea = new TextArea(strProp.getValue(), 0f, height, width, height) {
+                @Override
+                public void onValueChanged(String oldValue, String newValue) {
+                    strProp.setValue(newValue);
+                }
+            };
+
+            strProp.addChangeListener(prop -> valueArea.setText(prop.getValue()));
+
+            txtContainer.addChildren(nameLbl, valueArea);
+            return txtContainer;
         } else {
             return new Label(property.getName() + "(n/a)",
                     0f, y, width, height);

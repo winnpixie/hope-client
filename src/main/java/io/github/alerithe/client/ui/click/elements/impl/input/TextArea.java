@@ -1,6 +1,7 @@
 package io.github.alerithe.client.ui.click.elements.impl.input;
 
 import io.github.alerithe.client.ui.click.elements.Element;
+import net.minecraft.util.ChatAllowedCharacters;
 import org.lwjgl.input.Keyboard;
 
 public class TextArea extends Element {
@@ -12,12 +13,30 @@ public class TextArea extends Element {
         getNormalStyle().textStyle.setLineWrap(true);
     }
 
+    public void onValueChanged(String oldValue, String newValue) {
+    }
+
+    @Override
+    public void setText(String text) {
+        if (text == null) text = "";
+
+        super.setText(text);
+    }
+
     @Override
     public void onKeyPressed(char charCode, int keyCode) {
+        String oldText = getText();
+
         if (keyCode == Keyboard.KEY_BACK || keyCode == Keyboard.KEY_DELETE) {
-            if (!getText().isEmpty()) setText(getText().substring(0, getText().length() - 1));
-        } else {
-            if (charCode != '\r') setText(getText() + charCode);
+            if (!oldText.isEmpty()) setText(oldText.substring(0, oldText.length() - 1));
+        } else if (isAllowedCharacter(charCode)) {
+            setText(oldText + charCode);
         }
+
+        if (!oldText.equals(getText())) onValueChanged(oldText, getText());
+    }
+
+    private boolean isAllowedCharacter(char c) {
+        return ChatAllowedCharacters.isAllowedCharacter(c);
     }
 }

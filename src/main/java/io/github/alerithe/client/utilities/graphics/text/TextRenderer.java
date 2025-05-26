@@ -1,6 +1,6 @@
-package io.github.alerithe.client.utilities.graphics;
+package io.github.alerithe.client.utilities.graphics.text;
 
-public interface FontRenderer {
+public interface TextRenderer {
     float getFontHeight();
 
     float getStringWidth(String text);

@@ -7,7 +7,8 @@ import io.github.alerithe.client.utilities.Wrapper;
 import io.github.alerithe.events.Register;
 
 public class LongJump extends Module {
-    private final DoubleProperty strength = new DoubleProperty("Boost", new String[0], 3.3, 0.1, Double.MAX_VALUE);
+    private final DoubleProperty strength = new DoubleProperty("Boost", new String[0],
+            3.3, 0.1, 10.0);
 
     private boolean boost;
 
@@ -18,9 +19,7 @@ public class LongJump extends Module {
     }
 
     @Override
-    public void disable() {
-        super.disable();
-
+    public void onDisable() {
         boost = false;
         Wrapper.getPlayer().setSpeed(0);
     }

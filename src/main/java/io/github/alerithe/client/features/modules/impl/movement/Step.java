@@ -23,16 +23,12 @@ public class Step extends Module {
     }
 
     @Override
-    public void enable() {
+    public void onEnable() {
         oldStepHeight = Wrapper.getPlayer().stepHeight;
-
-        super.enable();
     }
 
     @Override
-    public void disable() {
-        super.disable();
-
+    public void onDisable() {
         Wrapper.getPlayer().stepHeight = oldStepHeight;
     }
 

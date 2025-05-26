@@ -9,8 +9,8 @@ import io.github.alerithe.client.features.keybinds.KeybindManager;
 import io.github.alerithe.client.features.modules.ModuleManager;
 import io.github.alerithe.client.features.plugins.PluginManager;
 import io.github.alerithe.client.utilities.IdentityHelper;
-import io.github.alerithe.client.utilities.sessions.SessionHelper;
 import io.github.alerithe.client.utilities.Wrapper;
+import io.github.alerithe.client.utilities.sessions.SessionHelper;
 import io.github.alerithe.client.utilities.speech.SpeechRecognition;
 import io.github.alerithe.client.utilities.speech.TextToSpeech;
 import io.github.alerithe.events.EventBus;
@@ -33,7 +33,7 @@ public class Client {
     public static final FriendManager FRIEND_MANAGER = new FriendManager();
     public static final PluginManager PLUGIN_MANAGER = new PluginManager();
     public static final TextToSpeech TEXT_TO_SPEECH = new TextToSpeech();
-    public static final SpeechRecognition VOICE_ATTACK = new SpeechRecognition();
+    public static final SpeechRecognition SPEECH_RECOGNIZER = new SpeechRecognition();
 
     public static File DATA_DIR;
 
@@ -46,8 +46,8 @@ public class Client {
         }
 
         TEXT_TO_SPEECH.load(); // TTS is very important, don't ask.
-        // FIXME: I'm pretty sure this is causing a memory leak, probably won't try to fix that, lol.
-        // VOICE_ATTACK.load(); // STT is also very important.
+        // FIXME: HIGH memory usage (mem-leak?) when you speak, plus it just kind of sucks.
+        // SPEECH_RECOGNIZER.load(); // STT is also very important.
 
         COMMAND_MANAGER.load();
         MODULE_MANAGER.load();
@@ -65,7 +65,7 @@ public class Client {
                 PLUGIN_MANAGER.save();
 
                 TEXT_TO_SPEECH.unload();
-                VOICE_ATTACK.unload();
+                SPEECH_RECOGNIZER.unload();
             }
         });
 
@@ -90,6 +90,6 @@ public class Client {
         boolean silentBoot = System.getProperty("hope.silentboot", "false").equalsIgnoreCase("true");
         if (silentBoot) return;
 
-        TEXT_TO_SPEECH.narrate("Hello, " + System.getProperty("user.name", Wrapper.getGame().getSession().getUsername()) + ".");
+        TEXT_TO_SPEECH.narrate(String.format("Hello, %s.", Wrapper.getGame().getSession().getUsername()));
     }
 }

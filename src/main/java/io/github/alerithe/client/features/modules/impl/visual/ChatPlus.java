@@ -8,7 +8,7 @@ import io.github.alerithe.client.utilities.Wrapper;
 public class ChatPlus extends Module {
     public final BooleanProperty background = new BooleanProperty("Background", new String[]{"fastchat"}, true);
     public final IntProperty historyLines = new IntProperty("MaxLines", new String[]{"maxhistory", "history", "lines"},
-            100, 0, Integer.MAX_VALUE);
+            100, 0, 1000);
 
     public ChatPlus() {
         super("Chat+", new String[]{"chatplus"}, Type.VISUAL);
@@ -20,10 +20,9 @@ public class ChatPlus extends Module {
     }
 
     @Override
-    public void disable() {
-        super.disable();
+    public void onDisable() {
+        toggle();
 
-        setEnabled(true);
         Wrapper.printMessage("\2474Chat+ can not be turned off.");
     }
 }

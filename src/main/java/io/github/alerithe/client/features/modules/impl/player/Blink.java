@@ -21,7 +21,7 @@ public class Blink extends Module {
     }
 
     @Override
-    public void enable() {
+    public void onEnable() {
         clone = new EntityOtherPlayerMP(Wrapper.getWorld(), Wrapper.getGame().getSession().getProfile());
         clone.setEntityId(-1337);
         clone.copyDataFromOld(Wrapper.getPlayer());
@@ -30,12 +30,10 @@ public class Blink extends Module {
         Wrapper.getWorld().addEntityToWorld(clone.getEntityId(), clone);
 
         startTime = System.currentTimeMillis();
-        super.enable();
     }
 
     @Override
-    public void disable() {
-        super.disable();
+    public void onDisable() {
         Wrapper.getWorld().removeEntityFromWorld(clone.getEntityId());
         clone = null;
         packetQueue.forEach(Wrapper::sendPacket);

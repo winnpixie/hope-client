@@ -13,10 +13,8 @@ public class AntiPlate extends Module {
     }
 
     @Override
-    public void enable() {
+    public void onEnable() {
         airTicks = 0;
-
-        super.enable();
     }
 
     @Register

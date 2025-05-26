@@ -1,12 +1,10 @@
 package io.github.alerithe.client.utilities.graphics;
 
+import io.github.alerithe.client.utilities.graphics.drawing.MinecraftGraphicsDevice;
+import io.github.alerithe.client.utilities.graphics.text.MinecraftTextRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.culling.Frustum;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.AxisAlignedBB;
 import org.lwjgl.BufferUtils;
@@ -34,16 +32,22 @@ public class VisualHelper {
     private final static Frustum frustum = new Frustum();
 
     // Fonts
-    public static final MinecraftFontRenderer MC_FONT = new MinecraftFontRenderer();
+    public static final MinecraftTextRenderer MC_FONT = new MinecraftTextRenderer();
+
+    // Graphics Device
+    public static final MinecraftGraphicsDevice MC_GFX = new MinecraftGraphicsDevice();
 
     public static ScaledResolution getDisplay() {
-        if (scaledResolution == null || previousWidth != Display.getWidth() || previousHeight != Display.getHeight()
+        if (scaledResolution == null
+                || previousWidth != Display.getWidth()
+                || previousHeight != Display.getHeight()
                 || previousScale != Minecraft.getMinecraft().gameSettings.guiScale) {
             previousWidth = Display.getWidth();
             previousHeight = Display.getHeight();
             previousScale = Minecraft.getMinecraft().gameSettings.guiScale;
             scaledResolution = new ScaledResolution(Minecraft.getMinecraft());
         }
+
         return scaledResolution;
     }
 
@@ -52,16 +56,14 @@ public class VisualHelper {
         GL11.glGetFloat(GL11.GL_PROJECTION_MATRIX, projectionMatrix);
         GL11.glGetInteger(GL11.GL_VIEWPORT, viewport);
 
-        if (GLU.gluProject(x, y, z, modelViewMatrix, projectionMatrix, viewport, windowPosition)) {
-            float scale = getDisplay().getScaleFactor();
+        if (!GLU.gluProject(x, y, z, modelViewMatrix, projectionMatrix, viewport, windowPosition)) return null;
 
-            return new float[]{
-                    windowPosition.get(0) / scale,
-                    (Display.getHeight() - windowPosition.get(1)) / scale,
-                    windowPosition.get(2)
-            };
-        }
-        return null;
+        float scale = getDisplay().getScaleFactor();
+        return new float[]{
+                windowPosition.get(0) / scale,
+                (Display.getHeight() - windowPosition.get(1)) / scale,
+                windowPosition.get(2)
+        };
     }
 
     public static boolean isInView(Entity entity) {
@@ -70,73 +72,54 @@ public class VisualHelper {
 
     public static boolean isInView(AxisAlignedBB aabb) {
         Entity current = Minecraft.getMinecraft().getRenderViewEntity();
-
         frustum.setPosition(current.posX, current.posY, current.posZ);
+
         return frustum.isBoundingBoxInFrustum(aabb);
     }
 
-    // Gui.drawRect
-    public static void drawRect(float x, float y, float right, float bottom, int color) {
-        if (x < right) {
-            float swp = x;
-            x = right;
-            right = swp;
-        }
-
-        if (y < bottom) {
-            float swp = y;
-            y = bottom;
-            bottom = swp;
-        }
-
-        float a = (float) (color >> 24 & 255) / 255F;
-        float r = (float) (color >> 16 & 255) / 255F;
-        float g = (float) (color >> 8 & 255) / 255F;
-        float b = (float) (color & 255) / 255F;
-        Tessellator tessellator = Tessellator.getInstance();
-        WorldRenderer worldrenderer = tessellator.getWorldRenderer();
-        GlStateManager.enableBlend();
-        GlStateManager.disableTexture2D();
-        GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
-        GlStateManager.color(r, g, b, a);
-        worldrenderer.begin(7, DefaultVertexFormats.POSITION);
-        worldrenderer.pos(x, bottom, 0.0D).endVertex();
-        worldrenderer.pos(right, bottom, 0.0D).endVertex();
-        worldrenderer.pos(right, y, 0.0D).endVertex();
-        worldrenderer.pos(x, y, 0.0D).endVertex();
-        tessellator.draw();
-        GlStateManager.enableTexture2D();
-        GlStateManager.disableBlend();
-    }
-
-    public static void drawSquare(float x, float y, float width, float height, int color) {
-        drawRect(x, y, x + width, y + height, color);
-    }
-
-    public static void drawBorderedRect(float x, float y, float right, float bottom, float lineWidth, int color, int borderColor) {
-        drawRect(x, y, right, bottom, color);
-
-        drawRect(x - lineWidth, y - lineWidth, x, bottom + lineWidth, borderColor);
-        drawRect(x, y - lineWidth, right, y, borderColor);
-        drawRect(right, y - lineWidth, right + lineWidth, bottom + lineWidth, borderColor);
-        drawRect(x, bottom, right, bottom + lineWidth, borderColor);
-    }
-
-    public static int[] toRGBAIntArray(int argb, int alpha) {
+    public static int[] toRGBAIntArray(int argbColor, boolean hasAlpha) {
         return new int[]{
-                (argb >> 16) & 255,
-                (argb >> 8) & 255,
-                (argb) & 255,
-                (alpha == -255 ? 255 : ((argb >> 24) & 255))
+                (argbColor >> 16) & 255,                     // R
+                (argbColor >> 8) & 255,                      // G
+                (argbColor >> 0) & 255,                      // B
+                (!hasAlpha ? 255 : ((argbColor >> 24) & 255)) // A
         };
     }
 
-    public static float[] toRGBAFloatArray(int argb, float alpha) {
+    public static float[] toRGBAFloatArray(int argbColor, boolean hasAlpha) {
+        int[] rgba = toRGBAIntArray(argbColor, hasAlpha);
+
         return new float[]{
-                ((argb >> 16) & 255) / 255f,
-                ((argb >> 8) & 255) / 255f,
-                ((argb) & 255) / 255f,
-                (alpha == -1f ? 1f : ((argb >> 24) & 255) / 255f),
+                rgba[0] / 255f,
+                rgba[1] / 255f,
+                rgba[2] / 255f,
+                rgba[3] / 255f,
         };
+    }
+
+    public static int toARGBInt(int red, int green, int blue) {
+        return toARGBInt(red, green, blue, 255);
+    }
+
+    public static int toARGBInt(int red, int green, int blue, int alpha) {
+        return (
+                ((alpha & 255) << 24)
+                        | ((red & 255) << 16)
+                        | ((green & 255) << 8)
+                        | ((blue & 255) << 0)
+        );
+    }
+
+    public static int toARGBInt(float red, float green, float blue) {
+        return toARGBInt(red, green, blue, 1f);
+    }
+
+    public static int toARGBInt(float r, float g, float b, float a) {
+        return toARGBInt(
+                (int) (r * 255f),
+                (int) (g * 255f),
+                (int) (b * 255f),
+                (int) (a * 255f)
+        );
     }
 }

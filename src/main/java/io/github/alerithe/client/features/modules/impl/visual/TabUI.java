@@ -16,10 +16,8 @@ public class TabUI extends Module {
     }
 
     @Override
-    public void enable() {
+    public void onEnable() {
         if (container == null) container = new Container();
-
-        super.enable();
     }
 
     @Register(CallOrder.UNIMPORTANT)

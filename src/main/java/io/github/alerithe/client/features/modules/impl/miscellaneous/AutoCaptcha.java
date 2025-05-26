@@ -15,7 +15,6 @@ public class AutoCaptcha extends Module {
 
     public AutoCaptcha() {
         super("AutoCaptcha", new String[0], Type.MISCELLANEOUS);
-        hidden.setValue(true);
     }
 
     @Register

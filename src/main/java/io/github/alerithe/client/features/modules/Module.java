@@ -33,9 +33,13 @@ public class Module extends Feature {
         this.enabled = enabled;
 
         if (enabled) {
-            enable();
+            onEnable();
+
+            EventBus.register(this);
         } else {
-            disable();
+            EventBus.unregister(this);
+
+            onDisable();
         }
 
         // EVENT
@@ -54,12 +58,10 @@ public class Module extends Feature {
         setEnabled(!enabled);
     }
 
-    public void enable() {
-        EventBus.register(this);
+    public void onEnable() {
     }
 
-    public void disable() {
-        EventBus.unregister(this);
+    public void onDisable() {
     }
 
     public enum Type {

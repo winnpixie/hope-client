@@ -27,12 +27,10 @@ public class LogSpammer extends Module {
     }
 
     @Override
-    public void enable() {
+    public void onEnable() {
         Wrapper.printMessage("\247eAnvils: \247rRight-click to activate.");
         Wrapper.printMessage("\247eEnchantment Tables: \247rRight-click and place Lapis Lazuli to activate.");
         Wrapper.printMessage("\247eNull Hand: \247rUnlikely to work on modded (ie. Spigot, Paper, etc) servers.");
-
-        super.enable();
     }
 
     @Register

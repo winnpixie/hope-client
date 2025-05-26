@@ -9,11 +9,10 @@ import net.minecraft.entity.player.EntityPlayer;
 
 public class AntiBot extends Module {
     private final IntProperty ticksExisted = new IntProperty("TicksExisted", new String[]{"ticks"},
-            10, 0, Integer.MAX_VALUE);
+            10, 0, 1200);
 
     public AntiBot() {
         super("AntiBot", new String[0], Type.COMBAT);
-        hidden.setValue(true);
 
         getPropertyManager().add(ticksExisted);
     }

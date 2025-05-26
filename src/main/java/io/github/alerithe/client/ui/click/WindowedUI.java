@@ -3,10 +3,7 @@ package io.github.alerithe.client.ui.click;
 import io.github.alerithe.client.Client;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.features.properties.Property;
-import io.github.alerithe.client.features.properties.impl.BooleanProperty;
-import io.github.alerithe.client.features.properties.impl.DoubleProperty;
-import io.github.alerithe.client.features.properties.impl.IntProperty;
-import io.github.alerithe.client.features.properties.impl.ObjectProperty;
+import io.github.alerithe.client.features.properties.impl.*;
 import io.github.alerithe.client.ui.click.elements.Element;
 import io.github.alerithe.client.ui.click.elements.handlers.EventHandler;
 import io.github.alerithe.client.ui.click.elements.handlers.impl.Draggable;
@@ -14,6 +11,7 @@ import io.github.alerithe.client.ui.click.elements.impl.Label;
 import io.github.alerithe.client.ui.click.elements.impl.input.Button;
 import io.github.alerithe.client.ui.click.elements.impl.input.CheckBox;
 import io.github.alerithe.client.ui.click.elements.impl.input.Slider;
+import io.github.alerithe.client.ui.click.elements.impl.input.TextArea;
 import io.github.alerithe.client.ui.click.elements.styling.ElementStyle;
 import io.github.alerithe.client.ui.click.elements.styling.text.TextAlignment;
 import io.github.alerithe.client.ui.click.elements.styling.text.TextPosition;
@@ -247,8 +245,29 @@ public class WindowedUI extends GuiScreen {
 
                 objContainer.addChildren(nameLbl, valueBtn);
                 propElem = objContainer;
+            } else if (property instanceof StringProperty) {
+                StringProperty strProp = (StringProperty) property;
+                Element txtContainer = new Element(x, y, width, height);
+
+                Label nameLbl = new Label(strProp.getName(), 0f, 0f, width / 2f, height);
+                nameLbl.getNormalStyle().setShowBackground(false);
+                nameLbl.getNormalStyle().textStyle.setColor(0xFFAAAAAA);
+                nameLbl.getNormalStyle().textStyle.setOffsetX(4);
+                nameLbl.getNormalStyle().textStyle.setPosition(TextPosition.MIDDLE);
+
+                TextArea valueArea = new TextArea(strProp.getValue(), width / 2f, 0f, width / 2f, height) {
+                    @Override
+                    public void onValueChanged(String oldValue, String newValue) {
+                        strProp.setValue(newValue);
+                    }
+                };
+
+                strProp.addChangeListener(prop -> valueArea.setText(prop.getValue()));
+
+                txtContainer.addChildren(nameLbl, valueArea);
+                propElem = txtContainer;
             } else {
-                propElem = new Label(property.getName() + "(n/a)",
+                propElem = new Label(property.getName() + " (???)",
                         x, y, width, height);
             }
 

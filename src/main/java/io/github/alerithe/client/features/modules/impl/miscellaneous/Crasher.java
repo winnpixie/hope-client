@@ -13,9 +13,11 @@ import net.minecraft.network.play.client.C0APacketAnimation;
 
 public class Crasher extends Module {
     private final BooleanProperty boxer = new BooleanProperty("Boxer", new String[0], true);
-    private final IntProperty bpt = new IntProperty("BoxersPerTick", new String[]{"bpt"}, 100, 1, Integer.MAX_VALUE);
+    private final IntProperty bpt = new IntProperty("BoxersPerTick", new String[]{"bpt"},
+            100, 1, 1000);
     private final BooleanProperty paralyze = new BooleanProperty("Paralyze", new String[0], true);
-    private final IntProperty ppt = new IntProperty("ParaPerTick", new String[]{"ppt"}, 100, 1, Integer.MAX_VALUE);
+    private final IntProperty ppt = new IntProperty("ParaPerTick", new String[]{"ppt"},
+            100, 1, 1000);
 
     public Crasher() {
         super("Crasher", new String[0], Type.MISCELLANEOUS);

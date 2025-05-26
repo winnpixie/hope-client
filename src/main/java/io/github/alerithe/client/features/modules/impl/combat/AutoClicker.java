@@ -10,8 +10,10 @@ import io.github.alerithe.events.Register;
 import net.minecraft.client.settings.GameSettings;
 
 public class AutoClicker extends Module {
-    public final IntProperty minCps = new IntProperty("MinClicksPerSecond", new String[]{"mincps", "minspeed"}, 8, 1, 20);
-    public final IntProperty maxCps = new IntProperty("MaxClicksPerSecond", new String[]{"maxcps", "maxspeed"}, 12, 1, 20);
+    public final IntProperty minCps = new IntProperty("MinClicksPerSecond", new String[]{"mincps", "minspeed"},
+            8, 1, 20);
+    public final IntProperty maxCps = new IntProperty("MaxClicksPerSecond", new String[]{"maxcps", "maxspeed"},
+            12, 1, 20);
 
     private final MsTimer timer = new MsTimer();
 

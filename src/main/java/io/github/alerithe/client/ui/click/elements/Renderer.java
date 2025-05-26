@@ -6,8 +6,8 @@ import io.github.alerithe.client.ui.click.elements.styling.ElementStyle;
 import io.github.alerithe.client.ui.click.elements.styling.text.TextAlignment;
 import io.github.alerithe.client.ui.click.elements.styling.text.TextPosition;
 import io.github.alerithe.client.ui.click.elements.styling.text.TextStyle;
-import io.github.alerithe.client.utilities.graphics.VisualHelper;
 import io.github.alerithe.client.utilities.Wrapper;
+import io.github.alerithe.client.utilities.graphics.VisualHelper;
 import org.lwjgl.opengl.GL11;
 
 public class Renderer {
@@ -43,7 +43,7 @@ public class Renderer {
         float eWidth = element.getWidth();
         float eHeight = element.getHeight();
 
-        VisualHelper.drawSquare(eX, eY, eWidth, eHeight, style.getBackgroundColor());
+        VisualHelper.MC_GFX.drawSquare(eX, eY, eWidth, eHeight, style.getBackgroundColor());
     }
 
     private void drawBorders(BorderStyle style) {
@@ -58,35 +58,35 @@ public class Renderer {
         float borderRight = style.getRight();
 
         if (borderTop > 0) {
-            VisualHelper.drawRect(eX,
+            VisualHelper.MC_GFX.drawSquare(eX,
                     eY - borderTop,
-                    eX + eWidth + borderRight,
-                    eY,
+                    eWidth + borderRight,
+                    borderTop,
                     style.getColorTop());
         }
 
         if (borderBottom > 0) {
-            VisualHelper.drawRect(eX - borderLeft,
+            VisualHelper.MC_GFX.drawSquare(eX - borderLeft,
                     eY + eHeight,
-                    eX + eWidth,
-                    eY + eHeight + borderBottom,
+                    eWidth + borderLeft,
+                    borderTop,
                     style.getColorBottom());
         }
 
         if (borderLeft > 0) {
-            VisualHelper.drawRect(eX - borderLeft,
+            VisualHelper.MC_GFX.drawSquare(eX - borderLeft,
                     eY - borderTop,
-                    eX,
-                    eY + eHeight,
+                    borderLeft,
+                    eHeight + borderTop,
                     style.getColorLeft());
         }
 
         if (borderRight > 0) {
-            VisualHelper.drawRect(eX + eWidth,
+            VisualHelper.MC_GFX.drawSquare(eX + eWidth,
                     eY,
-                    eX + eWidth + borderRight,
-                    eY + eHeight + borderBottom,
-                    style.getColorRight());
+                    borderRight,
+                    eHeight + borderBottom,
+                    style.getColorBottom());
         }
     }
 

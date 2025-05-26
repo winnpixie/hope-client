@@ -77,12 +77,10 @@ public class HUD extends Module {
     }
 
     @Override
-    public void enable() {
+    public void onEnable() {
         leftClicks.clear();
         rightClicks.clear();
         ticks.clear();
-
-        super.enable();
     }
 
     @Register(CallOrder.UNIMPORTANT)
@@ -146,9 +144,9 @@ public class HUD extends Module {
                     float textWidth = VisualHelper.MC_FONT.getStringWidth(module.getName());
                     float x = display.getScaledWidth() - textWidth;
 
-                    VisualHelper.drawSquare(x - 4, y - 2, textWidth + 4, VisualHelper.MC_FONT.getFontHeight() + 4,
+                    VisualHelper.MC_GFX.drawSquare(x - 4, y - 2, textWidth + 4, VisualHelper.MC_FONT.getFontHeight() + 4,
                             Client.ACCENT_COLOR);
-                    VisualHelper.drawSquare(x - 3, y - 2, textWidth + 3, VisualHelper.MC_FONT.getFontHeight() + 3,
+                    VisualHelper.MC_GFX.drawSquare(x - 3, y - 2, textWidth + 3, VisualHelper.MC_FONT.getFontHeight() + 3,
                             0xFF111111);
 
                     VisualHelper.MC_FONT.drawStringWithShadow(module.getName(), x - 1, y, -1);

@@ -12,6 +12,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.projectile.EntitySnowball;
 import net.minecraft.inventory.Slot;
 import net.minecraft.stats.StatFileWriter;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
@@ -41,9 +42,7 @@ public class LocalPlayer extends EntityPlayerSP {
 
     @Override
     public Vec3 getLook(float partialTicks) {
-        if (partialTicks == 1f) {
-            return this.getVectorForRotation(this.rotationPitch, this.rotationYaw);
-        }
+        if (partialTicks == 1f) return this.getVectorForRotation(this.rotationPitch, this.rotationYaw);
 
         float pitch = this.prevRotationPitch + (this.rotationPitch - this.prevRotationPitch) * partialTicks;
         float yaw = this.prevRotationYaw + (this.rotationYaw - this.prevRotationYaw) * partialTicks;
@@ -55,17 +54,17 @@ public class LocalPlayer extends EntityPlayerSP {
         return Config.zoomMode ? super.getFovModifier() / 4f : super.getFovModifier();
     }
 
-    public float[] getRotationToPosition(Vec3 pos) {
-        return getRotationsToEntity(new EntitySnowball(worldObj, pos.xCoord, pos.yCoord, pos.zCoord));
+    public float[] getRotationToBlock(BlockPos pos) {
+        return getRotationsToEntity(new EntitySnowball(worldObj, pos.getX() + 0.5, pos.getY() + 0.5f, pos.getZ() + 0.5));
     }
 
     public float[] getRotationsToEntity(Entity entity) {
         if (entity instanceof EntityLivingBase) {
-            EntityLivingBase ent = (EntityLivingBase) entity;
+            EntityLivingBase living = (EntityLivingBase) entity;
             return getRotationToPosition(
-                    ent.posX,
-                    ent.posY + ent.getEyeHeight(),
-                    ent.posZ);
+                    living.posX,
+                    living.posY + living.getEyeHeight(),
+                    living.posZ);
         }
 
         return getRotationToPosition(
@@ -78,7 +77,6 @@ public class LocalPlayer extends EntityPlayerSP {
         double dx = x - this.posX;
         double dz = z - this.posZ;
         double dy = y - (this.posY + this.getEyeHeight());
-
         double hypot = MathHelper.sqrt_double(dx * dx + dz * dz);
 
         return new float[]{
@@ -90,7 +88,6 @@ public class LocalPlayer extends EntityPlayerSP {
     public boolean isInLiquid() {
         return isInWater() || isInLava();
     }
-
 
     public boolean isInventoryFull() {
         for (int i = 0; i < 36; i++) {
@@ -118,22 +115,22 @@ public class LocalPlayer extends EntityPlayerSP {
     }
 
     public boolean isUserMoving() {
-        return movementInput.moveForward != 0 || movementInput.moveStrafe != 0;
+        return movementInput.moveForward != 0f || movementInput.moveStrafe != 0f;
     }
 
     public float[] getMoveVector() {
         float yaw = rotationYawHead;
         float forward = movementInput.moveForward;
         float strafe = movementInput.moveStrafe;
-        float strafeFactor = forward > 0 ? 0.5f : forward < 0 ? -0.5f : 1;
+        float strafeFactor = forward > 0f ? 0.5f : forward < 0 ? -0.5f : 1;
 
-        if (strafe > 0) {
+        if (strafe > 0f) {
             yaw -= 90f * strafeFactor;
-        } else if (strafe < 0) {
+        } else if (strafe < 0f) {
             yaw += 90f * strafeFactor;
         }
 
-        if (forward < 0) {
+        if (forward < 0f) {
             yaw += 180f;
         }
 
