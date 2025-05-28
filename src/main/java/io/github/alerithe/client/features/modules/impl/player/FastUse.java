@@ -3,8 +3,9 @@ package io.github.alerithe.client.features.modules.impl.player;
 import io.github.alerithe.client.events.game.EventUpdate;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.features.properties.impl.IntProperty;
-import io.github.alerithe.client.utilities.Wrapper;
-import io.github.alerithe.events.Register;
+import io.github.alerithe.client.utilities.EntityHelper;
+import io.github.alerithe.client.utilities.NetworkHelper;
+import io.github.alerithe.events.impl.Subscribe;
 import net.minecraft.item.*;
 import net.minecraft.network.play.client.C03PacketPlayer;
 
@@ -18,12 +19,12 @@ public class FastUse extends Module {
         getPropertyManager().add(useTicks);
     }
 
-    @Register
+    @Subscribe
     private void onPreUpdate(EventUpdate.Pre event) {
-        if (Wrapper.getPlayer().isUsingItem() && isUsable(Wrapper.getPlayer().getItemInUse())
-                && Wrapper.getPlayer().onGround && Wrapper.getPlayer().getItemInUseDuration() >= useTicks.getValue()) {
+        if (EntityHelper.getUser().isUsingItem() && isUsable(EntityHelper.getUser().getItemInUse())
+                && EntityHelper.getUser().onGround && EntityHelper.getUser().getItemInUseDuration() >= useTicks.getValue()) {
             for (int i = 0; i < (32 - useTicks.getValue()); i++) {
-                Wrapper.sendPacket(new C03PacketPlayer(true));
+                NetworkHelper.sendPacket(new C03PacketPlayer(true));
             }
         }
     }

@@ -2,8 +2,8 @@ package io.github.alerithe.client.features.modules.impl.player.antiaim.yaw;
 
 import io.github.alerithe.client.events.game.EventUpdate;
 import io.github.alerithe.client.features.modules.impl.player.antiaim.RotationMode;
+import io.github.alerithe.client.utilities.EntityHelper;
 import io.github.alerithe.client.utilities.MathHelper;
-import io.github.alerithe.client.utilities.Wrapper;
 
 public class LBYBreaker extends RotationMode {
     public LBYBreaker() {
@@ -12,8 +12,8 @@ public class LBYBreaker extends RotationMode {
 
     @Override
     public void onPreUpdate(EventUpdate.Pre event) {
-        if (Wrapper.getPlayer().ticksExisted % 10 == 0) {
-            event.setYaw(event.getYaw() + 90);
+        if (EntityHelper.getUser().ticksExisted % 10 == 0) {
+            event.setYaw(event.getYaw() + 90f);
             return;
         }
 

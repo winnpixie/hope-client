@@ -2,9 +2,10 @@ package io.github.alerithe.client.features.modules.impl.movement;
 
 import io.github.alerithe.client.events.game.EventUpdate;
 import io.github.alerithe.client.features.modules.Module;
+import io.github.alerithe.client.utilities.EntityHelper;
+import io.github.alerithe.client.utilities.GameHelper;
 import io.github.alerithe.client.utilities.MathHelper;
-import io.github.alerithe.client.utilities.Wrapper;
-import io.github.alerithe.events.Register;
+import io.github.alerithe.events.impl.Subscribe;
 import net.minecraft.client.gui.GuiScreenBook;
 import net.minecraft.client.gui.inventory.GuiEditSign;
 import net.minecraft.client.settings.GameSettings;
@@ -21,48 +22,48 @@ public class InventoryMove extends Module {
         updateKeyStates();
     }
 
-    @Register
+    @Subscribe
     private void onPreUpdate(EventUpdate.Pre event) {
-        if (Wrapper.getGame().currentScreen == null) return;
-        if (Wrapper.getGame().ingameGUI.getChatGUI().getChatOpen()) return;
-        if (Wrapper.getGame().currentScreen instanceof GuiEditSign) return;
-        if (Wrapper.getGame().currentScreen instanceof GuiScreenBook) return;
+        if (GameHelper.getGame().currentScreen == null) return;
+        if (GameHelper.getGame().ingameGUI.getChatGUI().getChatOpen()) return;
+        if (GameHelper.getGame().currentScreen instanceof GuiEditSign) return;
+        if (GameHelper.getGame().currentScreen instanceof GuiScreenBook) return;
 
         updateKeyStates();
 
         if (Keyboard.isKeyDown(Keyboard.KEY_UP)) {
-            Wrapper.getPlayer().rotationPitch -= 5;
+            EntityHelper.getUser().rotationPitch -= 5;
         }
         if (Keyboard.isKeyDown(Keyboard.KEY_DOWN)) {
-            Wrapper.getPlayer().rotationPitch += 5;
+            EntityHelper.getUser().rotationPitch += 5;
         }
-        Wrapper.getPlayer().rotationPitch = MathHelper.clamp(Wrapper.getPlayer().rotationPitch, -90, 90);
+        EntityHelper.getUser().rotationPitch = MathHelper.clamp(EntityHelper.getUser().rotationPitch, -90, 90);
         if (Keyboard.isKeyDown(Keyboard.KEY_LEFT)) {
-            Wrapper.getPlayer().rotationYaw -= 5;
+            EntityHelper.getUser().rotationYaw -= 5;
         }
         if (Keyboard.isKeyDown(Keyboard.KEY_RIGHT)) {
-            Wrapper.getPlayer().rotationYaw += 5;
+            EntityHelper.getUser().rotationYaw += 5;
         }
     }
 
     private void updateKeyStates() {
         // Forward
-        KeyBinding.setKeyBindState(Wrapper.getSettings().keyBindForward,
-                GameSettings.isKeyDown(Wrapper.getSettings().keyBindForward));
+        KeyBinding.setKeyBindState(GameHelper.getSettings().keyBindForward,
+                GameSettings.isKeyDown(GameHelper.getSettings().keyBindForward));
         // Back
-        KeyBinding.setKeyBindState(Wrapper.getSettings().keyBindBack,
-                GameSettings.isKeyDown(Wrapper.getSettings().keyBindBack));
+        KeyBinding.setKeyBindState(GameHelper.getSettings().keyBindBack,
+                GameSettings.isKeyDown(GameHelper.getSettings().keyBindBack));
         // Left
-        KeyBinding.setKeyBindState(Wrapper.getSettings().keyBindLeft,
-                GameSettings.isKeyDown(Wrapper.getSettings().keyBindLeft));
+        KeyBinding.setKeyBindState(GameHelper.getSettings().keyBindLeft,
+                GameSettings.isKeyDown(GameHelper.getSettings().keyBindLeft));
         // Right
-        KeyBinding.setKeyBindState(Wrapper.getSettings().keyBindRight,
-                GameSettings.isKeyDown(Wrapper.getSettings().keyBindRight));
+        KeyBinding.setKeyBindState(GameHelper.getSettings().keyBindRight,
+                GameSettings.isKeyDown(GameHelper.getSettings().keyBindRight));
         // Jump
-        KeyBinding.setKeyBindState(Wrapper.getSettings().keyBindJump,
-                GameSettings.isKeyDown(Wrapper.getSettings().keyBindJump));
+        KeyBinding.setKeyBindState(GameHelper.getSettings().keyBindJump,
+                GameSettings.isKeyDown(GameHelper.getSettings().keyBindJump));
         // Sneak
-        KeyBinding.setKeyBindState(Wrapper.getSettings().keyBindSneak,
-                GameSettings.isKeyDown(Wrapper.getSettings().keyBindSneak));
+        KeyBinding.setKeyBindState(GameHelper.getSettings().keyBindSneak,
+                GameSettings.isKeyDown(GameHelper.getSettings().keyBindSneak));
     }
 }

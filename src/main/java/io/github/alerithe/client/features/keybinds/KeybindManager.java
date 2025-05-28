@@ -3,8 +3,6 @@ package io.github.alerithe.client.features.keybinds;
 import io.github.alerithe.client.Client;
 import io.github.alerithe.client.events.game.EventInput;
 import io.github.alerithe.client.features.FeatureManager;
-import io.github.alerithe.events.EventBus;
-import io.github.alerithe.events.EventHandler;
 import org.lwjgl.input.Keyboard;
 
 import java.io.File;
@@ -28,20 +26,17 @@ public class KeybindManager extends FeatureManager<Keybind> {
             e.printStackTrace();
         }
 
-        EventBus.register(new EventHandler<EventInput.KeyPress>() {
-            @Override
-            public void handle(EventInput.KeyPress event) {
-                getElements().forEach(kb -> {
-                    if (kb.getKey() == event.getKey()) kb.getAction().run();
-                });
-            }
+        Client.EVENT_BUS.subscribe(EventInput.KeyPress.class, event -> {
+            getChildren().forEach(kb -> {
+                if (kb.getKey() == event.getKey()) kb.getAction().run();
+            });
         });
     }
 
     @Override
     public void save() {
         StringBuilder builder = new StringBuilder();
-        getElements().forEach(kb -> builder.append(kb.getName()).append(':')
+        getChildren().forEach(kb -> builder.append(kb.getName()).append(':')
                 .append(Keyboard.getKeyName(kb.getKey())).append('\n'));
 
         try {

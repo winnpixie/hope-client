@@ -2,8 +2,10 @@ package io.github.alerithe.client.features.modules.impl.player;
 
 import io.github.alerithe.client.events.game.EventUpdate;
 import io.github.alerithe.client.features.modules.Module;
-import io.github.alerithe.client.utilities.Wrapper;
-import io.github.alerithe.events.Register;
+import io.github.alerithe.client.utilities.EntityHelper;
+import io.github.alerithe.client.utilities.NetworkHelper;
+import io.github.alerithe.client.utilities.WorldHelper;
+import io.github.alerithe.events.impl.Subscribe;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.item.ItemShears;
@@ -14,19 +16,19 @@ public class AutoShear extends Module {
         super("AutoShear", new String[0], Type.PLAYER);
     }
 
-    @Register
+    @Subscribe
     private void onPreUpdate(EventUpdate.Pre event) {
-        if (Wrapper.getPlayer().getHeldItem() == null) return;
-        if (!(Wrapper.getPlayer().getHeldItem().getItem() instanceof ItemShears)) return;
+        if (EntityHelper.getUser().getHeldItem() == null) return;
+        if (!(EntityHelper.getUser().getHeldItem().getItem() instanceof ItemShears)) return;
 
-        for (Entity entity : Wrapper.getWorld().loadedEntityList) {
+        for (Entity entity : WorldHelper.getWorld().loadedEntityList) {
             if (!(entity instanceof EntitySheep)) continue;
-            if (entity.getDistanceSqToEntity(Wrapper.getPlayer()) > 36) continue;
+            if (entity.getDistanceSqToEntity(EntityHelper.getUser()) > 36) continue;
 
             EntitySheep sheep = (EntitySheep) entity;
             if (sheep.getSheared()) continue;
 
-            Wrapper.sendPacket(new C02PacketUseEntity(sheep, C02PacketUseEntity.Action.INTERACT));
+            NetworkHelper.sendPacket(new C02PacketUseEntity(sheep, C02PacketUseEntity.Action.INTERACT));
         }
     }
 }

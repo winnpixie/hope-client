@@ -4,9 +4,9 @@ import io.github.alerithe.client.events.game.EventSlowdown;
 import io.github.alerithe.client.events.game.EventUpdate;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.features.properties.impl.BooleanProperty;
-import io.github.alerithe.client.utilities.Wrapper;
-import io.github.alerithe.events.CallOrder;
-import io.github.alerithe.events.Register;
+import io.github.alerithe.client.utilities.EntityHelper;
+import io.github.alerithe.client.utilities.NetworkHelper;
+import io.github.alerithe.events.impl.Subscribe;
 import net.minecraft.block.BlockSoulSand;
 import net.minecraft.block.BlockWeb;
 import net.minecraft.network.play.client.C07PacketPlayerDigging;
@@ -25,35 +25,35 @@ public class NoSlowdown extends Module {
         getPropertyManager().add(packets);
     }
 
-    @Register
+    @Subscribe
     private void onItemSlowdown(EventSlowdown.Item event) {
         event.setCancelled(true);
     }
 
-    @Register
+    @Subscribe
     private void onEnvironmentSlowdown(EventSlowdown.Environment event) {
         if (event.getBlock() instanceof BlockWeb) event.setCancelled(true);
         if (event.getBlock() instanceof BlockSoulSand) event.setCancelled(true);
     }
 
-    @Register(CallOrder.LAST)
+    @Subscribe
     private void onPreUpdate(EventUpdate.Pre event) {
         if (!packets.getValue()) return;
-        if (!Wrapper.getPlayer().onGround) return;
-        if (!Wrapper.getPlayer().isUserMoving()) return;
-        if (!Wrapper.getPlayer().isBlocking()) return;
+        if (!EntityHelper.getUser().onGround) return;
+        if (!EntityHelper.getUser().isUserMoving()) return;
+        if (!EntityHelper.getUser().isBlocking()) return;
 
-        Wrapper.sendPacket(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.RELEASE_USE_ITEM,
+        NetworkHelper.sendPacket(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.RELEASE_USE_ITEM,
                 BlockPos.ORIGIN, EnumFacing.DOWN));
         block = true;
     }
 
-    @Register(CallOrder.LAST)
+    @Subscribe
     private void onPostUpdate(EventUpdate.Post event) {
         if (!block) return;
-        if (!Wrapper.getPlayer().isBlocking()) return;
+        if (!EntityHelper.getUser().isBlocking()) return;
 
-        Wrapper.sendPacket(new C08PacketPlayerBlockPlacement(Wrapper.getPlayer().getHeldItem()));
+        NetworkHelper.sendPacket(new C08PacketPlayerBlockPlacement(EntityHelper.getUser().getHeldItem()));
         block = false;
     }
 }

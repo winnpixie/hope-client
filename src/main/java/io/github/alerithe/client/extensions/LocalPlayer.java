@@ -1,18 +1,14 @@
 package io.github.alerithe.client.extensions;
 
+import io.github.alerithe.client.Client;
 import io.github.alerithe.client.events.game.EventBlockPush;
 import io.github.alerithe.client.events.game.EventChat;
 import io.github.alerithe.client.events.game.EventOpaqueCheck;
-import io.github.alerithe.events.EventBus;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.network.NetHandlerPlayClient;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.projectile.EntitySnowball;
 import net.minecraft.inventory.Slot;
 import net.minecraft.stats.StatFileWriter;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
@@ -25,17 +21,17 @@ public class LocalPlayer extends EntityPlayerSP {
 
     @Override
     public boolean isEntityInsideOpaqueBlock() {
-        return !EventBus.dispatch(new EventOpaqueCheck()).isCancelled() && super.isEntityInsideOpaqueBlock();
+        return !Client.EVENT_BUS.post(new EventOpaqueCheck()).isCancelled() && super.isEntityInsideOpaqueBlock();
     }
 
     @Override
     protected boolean pushOutOfBlocks(double x, double y, double z) {
-        return !EventBus.dispatch(new EventBlockPush()).isCancelled() && super.pushOutOfBlocks(x, y, z);
+        return !Client.EVENT_BUS.post(new EventBlockPush()).isCancelled() && super.pushOutOfBlocks(x, y, z);
     }
 
     @Override
     public void sendChatMessage(String message) {
-        EventChat event = EventBus.dispatch(new EventChat(message));
+        EventChat event = Client.EVENT_BUS.post(new EventChat(message));
 
         if (!event.isCancelled()) super.sendChatMessage(event.getMessage());
     }
@@ -52,37 +48,6 @@ public class LocalPlayer extends EntityPlayerSP {
     @Override
     public float getFovModifier() {
         return Config.zoomMode ? super.getFovModifier() / 4f : super.getFovModifier();
-    }
-
-    public float[] getRotationToBlock(BlockPos pos) {
-        return getRotationsToEntity(new EntitySnowball(worldObj, pos.getX() + 0.5, pos.getY() + 0.5f, pos.getZ() + 0.5));
-    }
-
-    public float[] getRotationsToEntity(Entity entity) {
-        if (entity instanceof EntityLivingBase) {
-            EntityLivingBase living = (EntityLivingBase) entity;
-            return getRotationToPosition(
-                    living.posX,
-                    living.posY + living.getEyeHeight(),
-                    living.posZ);
-        }
-
-        return getRotationToPosition(
-                entity.posX,
-                (entity.getEntityBoundingBox().minY + entity.getEntityBoundingBox().maxY) / 2.0,
-                entity.posZ);
-    }
-
-    public float[] getRotationToPosition(double x, double y, double z) {
-        double dx = x - this.posX;
-        double dz = z - this.posZ;
-        double dy = y - (this.posY + this.getEyeHeight());
-        double hypot = MathHelper.sqrt_double(dx * dx + dz * dz);
-
-        return new float[]{
-                (float) (MathHelper.func_181159_b(dz, dx) * 180d / Math.PI) - 90f,
-                (float) (-(MathHelper.func_181159_b(dy, hypot) * 180d / Math.PI))
-        };
     }
 
     public boolean isInLiquid() {

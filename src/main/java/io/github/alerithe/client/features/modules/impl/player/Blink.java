@@ -2,8 +2,11 @@ package io.github.alerithe.client.features.modules.impl.player;
 
 import io.github.alerithe.client.events.game.EventPacket;
 import io.github.alerithe.client.features.modules.Module;
-import io.github.alerithe.client.utilities.Wrapper;
-import io.github.alerithe.events.Register;
+import io.github.alerithe.client.utilities.EntityHelper;
+import io.github.alerithe.client.utilities.GameHelper;
+import io.github.alerithe.client.utilities.NetworkHelper;
+import io.github.alerithe.client.utilities.WorldHelper;
+import io.github.alerithe.events.impl.Subscribe;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.client.*;
@@ -22,27 +25,27 @@ public class Blink extends Module {
 
     @Override
     public void onEnable() {
-        clone = new EntityOtherPlayerMP(Wrapper.getWorld(), Wrapper.getGame().getSession().getProfile());
+        clone = new EntityOtherPlayerMP(WorldHelper.getWorld(), GameHelper.getGame().getSession().getProfile());
         clone.setEntityId(-1337);
-        clone.copyDataFromOld(Wrapper.getPlayer());
-        clone.copyLocationAndAnglesFrom(Wrapper.getPlayer());
-        clone.rotationYawHead = Wrapper.getPlayer().rotationYawHead;
-        Wrapper.getWorld().addEntityToWorld(clone.getEntityId(), clone);
+        clone.copyDataFromOld(EntityHelper.getUser());
+        clone.copyLocationAndAnglesFrom(EntityHelper.getUser());
+        clone.rotationYawHead = EntityHelper.getUser().rotationYawHead;
+        WorldHelper.getWorld().addEntityToWorld(clone.getEntityId(), clone);
 
         startTime = System.currentTimeMillis();
     }
 
     @Override
     public void onDisable() {
-        Wrapper.getWorld().removeEntityFromWorld(clone.getEntityId());
+        WorldHelper.getWorld().removeEntityFromWorld(clone.getEntityId());
         clone = null;
-        packetQueue.forEach(Wrapper::sendPacket);
-        Wrapper.printMessage(String.format("%dms elapsed, %d packets captured.",
+        packetQueue.forEach(NetworkHelper::sendPacket);
+        GameHelper.printChatMessage(String.format("%dms elapsed, %d packets captured.",
                 System.currentTimeMillis() - startTime, packetQueue.size()));
         packetQueue.clear();
     }
 
-    @Register
+    @Subscribe
     private void onPacketWrite(EventPacket.Write event) {
         if (event.getPacket() instanceof C03PacketPlayer
                 || event.getPacket() instanceof C02PacketUseEntity || event.getPacket() instanceof C0BPacketEntityAction

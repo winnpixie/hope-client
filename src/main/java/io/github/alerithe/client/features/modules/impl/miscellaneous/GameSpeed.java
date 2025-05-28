@@ -3,8 +3,8 @@ package io.github.alerithe.client.features.modules.impl.miscellaneous;
 import io.github.alerithe.client.events.game.EventTick;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.features.properties.impl.DoubleProperty;
-import io.github.alerithe.client.utilities.Wrapper;
-import io.github.alerithe.events.Register;
+import io.github.alerithe.client.utilities.GameHelper;
+import io.github.alerithe.events.impl.Subscribe;
 
 public class GameSpeed extends Module {
     private final DoubleProperty speed = new DoubleProperty("Speed", new String[0],
@@ -18,11 +18,11 @@ public class GameSpeed extends Module {
 
     @Override
     public void onDisable() {
-        Wrapper.getGame().timer.timerSpeed = 1f;
+        GameHelper.getGame().timer.timerSpeed = 1f;
     }
 
-    @Register
+    @Subscribe
     private void onTick(EventTick event) {
-        Wrapper.getGame().timer.timerSpeed = speed.getValue().floatValue();
+        GameHelper.getGame().timer.timerSpeed = speed.getValue().floatValue();
     }
 }

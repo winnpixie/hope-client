@@ -27,7 +27,7 @@ public class EventDraw {
     }
 
     public static class Tag extends CancellableEvent {
-        private Entity entity;
+        private final Entity entity;
 
         public Tag(Entity entity) {
             this.entity = entity;

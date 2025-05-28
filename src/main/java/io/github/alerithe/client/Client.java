@@ -8,13 +8,12 @@ import io.github.alerithe.client.features.friends.FriendManager;
 import io.github.alerithe.client.features.keybinds.KeybindManager;
 import io.github.alerithe.client.features.modules.ModuleManager;
 import io.github.alerithe.client.features.plugins.PluginManager;
+import io.github.alerithe.client.utilities.GameHelper;
 import io.github.alerithe.client.utilities.IdentityHelper;
-import io.github.alerithe.client.utilities.Wrapper;
 import io.github.alerithe.client.utilities.sessions.SessionHelper;
 import io.github.alerithe.client.utilities.speech.SpeechRecognition;
 import io.github.alerithe.client.utilities.speech.TextToSpeech;
-import io.github.alerithe.events.EventBus;
-import io.github.alerithe.events.EventHandler;
+import io.github.alerithe.events.impl.EventBusImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -27,6 +26,7 @@ public class Client {
 
     public static final int ACCENT_COLOR = 0xFFB00B1E;
 
+    public static final EventBusImpl EVENT_BUS = new EventBusImpl();
     public static final CommandManager COMMAND_MANAGER = new CommandManager();
     public static final ModuleManager MODULE_MANAGER = new ModuleManager();
     public static final KeybindManager KEYBIND_MANAGER = new KeybindManager();
@@ -40,7 +40,7 @@ public class Client {
     public static void load() {
         LOGGER.info(IdentityHelper.getId());
 
-        DATA_DIR = new File(Wrapper.getGame().mcDataDir, NAME);
+        DATA_DIR = new File(GameHelper.getGame().mcDataDir, NAME);
         if (!DATA_DIR.exists() && !DATA_DIR.mkdir()) {
             throw new RuntimeException("Could not create save directory!");
         }
@@ -55,18 +55,16 @@ public class Client {
         FRIEND_MANAGER.load();
         PLUGIN_MANAGER.load();
 
-        Wrapper.getGame().ingameGUI = new IngameGui(Wrapper.getGame());
+        GameHelper.getGame().ingameGUI = new IngameGui(GameHelper.getGame());
 
-        EventBus.register(new EventHandler<EventProgramExit>() {
-            public void handle(EventProgramExit event) {
-                MODULE_MANAGER.save();
-                KEYBIND_MANAGER.save();
-                FRIEND_MANAGER.save();
-                PLUGIN_MANAGER.save();
+        EVENT_BUS.subscribe(EventProgramExit.class, event -> {
+            MODULE_MANAGER.save();
+            KEYBIND_MANAGER.save();
+            FRIEND_MANAGER.save();
+            PLUGIN_MANAGER.save();
 
-                TEXT_TO_SPEECH.unload();
-                SPEECH_RECOGNIZER.unload();
-            }
+            TEXT_TO_SPEECH.unload();
+            SPEECH_RECOGNIZER.unload();
         });
 
         // ViaVersion / ViaMCP
@@ -81,7 +79,7 @@ public class Client {
         String password = System.getProperty("mc.pass", "");
         if (!username.isEmpty() && !password.isEmpty()) {
             try {
-                Wrapper.getGame().setSession(SessionHelper.MICROSOFT.createSession(username, password));
+                GameHelper.getGame().setSession(SessionHelper.MICROSOFT.createSession(username, password));
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -90,6 +88,6 @@ public class Client {
         boolean silentBoot = System.getProperty("hope.silentboot", "false").equalsIgnoreCase("true");
         if (silentBoot) return;
 
-        TEXT_TO_SPEECH.narrate(String.format("Hello, %s.", Wrapper.getGame().getSession().getUsername()));
+        TEXT_TO_SPEECH.narrate(String.format("Hello, %s.", GameHelper.getGame().getSession().getUsername()));
     }
 }

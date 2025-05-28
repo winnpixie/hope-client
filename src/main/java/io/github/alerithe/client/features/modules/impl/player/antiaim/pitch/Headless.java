@@ -10,6 +10,6 @@ public class Headless extends RotationMode {
 
     @Override
     public void onPreUpdate(EventUpdate.Pre event) {
-        event.setPitch(180);
+        event.setPitch(180f);
     }
 }

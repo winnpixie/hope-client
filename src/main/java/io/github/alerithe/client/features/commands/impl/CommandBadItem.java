@@ -2,7 +2,9 @@ package io.github.alerithe.client.features.commands.impl;
 
 import io.github.alerithe.client.features.commands.Command;
 import io.github.alerithe.client.features.commands.ErrorMessages;
-import io.github.alerithe.client.utilities.Wrapper;
+import io.github.alerithe.client.utilities.EntityHelper;
+import io.github.alerithe.client.utilities.GameHelper;
+import io.github.alerithe.client.utilities.NetworkHelper;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -25,30 +27,30 @@ public class CommandBadItem extends Command {
 
     @Override
     public void execute(String[] args) {
-        if (!Wrapper.getPlayer().capabilities.isCreativeMode) {
-            Wrapper.printMessage(ErrorMessages.format("You must be in Creative Mode to use this command."));
+        if (!EntityHelper.getUser().capabilities.isCreativeMode) {
+            GameHelper.printChatMessage(ErrorMessages.format("You must be in Creative Mode to use this command."));
             return;
         }
 
         if (args.length < 1) {
-            Wrapper.printMessage(ErrorMessages.NOT_ENOUGH_ARGS);
+            GameHelper.printChatMessage(ErrorMessages.NOT_ENOUGH_ARGS);
             return;
         }
 
-        int slot = Wrapper.getPlayer().inventory.currentItem + 36; // Set the item to spawn in their selected slot
+        int slot = EntityHelper.getUser().inventory.currentItem + 36; // Set the item to spawn in their selected slot
 
         switch (args[0].toLowerCase()) {
             case "anvil": {
                 ItemStack stack = new ItemStack(Blocks.anvil, 64, 3);
-                Wrapper.sendPacket(new C10PacketCreativeInventoryAction(slot, stack));
-                Wrapper.printMessage("Make other players place this Anvil to crash their game.");
+                NetworkHelper.sendPacket(new C10PacketCreativeInventoryAction(slot, stack));
+                GameHelper.printChatMessage("Make other players place this Anvil to crash their game.");
                 break;
             }
             case "tag": {
                 ItemStack stack = new ItemStack(Items.name_tag, 64);
                 stack.setStackDisplayName(tagName);
-                Wrapper.sendPacket(new C10PacketCreativeInventoryAction(slot, stack));
-                Wrapper.printMessage("Apply this tag to an entity to lag other players.");
+                NetworkHelper.sendPacket(new C10PacketCreativeInventoryAction(slot, stack));
+                GameHelper.printChatMessage("Apply this tag to an entity to lag other players.");
                 break;
             }
             case "stand": {
@@ -60,12 +62,12 @@ public class CommandBadItem extends Command {
                 tags.setDouble("x", 42);
                 tags.setDouble("y", 69);
                 tags.setDouble("z", 42);
-                Wrapper.sendPacket(new C10PacketCreativeInventoryAction(slot, stack));
-                Wrapper.printMessage("Apply this tag to an entity to lag other players.");
+                NetworkHelper.sendPacket(new C10PacketCreativeInventoryAction(slot, stack));
+                GameHelper.printChatMessage("Apply this tag to an entity to lag other players.");
                 break;
             }
             default:
-                Wrapper.printMessage(ErrorMessages.INVALID_ARG);
+                GameHelper.printChatMessage(ErrorMessages.INVALID_ARG);
                 break;
         }
     }

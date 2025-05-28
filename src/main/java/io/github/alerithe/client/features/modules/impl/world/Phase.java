@@ -9,7 +9,7 @@ import io.github.alerithe.client.features.modules.impl.world.phase.Latest;
 import io.github.alerithe.client.features.modules.impl.world.phase.NullAABB;
 import io.github.alerithe.client.features.modules.impl.world.phase.PhaseMode;
 import io.github.alerithe.client.features.properties.impl.ObjectProperty;
-import io.github.alerithe.events.Register;
+import io.github.alerithe.events.impl.Subscribe;
 
 public class Phase extends Module {
     private final ObjectProperty<PhaseMode> mode = new ObjectProperty<>("Mode", new String[0], new Latest(), new NullAABB());
@@ -20,22 +20,22 @@ public class Phase extends Module {
         getPropertyManager().add(mode);
     }
 
-    @Register
+    @Subscribe
     private void onPreUpdate(EventUpdate.Pre event) {
         mode.getValue().onPreUpdate(event);
     }
 
-    @Register
+    @Subscribe
     private void onOpaqueCheck(EventOpaqueCheck event) {
         event.setCancelled(true);
     }
 
-    @Register
+    @Subscribe
     private void onBlockPush(EventBlockPush event) {
         event.setCancelled(true);
     }
 
-    @Register
+    @Subscribe
     private void onCollision(EventBlockCollision event) {
         mode.getValue().onCollision(event);
     }

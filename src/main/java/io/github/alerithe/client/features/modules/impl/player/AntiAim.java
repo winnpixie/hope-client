@@ -11,8 +11,7 @@ import io.github.alerithe.client.features.modules.impl.player.antiaim.yaw.LBYBre
 import io.github.alerithe.client.features.modules.impl.player.antiaim.yaw.NormalYaw;
 import io.github.alerithe.client.features.modules.impl.player.antiaim.yaw.SpinYaw;
 import io.github.alerithe.client.features.properties.impl.ObjectProperty;
-import io.github.alerithe.events.CallOrder;
-import io.github.alerithe.events.Register;
+import io.github.alerithe.events.impl.Subscribe;
 
 public class AntiAim extends Module {
     private final ObjectProperty<RotationMode> yawMode = new ObjectProperty<>("YawMode", new String[0], new SpinYaw(),
@@ -27,7 +26,7 @@ public class AntiAim extends Module {
         getPropertyManager().add(pitchMode);
     }
 
-    @Register(CallOrder.FIRST)
+    @Subscribe
     private void onPreUpdate(EventUpdate.Pre event) {
         yawMode.getValue().onPreUpdate(event);
         pitchMode.getValue().onPreUpdate(event);

@@ -10,8 +10,7 @@ import io.github.alerithe.client.features.modules.impl.movement.*;
 import io.github.alerithe.client.features.modules.impl.player.*;
 import io.github.alerithe.client.features.modules.impl.visual.*;
 import io.github.alerithe.client.features.modules.impl.world.*;
-import io.github.alerithe.events.EventBus;
-import io.github.alerithe.events.EventHandler;
+import io.github.alerithe.events.impl.Subscriber;
 import org.lwjgl.input.Keyboard;
 
 import java.io.File;
@@ -107,9 +106,9 @@ public class ModuleManager extends FeatureManager<Module> {
         add(new PingSpoof());
         add(new TextSpammer()); // TODO: Finish
 
-        Client.LOGGER.info(String.format("Registered %d Module(s)", getElements().size()));
+        Client.LOGGER.info(String.format("Registered %d Module(s)", getChildren().size()));
 
-        getElements().forEach(module -> {
+        getChildren().forEach(module -> {
             Client.KEYBIND_MANAGER.add(new Keybind(module.getName(), module.getAliases(), Keyboard.KEY_NONE, module::toggle));
 
             module.getPropertyManager().load();
@@ -130,29 +129,29 @@ public class ModuleManager extends FeatureManager<Module> {
             e.printStackTrace();
         }
 
-        EventBus.register(new EventHandler<EventTick>() {
+        Client.EVENT_BUS.subscribe(new Subscriber<EventTick>() {
             @Override
             public void handle(EventTick event) {
                 if (!event.isInGame()) return;
 
                 toEnable.forEach(Module::toggle);
                 toggledModules = true;
-                EventBus.unregister(this);
+                Client.EVENT_BUS.unsubscribe(this);
             }
         });
     }
 
     public List<Module> getAllInType(Module.Type type) {
-        return getElements().stream().filter(module -> module.getType().equals(type)).collect(Collectors.toList());
+        return getChildren().stream().filter(module -> module.getType().equals(type)).collect(Collectors.toList());
     }
 
     @Override
     public void save() {
-        getElements().forEach(module -> module.getPropertyManager().save());
+        getChildren().forEach(module -> module.getPropertyManager().save());
         if (!toggledModules) return;
 
         StringBuilder builder = new StringBuilder();
-        getElements().forEach(module -> builder.append(module.getName()).append(':')
+        getChildren().forEach(module -> builder.append(module.getName()).append(':')
                 .append(module.isEnabled()).append('\n'));
 
         try {

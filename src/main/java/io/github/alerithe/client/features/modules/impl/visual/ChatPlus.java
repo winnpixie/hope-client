@@ -3,7 +3,7 @@ package io.github.alerithe.client.features.modules.impl.visual;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.features.properties.impl.BooleanProperty;
 import io.github.alerithe.client.features.properties.impl.IntProperty;
-import io.github.alerithe.client.utilities.Wrapper;
+import io.github.alerithe.client.utilities.GameHelper;
 
 public class ChatPlus extends Module {
     public final BooleanProperty background = new BooleanProperty("Background", new String[]{"fastchat"}, true);
@@ -23,6 +23,6 @@ public class ChatPlus extends Module {
     public void onDisable() {
         toggle();
 
-        Wrapper.printMessage("\2474Chat+ can not be turned off.");
+        GameHelper.printChatMessage("\2474Chat+ can not be turned off.");
     }
 }

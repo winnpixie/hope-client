@@ -3,7 +3,7 @@ package io.github.alerithe.client.features.modules.impl.world;
 import io.github.alerithe.client.events.game.EventInput;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.features.properties.impl.IntProperty;
-import io.github.alerithe.events.Register;
+import io.github.alerithe.events.impl.Subscribe;
 
 public class FastPlace extends Module {
     private final IntProperty speed = new IntProperty("Speed", new String[0],
@@ -15,7 +15,7 @@ public class FastPlace extends Module {
         getPropertyManager().add(speed);
     }
 
-    @Register
+    @Subscribe
     private void onRightClick(EventInput.RightClick event) {
         event.setDelay(event.getDelay() - speed.getValue());
     }

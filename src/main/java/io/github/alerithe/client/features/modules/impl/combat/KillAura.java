@@ -9,16 +9,10 @@ import io.github.alerithe.client.features.properties.impl.BooleanProperty;
 import io.github.alerithe.client.features.properties.impl.DoubleProperty;
 import io.github.alerithe.client.features.properties.impl.IntProperty;
 import io.github.alerithe.client.features.properties.impl.ObjectProperty;
-import io.github.alerithe.client.utilities.MathHelper;
-import io.github.alerithe.client.utilities.Wrapper;
-import io.github.alerithe.events.Register;
+import io.github.alerithe.client.utilities.*;
+import io.github.alerithe.events.impl.Subscribe;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.monster.EntityGolem;
-import net.minecraft.entity.monster.EntityMob;
-import net.minecraft.entity.passive.EntityAnimal;
-import net.minecraft.entity.passive.EntitySquid;
-import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemSword;
 import net.minecraft.network.play.client.C02PacketUseEntity;
@@ -47,7 +41,7 @@ public class KillAura extends Module {
     private final BooleanProperty look = new BooleanProperty("Look", new String[0], false);
     public final BooleanProperty autoBlock = new BooleanProperty("AutoBlock", new String[]{"ab"}, true);
     private final BooleanProperty players = new BooleanProperty("Players", new String[0], true);
-    private final BooleanProperty monsters = new BooleanProperty("Monsters", new String[]{"mobs"}, false);
+    private final BooleanProperty hostiles = new BooleanProperty("Hostiles", new String[]{"monsters", "mobs"}, false);
     private final BooleanProperty animals = new BooleanProperty("Animals", new String[0], false);
     private final BooleanProperty passive = new BooleanProperty("Passive", new String[0], false);
     private final BooleanProperty invisibles = new BooleanProperty("Invisibles", new String[]{"invis"}, true);
@@ -70,14 +64,14 @@ public class KillAura extends Module {
         getPropertyManager().add(angleOffset);
         getPropertyManager().add(look);
         getPropertyManager().add(players);
-        getPropertyManager().add(monsters);
+        getPropertyManager().add(hostiles);
         getPropertyManager().add(animals);
         getPropertyManager().add(passive);
         getPropertyManager().add(invisibles);
         getPropertyManager().add(attackFriends);
     }
 
-    @Register
+    @Subscribe
     private void onPreUpdate(EventUpdate.Pre event) {
         near = getNear();
 
@@ -90,38 +84,38 @@ public class KillAura extends Module {
         event.setPitch(MathHelper.clamp(angles[1] + MathHelper.getRandomFloat(-offsetValue, offsetValue), -90f, 90f));
 
         if (look.getValue()) {
-            Wrapper.getPlayer().rotationYaw = event.getYaw();
-            Wrapper.getPlayer().rotationPitch = event.getPitch();
+            EntityHelper.getUser().rotationYaw = event.getYaw();
+            EntityHelper.getUser().rotationPitch = event.getPitch();
         }
 
-        if (Wrapper.getPlayer().getHeldItem() != null
-                && Wrapper.getPlayer().getHeldItem().getItem() instanceof ItemSword
-                && (autoBlock.getValue() || Wrapper.getPlayer().isBlocking())) {
+        if (EntityHelper.getUser().getHeldItem() != null
+                && EntityHelper.getUser().getHeldItem().getItem() instanceof ItemSword
+                && (autoBlock.getValue() || EntityHelper.getUser().isBlocking())) {
             if (!attacking) {
-                Wrapper.getPlayerController().sendUseItem(Wrapper.getPlayer(), Wrapper.getWorld(),
-                        Wrapper.getPlayer().getHeldItem());
+                GameHelper.getController().sendUseItem(EntityHelper.getUser(), WorldHelper.getWorld(),
+                        EntityHelper.getUser().getHeldItem());
             }
 
-            Wrapper.getPlayer().setItemInUse(Wrapper.getPlayer().getHeldItem(),
-                    Wrapper.getPlayer().getHeldItem().getMaxItemUseDuration());
+            EntityHelper.getUser().setItemInUse(EntityHelper.getUser().getHeldItem(),
+                    EntityHelper.getUser().getHeldItem().getMaxItemUseDuration());
 
-            if (!Wrapper.getSettings().keyBindUseItem.isKeyDown()
+            if (!GameHelper.getSettings().keyBindUseItem.isKeyDown()
                     && !Client.MODULE_MANAGER.find(NoSlowdown.class).isEnabled()) {
-                Wrapper.getPlayer().setSpeed(Wrapper.getPlayer().getSpeed() * 0.2);
-                Wrapper.getPlayer().setSprinting(false);
+                EntityHelper.getUser().setSpeed(EntityHelper.getUser().getSpeed() * 0.2);
+                EntityHelper.getUser().setSprinting(false);
             }
         }
     }
 
-    @Register
+    @Subscribe
     private void onPostUpdate(EventUpdate.Post event) {
         mode.getValue().onPostUpdate(event);
         if (target == null) return;
         if (!attacking) return;
 
         attacking = false;
-        if (Wrapper.getPlayer().isBlocking()) {
-            Wrapper.sendPacket(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.RELEASE_USE_ITEM,
+        if (EntityHelper.getUser().isBlocking()) {
+            NetworkHelper.sendPacket(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.RELEASE_USE_ITEM,
                     BlockPos.ORIGIN, EnumFacing.DOWN));
         }
         attack(target);
@@ -129,7 +123,7 @@ public class KillAura extends Module {
 
     public List<EntityLivingBase> getNear() {
         List<EntityLivingBase> nearby = new ArrayList<>();
-        for (Entity entity : Wrapper.getWorld().loadedEntityList) {
+        for (Entity entity : WorldHelper.getWorld().loadedEntityList) {
             if (qualifies(entity)) nearby.add((EntityLivingBase) entity);
         }
 
@@ -138,33 +132,33 @@ public class KillAura extends Module {
     }
 
     public boolean qualifies(Entity entity) {
-        return ((entity instanceof EntityPlayer && this.players.getValue() && !AntiBot.isBot((EntityPlayer) entity))
-                || (entity instanceof EntityMob && this.monsters.getValue())
-                || ((entity instanceof EntityAnimal || entity instanceof EntitySquid) && this.animals.getValue())
-                || ((entity instanceof EntityVillager || entity instanceof EntityGolem) && this.passive.getValue()))
-                && (!entity.isInvisible() || this.invisibles.getValue()) && entity.isEntityAlive()
-                && Wrapper.getPlayer().getDistanceSqToEntity(entity) <= (distance.getValue() * distance.getValue())
-                && (attackFriends.getValue() || Client.FRIEND_MANAGER.find(entity.getName()) == null)
-                && entity != Wrapper.getPlayer();
+        return ((this.players.getValue() && EntityHelper.isOtherPlayer(entity) && !AntiBot.isBot((EntityPlayer) entity))
+                || (this.hostiles.getValue() && EntityHelper.isHostile(entity))
+                || (this.animals.getValue() && EntityHelper.isAnimal(entity))
+                || (this.passive.getValue() && EntityHelper.isPassive(entity))
+                && (this.invisibles.getValue() || !entity.isInvisible())
+                && EntityHelper.hasHeartBeat(entity))
+                && WorldHelper.distanceSq(entity) <= (distance.getValue() * distance.getValue())
+                && (attackFriends.getValue() || Client.FRIEND_MANAGER.find(entity.getName()) == null);
     }
 
     private float[] getRotationsToTarget(Entity target) {
-        if (!smartAngles.getValue()) return Wrapper.getPlayer().getRotationsToEntity(target);
+        if (!smartAngles.getValue()) return EntityHelper.getRotationToEntity(target);
 
-        double yDiff = target.posY - Wrapper.getPlayer().posY;
+        double yDiff = target.posY - EntityHelper.getUser().posY;
         if (yDiff > 0.4) {
-            return Wrapper.getPlayer().getRotationToPosition(
+            return EntityHelper.getRotationToPosition(
                     target.posX,
                     target.posY + (target.getEyeHeight() / (yDiff / 0.4)),
                     target.posZ);
         }
 
-        return Wrapper.getPlayer().getRotationsToEntity(target);
+        return EntityHelper.getRotationToEntity(target);
     }
 
     public void attack(Entity entity) {
-        Wrapper.getPlayer().swingItem();
-        Wrapper.sendPacket(new C02PacketUseEntity(entity, C02PacketUseEntity.Action.ATTACK));
+        EntityHelper.getUser().swingItem();
+        NetworkHelper.sendPacket(new C02PacketUseEntity(entity, C02PacketUseEntity.Action.ATTACK));
     }
 
     private static class SortingMode extends ObjectProperty.Value {
@@ -178,14 +172,13 @@ public class KillAura extends Module {
         private static class AngleSort extends SortingMode {
             public AngleSort() {
                 super("Angle", new String[0], Comparator.comparingDouble(entity ->
-                        Wrapper.getPlayer().getRotationsToEntity(entity)[0]));
+                        EntityHelper.getRotationToEntity(entity)[0]));
             }
         }
 
         private static class DistanceSort extends SortingMode {
             public DistanceSort() {
-                super("Distance", new String[]{"dist"}, Comparator.comparingDouble(entity ->
-                        Wrapper.getPlayer().getDistanceSqToEntity(entity)));
+                super("Distance", new String[]{"dist"}, Comparator.comparingDouble(WorldHelper::distanceSq));
             }
         }
     }

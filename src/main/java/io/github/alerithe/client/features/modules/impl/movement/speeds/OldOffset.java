@@ -1,7 +1,8 @@
 package io.github.alerithe.client.features.modules.impl.movement.speeds;
 
 import io.github.alerithe.client.events.game.EventUpdate;
-import io.github.alerithe.client.utilities.Wrapper;
+import io.github.alerithe.client.utilities.EntityHelper;
+import io.github.alerithe.client.utilities.WorldHelper;
 
 public class OldOffset extends SpeedMode {
     public OldOffset() {
@@ -10,22 +11,22 @@ public class OldOffset extends SpeedMode {
 
     @Override
     public void onPreUpdate(EventUpdate.Pre event) {
-        if (!Wrapper.getPlayer().isUserMoving()) return;
-        if (!Wrapper.getPlayer().onGround) return;
-        if (Wrapper.getPlayer().movementInput.jump) return;
-        if (Wrapper.getPlayer().isInLiquid()) return;
+        if (!EntityHelper.getUser().isUserMoving()) return;
+        if (!EntityHelper.getUser().onGround) return;
+        if (EntityHelper.getUser().movementInput.jump) return;
+        if (EntityHelper.getUser().isInLiquid()) return;
 
-        boolean boost = Wrapper.getPlayer().ticksExisted % 2 == 0;
-        boolean clearerSkies = Wrapper.getWorld().getCollidingBoundingBoxes(Wrapper.getPlayer(),
-                Wrapper.getPlayer().getEntityBoundingBox().offset(0, 0.3, 0)).isEmpty();
-        boolean clearSkies = Wrapper.getWorld().getCollidingBoundingBoxes(Wrapper.getPlayer(),
-                Wrapper.getPlayer().getEntityBoundingBox().offset(0, 0.02, 0)).isEmpty();
+        boolean boost = EntityHelper.getUser().ticksExisted % 2 == 0;
+        boolean clearerSkies = WorldHelper.getWorld().getCollidingBoundingBoxes(EntityHelper.getUser(),
+                EntityHelper.getUser().getEntityBoundingBox().offset(0, 0.3, 0)).isEmpty();
+        boolean clearSkies = WorldHelper.getWorld().getCollidingBoundingBoxes(EntityHelper.getUser(),
+                EntityHelper.getUser().getEntityBoundingBox().offset(0, 0.02, 0)).isEmpty();
 
         if (!boost) {
             event.setY(event.getY() + (clearerSkies ? 0.4 : clearSkies ? 0.2 : 0.0125));
             event.setOnGround(false);
         }
 
-        Wrapper.getPlayer().setSpeed(Wrapper.getPlayer().getSpeed() * (boost ? 3.3 : 0.705));
+        EntityHelper.getUser().setSpeed(EntityHelper.getUser().getSpeed() * (boost ? 3.3 : 0.705));
     }
 }

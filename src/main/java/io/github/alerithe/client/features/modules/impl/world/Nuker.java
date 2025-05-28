@@ -6,7 +6,7 @@ import io.github.alerithe.client.features.modules.impl.world.nuker.Creative;
 import io.github.alerithe.client.features.modules.impl.world.nuker.NukerMode;
 import io.github.alerithe.client.features.modules.impl.world.nuker.Survival;
 import io.github.alerithe.client.features.properties.impl.ObjectProperty;
-import io.github.alerithe.events.Register;
+import io.github.alerithe.events.impl.Subscribe;
 
 public class Nuker extends Module {
     private final ObjectProperty<NukerMode> mode = new ObjectProperty<>("Mode", new String[0], new Creative(), new Survival());
@@ -17,12 +17,12 @@ public class Nuker extends Module {
         getPropertyManager().add(mode);
     }
 
-    @Register
+    @Subscribe
     private void onPreUpdate(EventUpdate.Pre event) {
         mode.getValue().onPreUpdate(event);
     }
 
-    @Register
+    @Subscribe
     private void onPostUpdate(EventUpdate.Post event) {
         mode.getValue().onPostUpdate(event);
     }

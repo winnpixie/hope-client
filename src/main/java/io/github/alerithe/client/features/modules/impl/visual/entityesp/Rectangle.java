@@ -4,14 +4,16 @@ import io.github.alerithe.client.Client;
 import io.github.alerithe.client.events.game.EventDraw;
 import io.github.alerithe.client.features.friends.Friend;
 import io.github.alerithe.client.features.modules.impl.visual.EntityESP;
+import io.github.alerithe.client.utilities.EntityHelper;
+import io.github.alerithe.client.utilities.GameHelper;
 import io.github.alerithe.client.utilities.MathHelper;
-import io.github.alerithe.client.utilities.Wrapper;
+import io.github.alerithe.client.utilities.WorldHelper;
 import io.github.alerithe.client.utilities.graphics.VisualHelper;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.util.AxisAlignedBB;
-import org.lwjgl.opengl.GL11;
 
 import java.util.*;
 
@@ -25,17 +27,17 @@ public class Rectangle extends EntityESPMode {
         List<Entity> entities = new ArrayList<>();
         Map<Entity, float[]> projections = new HashMap<>();
 
-        GL11.glPushMatrix();
-        Wrapper.getGame().entityRenderer.setupCameraTransform(event.getPartialTicks(), 0);
-        for (Entity entity : Wrapper.getWorld().loadedEntityList) {
+        GlStateManager.pushMatrix();
+        GameHelper.getGame().entityRenderer.setupCameraTransform(event.getPartialTicks(), 0);
+        for (Entity entity : WorldHelper.getWorld().loadedEntityList) {
             if (!module.qualifies(entity)) continue;
 
             double x = (MathHelper.lerpd(entity.prevPosX, entity.posX, event.getPartialTicks())
-                    - Wrapper.getGame().getRenderManager().viewerPosX);
+                    - GameHelper.getGame().getRenderManager().viewerPosX);
             double y = (MathHelper.lerpd(entity.prevPosY, entity.posY, event.getPartialTicks())
-                    - Wrapper.getGame().getRenderManager().viewerPosY);
+                    - GameHelper.getGame().getRenderManager().viewerPosY);
             double z = (MathHelper.lerpd(entity.prevPosZ, entity.posZ, event.getPartialTicks())
-                    - Wrapper.getGame().getRenderManager().viewerPosZ);
+                    - GameHelper.getGame().getRenderManager().viewerPosZ);
 
             AxisAlignedBB aabb = new AxisAlignedBB(x - entity.width / 2d, y, z - entity.width / 2d,
                     x + entity.width / 2d, y + entity.height + 0.2, z + entity.width / 2d);
@@ -63,20 +65,22 @@ public class Rectangle extends EntityESPMode {
             entities.add(entity);
             projections.put(entity, position);
         }
-        Wrapper.getGame().entityRenderer.setupOverlayRendering();
-        GL11.glPopMatrix();
-        entities.sort(Comparator.comparingDouble(entity -> -Wrapper.getPlayer().getDistanceSqToEntity(entity)));
+
+        GameHelper.getGame().entityRenderer.setupOverlayRendering();
+        GlStateManager.popMatrix();
+        entities.sort(Comparator.comparingDouble(entity -> -WorldHelper.distanceSq(entity)));
 
         for (Entity entity : entities) {
             float[] position = projections.get(entity);
+            float x = position[0];
+            float y = position[1];
             float width = position[2] - position[0];
             float height = position[3] - position[1];
 
-            GL11.glPushMatrix();
-            GL11.glTranslatef(position[0], position[1], 0);
-
             if (module.showNames.getValue()) {
-                GL11.glScaled(0.5, 0.5, 0.5);
+                GlStateManager.pushMatrix();
+                GlStateManager.translate(position[0], position[1], 0f);
+                GlStateManager.scale(0.5f, 0.5f, 0.5f);
 
                 String text = entity.getDisplayName().getFormattedText();
                 if (entity instanceof EntityItem) {
@@ -91,11 +95,11 @@ public class Rectangle extends EntityESPMode {
                 VisualHelper.MC_FONT.drawStringWithShadow(text,
                         width - (VisualHelper.MC_FONT.getStringWidth(text) / 2f),
                         -VisualHelper.MC_FONT.getFontHeight() - 2, -1);
-                GL11.glScaled(2, 2, 2);
+                GlStateManager.popMatrix();
             }
 
-            VisualHelper.MC_GFX.drawBorderedSquare(0.5f, 0.5f, width - 1f, height - 1f, 1.5f, 0x00000000, 0xFF000000);
-            VisualHelper.MC_GFX.drawBorderedSquare(0f, 0f, width, height, 0.5f, 0x00000000,
+            VisualHelper.MC_GFX.drawBorderedSquare(x + 0.5f, y + 0.5f, width - 1f, height - 1f, 1.5f, 0x00000000, 0xFF000000);
+            VisualHelper.MC_GFX.drawBorderedSquare(x, y, width, height, 0.5f, 0x00000000,
                     Client.FRIEND_MANAGER.find(entity.getName()) == null ? 0xFFFFFFFF : 0xFF00FFFF);
 
             if (module.showHealth.getValue() && entity instanceof EntityLivingBase) {
@@ -104,25 +108,10 @@ public class Rectangle extends EntityESPMode {
                 float maxHealth = living.getMaxHealth();
                 if (maxHealth <= 0f) maxHealth = health + 1;
 
-                float percent = health / maxHealth;
-
-                int color = 0xFF0099FF;
-                if (percent <= 0.25) {
-                    color = 0xFF990000;
-                } else if (percent <= 0.5) {
-                    color = 0xFFFF6600;
-                } else if (percent <= 0.75) {
-                    color = 0xFFFFFF00;
-                } else if (percent <= 1) {
-                    color = 0xFF00FF00;
-                }
-
-                float healthBarHeight = height * MathHelper.clamp(percent, 0f, 1f);
-                VisualHelper.MC_GFX.drawBorderedSquare(-2.5f, height - healthBarHeight - 0.5f, 0.5f, healthBarHeight + 1f,
-                        0.5f, color, 0xFF000000);
+                float healthBarHeight = height * MathHelper.clamp(health / maxHealth, 0f, 1f);
+                VisualHelper.MC_GFX.drawBorderedSquare(x - 2.5f, y + height - healthBarHeight - 0.5f, 0.5f, healthBarHeight + 1f,
+                        0.5f, EntityHelper.getHealthColor(living), 0xFF000000);
             }
-
-            GL11.glPopMatrix();
         }
     }
 }

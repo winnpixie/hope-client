@@ -6,9 +6,9 @@ import io.github.alerithe.client.ui.click.elements.styling.ElementStyle;
 import io.github.alerithe.client.ui.click.elements.styling.text.TextAlignment;
 import io.github.alerithe.client.ui.click.elements.styling.text.TextPosition;
 import io.github.alerithe.client.ui.click.elements.styling.text.TextStyle;
-import io.github.alerithe.client.utilities.Wrapper;
+import io.github.alerithe.client.utilities.GameHelper;
 import io.github.alerithe.client.utilities.graphics.VisualHelper;
-import org.lwjgl.opengl.GL11;
+import net.minecraft.client.renderer.GlStateManager;
 
 public class Renderer {
     private final Element element;
@@ -128,14 +128,14 @@ public class Renderer {
             yOffset = eHeight - fontHeight - yOffset;
         }
 
-        GL11.glPushMatrix();
-        GL11.glTranslatef(eX + xOffset, eY + yOffset, 0f);
-        GL11.glScalef(style.getScaleX(), style.getScaleY(), 1f);
-        GL11.glTranslatef(-(eX + xOffset), -(eY + yOffset), 0f);
+        GlStateManager.pushMatrix();
+        GlStateManager.translate(eX + xOffset, eY + yOffset, 0f);
+        GlStateManager.scale(style.getScaleX(), style.getScaleY(), 1f);
+        GlStateManager.translate(-(eX + xOffset), -(eY + yOffset), 0f);
 
         if (style.isLineWrap()) {
             // FIXME: Develop own way to handle this instead of lazily depending on Minecraft's built-in way.
-            Wrapper.getGame().fontRenderer.drawSplitString(text,
+            GameHelper.getGame().fontRenderer.drawSplitString(text,
                     eX + xOffset,
                     eY + yOffset,
                     eWidth,
@@ -149,6 +149,6 @@ public class Renderer {
                     style.isShadow());
         }
 
-        GL11.glPopMatrix();
+        GlStateManager.popMatrix();
     }
 }

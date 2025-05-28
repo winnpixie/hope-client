@@ -9,7 +9,7 @@ import net.minecraft.util.Session;
 public class MojangSessionBuilder implements SessionBuilder {
     @Override
     public Session createSession(String username, String password) throws Exception {
-        YggdrasilAuthenticationService service = new YggdrasilAuthenticationService(Minecraft.getMinecraft().getProxy(), "");
+        YggdrasilAuthenticationService service = new YggdrasilAuthenticationService(Minecraft.getInstance().getProxy(), "");
         YggdrasilUserAuthentication auth = new YggdrasilUserAuthentication(service, Agent.MINECRAFT);
         auth.setUsername(username);
         auth.setPassword(password);

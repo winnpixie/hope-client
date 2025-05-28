@@ -4,9 +4,8 @@ import io.github.alerithe.client.events.game.EventDraw;
 import io.github.alerithe.client.events.game.EventInput;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.ui.tab.Container;
-import io.github.alerithe.client.utilities.Wrapper;
-import io.github.alerithe.events.CallOrder;
-import io.github.alerithe.events.Register;
+import io.github.alerithe.client.utilities.GameHelper;
+import io.github.alerithe.events.impl.Subscribe;
 
 public class TabUI extends Module {
     private Container container;
@@ -20,13 +19,13 @@ public class TabUI extends Module {
         if (container == null) container = new Container();
     }
 
-    @Register(CallOrder.UNIMPORTANT)
+    @Subscribe
     private void onOverlayDraw(EventDraw.Overlay event) {
-        if (!Wrapper.getSettings().showDebugInfo) container.getRenderer().draw(event.getPartialTicks());
+        if (!GameHelper.getSettings().showDebugInfo) container.getRenderer().draw(event.getPartialTicks());
     }
 
-    @Register
+    @Subscribe
     private void onKeyPress(EventInput.KeyPress event) {
-        if (!Wrapper.getSettings().showDebugInfo) container.getController().onKeyPress(event.getKey());
+        if (!GameHelper.getSettings().showDebugInfo) container.getController().onKeyPress(event.getKey());
     }
 }

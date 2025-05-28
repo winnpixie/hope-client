@@ -7,7 +7,7 @@ import io.github.alerithe.client.features.modules.impl.world.jesus.Bounce;
 import io.github.alerithe.client.features.modules.impl.world.jesus.JesusMode;
 import io.github.alerithe.client.features.modules.impl.world.jesus.Solid;
 import io.github.alerithe.client.features.properties.impl.ObjectProperty;
-import io.github.alerithe.events.Register;
+import io.github.alerithe.events.impl.Subscribe;
 
 public class Jesus extends Module {
     private final ObjectProperty<JesusMode> mode = new ObjectProperty<>("Mode", new String[0], new Solid(), new Bounce());
@@ -18,12 +18,12 @@ public class Jesus extends Module {
         getPropertyManager().add(mode);
     }
 
-    @Register
+    @Subscribe
     private void onPreUpdate(EventUpdate.Pre event) {
         mode.getValue().onPreUpdate(event);
     }
 
-    @Register
+    @Subscribe
     private void onBlockCollide(EventBlockCollision event) {
         mode.getValue().onBlockCollide(event);
     }

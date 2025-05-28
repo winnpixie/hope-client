@@ -4,6 +4,7 @@ import io.github.alerithe.client.utilities.graphics.drawing.MinecraftGraphicsDev
 import io.github.alerithe.client.utilities.graphics.text.MinecraftTextRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.AxisAlignedBB;
@@ -41,19 +42,19 @@ public class VisualHelper {
         if (scaledResolution == null
                 || previousWidth != Display.getWidth()
                 || previousHeight != Display.getHeight()
-                || previousScale != Minecraft.getMinecraft().gameSettings.guiScale) {
+                || previousScale != Minecraft.getInstance().gameSettings.guiScale) {
             previousWidth = Display.getWidth();
             previousHeight = Display.getHeight();
-            previousScale = Minecraft.getMinecraft().gameSettings.guiScale;
-            scaledResolution = new ScaledResolution(Minecraft.getMinecraft());
+            previousScale = Minecraft.getInstance().gameSettings.guiScale;
+            scaledResolution = new ScaledResolution(Minecraft.getInstance());
         }
 
         return scaledResolution;
     }
 
     public static float[] project(float x, float y, float z) {
-        GL11.glGetFloat(GL11.GL_MODELVIEW_MATRIX, modelViewMatrix);
-        GL11.glGetFloat(GL11.GL_PROJECTION_MATRIX, projectionMatrix);
+        GlStateManager.getFloat(GL11.GL_MODELVIEW_MATRIX, modelViewMatrix);
+        GlStateManager.getFloat(GL11.GL_PROJECTION_MATRIX, projectionMatrix);
         GL11.glGetInteger(GL11.GL_VIEWPORT, viewport);
 
         if (!GLU.gluProject(x, y, z, modelViewMatrix, projectionMatrix, viewport, windowPosition)) return null;
@@ -71,7 +72,7 @@ public class VisualHelper {
     }
 
     public static boolean isInView(AxisAlignedBB aabb) {
-        Entity current = Minecraft.getMinecraft().getRenderViewEntity();
+        Entity current = Minecraft.getInstance().getRenderViewEntity();
         frustum.setPosition(current.posX, current.posY, current.posZ);
 
         return frustum.isBoundingBoxInFrustum(aabb);
@@ -79,9 +80,9 @@ public class VisualHelper {
 
     public static int[] toRGBAIntArray(int argbColor, boolean hasAlpha) {
         return new int[]{
-                (argbColor >> 16) & 255,                     // R
-                (argbColor >> 8) & 255,                      // G
-                (argbColor >> 0) & 255,                      // B
+                (argbColor >> 16) & 255,                      // R
+                (argbColor >> 8) & 255,                       // G
+                argbColor & 255,                              // B
                 (!hasAlpha ? 255 : ((argbColor >> 24) & 255)) // A
         };
     }
@@ -106,7 +107,7 @@ public class VisualHelper {
                 ((alpha & 255) << 24)
                         | ((red & 255) << 16)
                         | ((green & 255) << 8)
-                        | ((blue & 255) << 0)
+                        | (blue & 255)
         );
     }
 

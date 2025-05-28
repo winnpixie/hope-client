@@ -10,6 +10,6 @@ public class SpinPitch extends RotationMode {
 
     @Override
     public void onPreUpdate(EventUpdate.Pre event) {
-        event.setPitch(System.currentTimeMillis() / 10 % 360);
+        event.setPitch(((float) (System.currentTimeMillis() / 5.0 % 360)));
     }
 }

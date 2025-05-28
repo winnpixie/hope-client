@@ -3,7 +3,7 @@ package io.github.alerithe.client.features.modules.impl.miscellaneous;
 import io.github.alerithe.client.events.game.EventPacket;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.utilities.MathHelper;
-import io.github.alerithe.events.Register;
+import io.github.alerithe.events.impl.Subscribe;
 import net.minecraft.item.ItemFirework;
 import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement;
 
@@ -12,7 +12,7 @@ public class FireUnwork extends Module {
         super("FireUnwork", new String[]{"firesploit", "fireworkdisplace"}, Type.MISCELLANEOUS);
     }
 
-    @Register
+    @Subscribe
     private void onPacketWrite(EventPacket.Write event) {
         if (!(event.getPacket() instanceof C08PacketPlayerBlockPlacement)) return;
 

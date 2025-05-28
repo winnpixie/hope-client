@@ -1,10 +1,10 @@
 package io.github.alerithe.client.extensions;
 
-import io.github.alerithe.events.EventBus;
+import io.github.alerithe.client.Client;
 import io.github.alerithe.client.events.game.EventDraw;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiIngame;
-import org.lwjgl.opengl.GL11;
+import net.minecraft.client.renderer.GlStateManager;
 
 public class IngameGui extends GuiIngame {
     public IngameGui(Minecraft mcIn) {
@@ -15,9 +15,9 @@ public class IngameGui extends GuiIngame {
     public void renderGameOverlay(float partialTicks) {
         super.renderGameOverlay(partialTicks);
 
-        GL11.glPushMatrix();
-        EventBus.dispatch(new EventDraw.Overlay(partialTicks));
-        GL11.glColor4f(1, 1, 1, 1);
-        GL11.glPopMatrix();
+        GlStateManager.pushMatrix();
+        GlStateManager.color(1f, 1f, 1f, 1f);
+        Client.EVENT_BUS.post(new EventDraw.Overlay(partialTicks));
+        GlStateManager.popMatrix();
     }
 }

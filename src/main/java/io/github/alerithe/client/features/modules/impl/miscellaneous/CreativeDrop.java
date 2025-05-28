@@ -2,8 +2,9 @@ package io.github.alerithe.client.features.modules.impl.miscellaneous;
 
 import io.github.alerithe.client.events.game.EventUpdate;
 import io.github.alerithe.client.features.modules.Module;
-import io.github.alerithe.client.utilities.Wrapper;
-import io.github.alerithe.events.Register;
+import io.github.alerithe.client.utilities.EntityHelper;
+import io.github.alerithe.client.utilities.NetworkHelper;
+import io.github.alerithe.events.impl.Subscribe;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -17,9 +18,9 @@ public class CreativeDrop extends Module {
         super("CreativeDrop", new String[]{"creativedrop", "dropspammer", "dropspam"}, Type.MISCELLANEOUS);
     }
 
-    @Register
+    @Subscribe
     private void onPreUpdate(EventUpdate.Pre event) {
-        if (!Wrapper.getPlayer().capabilities.isCreativeMode) return;
+        if (!EntityHelper.getUser().capabilities.isCreativeMode) return;
 
         ItemStack stack = new ItemStack(Items.cake, 64);
         stack.setStackDisplayName("\2474#HopeClient");
@@ -27,8 +28,8 @@ public class CreativeDrop extends Module {
             stack.addEnchantment(enchantment, Byte.MAX_VALUE);
         }
 
-        Wrapper.sendPacket(new C10PacketCreativeInventoryAction(36 + Wrapper.getPlayer().inventory.currentItem, stack));
-        Wrapper.sendPacket(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.DROP_ALL_ITEMS, BlockPos.ORIGIN,
+        NetworkHelper.sendPacket(new C10PacketCreativeInventoryAction(36 + EntityHelper.getUser().inventory.currentItem, stack));
+        NetworkHelper.sendPacket(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.DROP_ALL_ITEMS, BlockPos.ORIGIN,
                 EnumFacing.DOWN));
     }
 }

@@ -3,8 +3,9 @@ package io.github.alerithe.client.features.modules.impl.player;
 import io.github.alerithe.client.events.game.EventUpdate;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.features.properties.impl.IntProperty;
-import io.github.alerithe.client.utilities.Wrapper;
-import io.github.alerithe.events.Register;
+import io.github.alerithe.client.utilities.EntityHelper;
+import io.github.alerithe.client.utilities.NetworkHelper;
+import io.github.alerithe.events.impl.Subscribe;
 import net.minecraft.network.play.client.C03PacketPlayer;
 
 public class Regen extends Module {
@@ -16,14 +17,14 @@ public class Regen extends Module {
         getPropertyManager().add(minHealth);
     }
 
-    @Register
+    @Subscribe
     private void onPreUpdate(EventUpdate.Pre event) {
-        if (Wrapper.getPlayer().getHealth() > minHealth.getValue()) return;
-        if (Wrapper.getPlayer().getFoodStats().getFoodLevel() < 17) return;
-        if (!Wrapper.getPlayer().onGround) return;
+        if (EntityHelper.getUser().getHealth() > minHealth.getValue()) return;
+        if (EntityHelper.getUser().getFoodStats().getFoodLevel() < 17) return;
+        if (!EntityHelper.getUser().onGround) return;
 
-        for (int i = 0; i < 20 - Wrapper.getPlayer().getHealth(); i++) {
-            Wrapper.sendPacket(new C03PacketPlayer(true));
+        for (int i = 0; i < 20 - EntityHelper.getUser().getHealth(); i++) {
+            NetworkHelper.sendPacket(new C03PacketPlayer(true));
         }
     }
 }

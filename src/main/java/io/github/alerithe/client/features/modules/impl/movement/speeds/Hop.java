@@ -1,7 +1,7 @@
 package io.github.alerithe.client.features.modules.impl.movement.speeds;
 
 import io.github.alerithe.client.events.game.EventUpdate;
-import io.github.alerithe.client.utilities.Wrapper;
+import io.github.alerithe.client.utilities.EntityHelper;
 
 public class Hop extends SpeedMode {
     private boolean boost;
@@ -12,22 +12,22 @@ public class Hop extends SpeedMode {
 
     @Override
     public void onPreUpdate(EventUpdate.Pre event) {
-        if (!Wrapper.getPlayer().isUserMoving()) return;
-        if (Wrapper.getPlayer().movementInput.jump) return;
-        if (Wrapper.getPlayer().isInLiquid()) return;
+        if (!EntityHelper.getUser().isUserMoving()) return;
+        if (EntityHelper.getUser().movementInput.jump) return;
+        if (EntityHelper.getUser().isInLiquid()) return;
 
-        if (Wrapper.getPlayer().onGround) {
-            Wrapper.getPlayer().setPosition(Wrapper.getPlayer().posX, Wrapper.getPlayer().posY + 0.5,
-                    Wrapper.getPlayer().posZ);
-            Wrapper.getPlayer().setSpeed(0.34999);
+        if (EntityHelper.getUser().onGround) {
+            EntityHelper.getUser().setPosition(EntityHelper.getUser().posX, EntityHelper.getUser().posY + 0.5,
+                    EntityHelper.getUser().posZ);
+            EntityHelper.getUser().setSpeed(0.34999);
             boost = true;
         } else {
             if (boost) {
                 boost = false;
-                Wrapper.getPlayer().motionY = -0.5;
+                EntityHelper.getUser().motionY = -0.5;
             }
 
-            Wrapper.getPlayer().setSpeed(Wrapper.getPlayer().getSpeed());
+            EntityHelper.getUser().setSpeed(EntityHelper.getUser().getSpeed());
         }
     }
 }

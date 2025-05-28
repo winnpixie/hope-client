@@ -2,7 +2,9 @@ package io.github.alerithe.client.features.modules.impl.world.phase;
 
 import io.github.alerithe.client.events.game.EventBlockCollision;
 import io.github.alerithe.client.events.game.EventUpdate;
-import io.github.alerithe.client.utilities.Wrapper;
+import io.github.alerithe.client.utilities.EntityHelper;
+import io.github.alerithe.client.utilities.NetworkHelper;
+import io.github.alerithe.client.utilities.WorldHelper;
 import net.minecraft.block.BlockAir;
 import net.minecraft.network.play.client.C03PacketPlayer;
 
@@ -13,43 +15,43 @@ public class Latest extends PhaseMode {
 
     @Override
     public void onPreUpdate(EventUpdate.Pre event) {
-        if (Wrapper.getPlayer().isUserMoving()) {
-            Wrapper.getPlayer().setSprinting(false);
-            float[] vector = Wrapper.getPlayer().getMoveVector();
-            if (Wrapper.getPlayer().isCollidedHorizontally) { // THIS pushes you into the block
+        if (EntityHelper.getUser().isUserMoving()) {
+            EntityHelper.getUser().setSprinting(false);
+            float[] vector = EntityHelper.getUser().getMoveVector();
+            if (EntityHelper.getUser().isCollidedHorizontally) { // THIS pushes you into the block
                 double x = vector[0] * 0.006;
                 double z = vector[1] * 0.006;
-                Wrapper.sendPacket(new C03PacketPlayer.C04PacketPlayerPosition(Wrapper.getPlayer().posX + x,
-                        Wrapper.getPlayer().posY, Wrapper.getPlayer().posZ + z, false));
-                Wrapper.sendPacket(new C03PacketPlayer.C04PacketPlayerPosition(Wrapper.getPlayer().posX + x * 11,
-                        Wrapper.getPlayer().posY - 11, Wrapper.getPlayer().posZ + z * 11, false));
-                Wrapper.getPlayer().setPosition(Wrapper.getPlayer().posX + x, Wrapper.getPlayer().posY,
-                        Wrapper.getPlayer().posZ + z);
-            } else if (Wrapper.getPlayer().hurtTime == 9 || Wrapper.getPlayer().isSneaking()) { // THIS sends you through the block
+                NetworkHelper.sendPacket(new C03PacketPlayer.C04PacketPlayerPosition(EntityHelper.getUser().posX + x,
+                        EntityHelper.getUser().posY, EntityHelper.getUser().posZ + z, false));
+                NetworkHelper.sendPacket(new C03PacketPlayer.C04PacketPlayerPosition(EntityHelper.getUser().posX + x * 11,
+                        EntityHelper.getUser().posY - 11, EntityHelper.getUser().posZ + z * 11, false));
+                EntityHelper.getUser().setPosition(EntityHelper.getUser().posX + x, EntityHelper.getUser().posY,
+                        EntityHelper.getUser().posZ + z);
+            } else if (EntityHelper.getUser().hurtTime == 9 || EntityHelper.getUser().isSneaking()) { // THIS sends you through the block
                 double x = vector[0] * 0.3;
                 double z = vector[1] * 0.3;
-                Wrapper.sendPacket(new C03PacketPlayer.C04PacketPlayerPosition(Wrapper.getPlayer().posX + x,
-                        Wrapper.getPlayer().posY, Wrapper.getPlayer().posZ + z, false));
-                Wrapper.sendPacket(new C03PacketPlayer.C04PacketPlayerPosition(Wrapper.getPlayer().posX + x * 11,
-                        Wrapper.getPlayer().posY - 11, Wrapper.getPlayer().posZ + z * 11, false));
-                Wrapper.getPlayer().setPosition(Wrapper.getPlayer().posX + x, Wrapper.getPlayer().posY,
-                        Wrapper.getPlayer().posZ + z);
+                NetworkHelper.sendPacket(new C03PacketPlayer.C04PacketPlayerPosition(EntityHelper.getUser().posX + x,
+                        EntityHelper.getUser().posY, EntityHelper.getUser().posZ + z, false));
+                NetworkHelper.sendPacket(new C03PacketPlayer.C04PacketPlayerPosition(EntityHelper.getUser().posX + x * 11,
+                        EntityHelper.getUser().posY - 11, EntityHelper.getUser().posZ + z * 11, false));
+                EntityHelper.getUser().setPosition(EntityHelper.getUser().posX + x, EntityHelper.getUser().posY,
+                        EntityHelper.getUser().posZ + z);
             }
-        } else if (Wrapper.getPlayer().isSneaking()) { // DownClip because NCP is broken, lol.
-            if (Wrapper.getBlock(Wrapper.getPlayer().getPosition().up()) instanceof BlockAir) {
-                Wrapper.sendPacket(new C03PacketPlayer.C04PacketPlayerPosition(Wrapper.getPlayer().posX,
-                        Wrapper.getPlayer().posY - 1, Wrapper.getPlayer().posZ, true));
-            } else if (Wrapper.getPlayer().ticksExisted % 4 == 0) {
-                Wrapper.getPlayer().setPosition(Wrapper.getPlayer().posX, Wrapper.getPlayer().posY - 0.7, Wrapper.getPlayer().posZ);
+        } else if (EntityHelper.getUser().isSneaking()) { // DownClip because NCP is broken, lol.
+            if (WorldHelper.getBlock(EntityHelper.getUser().getPosition().up()) instanceof BlockAir) {
+                NetworkHelper.sendPacket(new C03PacketPlayer.C04PacketPlayerPosition(EntityHelper.getUser().posX,
+                        EntityHelper.getUser().posY - 1, EntityHelper.getUser().posZ, true));
+            } else if (EntityHelper.getUser().ticksExisted % 4 == 0) {
+                EntityHelper.getUser().setPosition(EntityHelper.getUser().posX, EntityHelper.getUser().posY - 0.7, EntityHelper.getUser().posZ);
             }
         }
     }
 
     @Override
     public void onCollision(EventBlockCollision event) {
-        if (Wrapper.getPlayer().isCollidedHorizontally) return;
+        if (EntityHelper.getUser().isCollidedHorizontally) return;
         if (event.getBoundingBox() == null) return;
-        if (event.getBoundingBox().minY < Wrapper.getPlayer().posY) return;
+        if (event.getBoundingBox().minY < EntityHelper.getUser().posY) return;
 
         event.setCancelled(true);
     }

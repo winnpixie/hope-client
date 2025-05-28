@@ -6,27 +6,21 @@ import io.github.alerithe.client.features.friends.Friend;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.features.modules.impl.combat.AntiBot;
 import io.github.alerithe.client.features.properties.impl.BooleanProperty;
-import io.github.alerithe.client.utilities.MathHelper;
-import io.github.alerithe.client.utilities.Wrapper;
+import io.github.alerithe.client.utilities.*;
 import io.github.alerithe.client.utilities.graphics.VisualHelper;
-import io.github.alerithe.events.Register;
+import io.github.alerithe.events.impl.Subscribe;
 import net.minecraft.client.network.NetworkPlayerInfo;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.monster.EntityGolem;
-import net.minecraft.entity.monster.EntityMob;
-import net.minecraft.entity.passive.EntityAnimal;
-import net.minecraft.entity.passive.EntitySquid;
-import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
-import org.lwjgl.opengl.GL11;
 
 import java.util.*;
 
 public class NameTags extends Module {
     private final BooleanProperty players = new BooleanProperty("Players", new String[0], true);
-    private final BooleanProperty monsters = new BooleanProperty("Monsters", new String[]{"mobs"}, false);
+    private final BooleanProperty hostiles = new BooleanProperty("Hostiles", new String[]{"monsters", "mobs"}, false);
     private final BooleanProperty animals = new BooleanProperty("Animals", new String[0], false);
     private final BooleanProperty passive = new BooleanProperty("Passive", new String[0], false);
     private final BooleanProperty invisibles = new BooleanProperty("Invisibles", new String[]{"invis"}, true);
@@ -38,7 +32,7 @@ public class NameTags extends Module {
         super("NameTags", new String[]{"tags"}, Type.VISUAL);
 
         getPropertyManager().add(players);
-        getPropertyManager().add(monsters);
+        getPropertyManager().add(hostiles);
         getPropertyManager().add(animals);
         getPropertyManager().add(passive);
         getPropertyManager().add(invisibles);
@@ -47,22 +41,22 @@ public class NameTags extends Module {
         getPropertyManager().add(showHealth);
     }
 
-    @Register
+    @Subscribe
     private void onOverlayDraw(EventDraw.Overlay event) {
         List<Entity> entities = new ArrayList<>();
         Map<Entity, float[]> projections = new HashMap<>();
 
-        GL11.glPushMatrix();
-        Wrapper.getGame().entityRenderer.setupCameraTransform(event.getPartialTicks(), 0);
-        for (Entity entity : Wrapper.getWorld().loadedEntityList) {
+        GlStateManager.pushMatrix();
+        GameHelper.getGame().entityRenderer.setupCameraTransform(event.getPartialTicks(), 0);
+        for (Entity entity : WorldHelper.getWorld().loadedEntityList) {
             if (!qualifies(entity)) continue;
 
             double x = (MathHelper.lerpd(entity.prevPosX, entity.posX, event.getPartialTicks())
-                    - Wrapper.getGame().getRenderManager().viewerPosX);
+                    - GameHelper.getGame().getRenderManager().viewerPosX);
             double y = (MathHelper.lerpd(entity.prevPosY, entity.posY, event.getPartialTicks())
-                    + entity.height + 0.2 - Wrapper.getGame().getRenderManager().viewerPosY);
+                    + entity.height + 0.2 - GameHelper.getGame().getRenderManager().viewerPosY);
             double z = (MathHelper.lerpd(entity.prevPosZ, entity.posZ, event.getPartialTicks())
-                    - Wrapper.getGame().getRenderManager().viewerPosZ);
+                    - GameHelper.getGame().getRenderManager().viewerPosZ);
 
             float[] projection = VisualHelper.project((float) x, (float) y, (float) z);
 
@@ -73,9 +67,9 @@ public class NameTags extends Module {
             entities.add(entity);
             projections.put(entity, projection);
         }
-        Wrapper.getGame().entityRenderer.setupOverlayRendering();
-        GL11.glPopMatrix();
-        entities.sort(Comparator.comparingDouble(entity -> -Wrapper.getPlayer().getDistanceSqToEntity(entity)));
+        GameHelper.getGame().entityRenderer.setupOverlayRendering();
+        GlStateManager.popMatrix();
+        entities.sort(Comparator.comparingDouble(entity -> -WorldHelper.distanceSq(entity)));
 
         for (Entity entity : entities) {
             String text = entity.getDisplayName().getFormattedText();
@@ -91,7 +85,7 @@ public class NameTags extends Module {
             if (ping.getValue() && entity instanceof EntityPlayer) {
                 EntityPlayer player = (EntityPlayer) entity;
                 if (player.getGameProfile() != null) {
-                    NetworkPlayerInfo npi = Wrapper.getNetInfo(player.getGameProfile().getId());
+                    NetworkPlayerInfo npi = NetworkHelper.getInfo(player);
                     if (npi != null) {
                         text = String.format("\247a%dms\247r %s", npi.getResponseTime(), text);
                     }
@@ -100,50 +94,34 @@ public class NameTags extends Module {
 
             if (showHealth.getValue() && entity instanceof EntityLivingBase) {
                 EntityLivingBase living = (EntityLivingBase) entity;
-                float health = living.getHealth();
-                float maxHealth = living.getMaxHealth();
-                if (maxHealth <= 0f) maxHealth = health + 1;
-
-                float percent = health / maxHealth;
-
-                char color = '9';
-                if (percent <= 0.25) {
-                    color = 'c';
-                } else if (percent <= 0.5) {
-                    color = '6';
-                } else if (percent <= 0.75) {
-                    color = 'e';
-                } else if (percent <= 1) {
-                    color = 'a';
-                }
-
-                text += String.format(" \247%s%d\u2764", color, MathHelper.ceil(living.getHealth() + living.getAbsorptionAmount()));
+                text += String.format(" \247%s%d\u2764",
+                        EntityHelper.getHealthColorCode(living), MathHelper.ceil(EntityHelper.getTotalHealth(living)));
             }
 
             float[] position = projections.get(entity);
-            GL11.glPushMatrix();
-            GL11.glTranslatef(position[0], position[1], 0);
-            GL11.glScalef(0.5f, 0.5f, 1f);
+            GlStateManager.pushMatrix();
+            GlStateManager.translate(position[0], position[1], 0f);
+            GlStateManager.scale(0.5f, 0.5f, 1f);
             float width = VisualHelper.MC_FONT.getStringWidth(text);
 
             VisualHelper.MC_GFX.drawBorderedSquare(-width / 2f - 1f, -1f, width + 2f, 10f, 1f, 0x69000000, 0x69AAAAAA);
             VisualHelper.MC_FONT.drawStringWithShadow(text, -width / 2f, 0, -1);
-            GL11.glPopMatrix();
+            GlStateManager.popMatrix();
         }
     }
 
-    @Register
+    @Subscribe
     private void onTagDraw(EventDraw.Tag event) {
-        event.setCancelled(qualifies(event.getEntity()));
+        if (qualifies(event.getEntity())) event.setCancelled(true);
     }
 
     private boolean qualifies(Entity entity) {
-        return ((entity instanceof EntityPlayer && this.players.getValue() && !AntiBot.isBot((EntityPlayer) entity))
-                || (entity instanceof EntityMob && this.monsters.getValue())
-                || ((entity instanceof EntityAnimal || entity instanceof EntitySquid) && this.animals.getValue())
-                || ((entity instanceof EntityVillager || entity instanceof EntityGolem) && this.passive.getValue())
-                || (entity instanceof EntityItem && items.getValue()))
-                && (!entity.isInvisible() || this.invisibles.getValue()) && VisualHelper.isInView(entity)
-                && entity != Wrapper.getPlayer();
+        return ((this.players.getValue() && EntityHelper.isOtherPlayer(entity) && !AntiBot.isBot((EntityPlayer) entity))
+                || (this.hostiles.getValue() && EntityHelper.isHostile(entity))
+                || (this.animals.getValue() && EntityHelper.isAnimal(entity))
+                || (this.passive.getValue() && EntityHelper.isPassive(entity))
+                || (this.items.getValue() && entity instanceof EntityItem))
+                && (this.invisibles.getValue() || !entity.isInvisible())
+                && VisualHelper.isInView(entity);
     }
 }

@@ -3,8 +3,8 @@ package io.github.alerithe.client.features.modules.impl.combat;
 import io.github.alerithe.client.events.game.EventPacket;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.features.properties.impl.IntProperty;
-import io.github.alerithe.client.utilities.Wrapper;
-import io.github.alerithe.events.Register;
+import io.github.alerithe.client.utilities.EntityHelper;
+import io.github.alerithe.events.impl.Subscribe;
 import net.minecraft.network.play.server.S12PacketEntityVelocity;
 import net.minecraft.network.play.server.S27PacketExplosion;
 import net.minecraft.util.Vec3;
@@ -22,11 +22,11 @@ public class Velocity extends Module {
         getPropertyManager().add(horizontalPercent);
     }
 
-    @Register
+    @Subscribe
     private void onPacketRead(EventPacket.Read event) {
         if (event.getPacket() instanceof S12PacketEntityVelocity) {
             S12PacketEntityVelocity packet = (S12PacketEntityVelocity) event.getPacket();
-            if (packet.getEntityID() != Wrapper.getPlayer().getEntityId()) return;
+            if (packet.getEntityID() != EntityHelper.getUser().getEntityId()) return;
             if (verticalPercent.getValue() == 0 && horizontalPercent.getValue() == 0) {
                 event.setCancelled(true);
                 return;

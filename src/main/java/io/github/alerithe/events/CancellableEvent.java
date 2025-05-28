@@ -1,6 +1,6 @@
 package io.github.alerithe.events;
 
-public class CancellableEvent {
+public class CancellableEvent implements IEvent {
     private boolean cancelled;
 
     public boolean isCancelled() {

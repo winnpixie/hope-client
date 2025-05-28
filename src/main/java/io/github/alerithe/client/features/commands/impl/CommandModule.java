@@ -6,8 +6,8 @@ import io.github.alerithe.client.features.commands.ErrorMessages;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.features.properties.Property;
 import io.github.alerithe.client.features.properties.impl.*;
+import io.github.alerithe.client.utilities.GameHelper;
 import io.github.alerithe.client.utilities.MathHelper;
-import io.github.alerithe.client.utilities.Wrapper;
 
 import java.util.Arrays;
 
@@ -19,19 +19,19 @@ public class CommandModule extends Command {
     @Override
     public void execute(String[] args) {
         if (args.length < 3) {
-            Wrapper.printMessage(ErrorMessages.NOT_ENOUGH_ARGS);
+            GameHelper.printChatMessage(ErrorMessages.NOT_ENOUGH_ARGS);
             return;
         }
 
         Module module = Client.MODULE_MANAGER.find(args[0]);
         if (module == null) {
-            Wrapper.printMessage(ErrorMessages.INVALID_TARGET);
+            GameHelper.printChatMessage(ErrorMessages.INVALID_TARGET);
             return;
         }
 
         Property<?> property = module.getPropertyManager().find(args[1]);
         if (property == null) {
-            Wrapper.printMessage(ErrorMessages.INVALID_TARGET);
+            GameHelper.printChatMessage(ErrorMessages.INVALID_TARGET);
             return;
         }
 
@@ -49,6 +49,6 @@ public class CommandModule extends Command {
             ((StringProperty) property).setValue(String.join(" ", Arrays.copyOfRange(args, 2, args.length)));
         }
 
-        Wrapper.printMessage(String.format("%s is now %s.", property.getName(), property.getValue().toString()));
+        GameHelper.printChatMessage(String.format("%s is now %s.", property.getName(), property.getValue().toString()));
     }
 }

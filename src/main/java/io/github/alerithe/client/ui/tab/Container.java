@@ -51,6 +51,6 @@ public class Container {
     }
 
     public List<Property<?>> getProperties() {
-        return getModule().getPropertyManager().getElements();
+        return getModule().getPropertyManager().getChildren();
     }
 }

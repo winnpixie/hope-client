@@ -2,8 +2,10 @@ package io.github.alerithe.client.features.modules.impl.player;
 
 import io.github.alerithe.client.events.game.*;
 import io.github.alerithe.client.features.modules.Module;
-import io.github.alerithe.client.utilities.Wrapper;
-import io.github.alerithe.events.Register;
+import io.github.alerithe.client.utilities.EntityHelper;
+import io.github.alerithe.client.utilities.GameHelper;
+import io.github.alerithe.client.utilities.WorldHelper;
+import io.github.alerithe.events.impl.Subscribe;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.network.play.client.*;
 import net.minecraft.network.play.server.S08PacketPlayerPosLook;
@@ -17,37 +19,37 @@ public class Freecam extends Module {
 
     @Override
     public void onEnable() {
-        clone = new EntityOtherPlayerMP(Wrapper.getWorld(), Wrapper.getGame().getSession().getProfile());
+        clone = new EntityOtherPlayerMP(WorldHelper.getWorld(), GameHelper.getGame().getSession().getProfile());
         clone.setEntityId(-1337);
-        clone.copyDataFromOld(Wrapper.getPlayer());
-        clone.copyLocationAndAnglesFrom(Wrapper.getPlayer());
-        clone.rotationYawHead = Wrapper.getPlayer().rotationYawHead;
-        clone.onGround = Wrapper.getPlayer().onGround;
-        Wrapper.getWorld().addEntityToWorld(clone.getEntityId(), clone);
+        clone.copyDataFromOld(EntityHelper.getUser());
+        clone.copyLocationAndAnglesFrom(EntityHelper.getUser());
+        clone.rotationYawHead = EntityHelper.getUser().rotationYawHead;
+        clone.onGround = EntityHelper.getUser().onGround;
+        WorldHelper.getWorld().addEntityToWorld(clone.getEntityId(), clone);
     }
 
     @Override
     public void onDisable() {
-        Wrapper.getPlayer().copyLocationAndAnglesFrom(clone);
-        Wrapper.getPlayer().rotationYawHead = clone.rotationYawHead;
-        Wrapper.getWorld().removeEntityFromWorld(clone.getEntityId());
+        EntityHelper.getUser().copyLocationAndAnglesFrom(clone);
+        EntityHelper.getUser().rotationYawHead = clone.rotationYawHead;
+        WorldHelper.getWorld().removeEntityFromWorld(clone.getEntityId());
         clone = null;
     }
 
-    @Register
+    @Subscribe
     private void onPreUpdate(EventUpdate.Pre event) {
-        Wrapper.getPlayer().setSpeed(Wrapper.getPlayer().isUserMoving() ? 2 : 0);
+        EntityHelper.getUser().setSpeed(EntityHelper.getUser().isUserMoving() ? 2 : 0);
 
-        if (Wrapper.getPlayer().movementInput.jump) {
-            Wrapper.getPlayer().motionY = 0.75;
-        } else if (Wrapper.getPlayer().movementInput.sneak) {
-            Wrapper.getPlayer().motionY = -0.75;
+        if (EntityHelper.getUser().movementInput.jump) {
+            EntityHelper.getUser().motionY = 0.75;
+        } else if (EntityHelper.getUser().movementInput.sneak) {
+            EntityHelper.getUser().motionY = -0.75;
         } else {
-            Wrapper.getPlayer().motionY = 0;
+            EntityHelper.getUser().motionY = 0;
         }
     }
 
-    @Register
+    @Subscribe
     private void onPacketWrite(EventPacket.Write event) {
         if (event.getPacket() instanceof C02PacketUseEntity || event.getPacket() instanceof C0BPacketEntityAction
                 || event.getPacket() instanceof C07PacketPlayerDigging | event.getPacket() instanceof C0APacketAnimation
@@ -70,7 +72,7 @@ public class Freecam extends Module {
         }
     }
 
-    @Register
+    @Subscribe
     private void onPacketRead(EventPacket.Read event) {
         if (!(event.getPacket() instanceof S08PacketPlayerPosLook)) return;
 
@@ -81,17 +83,17 @@ public class Freecam extends Module {
         clone.rotationYawHead = packet.getYaw();
     }
 
-    @Register
+    @Subscribe
     private void onOpaqueCheck(EventOpaqueCheck event) {
         event.setCancelled(true);
     }
 
-    @Register
+    @Subscribe
     private void onBlockPush(EventBlockPush event) {
         event.setCancelled(true);
     }
 
-    @Register
+    @Subscribe
     private void onCollision(EventBlockCollision event) {
         event.setCancelled(true);
     }

@@ -10,6 +10,6 @@ public class Backwards extends RotationMode {
 
     @Override
     public void onPreUpdate(EventUpdate.Pre event) {
-        event.setYaw(event.getYaw() + 180);
+        event.setYaw(event.getYaw() + 180f);
     }
 }

@@ -3,8 +3,9 @@ package io.github.alerithe.client.features.modules.impl.miscellaneous;
 import io.github.alerithe.client.events.game.EventTick;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.features.properties.impl.BooleanProperty;
-import io.github.alerithe.client.utilities.Wrapper;
-import io.github.alerithe.events.Register;
+import io.github.alerithe.client.utilities.GameHelper;
+import io.github.alerithe.client.utilities.NetworkHelper;
+import io.github.alerithe.events.impl.Subscribe;
 import io.netty.buffer.Unpooled;
 import net.minecraft.client.gui.GuiEnchantment;
 import net.minecraft.client.gui.GuiRepair;
@@ -28,12 +29,12 @@ public class LogSpammer extends Module {
 
     @Override
     public void onEnable() {
-        Wrapper.printMessage("\247eAnvils: \247rRight-click to activate.");
-        Wrapper.printMessage("\247eEnchantment Tables: \247rRight-click and place Lapis Lazuli to activate.");
-        Wrapper.printMessage("\247eNull Hand: \247rUnlikely to work on modded (ie. Spigot, Paper, etc) servers.");
+        GameHelper.printChatMessage("\247eAnvils: \247rRight-click to activate.");
+        GameHelper.printChatMessage("\247eEnchantment Tables: \247rRight-click and place Lapis Lazuli to activate.");
+        GameHelper.printChatMessage("\247eNull Hand: \247rUnlikely to work on modded (ie. Spigot, Paper, etc) servers.");
     }
 
-    @Register
+    @Subscribe
     private void onTick(EventTick event) {
         if (!event.isInGame()) return;
 
@@ -44,42 +45,42 @@ public class LogSpammer extends Module {
 
     private void sendInvalidAnvilText() {
         if (!anvilText.getValue()) return;
-        if (!(Wrapper.getGame().currentScreen instanceof GuiRepair)) return;
+        if (!(GameHelper.getGame().currentScreen instanceof GuiRepair)) return;
 
         // Throws an IndexOutOfBoundsException
         {
             PacketBuffer buffer = new PacketBuffer(Unpooled.buffer());
             buffer.writeVarIntToBuffer(1);
-            Wrapper.sendPacket(new C17PacketCustomPayload("MC|ItemName", buffer));
-            Wrapper.printMessage("Sent IndexOutOfBounds payload.");
+            NetworkHelper.sendPacket(new C17PacketCustomPayload("MC|ItemName", buffer));
+            GameHelper.printChatMessage("Sent IndexOutOfBounds payload.");
         }
 
         // Throws a DecoderException
         {
             PacketBuffer buffer = new PacketBuffer(Unpooled.buffer());
             buffer.writeVarIntToBuffer(131069);
-            Wrapper.sendPacket(new C17PacketCustomPayload("MC|ItemName", buffer));
-            Wrapper.printMessage("Sent Decoder payload.");
+            NetworkHelper.sendPacket(new C17PacketCustomPayload("MC|ItemName", buffer));
+            GameHelper.printChatMessage("Sent Decoder payload.");
         }
     }
 
     private void sendInvalidEnchantSlot() {
         if (!enchantSlot.getValue()) return;
-        if (!(Wrapper.getGame().currentScreen instanceof GuiEnchantment)) return;
+        if (!(GameHelper.getGame().currentScreen instanceof GuiEnchantment)) return;
 
         // Throws an IndexOutOfBoundException
-        GuiEnchantment gui = (GuiEnchantment) Wrapper.getGame().currentScreen;
+        GuiEnchantment gui = (GuiEnchantment) GameHelper.getGame().currentScreen;
         if (gui.container.getLapisAmount() < 1) return;
 
-        Wrapper.sendPacket(new C11PacketEnchantItem(gui.container.windowId, 3));
-        Wrapper.printMessage("Sent IndexOutOfBounds payload.");
+        NetworkHelper.sendPacket(new C11PacketEnchantItem(gui.container.windowId, 3));
+        GameHelper.printChatMessage("Sent IndexOutOfBounds payload.");
     }
 
     private void sendInvalidHandSlot() {
         if (!nullHand.getValue()) return;
 
         // Prints out "<Player> tried to set an invalid carried item"
-        Wrapper.sendPacket(new C09PacketHeldItemChange(-1));
-        Wrapper.printMessage("Sent Null Hand");
+        NetworkHelper.sendPacket(new C09PacketHeldItemChange(-1));
+        GameHelper.printChatMessage("Sent Null Hand");
     }
 }

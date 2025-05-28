@@ -4,7 +4,7 @@ import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.features.properties.impl.BooleanProperty;
 import io.github.alerithe.client.ui.click.FreeFormUI;
 import io.github.alerithe.client.ui.click.WindowedUI;
-import io.github.alerithe.client.utilities.Wrapper;
+import io.github.alerithe.client.utilities.GameHelper;
 import net.minecraft.client.gui.GuiScreen;
 
 public class ClickUI extends Module {
@@ -28,7 +28,7 @@ public class ClickUI extends Module {
             controller = newUI.getValue() ? new WindowedUI() : new FreeFormUI();
         }
 
-        Wrapper.getGame().displayGuiScreen(controller);
+        GameHelper.getGame().displayGuiScreen(controller);
         toggle();
     }
 }

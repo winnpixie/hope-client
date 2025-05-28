@@ -6,8 +6,8 @@ import io.github.alerithe.client.features.modules.impl.miscellaneous.pingspoof.N
 import io.github.alerithe.client.features.modules.impl.miscellaneous.pingspoof.SpoofMode;
 import io.github.alerithe.client.features.modules.impl.miscellaneous.pingspoof.ZeroPing;
 import io.github.alerithe.client.features.properties.impl.ObjectProperty;
-import io.github.alerithe.client.utilities.Wrapper;
-import io.github.alerithe.events.Register;
+import io.github.alerithe.client.utilities.GameHelper;
+import io.github.alerithe.events.impl.Subscribe;
 
 public class PingSpoof extends Module {
     private final ObjectProperty<SpoofMode> mode = new ObjectProperty<>("Mode", new String[0], new ZeroPing(),
@@ -19,9 +19,9 @@ public class PingSpoof extends Module {
         getPropertyManager().add(mode);
     }
 
-    @Register
+    @Subscribe
     private void onPacketRead(EventPacket.Read event) {
-        if (Wrapper.getGame().isSingleplayer()) return;
+        if (GameHelper.getGame().isSingleplayer()) return;
 
         mode.getValue().onPacketRead(event);
     }

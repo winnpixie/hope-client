@@ -4,6 +4,6 @@ import io.github.alerithe.client.features.modules.Module;
 
 public class TextSpammer extends Module {
     public TextSpammer() {
-        super("TextSpammer", new String[] {"textspam"}, Type.MISCELLANEOUS);
+        super("TextSpammer", new String[]{"textspam"}, Type.MISCELLANEOUS);
     }
 }

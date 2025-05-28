@@ -5,9 +5,11 @@ import io.github.alerithe.client.events.game.EventUpdate;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.features.properties.impl.BooleanProperty;
 import io.github.alerithe.client.features.properties.impl.IntProperty;
+import io.github.alerithe.client.utilities.EntityHelper;
+import io.github.alerithe.client.utilities.GameHelper;
 import io.github.alerithe.client.utilities.MsTimer;
-import io.github.alerithe.client.utilities.Wrapper;
-import io.github.alerithe.events.Register;
+import io.github.alerithe.client.utilities.WorldHelper;
+import io.github.alerithe.events.impl.Subscribe;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
@@ -44,12 +46,12 @@ public class ScaffoldWalk extends Module {
         this.data = null;
     }
 
-    @Register
+    @Subscribe
     private void onPreUpdate(EventUpdate.Pre event) {
         event.setPitch(90);
 
-        BlockPos pos = new BlockPos(Wrapper.getPlayer().posX, Wrapper.getPlayer().posY - 1, Wrapper.getPlayer().posZ);
-        Block block = Wrapper.getBlock(pos);
+        BlockPos pos = new BlockPos(EntityHelper.getUser().posX, EntityHelper.getUser().posY - 1, EntityHelper.getUser().posZ);
+        Block block = WorldHelper.getBlock(pos);
         data = null;
 
         if (!blacklist.contains(block)) return;
@@ -58,54 +60,54 @@ public class ScaffoldWalk extends Module {
         data = makeData(pos);
         if (data == null) return;
 
-        float[] angles = Wrapper.getPlayer().getRotationToBlock(data.pos);
+        float[] angles = EntityHelper.getRotationToBlock(data.pos);
         event.setYaw(angles[0]);
         event.setPitch(angles[1]);
     }
 
-    @Register
+    @Subscribe
     private void onPostUpdate(EventUpdate.Post event) {
         if (data == null) return;
         if (!timer.hasPassed(1000 / bps.getValue())) return;
-        if (!Wrapper.getPlayerController().onPlayerRightClick(Wrapper.getPlayer(), Wrapper.getWorld(),
-                Wrapper.getPlayer().getHeldItem(), data.pos, data.facing, new Vec3(data.pos))) return;
+        if (!GameHelper.getController().onPlayerRightClick(EntityHelper.getUser(), WorldHelper.getWorld(),
+                EntityHelper.getUser().getHeldItem(), data.pos, data.facing, new Vec3(data.pos))) return;
 
-        if (tower.getValue() && data.facing == EnumFacing.UP && Wrapper.getPlayer().movementInput.jump) {
+        if (tower.getValue() && data.facing == EnumFacing.UP && EntityHelper.getUser().movementInput.jump) {
             blocksPlaced++;
-            Wrapper.getPlayer().motionY = 0.42;
+            EntityHelper.getUser().motionY = 0.42;
 
             if (blocksPlaced > 8) {
-                Wrapper.getPlayer().motionY = 0;
+                EntityHelper.getUser().motionY = 0;
                 blocksPlaced = 0;
             }
 
-            Wrapper.getPlayer().setSpeed(0);
+            EntityHelper.getUser().setSpeed(0);
         }
 
-        Wrapper.getPlayer().swingItem();
+        EntityHelper.getUser().swingItem();
         timer.update();
     }
 
-    @Register
+    @Subscribe
     private void onBlockEdge(EventBlockEdgeCheck event) {
         event.setCancelled(true);
     }
 
     private Data makeData(BlockPos pos) {
         // now this part is simple
-        if (!blacklist.contains(Wrapper.getBlock(pos.add(0, -1, 0)))) { // Down
+        if (!blacklist.contains(WorldHelper.getBlock(pos.add(0, -1, 0)))) { // Down
             return new Data(pos.add(0, -1, 0), EnumFacing.UP);
         }
-        if (!blacklist.contains(Wrapper.getBlock(pos.add(1, 0, 0)))) { // East
+        if (!blacklist.contains(WorldHelper.getBlock(pos.add(1, 0, 0)))) { // East
             return new Data(pos.add(1, 0, 0), EnumFacing.WEST);
         }
-        if (!blacklist.contains(Wrapper.getBlock(pos.add(0, 0, 1)))) { // South
+        if (!blacklist.contains(WorldHelper.getBlock(pos.add(0, 0, 1)))) { // South
             return new Data(pos.add(0, 0, 1), EnumFacing.NORTH);
         }
-        if (!blacklist.contains(Wrapper.getBlock(pos.add(-1, 0, 0)))) { // West
+        if (!blacklist.contains(WorldHelper.getBlock(pos.add(-1, 0, 0)))) { // West
             return new Data(pos.add(-1, 0, 0), EnumFacing.EAST);
         }
-        if (!blacklist.contains(Wrapper.getBlock(pos.add(0, 0, -1)))) { // North
+        if (!blacklist.contains(WorldHelper.getBlock(pos.add(0, 0, -1)))) { // North
             return new Data(pos.add(0, 0, -1), EnumFacing.SOUTH);
         }
 
@@ -113,8 +115,8 @@ public class ScaffoldWalk extends Module {
     }
 
     private boolean isHoldingBlock() {
-        return Wrapper.getPlayer().getHeldItem() != null
-                && Wrapper.getPlayer().getHeldItem().getItem() instanceof ItemBlock;
+        return EntityHelper.getUser().getHeldItem() != null
+                && EntityHelper.getUser().getHeldItem().getItem() instanceof ItemBlock;
     }
 
     private static class Data {

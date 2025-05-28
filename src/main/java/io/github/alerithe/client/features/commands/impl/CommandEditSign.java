@@ -2,7 +2,9 @@ package io.github.alerithe.client.features.commands.impl;
 
 import io.github.alerithe.client.features.commands.Command;
 import io.github.alerithe.client.features.commands.ErrorMessages;
-import io.github.alerithe.client.utilities.Wrapper;
+import io.github.alerithe.client.utilities.GameHelper;
+import io.github.alerithe.client.utilities.NetworkHelper;
+import io.github.alerithe.client.utilities.WorldHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockSign;
 import net.minecraft.network.play.client.C12PacketUpdateSign;
@@ -18,21 +20,21 @@ public class CommandEditSign extends Command {
     @Override
     public void execute(String[] args) {
         if (args.length < 1) {
-            Wrapper.printMessage(ErrorMessages.NOT_ENOUGH_ARGS);
+            GameHelper.printChatMessage(ErrorMessages.NOT_ENOUGH_ARGS);
             return;
         }
 
         String[] lines = String.join(" ", args).split("\\\\n", 4);
 
-        if (Wrapper.getGame().objectMouseOver == null
-                || Wrapper.getGame().objectMouseOver.typeOfHit != MovingObjectPosition.MovingObjectType.BLOCK) {
-            Wrapper.printMessage("\247cYou must be hovering over a sign.");
+        if (GameHelper.getGame().objectMouseOver == null
+                || GameHelper.getGame().objectMouseOver.typeOfHit != MovingObjectPosition.MovingObjectType.BLOCK) {
+            GameHelper.printChatMessage("\247cYou must be hovering over a sign.");
             return;
         }
-        BlockPos pos = Wrapper.getGame().objectMouseOver.getBlockPos();
-        Block block = Wrapper.getBlock(pos);
+        BlockPos pos = GameHelper.getGame().objectMouseOver.getBlockPos();
+        Block block = WorldHelper.getBlock(pos);
         if (!(block instanceof BlockSign)) {
-            Wrapper.printMessage("\247cYou must be hovering over a sign.");
+            GameHelper.printChatMessage("\247cYou must be hovering over a sign.");
             return;
         }
 
@@ -41,6 +43,6 @@ public class CommandEditSign extends Command {
             components[i] = i < lines.length ? new ChatComponentText(lines[i]) : new ChatComponentText("");
         }
 
-        Wrapper.sendPacket(new C12PacketUpdateSign(pos, components));
+        NetworkHelper.sendPacket(new C12PacketUpdateSign(pos, components));
     }
 }

@@ -4,9 +4,7 @@ import io.github.alerithe.client.Client;
 import io.github.alerithe.client.events.game.EventChat;
 import io.github.alerithe.client.features.FeatureManager;
 import io.github.alerithe.client.features.commands.impl.*;
-import io.github.alerithe.client.utilities.Wrapper;
-import io.github.alerithe.events.EventBus;
-import io.github.alerithe.events.EventHandler;
+import io.github.alerithe.client.utilities.GameHelper;
 
 import java.util.Arrays;
 
@@ -31,24 +29,21 @@ public class CommandManager extends FeatureManager<Command> {
         add(new CommandVClip());
         add(new CommandWhois());
 
-        Client.LOGGER.info(String.format("Registered %d command(s)", getElements().size()));
+        Client.LOGGER.info(String.format("Registered %d command(s)", getChildren().size()));
 
-        EventBus.register(new EventHandler<EventChat>() {
-            @Override
-            public void handle(EventChat event) {
-                if (event.getMessage().indexOf('.') != 0) return;
-                if (event.getMessage().length() < 2) return;
+        Client.EVENT_BUS.subscribe(EventChat.class, event -> {
+            if (event.getMessage().indexOf('.') != 0) return;
+            if (event.getMessage().length() < 2) return;
 
-                event.setCancelled(true);
-                String[] args = event.getMessage().substring(1).split(" ");
-                Command command = find(args[0]);
-                if (command == null) {
-                    Wrapper.printMessage(ErrorMessages.INVALID_COMMAND);
-                    return;
-                }
-
-                command.execute(args.length > 1 ? Arrays.copyOfRange(args, 1, args.length) : new String[0]);
+            event.setCancelled(true);
+            String[] args = event.getMessage().substring(1).split(" ");
+            Command command = find(args[0]);
+            if (command == null) {
+                GameHelper.printChatMessage(ErrorMessages.INVALID_COMMAND);
+                return;
             }
+
+            command.execute(args.length > 1 ? Arrays.copyOfRange(args, 1, args.length) : new String[0]);
         });
     }
 }

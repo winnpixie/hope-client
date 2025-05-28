@@ -1,8 +1,8 @@
 package io.github.alerithe.client.features.properties;
 
+import io.github.alerithe.client.Client;
 import io.github.alerithe.client.events.client.PropertyModifiedEvent;
 import io.github.alerithe.client.features.Feature;
-import io.github.alerithe.events.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +26,7 @@ public class Property<T> extends Feature {
         for (ChangeListener<T> changeListener : changeListeners) changeListener.onValueChanged(this);
 
         // EVENT
-        EventBus.dispatch(new PropertyModifiedEvent(this));
+        Client.EVENT_BUS.post(new PropertyModifiedEvent(this));
     }
 
     public void addChangeListener(ChangeListener<T> changeListener) {

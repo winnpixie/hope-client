@@ -20,9 +20,9 @@ public class PluginManager extends FeatureManager<Plugin> {
 
         loadPluginsFromFiles();
 
-        Client.LOGGER.info(String.format("Registered %d Plugin(s)", getElements().size()));
+        Client.LOGGER.info(String.format("Registered %d Plugin(s)", getChildren().size()));
 
-        getElements().forEach(plugin -> {
+        getChildren().forEach(plugin -> {
             plugin.getLogger().info(String.format("Loading %s", plugin.getName()));
             plugin.onLoad();
         });
@@ -54,7 +54,7 @@ public class PluginManager extends FeatureManager<Plugin> {
                     if (!Plugin.class.isAssignableFrom(cls)) continue;
 
                     Plugin plugin = (Plugin) cls.newInstance();
-                    getElements().add(plugin);
+                    getChildren().add(plugin);
                     Client.LOGGER.info(String.format("Registered plugin %s", plugin.getName()));
                 }
             } catch (Exception e) {
@@ -65,7 +65,7 @@ public class PluginManager extends FeatureManager<Plugin> {
 
     @Override
     public void save() {
-        getElements().forEach(plugin -> {
+        getChildren().forEach(plugin -> {
             plugin.getLogger().info(String.format("Unloading %s", plugin.getName()));
             plugin.onExit();
         });

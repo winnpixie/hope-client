@@ -5,8 +5,10 @@ import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.features.modules.impl.combat.AntiBot;
 import io.github.alerithe.client.features.properties.impl.BooleanProperty;
 import io.github.alerithe.client.features.properties.impl.IntProperty;
-import io.github.alerithe.client.utilities.Wrapper;
-import io.github.alerithe.events.Register;
+import io.github.alerithe.client.utilities.EntityHelper;
+import io.github.alerithe.client.utilities.NetworkHelper;
+import io.github.alerithe.client.utilities.WorldHelper;
+import io.github.alerithe.events.impl.Subscribe;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.play.client.C03PacketPlayer;
 import net.minecraft.network.play.client.C0APacketAnimation;
@@ -28,7 +30,7 @@ public class Crasher extends Module {
         getPropertyManager().add(ppt);
     }
 
-    @Register
+    @Subscribe
     private void onTick(EventTick event) {
         if (!event.isInGame()) return;
 
@@ -40,21 +42,21 @@ public class Crasher extends Module {
         if (!boxer.getValue()) return;
 
         for (int i = 0; i < bpt.getValue(); i++) {
-            Wrapper.sendPacket(new C0APacketAnimation());
+            NetworkHelper.sendPacket(new C0APacketAnimation());
         }
     }
 
     private void sendParalyzeCrash() {
         if (!paralyze.getValue()) return;
-        if (!Wrapper.getPlayer().onGround) return;
+        if (!EntityHelper.getUser().onGround) return;
 
-        for (EntityPlayer player : Wrapper.getWorld().playerEntities) {
+        for (EntityPlayer player : WorldHelper.getWorld().playerEntities) {
             if (AntiBot.isBot(player)) continue;
-            if (player.equals(Wrapper.getPlayer())) continue;
-            if (Wrapper.getPlayer().getDistanceSqToEntity(player) > 1) continue;
+            if (player.equals(EntityHelper.getUser())) continue;
+            if (EntityHelper.getUser().getDistanceSqToEntity(player) > 1) continue;
 
             for (int i = 0; i < ppt.getValue(); i++) {
-                Wrapper.sendPacket(new C03PacketPlayer(true));
+                NetworkHelper.sendPacket(new C03PacketPlayer(true));
             }
 
             break;

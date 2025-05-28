@@ -4,9 +4,10 @@ import io.github.alerithe.client.events.game.EventGuiOpen;
 import io.github.alerithe.client.events.game.EventUpdate;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.features.properties.impl.IntProperty;
+import io.github.alerithe.client.utilities.EntityHelper;
+import io.github.alerithe.client.utilities.GameHelper;
 import io.github.alerithe.client.utilities.MsTimer;
-import io.github.alerithe.client.utilities.Wrapper;
-import io.github.alerithe.events.Register;
+import io.github.alerithe.events.impl.Subscribe;
 import net.minecraft.client.gui.inventory.GuiChest;
 import net.minecraft.inventory.Slot;
 
@@ -24,7 +25,7 @@ public class ChestStealer extends Module {
         getPropertyManager().add(cps);
     }
 
-    @Register
+    @Subscribe
     private void onGuiOpen(EventGuiOpen event) {
         if (!(event.getScreen() instanceof GuiChest)) return;
 
@@ -32,14 +33,14 @@ public class ChestStealer extends Module {
         timer.update();
     }
 
-    @Register
+    @Subscribe
     private void onPreUpdate(EventUpdate.Pre event) {
-        if (!(Wrapper.getGame().currentScreen instanceof GuiChest)) return;
+        if (!(GameHelper.getGame().currentScreen instanceof GuiChest)) return;
 
-        GuiChest gui = (GuiChest) Wrapper.getGame().currentScreen;
+        GuiChest gui = (GuiChest) GameHelper.getGame().currentScreen;
         int slots = gui.inventoryRows * 9;
-        if (index >= slots || Wrapper.getPlayer().isInventoryFull()) {
-            Wrapper.getPlayer().closeScreen();
+        if (index >= slots || EntityHelper.getUser().isInventoryFull()) {
+            EntityHelper.getUser().closeScreen();
             return;
         }
 
@@ -48,7 +49,7 @@ public class ChestStealer extends Module {
 
         Slot slot = gui.inventorySlots.inventorySlots.get(index);
         if (slot.getHasStack()) {
-            Wrapper.getPlayer().clickWindow(gui.inventorySlots.windowId, index, 0, 1);
+            EntityHelper.getUser().clickWindow(gui.inventorySlots.windowId, index, 0, 1);
             timer.update();
         }
         index++;

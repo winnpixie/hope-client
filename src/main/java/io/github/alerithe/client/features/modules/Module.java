@@ -5,7 +5,6 @@ import io.github.alerithe.client.events.client.ModuleToggleEvent;
 import io.github.alerithe.client.features.Feature;
 import io.github.alerithe.client.features.properties.PropertyManager;
 import io.github.alerithe.client.features.properties.impl.BooleanProperty;
-import io.github.alerithe.events.EventBus;
 
 import java.io.File;
 
@@ -35,15 +34,15 @@ public class Module extends Feature {
         if (enabled) {
             onEnable();
 
-            EventBus.register(this);
+            Client.EVENT_BUS.subscribe(this);
         } else {
-            EventBus.unregister(this);
+            Client.EVENT_BUS.unsubscribe(this);
 
             onDisable();
         }
 
         // EVENT
-        EventBus.dispatch(new ModuleToggleEvent(this));
+        Client.EVENT_BUS.post(new ModuleToggleEvent(this));
     }
 
     public Type getType() {

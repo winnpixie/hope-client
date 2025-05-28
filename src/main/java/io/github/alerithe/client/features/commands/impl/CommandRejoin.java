@@ -2,7 +2,8 @@ package io.github.alerithe.client.features.commands.impl;
 
 import io.github.alerithe.client.features.commands.Command;
 import io.github.alerithe.client.features.commands.ErrorMessages;
-import io.github.alerithe.client.utilities.Wrapper;
+import io.github.alerithe.client.utilities.GameHelper;
+import io.github.alerithe.client.utilities.WorldHelper;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.GuiMultiplayer;
 import net.minecraft.client.multiplayer.GuiConnecting;
@@ -15,19 +16,19 @@ public class CommandRejoin extends Command {
 
     @Override
     public void execute(String[] args) {
-        if (Wrapper.getGame().getCurrentServerData() == null || Wrapper.getGame().isSingleplayer()) {
-            Wrapper.printMessage(ErrorMessages.format("No server detected, are you in single-player?"));
+        if (GameHelper.getGame().getCurrentServerData() == null || GameHelper.getGame().isSingleplayer()) {
+            GameHelper.printChatMessage(ErrorMessages.format("No server detected, are you in single-player?"));
             return;
         }
 
-        ServerData serverData = Wrapper.getGame().getCurrentServerData();
+        ServerData serverData = GameHelper.getGame().getCurrentServerData();
 
-        Wrapper.getWorld().sendQuittingDisconnectingPacket();
-        Wrapper.getGame().loadWorld(null);
-        Wrapper.getGame().displayGuiScreen(new GuiMultiplayer(new GuiMainMenu()));
-        Wrapper.getGame().displayGuiScreen(new GuiConnecting(new GuiMultiplayer(new GuiMainMenu()), Wrapper.getGame(),
+        WorldHelper.getWorld().sendQuittingDisconnectingPacket();
+        GameHelper.getGame().loadWorld(null);
+        GameHelper.getGame().displayGuiScreen(new GuiMultiplayer(new GuiMainMenu()));
+        GameHelper.getGame().displayGuiScreen(new GuiConnecting(new GuiMultiplayer(new GuiMainMenu()), GameHelper.getGame(),
                 serverData));
 
-        Wrapper.getGame().setServerData(serverData);
+        GameHelper.getGame().setServerData(serverData);
     }
 }

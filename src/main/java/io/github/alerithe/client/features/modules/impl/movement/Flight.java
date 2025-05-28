@@ -5,8 +5,8 @@ import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.features.modules.impl.movement.flights.*;
 import io.github.alerithe.client.features.properties.impl.DoubleProperty;
 import io.github.alerithe.client.features.properties.impl.ObjectProperty;
-import io.github.alerithe.client.utilities.Wrapper;
-import io.github.alerithe.events.Register;
+import io.github.alerithe.client.utilities.EntityHelper;
+import io.github.alerithe.events.impl.Subscribe;
 
 public class Flight extends Module {
     private final ObjectProperty<FlightMode> mode = new ObjectProperty<>("Mode", new String[0], new Creative(this),
@@ -24,10 +24,10 @@ public class Flight extends Module {
 
     @Override
     public void onDisable() {
-        Wrapper.getPlayer().setSpeed(0);
+        EntityHelper.getUser().setSpeed(0);
     }
 
-    @Register
+    @Subscribe
     private void onPreUpdate(EventUpdate.Pre event) {
         mode.getValue().onPreUpdate(event);
     }

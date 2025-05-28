@@ -1,12 +1,15 @@
 package io.github.alerithe.client.features.commands.impl;
 
+import io.github.alerithe.client.Client;
 import io.github.alerithe.client.events.game.EventPacket;
 import io.github.alerithe.client.features.commands.Command;
 import io.github.alerithe.client.features.commands.ErrorMessages;
+import io.github.alerithe.client.utilities.EntityHelper;
+import io.github.alerithe.client.utilities.GameHelper;
 import io.github.alerithe.client.utilities.MsTimer;
-import io.github.alerithe.client.utilities.Wrapper;
-import io.github.alerithe.events.EventBus;
-import io.github.alerithe.events.EventHandler;
+import io.github.alerithe.client.utilities.NetworkHelper;
+import io.github.alerithe.events.impl.EventBusImpl;
+import io.github.alerithe.events.impl.Subscriber;
 import net.minecraft.network.play.client.C14PacketTabComplete;
 import net.minecraft.network.play.server.S3APacketTabComplete;
 
@@ -20,29 +23,30 @@ public class CommandServerInfo extends Command {
 
     @Override
     public void execute(String[] args) {
-        if (Wrapper.getGame().getCurrentServerData() == null || Wrapper.getGame().isSingleplayer()) {
-            Wrapper.printMessage(ErrorMessages.format("No server detected, are you in single-player?"));
+        if (GameHelper.getGame().getCurrentServerData() == null || GameHelper.getGame().isSingleplayer()) {
+            GameHelper.printChatMessage(ErrorMessages.format("No server detected, are you in single-player?"));
             return;
         }
 
-        Wrapper.printMessage("\247eServer Information:");
-        Wrapper.printMessage(String.format("Name in List: \247e%s", Wrapper.getGame().getCurrentServerData().serverName));
+        GameHelper.printChatMessage("\247eServer Information:");
+        GameHelper.printChatMessage(String.format("Name in List: \247e%s", GameHelper.getGame().getCurrentServerData().serverName));
 
-        String[] ipAndPort = Wrapper.getGame().getCurrentServerData().serverIP.split(":");
+        String[] ipAndPort = GameHelper.getGame().getCurrentServerData().serverIP.split(":");
         String addr = ipAndPort[0];
         int port = ipAndPort.length > 1 ? Integer.parseInt(ipAndPort[1]) : 25565;
-        Wrapper.printMessage(String.format("IP: \247e%s", addr));
-        Wrapper.printMessage(String.format("Port: \247e%s", port));
-        Wrapper.printMessage(String.format("Brand: \247e%s", Wrapper.getPlayer().getClientBrand()));
+        GameHelper.printChatMessage(String.format("IP: \247e%s", addr));
+        GameHelper.printChatMessage(String.format("Port: \247e%s", port));
+        GameHelper.printChatMessage(String.format("Brand: \247e%s", EntityHelper.getUser().getClientBrand()));
+
         if (args.length > 0) {
-            Wrapper.printMessage(String.format("Searching for plugins that begin with '%s'...", args[0]));
-            Wrapper.sendPacket(new C14PacketTabComplete("/" + args[0]));
+            GameHelper.printChatMessage(String.format("Searching for plugins that begin with '%s'...", args[0]));
+            NetworkHelper.sendPacket(new C14PacketTabComplete("/" + args[0]));
         } else {
-            Wrapper.printMessage("Searching for plugins...");
-            Wrapper.sendPacket(new C14PacketTabComplete("/"));
+            GameHelper.printChatMessage("Searching for plugins...");
+            NetworkHelper.sendPacket(new C14PacketTabComplete("/"));
         }
 
-        EventBus.register(new EventHandler<EventPacket.Read>() {
+        Client.EVENT_BUS.subscribe(new Subscriber<EventPacket.Read>() {
             private final MsTimer timer = new MsTimer();
 
             @Override
@@ -56,12 +60,12 @@ public class CommandServerInfo extends Command {
                         plugins.add(match.substring(1).split(":")[0].toLowerCase());
                     }
 
-                    Wrapper.printMessage(String.format("Detected \247a(%d)\247r Plugins", plugins.size()));
-                    Wrapper.printMessage("\247a" + String.join("\247f, \247a", plugins));
-                    EventBus.unregister(this);
+                    GameHelper.printChatMessage(String.format("Detected \247a(%d)\247r Plugins", plugins.size()));
+                    GameHelper.printChatMessage("\247a" + String.join("\247f, \247a", plugins));
+                    Client.EVENT_BUS.unsubscribe(this);
                 } else if (timer.hasPassed(20000)) {
-                    EventBus.unregister(this);
-                    Wrapper.printMessage(ErrorMessages.format("Could not receive plugin information within 20 seconds."));
+                    Client.EVENT_BUS.unsubscribe(this);
+                    GameHelper.printChatMessage(ErrorMessages.format("Could not receive plugin information within 20 seconds."));
                 }
             }
         });

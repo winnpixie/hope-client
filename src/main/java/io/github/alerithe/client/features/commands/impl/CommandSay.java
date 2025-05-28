@@ -2,7 +2,8 @@ package io.github.alerithe.client.features.commands.impl;
 
 import io.github.alerithe.client.features.commands.Command;
 import io.github.alerithe.client.features.commands.ErrorMessages;
-import io.github.alerithe.client.utilities.Wrapper;
+import io.github.alerithe.client.utilities.GameHelper;
+import io.github.alerithe.client.utilities.NetworkHelper;
 import net.minecraft.network.play.client.C01PacketChatMessage;
 
 public class CommandSay extends Command {
@@ -13,10 +14,10 @@ public class CommandSay extends Command {
     @Override
     public void execute(String[] args) {
         if (args.length < 1) {
-            Wrapper.printMessage(ErrorMessages.NOT_ENOUGH_ARGS);
+            GameHelper.printChatMessage(ErrorMessages.NOT_ENOUGH_ARGS);
             return;
         }
 
-        Wrapper.sendPacket(new C01PacketChatMessage(String.join(" ", args)));
+        NetworkHelper.sendPacket(new C01PacketChatMessage(String.join(" ", args)));
     }
 }

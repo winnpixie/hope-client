@@ -3,8 +3,10 @@ package io.github.alerithe.client.features.modules.impl.movement;
 import io.github.alerithe.client.events.game.EventUpdate;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.features.properties.impl.BooleanProperty;
-import io.github.alerithe.client.utilities.Wrapper;
-import io.github.alerithe.events.Register;
+import io.github.alerithe.client.utilities.EntityHelper;
+import io.github.alerithe.client.utilities.GameHelper;
+import io.github.alerithe.client.utilities.NetworkHelper;
+import io.github.alerithe.events.impl.Subscribe;
 import net.minecraft.network.play.client.C03PacketPlayer;
 
 public class Step extends Module {
@@ -24,72 +26,72 @@ public class Step extends Module {
 
     @Override
     public void onEnable() {
-        oldStepHeight = Wrapper.getPlayer().stepHeight;
+        oldStepHeight = EntityHelper.getUser().stepHeight;
     }
 
     @Override
     public void onDisable() {
-        Wrapper.getPlayer().stepHeight = oldStepHeight;
+        EntityHelper.getUser().stepHeight = oldStepHeight;
     }
 
-    @Register
+    @Subscribe
     private void onPreUpdate(EventUpdate.Pre event) {
-        Wrapper.getPlayer().stepHeight = oldStepHeight;
+        EntityHelper.getUser().stepHeight = oldStepHeight;
 
-        if (!Wrapper.getPlayer().isCollidedHorizontally) return;
-        if (Wrapper.getPlayer().movementInput.jump) return;
-        if (Wrapper.getPlayer().isInLiquid()) return;
+        if (!EntityHelper.getUser().isCollidedHorizontally) return;
+        if (EntityHelper.getUser().movementInput.jump) return;
+        if (EntityHelper.getUser().isInLiquid()) return;
 
         if (motion.getValue()) {
-            if (Wrapper.getPlayer().onGround) {
-                Wrapper.getPlayer().motionY = 0.369;
-            } else if (oneAndAHalf.getValue() && Wrapper.getPlayer().fallDistance > 0) {
-                Wrapper.getPlayer().motionY = 0.26;
-                Wrapper.getPlayer().fallDistance = 0;
+            if (EntityHelper.getUser().onGround) {
+                EntityHelper.getUser().motionY = 0.369;
+            } else if (oneAndAHalf.getValue() && EntityHelper.getUser().fallDistance > 0) {
+                EntityHelper.getUser().motionY = 0.26;
+                EntityHelper.getUser().fallDistance = 0;
             }
 
             return;
         }
 
-        if (Wrapper.getPlayer().onGround) {
-            Wrapper.getPlayer().setSprinting(false);
+        if (EntityHelper.getUser().onGround) {
+            EntityHelper.getUser().setSprinting(false);
             event.setCancelled(true);
 
             if (oneAndAHalf.getValue()) {
                 for (double offset : oneAndAHalfOffsets) {
-                    Wrapper.sendPacket(new C03PacketPlayer.C04PacketPlayerPosition(Wrapper.getPlayer().posX,
-                            Wrapper.getPlayer().posY + offset, Wrapper.getPlayer().posZ, false));
+                    NetworkHelper.sendPacket(new C03PacketPlayer.C04PacketPlayerPosition(EntityHelper.getUser().posX,
+                            EntityHelper.getUser().posY + offset, EntityHelper.getUser().posZ, false));
                 }
 
-                Wrapper.getPlayer().stepHeight = 1.5f;
+                EntityHelper.getUser().stepHeight = 1.5f;
 
                 new Thread(() -> {
-                    Wrapper.getGame().timer.timerSpeed = 0f;
+                    GameHelper.getGame().timer.timerSpeed = 0f;
 
                     try {
                         Thread.sleep(200);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    Wrapper.getGame().timer.timerSpeed = 1f;
+                    GameHelper.getGame().timer.timerSpeed = 1f;
                 }).start();
             } else {
                 for (double offset : oneBlockOffsets) {
-                    Wrapper.sendPacket(new C03PacketPlayer.C04PacketPlayerPosition(Wrapper.getPlayer().posX,
-                            Wrapper.getPlayer().posY + offset, Wrapper.getPlayer().posZ, false));
+                    NetworkHelper.sendPacket(new C03PacketPlayer.C04PacketPlayerPosition(EntityHelper.getUser().posX,
+                            EntityHelper.getUser().posY + offset, EntityHelper.getUser().posZ, false));
                 }
 
-                Wrapper.getPlayer().stepHeight = 1;
+                EntityHelper.getUser().stepHeight = 1;
 
                 new Thread(() -> {
-                    Wrapper.getGame().timer.timerSpeed = 0f;
+                    GameHelper.getGame().timer.timerSpeed = 0f;
 
                     try {
                         Thread.sleep(200);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    Wrapper.getGame().timer.timerSpeed = 1f;
+                    GameHelper.getGame().timer.timerSpeed = 1f;
                 }).start();
             }
         }

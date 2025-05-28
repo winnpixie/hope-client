@@ -3,10 +3,10 @@ package io.github.alerithe.client.features.modules.impl.combat;
 import io.github.alerithe.client.events.game.EventTick;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.features.properties.impl.IntProperty;
+import io.github.alerithe.client.utilities.GameHelper;
 import io.github.alerithe.client.utilities.MathHelper;
 import io.github.alerithe.client.utilities.MsTimer;
-import io.github.alerithe.client.utilities.Wrapper;
-import io.github.alerithe.events.Register;
+import io.github.alerithe.events.impl.Subscribe;
 import net.minecraft.client.settings.GameSettings;
 
 public class AutoClicker extends Module {
@@ -24,15 +24,15 @@ public class AutoClicker extends Module {
         getPropertyManager().add(maxCps);
     }
 
-    @Register
+    @Subscribe
     private void onTick(EventTick event) {
         if (!event.isInGame()) return;
-        if (!GameSettings.isKeyDown(Wrapper.getSettings().keyBindAttack)) return;
-        if (Wrapper.getGame().currentScreen != null) return;
+        if (!GameSettings.isKeyDown(GameHelper.getSettings().keyBindAttack)) return;
+        if (GameHelper.getGame().currentScreen != null) return;
         if (!timer.hasPassed(1000 / MathHelper.getRandomInt(minCps.getValue(), maxCps.getValue()))) return;
 
         timer.update();
-        Wrapper.getGame().clickMouse();
-        Wrapper.getSettings().keyBindAttack.unpressKey();
+        GameHelper.getGame().clickMouse();
+        GameHelper.getSettings().keyBindAttack.unpressKey();
     }
 }

@@ -2,7 +2,7 @@ package io.github.alerithe.client.features.modules.impl.miscellaneous;
 
 import io.github.alerithe.client.events.game.EventPacket;
 import io.github.alerithe.client.features.modules.Module;
-import io.github.alerithe.events.Register;
+import io.github.alerithe.events.impl.Subscribe;
 import net.minecraft.network.play.client.C01PacketChatMessage;
 import net.minecraft.network.play.server.S02PacketChat;
 
@@ -17,7 +17,7 @@ public class AutoCaptcha extends Module {
         super("AutoCaptcha", new String[0], Type.MISCELLANEOUS);
     }
 
-    @Register
+    @Subscribe
     private void onPacketRead(EventPacket.Read event) {
         if (!(event.getPacket() instanceof S02PacketChat)) return;
 

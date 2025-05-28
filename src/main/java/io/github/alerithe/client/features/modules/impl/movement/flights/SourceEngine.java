@@ -2,7 +2,7 @@ package io.github.alerithe.client.features.modules.impl.movement.flights;
 
 import io.github.alerithe.client.events.game.EventUpdate;
 import io.github.alerithe.client.features.modules.impl.movement.Flight;
-import io.github.alerithe.client.utilities.Wrapper;
+import io.github.alerithe.client.utilities.EntityHelper;
 import net.minecraft.util.MathHelper;
 
 public class SourceEngine extends FlightMode {
@@ -12,14 +12,14 @@ public class SourceEngine extends FlightMode {
 
     @Override
     public void onPreUpdate(EventUpdate.Pre event) {
-        Wrapper.getPlayer().setSpeed(Wrapper.getPlayer().isUserMoving() ? module.moveSpeed.getValue() : 0);
+        EntityHelper.getUser().setSpeed(EntityHelper.getUser().isUserMoving() ? module.moveSpeed.getValue() : 0);
 
-        float forward = Math.signum(Wrapper.getPlayer().movementInput.moveForward);
-        Wrapper.getPlayer().motionY = -MathHelper.deg2Rad * Wrapper.getPlayer().rotationPitch * forward;
+        float forward = Math.signum(EntityHelper.getUser().movementInput.moveForward);
+        EntityHelper.getUser().motionY = -MathHelper.deg2Rad * EntityHelper.getUser().rotationPitch * forward;
 
         if (forward == 0F) return;
-        if (Wrapper.getPlayer().rotationPitch >= 90.0 || Wrapper.getPlayer().rotationPitch <= -90.0) {
-            Wrapper.getPlayer().setSpeed(0);
+        if (EntityHelper.getUser().rotationPitch >= 90.0 || EntityHelper.getUser().rotationPitch <= -90.0) {
+            EntityHelper.getUser().setSpeed(0);
         }
     }
 }
