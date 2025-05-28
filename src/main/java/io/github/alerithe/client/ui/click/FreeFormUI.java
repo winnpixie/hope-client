@@ -70,7 +70,7 @@ public class FreeFormUI extends GuiScreen {
 
             moduleBtn.addHandler(new EventHandler() {
                 @Override
-                public void onClicked(int mouseX, int mouseY, int button) {
+                public void onMouseDown(int mouseX, int mouseY, int button) {
                     if (button == 0) {
                         module.toggle();
 
@@ -213,14 +213,15 @@ public class FreeFormUI extends GuiScreen {
             nameLbl.getNormalStyle().textStyle.setPosition(TextPosition.MIDDLE);
 
             Button valueBtn = new Button(objProp.getValue().toString(),
-                    width / 2f, 0f, width / 2f, height) {
+                    width / 2f, 0f, width / 2f, height);
+            valueBtn.addHandler(new EventHandler() {
                 @Override
-                public void onClicked(int mouseX, int mouseY, int button) {
+                public void onLeftClick(int mouseX, int mouseY) {
                     int index = objProp.getValues().indexOf(objProp.getValue());
                     index = (index + 1) % objProp.getValues().size();
                     objProp.setValue(objProp.getValues().get(index));
                 }
-            };
+            });
             valueBtn.getNormalStyle().setShowBackground(false);
             valueBtn.getHoveredStyle().setInheritsShowBackground(false);
             valueBtn.getNormalStyle().textStyle.setColor(0xFFFFFFFF);

@@ -264,13 +264,4 @@ public class Element {
 
     public void onUpdate() {
     }
-
-    public void onClicked(int mouseX, int mouseY, int button) {
-    }
-
-    public void onRelease(int mouseX, int mouseY, int button) {
-    }
-
-    public void onKeyPressed(char charCode, int keyCode) {
-    }
 }

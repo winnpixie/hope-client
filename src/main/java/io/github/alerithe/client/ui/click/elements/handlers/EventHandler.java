@@ -13,16 +13,25 @@ public class EventHandler {
         this.source = source;
     }
 
+    public void onLeftClick(int mouseX, int mouseY) {
+    }
+
+    public void onRightClick(int mouseX, int mouseY) {
+    }
+
+    public void onMiddleClick(int mouseX, int mouseY) {
+    }
+
     public void onUpdate() {
     }
 
     public void onDraw(int mouseX, int mouseY, float partialTicks) {
     }
 
-    public void onClicked(int mouseX, int mouseY, int button) {
+    public void onMouseDown(int mouseX, int mouseY, int button) {
     }
 
-    public void onRelease(int mouseX, int mouseY, int button) {
+    public void onMouseUp(int mouseX, int mouseY, int button) {
     }
 
     public void onKeyPressed(char charCode, int keyCode) {

@@ -54,7 +54,7 @@ public class CommandEntityInfo extends Command {
     }
 
     private void printEntityInfo(Entity entity) {
-        GameHelper.printChatMessage("\247eID: \247r" + entity.getEntityId());
+        GameHelper.printChatMessage("\247eId: \247r" + entity.getEntityId());
         GameHelper.printChatMessage("\247eType: \247r" + entity.getClass().getSimpleName());
         GameHelper.printChatMessage("\247eName: \247r" + entity.getName());
         GameHelper.printChatMessage("\247eDisplay Name: \247r" + entity.getDisplayName().getFormattedText());

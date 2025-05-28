@@ -25,9 +25,18 @@ public class Controller {
         if (element.isInBounds(mouseX, mouseY)) {
             element.setFocused(true);
 
-            for (EventHandler handler : element.getHandlers()) handler.onClicked(mouseX, mouseY, button);
+            for (EventHandler handler : element.getHandlers()) {
+                handler.onMouseDown(mouseX, mouseY, button);
 
-            element.onClicked(mouseX, mouseY, button);
+                if (button == 0) {
+                    handler.onLeftClick(mouseX, mouseY);
+                } else if (button == 1) {
+                    handler.onRightClick(mouseX, mouseY);
+                } else if (button == 2) {
+                    // Delegate unknowns to middle-click.
+                    handler.onMiddleClick(mouseX, mouseY);
+                }
+            }
         } else {
             element.setFocused(false);
         }
@@ -38,9 +47,7 @@ public class Controller {
     public void release(int mouseX, int mouseY, int button) {
         if (!element.getNormalStyle().isVisible()) return;
 
-        for (EventHandler handler : element.getHandlers()) handler.onRelease(mouseX, mouseY, button);
-
-        element.onRelease(mouseX, mouseY, button);
+        for (EventHandler handler : element.getHandlers()) handler.onMouseUp(mouseX, mouseY, button);
 
         for (Element child : element.getChildren()) child.release(mouseX, mouseY, button);
     }
@@ -50,8 +57,6 @@ public class Controller {
 
         if (element.isFocused()) {
             for (EventHandler handler : element.getHandlers()) handler.onKeyPressed(charCode, keyCode);
-
-            element.onKeyPressed(charCode, keyCode);
         }
 
         for (Element child : element.getChildren()) child.pressKey(charCode, keyCode);

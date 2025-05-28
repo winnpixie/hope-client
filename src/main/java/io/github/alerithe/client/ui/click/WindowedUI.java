@@ -64,15 +64,16 @@ public class WindowedUI extends GuiScreen {
             float x = 0;
             float y = height * i;
 
-            Button typeLbl = new Button(type.getLabel(), x, y, WINDOW_WIDTH / 4f, height) {
+            Button typeLbl = new Button(type.getLabel(), x, y, WINDOW_WIDTH / 4f, height);
+            typeLbl.addHandler(new EventHandler() {
                 @Override
-                public void onClicked(int mouseX, int mouseY, int button) {
+                public void onLeftClick(int mouseX, int mouseY) {
                     moduleContainer.clearChildren();
                     propertyContainer.clearChildren();
 
                     buildModules(type, moduleContainer);
                 }
-            };
+            });
 
             typeLbl.getNormalStyle().setBackgroundColor(0xFFB00B1E);
             typeLbl.getNormalStyle().textStyle.setColor(0xFFFFFFFF);
@@ -97,12 +98,12 @@ public class WindowedUI extends GuiScreen {
             float y = height * i;
 
             Button moduleBtn = new Button(module.getName(), x, y, WINDOW_WIDTH / 4f, height);
-            moduleBtn.getNormalStyle().setBackgroundColor(0xFF111111);
+            moduleBtn.getNormalStyle().setBackgroundColor(0xFF222222);
             moduleBtn.getNormalStyle().textStyle.setColor(module.isEnabled() ? 0xFFFFFFFF : 0xFFAAAAAA);
 
             moduleBtn.addHandler(new EventHandler() {
                 @Override
-                public void onClicked(int mouseX, int mouseY, int button) {
+                public void onMouseDown(int mouseX, int mouseY, int button) {
                     if (button == 0) {
                         module.toggle();
 
@@ -148,7 +149,12 @@ public class WindowedUI extends GuiScreen {
                 ElementStyle unchecked = valueCheckBox.uncheckedStyle;
                 unchecked.setBackgroundColor(0xFF696969);
 
-                boolProp.addChangeListener(prop -> valueCheckBox.setChecked(prop.getValue()));
+                boolProp.addChangeListener(prop -> {
+                            valueCheckBox.setChecked(prop.getValue());
+
+                            System.out.println("changed");
+                        }
+                );
 
                 propElem = valueCheckBox;
             } else if (property instanceof IntProperty) {
@@ -226,14 +232,15 @@ public class WindowedUI extends GuiScreen {
                 nameLbl.getNormalStyle().textStyle.setPosition(TextPosition.MIDDLE);
 
                 Button valueBtn = new Button(objProp.getValue().toString(),
-                        width / 2f, 0, width / 2f, height) {
+                        width / 2f, 0, width / 2f, height);
+                valueBtn.addHandler(new EventHandler() {
                     @Override
-                    public void onClicked(int mouseX, int mouseY, int button) {
+                    public void onLeftClick(int mouseX, int mouseY) {
                         int index = objProp.getValues().indexOf(objProp.getValue());
                         index = (index + 1) % objProp.getValues().size();
                         objProp.setValue(objProp.getValues().get(index));
                     }
-                };
+                });
                 valueBtn.getNormalStyle().setShowBackground(false);
                 valueBtn.getHoveredStyle().setInheritsShowBackground(false);
                 valueBtn.getNormalStyle().textStyle.setColor(0xFFFFFFFF);

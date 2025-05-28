@@ -9,6 +9,8 @@ import io.github.alerithe.client.utilities.MathHelper;
 import java.util.Arrays;
 
 public class CommandHelp extends Command {
+    private static final int COMMANDS_PER_PAGE = 7;
+
     public CommandHelp() {
         super("help", new String[]{"?", "commands"}, "[page/command]");
     }
@@ -33,12 +35,11 @@ public class CommandHelp extends Command {
             }
         }
 
-        final int PER_PAGE = 7;
-        int pageCount = (Client.COMMAND_MANAGER.getChildren().size() - 1) / PER_PAGE; // 7 COMMANDS PER PAGE
-        GameHelper.printChatMessage(String.format("\247eCommands (Page %d/%d)", page, pageCount + 1));
+        int pageCount = MathHelper.ceil(Client.COMMAND_MANAGER.getChildren().size() / (float) COMMANDS_PER_PAGE); // 7 COMMANDS PER PAGE
+        GameHelper.printChatMessage(String.format("\247eCommands (Page %d/%d)", page, pageCount));
         GameHelper.printChatMessage("\2477<arg> = Required, [arg] = Optional");
-        for (int i = 0; i < PER_PAGE; i++) {
-            int idx = i + ((page - 1) * PER_PAGE);
+        for (int i = 0; i < COMMANDS_PER_PAGE; i++) {
+            int idx = i + ((page - 1) * COMMANDS_PER_PAGE);
             if (idx > Client.COMMAND_MANAGER.getChildren().size() - 1) break;
 
             Command command = Client.COMMAND_MANAGER.getChildren().get(idx);

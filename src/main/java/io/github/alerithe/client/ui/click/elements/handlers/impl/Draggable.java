@@ -59,7 +59,7 @@ public class Draggable extends EventHandler {
     }
 
     @Override
-    public void onClicked(int mouseX, int mouseY, int button) {
+    public void onMouseDown(int mouseX, int mouseY, int button) {
         if (button != 0) return;
 
         initialX = getSource().getX() - mouseX;
@@ -68,7 +68,7 @@ public class Draggable extends EventHandler {
     }
 
     @Override
-    public void onRelease(int mouseX, int mouseY, int button) {
+    public void onMouseUp(int mouseX, int mouseY, int button) {
         if (button == 0) dragging = false;
     }
 }

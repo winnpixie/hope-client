@@ -1,6 +1,7 @@
 package io.github.alerithe.client.ui.click.elements.impl.input;
 
 import io.github.alerithe.client.ui.click.elements.Element;
+import io.github.alerithe.client.ui.click.elements.handlers.EventHandler;
 import io.github.alerithe.client.ui.click.elements.styling.ElementStyle;
 import io.github.alerithe.client.ui.click.elements.styling.text.TextAlignment;
 import io.github.alerithe.client.utilities.MathHelper;
@@ -17,12 +18,24 @@ public class Slider extends Element {
         this(x, y, width, height, value, 0.0, 1.0);
     }
 
-    public Slider(float x, float y, float width, float height, double value, double minimum, double maximum) {
+    public Slider(float x, float y, float width, float height, double initialValue, double minimum, double maximum) {
         super(x, y, width, height);
 
-        this.value = value;
+        this.value = initialValue;
         this.minimum = minimum;
         this.maximum = maximum;
+
+        addHandler(new EventHandler() {
+            @Override
+            public void onLeftClick(int mouseX, int mouseY) {
+                dragging = true;
+            }
+
+            @Override
+            public void onMouseUp(int mouseX, int mouseY, int button) {
+                if (button == 0) dragging = false;
+            }
+        });
 
         getNormalStyle().textStyle.setAlignment(TextAlignment.CENTER);
     }
@@ -36,16 +49,6 @@ public class Slider extends Element {
     }
 
     public void onValueChanged(double oldValue, double newValue) {
-    }
-
-    @Override
-    public void onClicked(int mouseX, int mouseY, int button) {
-        if (button == 0) dragging = true;
-    }
-
-    @Override
-    public void onRelease(int mouseX, int mouseY, int button) {
-        if (button == 0) dragging = false;
     }
 
     @Override
