@@ -6,10 +6,9 @@ import io.github.alerithe.client.features.commands.Command;
 import io.github.alerithe.client.features.commands.ErrorMessages;
 import io.github.alerithe.client.utilities.EntityHelper;
 import io.github.alerithe.client.utilities.GameHelper;
-import io.github.alerithe.client.utilities.MsTimer;
 import io.github.alerithe.client.utilities.NetworkHelper;
-import io.github.alerithe.events.impl.EventBusImpl;
-import io.github.alerithe.events.impl.Subscriber;
+import io.github.alerithe.client.utilities.Stopwatch;
+import io.github.alerithe.events.Subscriber;
 import net.minecraft.network.play.client.C14PacketTabComplete;
 import net.minecraft.network.play.server.S3APacketTabComplete;
 
@@ -46,8 +45,8 @@ public class CommandServerInfo extends Command {
             NetworkHelper.sendPacket(new C14PacketTabComplete("/"));
         }
 
-        Client.EVENT_BUS.subscribe(new Subscriber<EventPacket.Read>() {
-            private final MsTimer timer = new MsTimer();
+        Client.EVENT_BUS.subscribe(EventPacket.Read.class, new Subscriber<EventPacket.Read>() {
+            private final Stopwatch timer = new Stopwatch();
 
             @Override
             public void handle(EventPacket.Read event) {

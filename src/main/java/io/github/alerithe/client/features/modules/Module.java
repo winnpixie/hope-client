@@ -34,9 +34,9 @@ public class Module extends Feature {
         if (enabled) {
             onEnable();
 
-            Client.EVENT_BUS.subscribe(this);
+            Client.EVENT_BUS.subscribeAll(this);
         } else {
-            Client.EVENT_BUS.unsubscribe(this);
+            Client.EVENT_BUS.unsubscribeAll(this);
 
             onDisable();
         }

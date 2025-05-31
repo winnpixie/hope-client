@@ -6,7 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class ObjectProperty<T extends ObjectProperty.Value> extends Property<T> {
-    private List<T> values;
+    private final List<T> values;
 
     public ObjectProperty(String name, String[] aliases, T... values) {
         super(name, aliases, values[0]);

@@ -1,7 +1,7 @@
 package io.github.alerithe.client.ui.click.elements.impl.input;
 
 import io.github.alerithe.client.ui.click.elements.Element;
-import io.github.alerithe.client.ui.click.elements.handlers.EventHandler;
+import io.github.alerithe.client.ui.click.elements.handlers.ElementEventListener;
 import io.github.alerithe.client.ui.click.elements.styling.ElementStyle;
 import io.github.alerithe.client.ui.click.elements.styling.text.TextAlignment;
 import io.github.alerithe.client.utilities.MathHelper;
@@ -25,7 +25,7 @@ public class Slider extends Element {
         this.minimum = minimum;
         this.maximum = maximum;
 
-        addHandler(new EventHandler() {
+        addListener(new ElementEventListener() {
             @Override
             public void onLeftClick(int mouseX, int mouseY) {
                 dragging = true;

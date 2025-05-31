@@ -3,6 +3,7 @@ package io.github.alerithe.client.features.modules.impl.movement;
 import io.github.alerithe.client.events.game.EventUpdate;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.utilities.EntityHelper;
+import io.github.alerithe.client.utilities.GameHelper;
 import io.github.alerithe.events.impl.Subscribe;
 
 public class AntiPlate extends Module {
@@ -22,7 +23,7 @@ public class AntiPlate extends Module {
         if (!EntityHelper.getUser().isUserMoving()) return;
 
         if (EntityHelper.getUser().onGround) {
-            EntityHelper.getUser().jump();
+            EntityHelper.getUser().motionY = 0.422;
             airTicks = 0;
         } else {
             if (airTicks < 9) {

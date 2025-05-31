@@ -1,21 +1,22 @@
 package io.github.alerithe.client.features.modules.impl.world;
 
-import io.github.alerithe.client.events.game.EventGuiOpen;
+import io.github.alerithe.client.events.game.EventGameScreen;
 import io.github.alerithe.client.events.game.EventUpdate;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.features.properties.impl.IntProperty;
 import io.github.alerithe.client.utilities.EntityHelper;
 import io.github.alerithe.client.utilities.GameHelper;
-import io.github.alerithe.client.utilities.MsTimer;
+import io.github.alerithe.client.utilities.Stopwatch;
 import io.github.alerithe.events.impl.Subscribe;
 import net.minecraft.client.gui.inventory.GuiChest;
+import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 
 public class ChestStealer extends Module {
     private final IntProperty cps = new IntProperty("CPS", new String[0],
             15, 1, 20);
 
-    private final MsTimer timer = new MsTimer();
+    private final Stopwatch timer = new Stopwatch();
 
     private int index;
 
@@ -26,7 +27,7 @@ public class ChestStealer extends Module {
     }
 
     @Subscribe
-    private void onGuiOpen(EventGuiOpen event) {
+    private void onScreenOpen(EventGameScreen.Open event) {
         if (!(event.getScreen() instanceof GuiChest)) return;
 
         index = 0;
@@ -53,5 +54,14 @@ public class ChestStealer extends Module {
             timer.update();
         }
         index++;
+    }
+
+    // TODO: Move to a utility class eventually
+    private boolean isFull(Container container) {
+        for (Slot slot : container.inventorySlots) {
+            if (!slot.getHasStack()) return false;
+        }
+
+        return true;
     }
 }

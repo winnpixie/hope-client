@@ -5,7 +5,7 @@ import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.features.properties.Property;
 import io.github.alerithe.client.features.properties.impl.*;
 import io.github.alerithe.client.ui.click.elements.Element;
-import io.github.alerithe.client.ui.click.elements.handlers.EventHandler;
+import io.github.alerithe.client.ui.click.elements.handlers.ElementEventListener;
 import io.github.alerithe.client.ui.click.elements.handlers.impl.Collapsible;
 import io.github.alerithe.client.ui.click.elements.handlers.impl.Draggable;
 import io.github.alerithe.client.ui.click.elements.impl.Label;
@@ -38,7 +38,7 @@ public class FreeFormUI extends GuiScreen {
 
         for (Module.Type type : Module.Type.values()) {
             Label typeLbl = new Label(type.getLabel(), x, y, width, height);
-            typeLbl.addHandler(new Draggable());
+            typeLbl.addListener(new Draggable());
 
             typeLbl.getNormalStyle().setBackgroundColor(0xFFB00B1E);
             typeLbl.getNormalStyle().textStyle.setColor(0xFFFFFFFF);
@@ -51,7 +51,7 @@ public class FreeFormUI extends GuiScreen {
             Element moduleContainer = new Element(0f, height, 0f, 0f);
             moduleContainer.getNormalStyle().setVisible(false);
             typeLbl.addChild(moduleContainer);
-            typeLbl.addHandler(new Collapsible(moduleContainer));
+            typeLbl.addListener(new Collapsible(moduleContainer));
 
             buildModules(type, moduleContainer);
         }
@@ -68,7 +68,7 @@ public class FreeFormUI extends GuiScreen {
             moduleBtn.getNormalStyle().setBackgroundColor(0xEE111111);
             moduleBtn.getNormalStyle().textStyle.setColor(module.isEnabled() ? 0xFFFFFFFF : 0xFFAAAAAA);
 
-            moduleBtn.addHandler(new EventHandler() {
+            moduleBtn.addListener(new ElementEventListener() {
                 @Override
                 public void onMouseDown(int mouseX, int mouseY, int button) {
                     if (button == 0) {
@@ -85,7 +85,7 @@ public class FreeFormUI extends GuiScreen {
             Element propertyContainer = new Element(width, 0f, 0f, 0f);
             propertyContainer.getNormalStyle().setVisible(false);
             moduleBtn.addChild(propertyContainer);
-            moduleBtn.addHandler(new Collapsible(propertyContainer));
+            moduleBtn.addListener(new Collapsible(propertyContainer));
 
             buildProperties(module, propertyContainer);
         }
@@ -191,7 +191,7 @@ public class FreeFormUI extends GuiScreen {
                     dblProp.getValue(), dblProp.getMinimum(), dblProp.getMaximum()) {
                 @Override
                 public void onValueChanged(double oldValue, double newValue) {
-                    dblProp.setValue(MathHelper.truncate(newValue, 1));
+                    dblProp.setValue(MathHelper.round(newValue, 1));
                 }
             };
             valueSlider.addChildren(nameLbl, valueLbl);
@@ -214,7 +214,7 @@ public class FreeFormUI extends GuiScreen {
 
             Button valueBtn = new Button(objProp.getValue().toString(),
                     width / 2f, 0f, width / 2f, height);
-            valueBtn.addHandler(new EventHandler() {
+            valueBtn.addListener(new ElementEventListener() {
                 @Override
                 public void onLeftClick(int mouseX, int mouseY) {
                     int index = objProp.getValues().indexOf(objProp.getValue());

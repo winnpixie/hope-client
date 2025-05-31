@@ -80,7 +80,8 @@ public class KillAura extends Module {
 
         float[] angles = getRotationsToTarget(target);
         float offsetValue = angleOffset.getValue().floatValue();
-        event.setYaw(MathHelper.clamp(angles[0] + MathHelper.getRandomFloat(-offsetValue, offsetValue), -360f, 360f));
+        float yawDelta = (((angles[0] - (event.getYaw() % 360)) + 180f) % 360f) - 180f;
+        event.setYaw(event.getYaw() + yawDelta + MathHelper.getRandomFloat(-offsetValue, offsetValue));
         event.setPitch(MathHelper.clamp(angles[1] + MathHelper.getRandomFloat(-offsetValue, offsetValue), -90f, 90f));
 
         if (look.getValue()) {
@@ -109,8 +110,6 @@ public class KillAura extends Module {
 
     @Subscribe
     private void onPostUpdate(EventUpdate.Post event) {
-        mode.getValue().onPostUpdate(event);
-        if (target == null) return;
         if (!attacking) return;
 
         attacking = false;
@@ -118,6 +117,7 @@ public class KillAura extends Module {
             NetworkHelper.sendPacket(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.RELEASE_USE_ITEM,
                     BlockPos.ORIGIN, EnumFacing.DOWN));
         }
+
         attack(target);
     }
 

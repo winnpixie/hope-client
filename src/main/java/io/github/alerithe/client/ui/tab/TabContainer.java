@@ -6,31 +6,31 @@ import io.github.alerithe.client.features.properties.Property;
 
 import java.util.List;
 
-public class Container {
-    private final Controller controller;
-    private final Renderer renderer;
+public class TabContainer {
+    private final TabController controller;
+    private final TabRenderer renderer;
     
-    private Section section;
+    private TabSection section;
 
-    public Container() {
-        this.controller = new Controller(this);
-        this.renderer = new Renderer(this);
-        section = Section.TYPE;
+    public TabContainer() {
+        this.controller = new TabController(this);
+        this.renderer = new TabRenderer(this);
+        section = TabSection.TYPE;
     }
 
-    public Controller getController() {
+    public TabController getController() {
         return controller;
     }
 
-    public Renderer getRenderer() {
+    public TabRenderer getRenderer() {
         return renderer;
     }
 
-    public Section getSection() {
+    public TabSection getSection() {
         return section;
     }
 
-    public void setSection(Section section) {
+    public void setSection(TabSection section) {
         this.section = section;
     }
 

@@ -13,12 +13,18 @@ public class SkyHigh extends FlightMode {
 
     @Override
     public void onPreUpdate(EventUpdate.Pre event) {
-        EntityHelper.getUser().motionY = 0;
-        double x = EntityHelper.getUser().posX + EntityHelper.getUser().motionX * 11;
-        double y = EntityHelper.getUser().posY
-                + (EntityHelper.getUser().movementInput.jump ? 0.0625 : EntityHelper.getUser().movementInput.sneak ? -0.0625 : 0);
-        double z = EntityHelper.getUser().posZ + EntityHelper.getUser().motionZ * 11;
+        // This is the maximum move you can make in one tick to not trigger Bukkit's PlayerMoveEvent
+        double maxMoveDelta = 1.0 / 16.1;
+        float[] moveVec = EntityHelper.getUser().getLookVector();
+
+        EntityHelper.getUser().motionY = 0.0;
+        EntityHelper.getUser().setSpeed(0.0);
+        double x = EntityHelper.getUser().posX + (moveVec[0] * maxMoveDelta);
+        double y = EntityHelper.getUser().posY;
+        double z = EntityHelper.getUser().posZ + (moveVec[1] * maxMoveDelta);
         NetworkHelper.sendPacket(new C03PacketPlayer.C04PacketPlayerPosition(x, y, z, false));
-        NetworkHelper.sendPacket(new C03PacketPlayer.C04PacketPlayerPosition(x, EntityHelper.getUser().posY - 420, z, false));
+        EntityHelper.getUser().setPosition(x, y, z);
+        NetworkHelper.sendPacket(new C03PacketPlayer.C04PacketPlayerPosition(x, -301, z, false));
+        event.cancel();
     }
 }

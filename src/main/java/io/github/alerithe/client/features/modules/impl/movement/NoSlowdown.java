@@ -16,6 +16,9 @@ import net.minecraft.util.EnumFacing;
 
 public class NoSlowdown extends Module {
     private final BooleanProperty packets = new BooleanProperty("Packets", new String[0], true);
+    private final BooleanProperty items = new BooleanProperty("Items", new String[0], true);
+    private final BooleanProperty webs = new BooleanProperty("Webs", new String[0], true);
+    private final BooleanProperty soulSand = new BooleanProperty("SoulSand", new String[0], true);
 
     private boolean block;
 
@@ -23,17 +26,20 @@ public class NoSlowdown extends Module {
         super("NoSlowdown", new String[0], Type.MOVEMENT);
 
         getPropertyManager().add(packets);
+        getPropertyManager().add(items);
+        getPropertyManager().add(webs);
+        getPropertyManager().add(soulSand);
     }
 
     @Subscribe
     private void onItemSlowdown(EventSlowdown.Item event) {
-        event.setCancelled(true);
+        if (items.getValue()) event.cancel();
     }
 
     @Subscribe
     private void onEnvironmentSlowdown(EventSlowdown.Environment event) {
-        if (event.getBlock() instanceof BlockWeb) event.setCancelled(true);
-        if (event.getBlock() instanceof BlockSoulSand) event.setCancelled(true);
+        if (webs.getValue() && event.getBlock() instanceof BlockWeb) event.cancel();
+        if (soulSand.getValue() && event.getBlock() instanceof BlockSoulSand) event.cancel();
     }
 
     @Subscribe

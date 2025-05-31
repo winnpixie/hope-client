@@ -1,5 +1,5 @@
 package io.github.alerithe.events;
 
-public interface ISubscriber<T> {
+public interface Subscriber<T> {
     void handle(T value);
 }

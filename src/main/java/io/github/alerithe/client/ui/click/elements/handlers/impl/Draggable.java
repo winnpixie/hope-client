@@ -1,11 +1,11 @@
 package io.github.alerithe.client.ui.click.elements.handlers.impl;
 
 import io.github.alerithe.client.ui.click.elements.Element;
-import io.github.alerithe.client.ui.click.elements.handlers.EventHandler;
+import io.github.alerithe.client.ui.click.elements.handlers.ElementEventListener;
 import io.github.alerithe.client.utilities.graphics.VisualHelper;
 import net.minecraft.client.gui.ScaledResolution;
 
-public class Draggable extends EventHandler {
+public class Draggable extends ElementEventListener {
     private boolean dragging;
 
     public float initialX;

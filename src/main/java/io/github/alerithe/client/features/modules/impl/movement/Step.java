@@ -1,10 +1,10 @@
 package io.github.alerithe.client.features.modules.impl.movement;
 
+import io.github.alerithe.client.events.game.EventPacket;
 import io.github.alerithe.client.events.game.EventUpdate;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.features.properties.impl.BooleanProperty;
 import io.github.alerithe.client.utilities.EntityHelper;
-import io.github.alerithe.client.utilities.GameHelper;
 import io.github.alerithe.client.utilities.NetworkHelper;
 import io.github.alerithe.events.impl.Subscribe;
 import net.minecraft.network.play.client.C03PacketPlayer;
@@ -17,6 +17,7 @@ public class Step extends Module {
     private final double[] oneBlockOffsets = {0.42, 0.75};
 
     private float oldStepHeight;
+    private int packetSkips;
 
     public Step() {
         super("Step", new String[0], Type.MOVEMENT);
@@ -32,6 +33,7 @@ public class Step extends Module {
     @Override
     public void onDisable() {
         EntityHelper.getUser().stepHeight = oldStepHeight;
+        packetSkips = 0;
     }
 
     @Subscribe
@@ -55,7 +57,7 @@ public class Step extends Module {
 
         if (EntityHelper.getUser().onGround) {
             EntityHelper.getUser().setSprinting(false);
-            event.setCancelled(true);
+            event.cancel();
 
             if (oneAndAHalf.getValue()) {
                 for (double offset : oneAndAHalfOffsets) {
@@ -64,17 +66,7 @@ public class Step extends Module {
                 }
 
                 EntityHelper.getUser().stepHeight = 1.5f;
-
-                new Thread(() -> {
-                    GameHelper.getGame().timer.timerSpeed = 0f;
-
-                    try {
-                        Thread.sleep(200);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    GameHelper.getGame().timer.timerSpeed = 1f;
-                }).start();
+                packetSkips = 8;
             } else {
                 for (double offset : oneBlockOffsets) {
                     NetworkHelper.sendPacket(new C03PacketPlayer.C04PacketPlayerPosition(EntityHelper.getUser().posX,
@@ -82,18 +74,16 @@ public class Step extends Module {
                 }
 
                 EntityHelper.getUser().stepHeight = 1;
-
-                new Thread(() -> {
-                    GameHelper.getGame().timer.timerSpeed = 0f;
-
-                    try {
-                        Thread.sleep(200);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    GameHelper.getGame().timer.timerSpeed = 1f;
-                }).start();
+                packetSkips = 4;
             }
         }
+    }
+
+    private void onPacketWrite(EventPacket.Write event) {
+        if (!(event.getPacket() instanceof C03PacketPlayer)) return;
+        if (packetSkips < 1) return;
+
+        if (packetSkips < 5) event.cancel();
+        packetSkips--;
     }
 }

@@ -9,12 +9,12 @@ import io.github.alerithe.client.features.properties.impl.ObjectProperty;
 import io.github.alerithe.client.utilities.MathHelper;
 import org.lwjgl.input.Keyboard;
 
-public class Controller extends Component {
+public class TabController extends TabComponent {
     private int typeIndex;
     private int moduleIndex;
     private int propertyIndex;
 
-    public Controller(Container container) {
+    public TabController(TabContainer container) {
         super(container);
     }
 
@@ -25,7 +25,7 @@ public class Controller extends Component {
                     case TYPE:
                         break;
                     case MODULE:
-                        getContainer().setSection(Section.TYPE);
+                        getContainer().setSection(TabSection.TYPE);
                         break;
                     case PROPERTY:
                         Property<?> property = getContainer().getProperty();
@@ -37,7 +37,7 @@ public class Controller extends Component {
                             intProp.setValue(intProp.getValue() - 1);
                         } else if (property instanceof DoubleProperty) {
                             DoubleProperty dblProp = (DoubleProperty) property;
-                            dblProp.setValue(MathHelper.truncate(dblProp.getValue() - 0.1, 1));
+                            dblProp.setValue(MathHelper.round(dblProp.getValue() - 0.1, 1));
                         } else if (property instanceof ObjectProperty) {
                             ObjectProperty objProp = (ObjectProperty) property;
                             int index = objProp.getValues().indexOf(objProp.getValue());
@@ -51,7 +51,7 @@ public class Controller extends Component {
                 switch (getContainer().getSection()) {
                     case TYPE:
                         moduleIndex = 0;
-                        getContainer().setSection(Section.MODULE);
+                        getContainer().setSection(TabSection.MODULE);
                         break;
                     case MODULE:
                         getContainer().getModule().toggle();
@@ -66,7 +66,7 @@ public class Controller extends Component {
                             intProp.setValue(intProp.getValue() + 1);
                         } else if (property instanceof DoubleProperty) {
                             DoubleProperty dblProp = (DoubleProperty) property;
-                            dblProp.setValue(MathHelper.truncate(dblProp.getValue() + 0.1, 1));
+                            dblProp.setValue(MathHelper.round(dblProp.add(0.1), 1));
                         } else if (property instanceof ObjectProperty) {
                             ObjectProperty objProp = (ObjectProperty) property;
                             int index = objProp.getValues().indexOf(objProp.getValue());
@@ -106,15 +106,15 @@ public class Controller extends Component {
                 switch (getContainer().getSection()) {
                     case TYPE:
                         moduleIndex = 0;
-                        getContainer().setSection(Section.MODULE);
+                        getContainer().setSection(TabSection.MODULE);
                         break;
                     case MODULE:
                         propertyIndex = 0;
-                        getContainer().setSection(Section.PROPERTY);
+                        getContainer().setSection(TabSection.PROPERTY);
                         break;
                     case PROPERTY:
                         propertyIndex = 0;
-                        getContainer().setSection(Section.MODULE);
+                        getContainer().setSection(TabSection.MODULE);
                         break;
                 }
                 break;

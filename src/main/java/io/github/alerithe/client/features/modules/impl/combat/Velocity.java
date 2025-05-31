@@ -28,7 +28,7 @@ public class Velocity extends Module {
             S12PacketEntityVelocity packet = (S12PacketEntityVelocity) event.getPacket();
             if (packet.getEntityID() != EntityHelper.getUser().getEntityId()) return;
             if (verticalPercent.getValue() == 0 && horizontalPercent.getValue() == 0) {
-                event.setCancelled(true);
+                event.cancel();
                 return;
             }
 
@@ -41,7 +41,7 @@ public class Velocity extends Module {
 
         if (event.getPacket() instanceof S27PacketExplosion) {
             if (verticalPercent.getValue() == 0 && horizontalPercent.getValue() == 0) {
-                event.setCancelled(true);
+                event.cancel();
                 return;
             }
 

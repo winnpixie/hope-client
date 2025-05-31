@@ -10,7 +10,7 @@ import io.github.alerithe.events.impl.Subscribe;
 
 public class Flight extends Module {
     private final ObjectProperty<FlightMode> mode = new ObjectProperty<>("Mode", new String[0], new Creative(this),
-            new SkyHigh(this), new OldNCP(this), new AncientNCP(this), new SourceEngine(this));
+            new SkyHigh(this), new OldNCP(this), new Vanilla(this), new SourceEngine(this));
     public final DoubleProperty moveSpeed = new DoubleProperty("MoveSpeed", new String[]{"speed"},
             1.0, 0.1, 10.0);
 

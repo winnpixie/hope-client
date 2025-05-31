@@ -10,8 +10,6 @@ public class ZeroPing extends SpoofMode {
 
     @Override
     public void onPacketRead(EventPacket.Read event) {
-        if (!(event.getPacket() instanceof S00PacketKeepAlive)) return;
-
-        event.setCancelled(true);
+        if (event.getPacket() instanceof S00PacketKeepAlive) event.cancel();
     }
 }

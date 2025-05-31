@@ -2,7 +2,7 @@ package io.github.alerithe.client.features.properties.impl;
 
 import io.github.alerithe.client.features.properties.Property;
 
-public class NumberProperty<T extends Number> extends Property<T> {
+public abstract class NumberProperty<T extends Number> extends Property<T> {
     private final T minimum;
     private final T maximum;
 
@@ -19,4 +19,14 @@ public class NumberProperty<T extends Number> extends Property<T> {
     public T getMaximum() {
         return maximum;
     }
+
+    /* --- ARITHMETIC */
+    public abstract T add(T addend);
+
+    public abstract T subtract(T subtrahend);
+
+    public abstract T multiply(T factor);
+
+    public abstract T divide(T denominator);
+    /* --- */
 }

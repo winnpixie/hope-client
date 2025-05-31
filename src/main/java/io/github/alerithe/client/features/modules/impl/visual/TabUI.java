@@ -3,12 +3,12 @@ package io.github.alerithe.client.features.modules.impl.visual;
 import io.github.alerithe.client.events.game.EventDraw;
 import io.github.alerithe.client.events.game.EventInput;
 import io.github.alerithe.client.features.modules.Module;
-import io.github.alerithe.client.ui.tab.Container;
+import io.github.alerithe.client.ui.tab.TabContainer;
 import io.github.alerithe.client.utilities.GameHelper;
 import io.github.alerithe.events.impl.Subscribe;
 
 public class TabUI extends Module {
-    private Container container;
+    private TabContainer container;
 
     public TabUI() {
         super("TabUI", new String[]{"tabgui"}, Type.VISUAL);
@@ -16,7 +16,7 @@ public class TabUI extends Module {
 
     @Override
     public void onEnable() {
-        if (container == null) container = new Container();
+        if (container == null) container = new TabContainer();
     }
 
     @Subscribe

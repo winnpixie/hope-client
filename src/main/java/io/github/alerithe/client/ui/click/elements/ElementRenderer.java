@@ -1,6 +1,6 @@
 package io.github.alerithe.client.ui.click.elements;
 
-import io.github.alerithe.client.ui.click.elements.handlers.EventHandler;
+import io.github.alerithe.client.ui.click.elements.handlers.ElementEventListener;
 import io.github.alerithe.client.ui.click.elements.styling.BorderStyle;
 import io.github.alerithe.client.ui.click.elements.styling.ElementStyle;
 import io.github.alerithe.client.ui.click.elements.styling.text.TextAlignment;
@@ -10,17 +10,17 @@ import io.github.alerithe.client.utilities.GameHelper;
 import io.github.alerithe.client.utilities.graphics.VisualHelper;
 import net.minecraft.client.renderer.GlStateManager;
 
-public class Renderer {
+public class ElementRenderer {
     private final Element element;
 
-    public Renderer(Element element) {
+    public ElementRenderer(Element element) {
         this.element = element;
     }
 
     public void draw(int mouseX, int mouseY, float partialTicks) {
         if (!element.getNormalStyle().isVisible()) return;
 
-        for (EventHandler handler : element.getHandlers()) handler.onDraw(mouseX, mouseY, partialTicks);
+        for (ElementEventListener handler : element.getEventListeners()) handler.onDraw(mouseX, mouseY, partialTicks);
 
         element.setHovered(element.isInBounds(mouseX, mouseY));
         ElementStyle activeStyle = element.isHovered()

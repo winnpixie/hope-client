@@ -10,7 +10,7 @@ import io.github.alerithe.client.features.modules.impl.movement.*;
 import io.github.alerithe.client.features.modules.impl.player.*;
 import io.github.alerithe.client.features.modules.impl.visual.*;
 import io.github.alerithe.client.features.modules.impl.world.*;
-import io.github.alerithe.events.impl.Subscriber;
+import io.github.alerithe.events.Subscriber;
 import org.lwjgl.input.Keyboard;
 
 import java.io.File;
@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 
 public class ModuleManager extends FeatureManager<Module> {
     private File moduleStatesFile;
-    private boolean toggledModules;
+    private boolean restoredStates;
 
     @Override
     public void load() {
@@ -46,6 +46,9 @@ public class ModuleManager extends FeatureManager<Module> {
 
         // Movement
         add(new AntiPlate());
+        add(new AutoJump());
+        add(new AutoSprint());
+        add(new AutoWalk());
         add(new FastLadder());
         add(new Flight());
         add(new InventoryMove());
@@ -55,7 +58,6 @@ public class ModuleManager extends FeatureManager<Module> {
         add(new Speed());
         add(new Spider()); // TODO: Finish/Fix?
         add(new Step());
-        add(new Sprint());
 
         // Player
         add(new AntiAim());
@@ -101,7 +103,6 @@ public class ModuleManager extends FeatureManager<Module> {
         add(new GameSpeed());
         add(new LogSpammer());
         add(new MiddleClickFriend());
-        add(new NetPlus());
         add(new NoHunger());
         add(new PingSpoof());
         add(new TextSpammer()); // TODO: Finish
@@ -129,13 +130,14 @@ public class ModuleManager extends FeatureManager<Module> {
             e.printStackTrace();
         }
 
-        Client.EVENT_BUS.subscribe(new Subscriber<EventTick>() {
+        Client.EVENT_BUS.subscribe(EventTick.End.class, new Subscriber<EventTick.End>() {
             @Override
-            public void handle(EventTick event) {
+            public void handle(EventTick.End event) {
                 if (!event.isInGame()) return;
+                if (restoredStates) return; // Just in case.
 
                 toEnable.forEach(Module::toggle);
-                toggledModules = true;
+                restoredStates = true;
                 Client.EVENT_BUS.unsubscribe(this);
             }
         });
@@ -148,7 +150,7 @@ public class ModuleManager extends FeatureManager<Module> {
     @Override
     public void save() {
         getChildren().forEach(module -> module.getPropertyManager().save());
-        if (!toggledModules) return;
+        if (!restoredStates) return;
 
         StringBuilder builder = new StringBuilder();
         getChildren().forEach(module -> builder.append(module.getName()).append(':')

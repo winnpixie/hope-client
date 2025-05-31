@@ -18,7 +18,7 @@ public class FullBright extends Module {
     }
 
     @Subscribe
-    private void onTick(EventTick event) {
+    private void onStartTick(EventTick.Start event) {
         if (event.isInGame()) EntityHelper.getUser().addPotionEffect(new PotionEffect(Potion.nightVision.id, 5201, 68));
     }
 }

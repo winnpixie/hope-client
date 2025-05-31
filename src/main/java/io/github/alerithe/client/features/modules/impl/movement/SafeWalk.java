@@ -11,6 +11,6 @@ public class SafeWalk extends Module {
 
     @Subscribe
     private void onBlockEdge(EventBlockEdgeCheck event) {
-        event.setCancelled(true);
+        event.cancel();
     }
 }

@@ -8,7 +8,7 @@ import io.github.alerithe.events.impl.Subscribe;
 
 public class GameSpeed extends Module {
     private final DoubleProperty speed = new DoubleProperty("Speed", new String[0],
-            2.0, 0.1, 100.0);
+            2.0, 0.1, 10.0);
 
     public GameSpeed() {
         super("GameSpeed", new String[]{"timer"}, Type.MISCELLANEOUS);
@@ -22,7 +22,7 @@ public class GameSpeed extends Module {
     }
 
     @Subscribe
-    private void onTick(EventTick event) {
+    private void onStartTick(EventTick.Start event) {
         GameHelper.getGame().timer.timerSpeed = speed.getValue().floatValue();
     }
 }

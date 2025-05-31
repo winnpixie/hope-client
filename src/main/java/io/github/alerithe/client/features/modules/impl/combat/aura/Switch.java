@@ -3,11 +3,11 @@ package io.github.alerithe.client.features.modules.impl.combat.aura;
 import io.github.alerithe.client.events.game.EventUpdate;
 import io.github.alerithe.client.features.modules.impl.combat.KillAura;
 import io.github.alerithe.client.utilities.MathHelper;
-import io.github.alerithe.client.utilities.MsTimer;
+import io.github.alerithe.client.utilities.Stopwatch;
 
 public class Switch extends AuraMode {
-    private final MsTimer timer = new MsTimer();
-    private final MsTimer switchTimer = new MsTimer();
+    private final Stopwatch timer = new Stopwatch();
+    private final Stopwatch switchTimer = new Stopwatch();
     private int index;
 
     public Switch(KillAura module) {

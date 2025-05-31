@@ -10,4 +10,16 @@ public class EventTick {
     public boolean isInGame() {
         return isInGame;
     }
+
+    public static class Start extends EventTick {
+        public Start(boolean isInGame) {
+            super(isInGame);
+        }
+    }
+
+    public static class End extends EventTick {
+        public End(boolean isInGame) {
+            super(isInGame);
+        }
+    }
 }

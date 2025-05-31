@@ -13,12 +13,11 @@ public class NullPing extends SpoofMode {
 
     @Override
     public void onPacketRead(EventPacket.Read event) {
-        if (event.getPacket() instanceof S00PacketKeepAlive) {
-            event.setCancelled(true);
-        }
+        if (event.getPacket() instanceof S00PacketKeepAlive) event.cancel();
 
         if (event.getPacket() instanceof S02PacketLoginSuccess) {
-            event.setCancelled(true);
+            event.cancel();
+
             ((Packet) event.getPacket()).processPacket(event.getNetHandler());
             event.getNetworkManager().sendPacket(new C00PacketKeepAlive(0));
         }

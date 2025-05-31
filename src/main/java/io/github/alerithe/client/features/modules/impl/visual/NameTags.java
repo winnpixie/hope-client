@@ -112,7 +112,7 @@ public class NameTags extends Module {
 
     @Subscribe
     private void onTagDraw(EventDraw.Tag event) {
-        if (qualifies(event.getEntity())) event.setCancelled(true);
+        if (qualifies(event.getEntity())) event.cancel();
     }
 
     private boolean qualifies(Entity entity) {

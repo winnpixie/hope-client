@@ -35,7 +35,7 @@ public class CommandManager extends FeatureManager<Command> {
             if (event.getMessage().indexOf('.') != 0) return;
             if (event.getMessage().length() < 2) return;
 
-            event.setCancelled(true);
+            event.cancel();
             String[] args = event.getMessage().substring(1).split(" ");
             Command command = find(args[0]);
             if (command == null) {

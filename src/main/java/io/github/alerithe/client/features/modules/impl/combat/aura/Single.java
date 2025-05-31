@@ -3,10 +3,10 @@ package io.github.alerithe.client.features.modules.impl.combat.aura;
 import io.github.alerithe.client.events.game.EventUpdate;
 import io.github.alerithe.client.features.modules.impl.combat.KillAura;
 import io.github.alerithe.client.utilities.MathHelper;
-import io.github.alerithe.client.utilities.MsTimer;
+import io.github.alerithe.client.utilities.Stopwatch;
 
 public class Single extends AuraMode {
-    private final MsTimer timer = new MsTimer();
+    private final Stopwatch timer = new Stopwatch();
 
     public Single(KillAura module) {
         super("Single", new String[0], module);

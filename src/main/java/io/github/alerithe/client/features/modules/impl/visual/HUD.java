@@ -159,13 +159,22 @@ public class HUD extends Module {
         double uY = EntityHelper.getUser().posY;
         double uZ = EntityHelper.getUser().posZ;
 
-        double dimFactor = WorldHelper.getWorld().provider.getDimensionId() == -1 ? 8.0 : 0.125;
-        char dimColor = WorldHelper.getWorld().provider.getDimensionId() == -1 ? 'a' : 'c';
+        int dimId = WorldHelper.getWorld().provider.getDimensionId();
+        StringBuilder builder = new StringBuilder("\2477[ \247r"); // Hear me out...
+        if (dimId < 1) {
+            double dimFactor = dimId == -1 ? 8.0 : 0.125;
+            char dimColor = dimId == -1 ? 'a' : 'c';
 
-        String text = String.format("\2477[\247r %.1f(\247%c%.1f\247r) \2477/\247r %.1f \2477/\247r %.1f(\247%c%.1f\247r) \2477]",
-                uX, dimColor, uX * dimFactor, uY, uZ, dimColor, uZ * dimFactor);
+            builder.append(String.format("%.1f(\247%c%.1f\247r) \2477/\247r %.1f \2477/\247r %.1f(\247%c%.1f\247r)",
+                    uX, dimColor, uX * dimFactor, uY, uZ, dimColor, uZ * dimFactor));
+        } else {
+            builder.append(String.format("\247d %.1f \2477/\247d %.1f \2477/\247d %.1f",
+                    uX, uY, uZ));
+        }
 
-        VisualHelper.MC_FONT.drawStringWithShadow(text, 2, display.getScaledHeight() - chatOffset, -1);
+        builder.append(" \2477]");
+
+        VisualHelper.MC_FONT.drawStringWithShadow(builder.toString(), 2, display.getScaledHeight() - chatOffset, -1);
     }
 
     private String formatPotionEffect(PotionEffect effect) {
@@ -202,26 +211,26 @@ public class HUD extends Module {
     }
 
     @Subscribe
-    private void onTick(EventTick event) {
+    private void onEndTick(EventTick.End event) {
         if (!event.isInGame()) return;
 
         if (realPing.getValue()) {
             if (!awaitingStatResponse) {
                 NetworkHelper.sendPacket(new C16PacketClientStatus(C16PacketClientStatus.EnumState.REQUEST_STATS));
-                statRequestTime = MsTimer.getNow();
+                statRequestTime = Stopwatch.getNow();
                 awaitingStatResponse = true;
             }
         }
 
         List<Long> old = new ArrayList<>();
         for (long ms : leftClicks) {
-            if (MsTimer.getNow() - ms >= 1000) old.add(ms);
+            if (Stopwatch.getNow() - ms >= 1000) old.add(ms);
         }
         leftClicks.removeAll(old);
 
         old.clear();
         for (long ms : rightClicks) {
-            if (MsTimer.getNow() - ms >= 1000) old.add(ms);
+            if (Stopwatch.getNow() - ms >= 1000) old.add(ms);
         }
         rightClicks.removeAll(old);
 
@@ -230,12 +239,12 @@ public class HUD extends Module {
 
     @Subscribe
     private void onLeftClick(EventInput.LeftClick event) {
-        leftClicks.add(MsTimer.getNow());
+        leftClicks.add(Stopwatch.getNow());
     }
 
     @Subscribe
     private void onRightClick(EventInput.RightClick event) {
-        rightClicks.add(MsTimer.getNow());
+        rightClicks.add(Stopwatch.getNow());
     }
 
     @Subscribe
@@ -245,12 +254,12 @@ public class HUD extends Module {
         }
 
         if (event.getPacket() instanceof S03PacketTimeUpdate) {
-            ticks.add(MsTimer.getNow());
+            ticks.add(Stopwatch.getNow());
         }
 
         if (event.getPacket() instanceof S37PacketStatistics) {
             if (awaitingStatResponse) {
-                statResponseTime = MsTimer.getNow() - statRequestTime;
+                statResponseTime = Stopwatch.getNow() - statRequestTime;
                 awaitingStatResponse = false;
             }
         }

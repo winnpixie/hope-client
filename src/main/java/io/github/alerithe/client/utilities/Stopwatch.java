@@ -1,9 +1,9 @@
 package io.github.alerithe.client.utilities;
 
-public class MsTimer {
+public class Stopwatch {
     private long instant;
 
-    public MsTimer() {
+    public Stopwatch() {
         update();
     }
 

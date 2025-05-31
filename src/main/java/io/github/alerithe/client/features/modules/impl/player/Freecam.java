@@ -54,7 +54,7 @@ public class Freecam extends Module {
         if (event.getPacket() instanceof C02PacketUseEntity || event.getPacket() instanceof C0BPacketEntityAction
                 || event.getPacket() instanceof C07PacketPlayerDigging | event.getPacket() instanceof C0APacketAnimation
                 || event.getPacket() instanceof C08PacketPlayerBlockPlacement) {
-            event.setCancelled(true);
+            event.cancel();
         }
 
         if (event.getPacket() instanceof C03PacketPlayer.C06PacketPlayerPosLook) {
@@ -84,17 +84,17 @@ public class Freecam extends Module {
     }
 
     @Subscribe
-    private void onOpaqueCheck(EventOpaqueCheck event) {
-        event.setCancelled(true);
+    private void onOpaqueCheck(EventOpaqueBlockCheck event) {
+        event.cancel();
     }
 
     @Subscribe
     private void onBlockPush(EventBlockPush event) {
-        event.setCancelled(true);
+        event.cancel();
     }
 
     @Subscribe
     private void onCollision(EventBlockCollision event) {
-        event.setCancelled(true);
+        event.cancel();
     }
 }

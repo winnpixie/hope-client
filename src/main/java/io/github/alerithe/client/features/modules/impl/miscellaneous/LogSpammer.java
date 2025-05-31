@@ -35,7 +35,7 @@ public class LogSpammer extends Module {
     }
 
     @Subscribe
-    private void onTick(EventTick event) {
+    private void onStartTick(EventTick.Start event) {
         if (!event.isInGame()) return;
 
         sendInvalidAnvilText();

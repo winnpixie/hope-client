@@ -53,6 +53,6 @@ public class Latest extends PhaseMode {
         if (event.getBoundingBox() == null) return;
         if (event.getBoundingBox().minY < EntityHelper.getUser().posY) return;
 
-        event.setCancelled(true);
+        event.cancel();
     }
 }

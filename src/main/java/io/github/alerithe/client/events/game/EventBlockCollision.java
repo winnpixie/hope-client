@@ -6,7 +6,8 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
 
 public class EventBlockCollision extends CancellableEvent {
-    private Block block;
+    private final Block block;
+    
     private BlockPos pos;
     private AxisAlignedBB boundingBox;
 
@@ -18,10 +19,6 @@ public class EventBlockCollision extends CancellableEvent {
 
     public Block getBlock() {
         return block;
-    }
-
-    public void setBlock(Block block) {
-        this.block = block;
     }
 
     public BlockPos getPos() {

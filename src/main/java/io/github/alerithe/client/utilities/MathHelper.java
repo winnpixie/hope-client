@@ -1,5 +1,7 @@
 package io.github.alerithe.client.utilities;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class MathHelper {
@@ -113,12 +115,20 @@ public class MathHelper {
         }
     }
 
-    public static float truncate(float value, int places) {
-        return Float.parseFloat(String.format("%." + places + "f", value));
+    public static float round(float value, int places) {
+        DecimalFormat decFormat = new DecimalFormat();
+        decFormat.setRoundingMode(RoundingMode.HALF_UP);
+        decFormat.setMaximumFractionDigits(places);
+
+        return Float.parseFloat(decFormat.format(value));
     }
 
-    public static double truncate(double value, int places) {
-        return Double.parseDouble(String.format("%." + places + "f", value));
+    public static double round(double value, int places) {
+        DecimalFormat decFormat = new DecimalFormat();
+        decFormat.setRoundingMode(RoundingMode.HALF_UP);
+        decFormat.setMaximumFractionDigits(places);
+
+        return Double.parseDouble(decFormat.format(value));
     }
 
     public static int getRandomInt(int min, int max) {

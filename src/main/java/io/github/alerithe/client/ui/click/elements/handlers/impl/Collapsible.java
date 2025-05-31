@@ -1,9 +1,9 @@
 package io.github.alerithe.client.ui.click.elements.handlers.impl;
 
 import io.github.alerithe.client.ui.click.elements.Element;
-import io.github.alerithe.client.ui.click.elements.handlers.EventHandler;
+import io.github.alerithe.client.ui.click.elements.handlers.ElementEventListener;
 
-public class Collapsible extends EventHandler {
+public class Collapsible extends ElementEventListener {
     private final Element container;
 
     public Collapsible(Element container) {

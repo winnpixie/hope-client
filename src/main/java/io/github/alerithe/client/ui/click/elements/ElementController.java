@@ -1,18 +1,18 @@
 package io.github.alerithe.client.ui.click.elements;
 
-import io.github.alerithe.client.ui.click.elements.handlers.EventHandler;
+import io.github.alerithe.client.ui.click.elements.handlers.ElementEventListener;
 
-public class Controller {
+public class ElementController {
     private final Element element;
 
-    public Controller(Element element) {
+    public ElementController(Element element) {
         this.element = element;
     }
 
     public void update() {
         if (!element.getNormalStyle().isVisible()) return;
 
-        for (EventHandler handler : element.getHandlers()) handler.onUpdate();
+        for (ElementEventListener handler : element.getEventListeners()) handler.onUpdate();
 
         element.onUpdate();
 
@@ -25,7 +25,7 @@ public class Controller {
         if (element.isInBounds(mouseX, mouseY)) {
             element.setFocused(true);
 
-            for (EventHandler handler : element.getHandlers()) {
+            for (ElementEventListener handler : element.getEventListeners()) {
                 handler.onMouseDown(mouseX, mouseY, button);
 
                 if (button == 0) {
@@ -47,7 +47,7 @@ public class Controller {
     public void release(int mouseX, int mouseY, int button) {
         if (!element.getNormalStyle().isVisible()) return;
 
-        for (EventHandler handler : element.getHandlers()) handler.onMouseUp(mouseX, mouseY, button);
+        for (ElementEventListener handler : element.getEventListeners()) handler.onMouseUp(mouseX, mouseY, button);
 
         for (Element child : element.getChildren()) child.release(mouseX, mouseY, button);
     }
@@ -56,7 +56,7 @@ public class Controller {
         if (!element.getNormalStyle().isVisible()) return;
 
         if (element.isFocused()) {
-            for (EventHandler handler : element.getHandlers()) handler.onKeyPressed(charCode, keyCode);
+            for (ElementEventListener handler : element.getEventListeners()) handler.onKeyPressed(charCode, keyCode);
         }
 
         for (Element child : element.getChildren()) child.pressKey(charCode, keyCode);

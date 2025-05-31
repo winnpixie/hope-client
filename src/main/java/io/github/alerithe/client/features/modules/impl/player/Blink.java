@@ -52,7 +52,7 @@ public class Blink extends Module {
                 || event.getPacket() instanceof C07PacketPlayerDigging
                 || event.getPacket() instanceof C08PacketPlayerBlockPlacement) {
             packetQueue.add(event.getPacket());
-            event.setCancelled(true);
+            event.cancel();
         }
     }
 }

@@ -1,4 +1,4 @@
 package io.github.alerithe.events;
 
-public interface IEvent {
+public interface Event {
 }

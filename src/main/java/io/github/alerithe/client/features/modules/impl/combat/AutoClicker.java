@@ -5,7 +5,7 @@ import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.features.properties.impl.IntProperty;
 import io.github.alerithe.client.utilities.GameHelper;
 import io.github.alerithe.client.utilities.MathHelper;
-import io.github.alerithe.client.utilities.MsTimer;
+import io.github.alerithe.client.utilities.Stopwatch;
 import io.github.alerithe.events.impl.Subscribe;
 import net.minecraft.client.settings.GameSettings;
 
@@ -15,7 +15,7 @@ public class AutoClicker extends Module {
     public final IntProperty maxCps = new IntProperty("MaxClicksPerSecond", new String[]{"maxcps", "maxspeed"},
             12, 1, 20);
 
-    private final MsTimer timer = new MsTimer();
+    private final Stopwatch timer = new Stopwatch();
 
     public AutoClicker() {
         super("AutoClicker", new String[]{"ac"}, Type.COMBAT);
@@ -25,7 +25,7 @@ public class AutoClicker extends Module {
     }
 
     @Subscribe
-    private void onTick(EventTick event) {
+    private void onEndTick(EventTick.End event) {
         if (!event.isInGame()) return;
         if (!GameSettings.isKeyDown(GameHelper.getSettings().keyBindAttack)) return;
         if (GameHelper.getGame().currentScreen != null) return;

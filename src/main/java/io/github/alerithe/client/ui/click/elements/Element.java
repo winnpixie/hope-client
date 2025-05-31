@@ -1,6 +1,6 @@
 package io.github.alerithe.client.ui.click.elements;
 
-import io.github.alerithe.client.ui.click.elements.handlers.EventHandler;
+import io.github.alerithe.client.ui.click.elements.handlers.ElementEventListener;
 import io.github.alerithe.client.ui.click.elements.styling.ElementStyle;
 import io.github.alerithe.client.utilities.MathHelper;
 
@@ -16,7 +16,7 @@ public class Element {
     private float height;
     private final float[] bounds = new float[4];
     private String text;
-    private final List<EventHandler> eventHandlers = new ArrayList<>();
+    private final List<ElementEventListener> eventListeners = new ArrayList<>();
     private final List<Element> children = new ArrayList<>();
 
     private boolean hovered;
@@ -25,8 +25,8 @@ public class Element {
     private ElementStyle normalStyle = new ElementStyle(null);
     private ElementStyle hoveredStyle = new ElementStyle(normalStyle);
 
-    private final Renderer renderer = new Renderer(this);
-    private final Controller controller = new Controller(this);
+    private final ElementRenderer renderer = new ElementRenderer(this);
+    private final ElementController controller = new ElementController(this);
 
     public Element(float x, float y, float width, float height) {
         this.x = x;
@@ -40,21 +40,45 @@ public class Element {
     }
 
     public void setParent(Element parent) {
-        if (parent == this) {
-            throw new IllegalArgumentException("An Element can not be a parent of itself!");
-        }
+        if (parent == this) throw new IllegalArgumentException("An Element can not adopt itself!");
 
         this.parent = parent;
     }
 
     public float getX() {
-        if (this.parent == null) return getLocalX();
+        if (this.parent == null) return x;
 
-        return parent.getX() + getLocalX();
+        return parent.getX() + x;
     }
 
-    public float getLocalX() {
-        return x;
+    public void setX(float x) {
+        this.x = x;
+    }
+
+    public float getY() {
+        if (this.parent == null) return y;
+
+        return parent.getY() + y;
+    }
+
+    public void setY(float y) {
+        this.y = y;
+    }
+
+    public float getWidth() {
+        return width;
+    }
+
+    public void setWidth(float width) {
+        this.width = width;
+    }
+
+    public float getHeight() {
+        return height;
+    }
+
+    public void setHeight(float height) {
+        this.height = height;
     }
 
     public float getMinX() {
@@ -65,30 +89,12 @@ public class Element {
         return getBounds()[2];
     }
 
-    public void setX(float x) {
-        this.x = x;
-    }
-
-    public float getY() {
-        if (this.parent == null) return getLocalY();
-
-        return parent.getY() + getLocalY();
-    }
-
-    public float getLocalY() {
-        return y;
-    }
-
     public float getMinY() {
         return getBounds()[1];
     }
 
     public float getMaxY() {
         return getBounds()[3];
-    }
-
-    public void setY(float y) {
-        this.y = y;
     }
 
     public float[] getBounds() {
@@ -108,22 +114,6 @@ public class Element {
         }
 
         return bounds;
-    }
-
-    public float getWidth() {
-        return width;
-    }
-
-    public void setWidth(float width) {
-        this.width = width;
-    }
-
-    public float getHeight() {
-        return height;
-    }
-
-    public void setHeight(float height) {
-        this.height = height;
     }
 
     public String getText() {
@@ -152,24 +142,24 @@ public class Element {
         this.hoveredStyle = hoveredStyle;
     }
 
-    public void addHandler(EventHandler eventHandler) {
-        eventHandler.setSource(this);
-        eventHandlers.add(eventHandler);
+    public void addListener(ElementEventListener listener) {
+        listener.setSource(this);
+        eventListeners.add(listener);
     }
 
-    public void addHandlers(EventHandler... eventHandlers) {
-        for (EventHandler eventHandler : eventHandlers) {
-            addHandler(eventHandler);
+    public void addListeners(ElementEventListener... listeners) {
+        for (ElementEventListener listener : listeners) {
+            addListener(listener);
         }
     }
 
-    public void removeHandler(EventHandler eventHandler) {
-        eventHandlers.remove(eventHandler);
+    public void removeListener(ElementEventListener listener) {
+        eventListeners.remove(listener);
     }
 
     // TODO: Make this return an immutable copy?
-    public List<EventHandler> getHandlers() {
-        return eventHandlers;
+    public List<ElementEventListener> getEventListeners() {
+        return eventListeners;
     }
 
     public void addChild(Element child) {
@@ -226,11 +216,11 @@ public class Element {
         this.focused = focused;
     }
 
-    public Renderer getRenderer() {
+    public ElementRenderer getRenderer() {
         return renderer;
     }
 
-    public Controller getController() {
+    public ElementController getController() {
         return controller;
     }
 

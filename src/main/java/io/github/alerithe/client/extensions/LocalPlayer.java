@@ -3,7 +3,7 @@ package io.github.alerithe.client.extensions;
 import io.github.alerithe.client.Client;
 import io.github.alerithe.client.events.game.EventBlockPush;
 import io.github.alerithe.client.events.game.EventChat;
-import io.github.alerithe.client.events.game.EventOpaqueCheck;
+import io.github.alerithe.client.events.game.EventOpaqueBlockCheck;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.network.NetHandlerPlayClient;
@@ -21,7 +21,7 @@ public class LocalPlayer extends EntityPlayerSP {
 
     @Override
     public boolean isEntityInsideOpaqueBlock() {
-        return !Client.EVENT_BUS.post(new EventOpaqueCheck()).isCancelled() && super.isEntityInsideOpaqueBlock();
+        return !Client.EVENT_BUS.post(new EventOpaqueBlockCheck()).isCancelled() && super.isEntityInsideOpaqueBlock();
     }
 
     @Override
@@ -36,6 +36,7 @@ public class LocalPlayer extends EntityPlayerSP {
         if (!event.isCancelled()) super.sendChatMessage(event.getMessage());
     }
 
+    // prplz/MouseDelayFix
     @Override
     public Vec3 getLook(float partialTicks) {
         if (partialTicks == 1f) return this.getVectorForRotation(this.rotationPitch, this.rotationYaw);
@@ -87,7 +88,7 @@ public class LocalPlayer extends EntityPlayerSP {
         float yaw = rotationYawHead;
         float forward = movementInput.moveForward;
         float strafe = movementInput.moveStrafe;
-        float strafeFactor = forward > 0f ? 0.5f : forward < 0 ? -0.5f : 1;
+        float strafeFactor = forward > 0f ? 0.5f : forward < 0 ? -0.5f : 1f;
 
         if (strafe > 0f) {
             yaw -= 90f * strafeFactor;

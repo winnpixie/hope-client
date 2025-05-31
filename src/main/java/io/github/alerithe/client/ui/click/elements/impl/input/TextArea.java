@@ -1,7 +1,7 @@
 package io.github.alerithe.client.ui.click.elements.impl.input;
 
 import io.github.alerithe.client.ui.click.elements.Element;
-import io.github.alerithe.client.ui.click.elements.handlers.EventHandler;
+import io.github.alerithe.client.ui.click.elements.handlers.ElementEventListener;
 import net.minecraft.util.ChatAllowedCharacters;
 import org.lwjgl.input.Keyboard;
 
@@ -11,7 +11,7 @@ public class TextArea extends Element {
 
         setText(initialText);
 
-        addHandler(new EventHandler() {
+        addListener(new ElementEventListener() {
             @Override
             public void onKeyPressed(char charCode, int keyCode) {
                 String oldText = getText();

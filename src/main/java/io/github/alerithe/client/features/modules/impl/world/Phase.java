@@ -2,7 +2,7 @@ package io.github.alerithe.client.features.modules.impl.world;
 
 import io.github.alerithe.client.events.game.EventBlockCollision;
 import io.github.alerithe.client.events.game.EventBlockPush;
-import io.github.alerithe.client.events.game.EventOpaqueCheck;
+import io.github.alerithe.client.events.game.EventOpaqueBlockCheck;
 import io.github.alerithe.client.events.game.EventUpdate;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.features.modules.impl.world.phase.Latest;
@@ -26,13 +26,13 @@ public class Phase extends Module {
     }
 
     @Subscribe
-    private void onOpaqueCheck(EventOpaqueCheck event) {
-        event.setCancelled(true);
+    private void onOpaqueCheck(EventOpaqueBlockCheck event) {
+        event.cancel();
     }
 
     @Subscribe
     private void onBlockPush(EventBlockPush event) {
-        event.setCancelled(true);
+        event.cancel();
     }
 
     @Subscribe

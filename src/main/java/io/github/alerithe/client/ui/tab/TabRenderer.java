@@ -9,12 +9,12 @@ import io.github.alerithe.client.utilities.graphics.VisualHelper;
 import java.util.List;
 
 // TODO: Why do I insist on using a tab UI.
-public class Renderer extends Component {
+public class TabRenderer extends TabComponent {
     private static final int BACKGROUND_COLOR = 0x69000000;
 
     private static final int TEXT_COLOR = 0xFFAAAAAA;
 
-    public Renderer(Container container) {
+    public TabRenderer(TabContainer container) {
         super(container);
     }
 
@@ -23,11 +23,11 @@ public class Renderer extends Component {
         float xOffset = 0;
         xOffset = drawCategories(xOffset) + 1;
 
-        if (getContainer().getSection() == Section.MODULE) {
+        if (getContainer().getSection() == TabSection.MODULE) {
             drawModules(xOffset);
         }
 
-        if (getContainer().getSection() == Section.PROPERTY) {
+        if (getContainer().getSection() == TabSection.PROPERTY) {
             xOffset += drawModules(xOffset) + 1;
             drawProperties(xOffset);
         }

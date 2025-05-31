@@ -2,7 +2,7 @@ package io.github.alerithe.client.ui.click.elements.handlers;
 
 import io.github.alerithe.client.ui.click.elements.Element;
 
-public class EventHandler {
+public class ElementEventListener {
     private Element source;
 
     public Element getSource() {

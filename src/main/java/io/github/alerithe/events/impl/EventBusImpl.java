@@ -1,7 +1,7 @@
 package io.github.alerithe.events.impl;
 
-import io.github.alerithe.events.IEventBus;
-import io.github.alerithe.events.ISubscriber;
+import io.github.alerithe.events.EventBus;
+import io.github.alerithe.events.Subscriber;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -11,27 +11,28 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class EventBusImpl implements IEventBus {
-    private static final Map<Object, Subscriber<?>[]> CACHE = new HashMap<>();
+public class EventBusImpl implements EventBus {
+    private static final Map<Object, ReflectSubscriber<?>[]> REFLECTION_CACHE = new HashMap<>();
 
-    private final Map<Class<?>, List<ISubscriber<?>>> REGISTRY = new HashMap<>();
+    private final Map<Class<?>, List<Subscriber<?>>> REGISTRY = new HashMap<>();
 
-    public void subscribe(Object parent) {
-        if (CACHE.containsKey(parent)) {
-            for (Subscriber<?> handler : CACHE.get(parent)) subscribe(handler);
+    public void subscribeAll(Object parent) {
+        if (REFLECTION_CACHE.containsKey(parent)) {
+            for (ReflectSubscriber<?> subscriber : REFLECTION_CACHE.get(parent)) subscribeReflective(subscriber);
             return;
         }
 
-        List<Subscriber<?>> cache = new ArrayList<>();
+        List<ReflectSubscriber<?>> reflectionCache = new ArrayList<>();
 
         for (Method method : parent.getClass().getDeclaredMethods()) {
             if (!method.isAnnotationPresent(Subscribe.class)) continue;
+            if (method.getParameterCount() != 1) continue;
 
             if (!method.isAccessible()) method.setAccessible(true);
 
-            MethodSubscriber methodSubscriber = new MethodSubscriber(parent, method);
-            subscribe(methodSubscriber);
-            cache.add(methodSubscriber);
+            MethodSubscriber methodSub = new MethodSubscriber(parent, method);
+            subscribeReflective(methodSub);
+            reflectionCache.add(methodSub);
         }
 
         for (Field field : parent.getClass().getDeclaredFields()) {
@@ -39,44 +40,41 @@ public class EventBusImpl implements IEventBus {
 
             if (!field.isAccessible()) field.setAccessible(true);
 
-            try {
-                Subscriber<?> handler = (Subscriber<?>) field.get(parent);
-                subscribe(handler);
-                cache.add(handler);
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
+            FieldSubscriber fieldSub = new FieldSubscriber(parent, field);
+            subscribeReflective(fieldSub);
+            reflectionCache.add(fieldSub);
         }
 
-        CACHE.put(parent, cache.toArray(new Subscriber<?>[0]));
+        REFLECTION_CACHE.put(parent, reflectionCache.toArray(new ReflectSubscriber[0]));
     }
 
-    public <T> void subscribe(Subscriber<T> handler) {
-        subscribe(handler.getTargetClass(), handler);
+    private <T> void subscribeReflective(ReflectSubscriber<T> subscriber) {
+        subscribe(subscriber.getTarget(), subscriber.getSubscriber());
     }
 
-    public <T> void subscribe(Class<T> event, ISubscriber<T> handler) {
+    public <T> void subscribe(Class<T> event, Subscriber<T> subscriber) {
         REGISTRY.computeIfAbsent(event, v -> new CopyOnWriteArrayList<>())
-                .add(handler);
+                .add(subscriber);
     }
 
-    public void unsubscribe(Object parent) {
-        if (!CACHE.containsKey(parent)) return;
+    public void unsubscribeAll(Object parent) {
+        if (!REFLECTION_CACHE.containsKey(parent)) return;
 
-        for (Subscriber<?> handler : CACHE.get(parent)) unsubscribe(handler);
+        for (ReflectSubscriber<?> subscriber : REFLECTION_CACHE.get(parent))
+            unsubscribe(subscriber.getSubscriber());
     }
 
     @Override
-    public <T> void unsubscribe(ISubscriber<T> handler) {
-        REGISTRY.values().forEach(list -> list.remove(handler));
+    public <T> void unsubscribe(Subscriber<T> subscriber) {
+        REGISTRY.values().forEach(list -> list.remove(subscriber));
     }
 
     @Override
     public <T> T post(T value) {
-        List<ISubscriber<?>> list = REGISTRY.get(value.getClass());
+        List<Subscriber<?>> list = REGISTRY.get(value.getClass());
         if (list == null || list.isEmpty()) return value;
 
-        for (ISubscriber<?> handler : list) ((ISubscriber<T>) handler).handle(value);
+        for (Subscriber<?> subscriber : list) ((Subscriber<T>) subscriber).handle(value);
 
         return value;
     }

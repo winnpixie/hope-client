@@ -5,7 +5,7 @@ import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.features.properties.Property;
 import io.github.alerithe.client.features.properties.impl.*;
 import io.github.alerithe.client.ui.click.elements.Element;
-import io.github.alerithe.client.ui.click.elements.handlers.EventHandler;
+import io.github.alerithe.client.ui.click.elements.handlers.ElementEventListener;
 import io.github.alerithe.client.ui.click.elements.handlers.impl.Draggable;
 import io.github.alerithe.client.ui.click.elements.impl.Label;
 import io.github.alerithe.client.ui.click.elements.impl.input.Button;
@@ -38,7 +38,7 @@ public class WindowedUI extends GuiScreen {
         windowTitle.getNormalStyle().textStyle.setColor(0xFFFFFFFF);
         windowTitle.getNormalStyle().textStyle.setAlignment(TextAlignment.CENTER);
         windowTitle.getNormalStyle().textStyle.setPosition(TextPosition.MIDDLE);
-        windowTitle.addHandler(new Draggable());
+        windowTitle.addListener(new Draggable());
 
         Element windowContainer = new Element(0, 20, WINDOW_WIDTH, WINDOW_HEIGHT);
         windowContainer.getNormalStyle().setBackgroundColor(0xFF111111);
@@ -65,7 +65,7 @@ public class WindowedUI extends GuiScreen {
             float y = height * i;
 
             Button typeLbl = new Button(type.getLabel(), x, y, WINDOW_WIDTH / 4f, height);
-            typeLbl.addHandler(new EventHandler() {
+            typeLbl.addListener(new ElementEventListener() {
                 @Override
                 public void onLeftClick(int mouseX, int mouseY) {
                     moduleContainer.clearChildren();
@@ -101,7 +101,7 @@ public class WindowedUI extends GuiScreen {
             moduleBtn.getNormalStyle().setBackgroundColor(0xFF222222);
             moduleBtn.getNormalStyle().textStyle.setColor(module.isEnabled() ? 0xFFFFFFFF : 0xFFAAAAAA);
 
-            moduleBtn.addHandler(new EventHandler() {
+            moduleBtn.addListener(new ElementEventListener() {
                 @Override
                 public void onMouseDown(int mouseX, int mouseY, int button) {
                     if (button == 0) {
@@ -210,7 +210,7 @@ public class WindowedUI extends GuiScreen {
                         dblProp.getValue(), dblProp.getMinimum(), dblProp.getMaximum()) {
                     @Override
                     public void onValueChanged(double oldValue, double newValue) {
-                        dblProp.setValue(MathHelper.truncate(newValue, 1));
+                        dblProp.setValue(MathHelper.round(newValue, 1));
                     }
                 };
                 valueSlider.addChildren(nameLbl, valueLbl);
@@ -233,7 +233,7 @@ public class WindowedUI extends GuiScreen {
 
                 Button valueBtn = new Button(objProp.getValue().toString(),
                         width / 2f, 0, width / 2f, height);
-                valueBtn.addHandler(new EventHandler() {
+                valueBtn.addListener(new ElementEventListener() {
                     @Override
                     public void onLeftClick(int mouseX, int mouseY) {
                         int index = objProp.getValues().indexOf(objProp.getValue());

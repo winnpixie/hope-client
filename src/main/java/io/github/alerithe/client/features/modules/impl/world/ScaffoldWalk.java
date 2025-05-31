@@ -7,7 +7,7 @@ import io.github.alerithe.client.features.properties.impl.BooleanProperty;
 import io.github.alerithe.client.features.properties.impl.IntProperty;
 import io.github.alerithe.client.utilities.EntityHelper;
 import io.github.alerithe.client.utilities.GameHelper;
-import io.github.alerithe.client.utilities.MsTimer;
+import io.github.alerithe.client.utilities.Stopwatch;
 import io.github.alerithe.client.utilities.WorldHelper;
 import io.github.alerithe.events.impl.Subscribe;
 import net.minecraft.block.Block;
@@ -28,7 +28,7 @@ public class ScaffoldWalk extends Module {
     private final List<Block> blacklist = Arrays.asList(Blocks.cocoa, Blocks.water, Blocks.flowing_water, Blocks.lava,
             Blocks.flowing_lava, Blocks.air, Blocks.flower_pot, Blocks.red_flower, Blocks.yellow_flower,
             Blocks.tallgrass);
-    private final MsTimer timer = new MsTimer();
+    private final Stopwatch timer = new Stopwatch();
 
     private Data data;
     private int blocksPlaced;
@@ -90,7 +90,7 @@ public class ScaffoldWalk extends Module {
 
     @Subscribe
     private void onBlockEdge(EventBlockEdgeCheck event) {
-        event.setCancelled(true);
+        event.cancel();
     }
 
     private Data makeData(BlockPos pos) {
