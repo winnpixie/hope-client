@@ -7,12 +7,22 @@ import org.apache.logging.log4j.Logger;
 public class Plugin extends Feature {
     private final Logger logger = LogManager.getLogger(this.getName());
 
-    public Plugin(String name, String... aliases) {
-        super(name, aliases);
+    private PluginManifest manifest;
+
+    public Plugin() {
+        super("");
     }
 
     public Logger getLogger() {
         return logger;
+    }
+
+    public PluginManifest getManifest() {
+        return manifest;
+    }
+
+    protected final void setManifest(PluginManifest manifest) {
+        this.manifest = manifest;
     }
 
     public void onLoad() {

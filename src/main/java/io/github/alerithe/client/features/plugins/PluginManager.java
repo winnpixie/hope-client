@@ -3,14 +3,20 @@ package io.github.alerithe.client.features.plugins;
 import io.github.alerithe.client.Client;
 import io.github.alerithe.client.features.FeatureManager;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.Enumeration;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 
 public class PluginManager extends FeatureManager<Plugin> {
+    private ClassLoader primaryClassLoader;
+
     @Override
     public void load() {
         setConfigurationFile(new File(Client.DATA_DIR, "plugins"));
@@ -18,6 +24,7 @@ public class PluginManager extends FeatureManager<Plugin> {
             Client.LOGGER.warn("Could not create plugins directory (does it already exist?)!");
         }
 
+        this.primaryClassLoader = getClass().getClassLoader();
         loadPluginsFromFiles();
 
         Client.LOGGER.info(String.format("Registered %d Plugin(s)", getChildren().size()));
@@ -33,41 +40,61 @@ public class PluginManager extends FeatureManager<Plugin> {
         if (pluginFiles == null) return;
         if (pluginFiles.length < 1) return;
 
-        ClassLoader clsLoader = getClass().getClassLoader();
-        Thread.currentThread().setContextClassLoader(clsLoader);
+        for (File file : pluginFiles) {
+            Plugin plugin = loadPluginFromFile(file);
+            if (plugin == null) continue;
 
-        for (File zipFile : pluginFiles) {
-            String pathName = zipFile.getAbsolutePath();
-            if (!pathName.toLowerCase().endsWith(".jar") && !pathName.toLowerCase().endsWith(".zip")) continue;
+            getChildren().add(plugin);
+            Client.LOGGER.info(String.format("Registered plugin %s v%s",
+                    plugin.getManifest().getName(),
+                    plugin.getManifest().getVersion()));
+        }
+    }
 
-            try (ZipFile zip = new ZipFile((zipFile));
-                 URLClassLoader urlClsLoader = new URLClassLoader(new URL[]{zipFile.toURI().toURL()}, clsLoader)) {
-                Enumeration<? extends ZipEntry> entries = zip.entries();
-                while (entries.hasMoreElements()) {
-                    ZipEntry entry = entries.nextElement();
-                    if (entry.isDirectory()) continue;
-                    if (!entry.getName().toLowerCase().endsWith(".class")) continue;
+    private Plugin loadPluginFromFile(File file) {
+        String path = file.getPath();
+        if (!path.toLowerCase().endsWith(".jar")) return null;
 
-                    String className = entry.getName().replaceAll("[/\\\\]", ".");
-                    className = className.substring(0, className.lastIndexOf('.'));
-                    Class<?> cls = urlClsLoader.loadClass(className);
-                    if (!Plugin.class.isAssignableFrom(cls)) continue;
+        PluginClassLoader loader = null;
 
-                    Plugin plugin = (Plugin) cls.newInstance();
-                    getChildren().add(plugin);
-                    Client.LOGGER.info(String.format("Registered plugin %s", plugin.getName()));
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
+        try (JarFile jar = new JarFile(file)) {
+            JarEntry manifestEntry = jar.getJarEntry("plugin.properties");
+            if (manifestEntry == null) return null;
+
+            loader = new PluginClassLoader(file, primaryClassLoader);
+
+            PluginManifest manifest = new PluginManifest(jar.getInputStream(manifestEntry));
+            Class<?> entryPoint = loader.loadClass(manifest.getEntryPoint());
+            if (!Plugin.class.isAssignableFrom(entryPoint)) return null;
+
+            Plugin plugin = (Plugin) entryPoint.newInstance();
+            plugin.setManifest(manifest);
+            return plugin;
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            try {
+                if (loader != null) loader.close();
+            } catch (IOException ex) {
+                ex.printStackTrace();
             }
         }
+
+        return null;
     }
 
     @Override
     public void save() {
+
         getChildren().forEach(plugin -> {
-            plugin.getLogger().info(String.format("Unloading %s", plugin.getName()));
+            plugin.getLogger().info(String.format("Unloading %s", plugin.getManifest().getName()));
             plugin.onExit();
+
+            try {
+                ((PluginClassLoader) plugin.getClass().getClassLoader()).close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         });
     }
 }

@@ -1,6 +1,6 @@
 package io.github.alerithe.client.features.modules.impl.movement;
 
-import io.github.alerithe.client.events.game.EventBlockEdgeCheck;
+import io.github.alerithe.client.events.game.EventBlockEdgeTest;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.events.impl.Subscribe;
 
@@ -10,7 +10,7 @@ public class SafeWalk extends Module {
     }
 
     @Subscribe
-    private void onBlockEdge(EventBlockEdgeCheck event) {
+    private void onBlockEdge(EventBlockEdgeTest event) {
         event.cancel();
     }
 }

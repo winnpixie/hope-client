@@ -1,6 +1,6 @@
 package io.github.alerithe.client.features.modules.impl.world;
 
-import io.github.alerithe.client.events.game.EventBlockEdgeCheck;
+import io.github.alerithe.client.events.game.EventBlockEdgeTest;
 import io.github.alerithe.client.events.game.EventUpdate;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.features.properties.impl.BooleanProperty;
@@ -89,7 +89,7 @@ public class ScaffoldWalk extends Module {
     }
 
     @Subscribe
-    private void onBlockEdge(EventBlockEdgeCheck event) {
+    private void onBlockEdge(EventBlockEdgeTest event) {
         event.cancel();
     }
 

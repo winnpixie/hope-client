@@ -24,7 +24,6 @@ public class CommandManager extends FeatureManager<Command> {
         add(new CommandServerInfo());
         add(new CommandSetName());
         add(new CommandSkull());
-        add(new CommandSpeak());
         add(new CommandToggle());
         add(new CommandVClip());
         add(new CommandWhois());

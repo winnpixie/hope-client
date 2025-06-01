@@ -204,7 +204,7 @@ public class EntityHelper {
         } else if (percent <= 0.8) {
             return 0xFFFFFF00;
         } else if (percent <= 1) {
-            return 0xFF99FF00;
+            return 0xFF00FF00;
         }
 
         return 0xFF0099FF;

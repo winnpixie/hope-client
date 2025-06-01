@@ -90,7 +90,7 @@ public class HUD extends Module {
     }
 
     private void drawInfo(ScaledResolution display) {
-        String text = String.format("\247o%s\247r", Client.NAME);
+        String text = String.format("\247o%s \2477%s \247r", Client.NAME, Client.BUILD);
 
         // FPS
         if (frameRate.getValue()) text += String.format(" \2477[\247f%d FPS\2477]", Minecraft.getDebugFPS());
