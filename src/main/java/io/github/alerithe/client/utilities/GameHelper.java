@@ -8,7 +8,7 @@ import net.minecraft.util.IChatComponent;
 
 public class GameHelper {
     public static Minecraft getGame() {
-        return Minecraft.getInstance();
+        return Minecraft.getMinecraft();
     }
 
     public static PlayerControllerMP getController() {

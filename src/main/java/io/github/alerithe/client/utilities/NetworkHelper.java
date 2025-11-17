@@ -1,7 +1,6 @@
 package io.github.alerithe.client.utilities;
 
 import com.mojang.authlib.GameProfile;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.Packet;
@@ -10,7 +9,7 @@ import java.util.UUID;
 
 public class NetworkHelper {
     public static int getPing() {
-        return getPing(Minecraft.getInstance().player);
+        return getPing(EntityHelper.getUser());
     }
 
     public static int getPing(EntityPlayer player) {
@@ -24,7 +23,7 @@ public class NetworkHelper {
     }
 
     public static NetworkPlayerInfo getInfo() {
-        return getInfo(Minecraft.getInstance().player);
+        return getInfo(EntityHelper.getUser());
     }
 
     public static NetworkPlayerInfo getInfo(EntityPlayer player) {
@@ -35,10 +34,10 @@ public class NetworkHelper {
     }
 
     public static NetworkPlayerInfo getInfo(UUID id) {
-        return Minecraft.getInstance().player.sendQueue.getPlayerInfo(id);
+        return EntityHelper.getUser().sendQueue.getPlayerInfo(id);
     }
 
     public static void sendPacket(Packet<?> packet) {
-        Minecraft.getInstance().player.sendQueue.addToSendQueue(packet);
+        EntityHelper.getUser().sendQueue.addToSendQueue(packet);
     }
 }

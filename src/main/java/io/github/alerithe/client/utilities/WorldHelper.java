@@ -3,14 +3,13 @@ package io.github.alerithe.client.utilities;
 import io.github.alerithe.client.extensions.LocalPlayer;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.BlockPos;
 
 public class WorldHelper {
     public static WorldClient getWorld() {
-        return Minecraft.getInstance().world;
+        return GameHelper.getGame().world;
     }
 
     public static Block getBlock(int x, int y, int z) {
@@ -30,51 +29,62 @@ public class WorldHelper {
     }
 
     public static double distance(Entity end) {
-        return distance(Minecraft.getInstance().player, end);
+        return distance(EntityHelper.getUser(),
+                end);
     }
 
     public static double distance(double endX, double endY, double endZ) {
-        LocalPlayer user = Minecraft.getInstance().player;
+        LocalPlayer user = EntityHelper.getUser();
 
-        return distance(user.posX, user.posY, user.posZ, endX, endY, endZ);
+        return distance(user.posX, user.posY, user.posZ,
+                endX, endY, endZ);
     }
 
     public static double distance(Entity start, Entity end) {
-        return distance(start, end.posX, end.posY, end.posY);
+        return distance(start,
+                end.posX, end.posY, end.posY);
     }
 
     public static double distance(Entity start, double endX, double endY, double endZ) {
-        return distance(start.posX, start.posY, start.posY, endX, endY, endZ);
+        return distance(start.posX, start.posY, start.posY,
+                endX, endY, endZ);
     }
 
     public static double distance(double startX, double startY, double startZ, Entity end) {
-        return distance(startX, startY, startZ, end.posX, end.posY, end.posZ);
+        return distance(startX, startY, startZ,
+                end.posX, end.posY, end.posZ);
     }
 
     public static double distance(double startX, double startY, double startZ, double endX, double endY, double endZ) {
-        return Math.sqrt(distanceSq(startX, startY, startZ, endX, endY, endZ));
+        return Math.sqrt(distanceSq(startX, startY, startZ,
+                endX, endY, endZ));
     }
 
     public static double distanceSq(Entity end) {
-        return distanceSq(Minecraft.getInstance().player, end);
+        return distanceSq(EntityHelper.getUser(),
+                end);
     }
 
     public static double distanceSq(double startX, double startY, double startZ) {
-        LocalPlayer user = Minecraft.getInstance().player;
+        LocalPlayer user = EntityHelper.getUser();
 
-        return distanceSq(startX, startY, startZ, user.posX, user.posY, user.posZ);
+        return distanceSq(startX, startY, startZ,
+                user.posX, user.posY, user.posZ);
     }
 
     public static double distanceSq(Entity start, Entity end) {
-        return distanceSq(start, end.posX, end.posY, end.posZ);
+        return distanceSq(start,
+                end.posX, end.posY, end.posZ);
     }
 
     public static double distanceSq(Entity start, double endX, double endY, double endZ) {
-        return distanceSq(start.posX, start.posY, start.posZ, endX, endY, endZ);
+        return distanceSq(start.posX, start.posY, start.posZ,
+                endX, endY, endZ);
     }
 
     public static double distanceSq(double startX, double startY, double startZ, Entity end) {
-        return distanceSq(startX, startY, startZ, end.posX, end.posY, end.posZ);
+        return distanceSq(startX, startY, startZ,
+                end.posX, end.posY, end.posZ);
     }
 
     public static double distanceSq(double startX, double startY, double startZ, double endX, double endY, double endZ) {

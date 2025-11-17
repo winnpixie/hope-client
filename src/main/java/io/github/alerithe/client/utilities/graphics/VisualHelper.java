@@ -1,5 +1,6 @@
 package io.github.alerithe.client.utilities.graphics;
 
+import io.github.alerithe.client.utilities.GameHelper;
 import io.github.alerithe.client.utilities.graphics.drawing.MinecraftGraphicsDevice;
 import io.github.alerithe.client.utilities.graphics.text.MinecraftTextRenderer;
 import net.minecraft.client.Minecraft;
@@ -42,11 +43,11 @@ public class VisualHelper {
         if (scaledResolution == null
                 || previousWidth != Display.getWidth()
                 || previousHeight != Display.getHeight()
-                || previousScale != Minecraft.getInstance().gameSettings.guiScale) {
+                || previousScale != GameHelper.getGame().gameSettings.guiScale) {
             previousWidth = Display.getWidth();
             previousHeight = Display.getHeight();
-            previousScale = Minecraft.getInstance().gameSettings.guiScale;
-            scaledResolution = new ScaledResolution(Minecraft.getInstance());
+            previousScale = GameHelper.getGame().gameSettings.guiScale;
+            scaledResolution = new ScaledResolution(GameHelper.getGame());
         }
 
         return scaledResolution;
@@ -72,7 +73,7 @@ public class VisualHelper {
     }
 
     public static boolean isInView(AxisAlignedBB aabb) {
-        Entity current = Minecraft.getInstance().getRenderViewEntity();
+        Entity current = GameHelper.getGame().getRenderViewEntity();
         frustum.setPosition(current.posX, current.posY, current.posZ);
 
         return frustum.isBoundingBoxInFrustum(aabb);

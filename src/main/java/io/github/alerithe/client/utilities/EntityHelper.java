@@ -2,7 +2,6 @@ package io.github.alerithe.client.utilities;
 
 import io.github.alerithe.client.Client;
 import io.github.alerithe.client.extensions.LocalPlayer;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.Entity;
@@ -22,7 +21,7 @@ import net.minecraft.util.MathHelper;
 
 public class EntityHelper {
     public static LocalPlayer getUser() {
-        return Minecraft.getInstance().player;
+        return GameHelper.getGame().player;
     }
 
     public static boolean isUser(Entity entity) {
@@ -59,7 +58,7 @@ public class EntityHelper {
     }
 
     public static float[] getRotationToBlock(BlockPos end) {
-        return getRotationToBlock(Minecraft.getInstance().player,
+        return getRotationToBlock(getUser(),
                 end);
     }
 
@@ -91,7 +90,7 @@ public class EntityHelper {
     }
 
     public static float[] getRotationToEntity(Entity end) {
-        return getRotationToEntity(Minecraft.getInstance().player,
+        return getRotationToEntity(getUser(),
                 end);
     }
 
@@ -135,7 +134,7 @@ public class EntityHelper {
     }
 
     public static float[] getRotationToPosition(double endX, double endY, double endZ) {
-        return getRotationToPosition(Minecraft.getInstance().player,
+        return getRotationToPosition(getUser(),
                 endX, endY, endZ);
     }
 

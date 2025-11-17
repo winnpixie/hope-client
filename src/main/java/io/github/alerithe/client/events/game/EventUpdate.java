@@ -49,6 +49,6 @@ public class EventUpdate extends CancellableEvent {
         }
     }
 
-    public static class Post {
+    public static class Post extends EventUpdate {
     }
 }
