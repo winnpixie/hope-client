@@ -19,7 +19,7 @@ public class Module extends Feature {
         super(name, aliases);
         this.type = type;
         this.propertyManager = new PropertyManager();
-        this.propertyManager.setDataFile(new File(Client.MODULE_MANAGER.getDataFile(), getName() + ".txt"));
+        this.propertyManager.setDataFile(new File(Client.MODULE_MANAGER.getDataFile(), getName() + ".properties"));
 
         visibility.setValue(type.equals(Type.VISUAL));
         propertyManager.add(visibility);

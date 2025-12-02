@@ -23,7 +23,7 @@ import java.util.Map;
 
 public class ModuleManager extends FeatureManager<Module> {
     private File statesDataFile;
-    private boolean restoredStates;
+    private boolean restored;
 
     private final Map<Module.Type, List<Module>> modulesInType = new EnumMap<>(Module.Type.class);
 
@@ -34,7 +34,7 @@ public class ModuleManager extends FeatureManager<Module> {
             Client.LOGGER.warn("Could not create modules directory (does it already exist?)!");
         }
 
-        statesDataFile = new File(getDataFile(), "enabled.txt");
+        statesDataFile = new File(getDataFile(), "RESTORE_ON_PLAY");
 
         for (Module.Type type : Module.Type.values()) {
             modulesInType.put(type, new ArrayList<>());
@@ -63,7 +63,7 @@ public class ModuleManager extends FeatureManager<Module> {
         add(new NoSlowdown()); // TODO: Water
         add(new SafeWalk());
         add(new Speed());
-        add(new Spider()); // TODO: Finish/Fix?
+        add(new Spider()); // FIXME: Try to find original motion value?
         add(new Step());
 
         // Player
@@ -137,10 +137,10 @@ public class ModuleManager extends FeatureManager<Module> {
             @Override
             public void handle(EventTick.End event) {
                 if (!event.isInGame()) return;
-                if (restoredStates) return; // Just in case.
+                if (restored) return; // Just in case.
 
                 toRestore.forEach(Module::toggle);
-                restoredStates = true;
+                restored = true;
                 Client.EVENT_BUS.unsubscribe(this);
             }
         });
@@ -160,14 +160,12 @@ public class ModuleManager extends FeatureManager<Module> {
     @Override
     public void save() {
         getChildren().forEach(module -> module.getPropertyManager().save());
-        if (!restoredStates) return;
+        if (!restored) return;
 
         StringBuilder builder = new StringBuilder();
 
         for (Module module : getChildren()) {
-            if (module.isEnabled()) {
-                builder.append(module.getName()).append('\n');
-            }
+            if (module.isEnabled()) builder.append(module.getName()).append('\n');
         }
 
         try {

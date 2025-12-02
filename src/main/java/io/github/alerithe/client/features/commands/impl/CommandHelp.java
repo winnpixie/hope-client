@@ -12,7 +12,7 @@ public class CommandHelp extends Command {
     private static final int COMMANDS_PER_PAGE = 7;
 
     public CommandHelp() {
-        super("help", new String[]{"?", "commands"}, "[page/command]");
+        super("help", new String[]{"?", "commands"}, "[page|command]");
     }
 
     @Override

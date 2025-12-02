@@ -12,7 +12,7 @@ import java.nio.file.Files;
 public class KeybindManager extends FeatureManager<Keybind> {
     @Override
     public void load() {
-        setDataFile(new File(Client.DATA_DIR, "keybinds.txt"));
+        setDataFile(new File(Client.DATA_DIR, "keybinds.properties"));
 
         try {
             Files.readAllLines(getDataFile().toPath()).forEach(line -> {

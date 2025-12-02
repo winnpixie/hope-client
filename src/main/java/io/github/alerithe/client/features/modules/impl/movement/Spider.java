@@ -12,11 +12,10 @@ public class Spider extends Module {
 
     @Subscribe
     private void onPreUpdate(EventUpdate.Pre event) {
-        // FIXME: How tired was I when I wrote this?
         if (!EntityHelper.getUser().isCollidedHorizontally) return;
 
         if (EntityHelper.getUser().fallDistance > 0) {
-            EntityHelper.getUser().motionY = 0.2;
+            EntityHelper.getUser().motionY = 1.0 / 32.0;
             EntityHelper.getUser().fallDistance = 0;
         }
     }

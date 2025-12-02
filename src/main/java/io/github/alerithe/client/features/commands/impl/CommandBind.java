@@ -9,7 +9,7 @@ import org.lwjgl.input.Keyboard;
 
 public class CommandBind extends Command {
     public CommandBind() {
-        super("bind", new String[]{"b"}, "<keybind> <key>");
+        super("keybind", new String[]{"kb", "bind", "b"}, "<keybind> <key>");
     }
 
     @Override
