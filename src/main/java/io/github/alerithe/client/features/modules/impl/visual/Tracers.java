@@ -56,7 +56,7 @@ public class Tracers extends Module {
                     - GameHelper.getGame().getRenderManager().viewerPosZ);
 
             float[] projection = VisualHelper.project((float) x, (float) y, (float) z);
-            if (projection == null) continue;
+            if (projection.length == 0) continue;
 
             entities.add(entity);
             projections.put(entity, projection);

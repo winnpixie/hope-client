@@ -11,17 +11,30 @@ import java.io.File;
 public class Module extends Feature {
     private final Type type;
     private final PropertyManager propertyManager;
+    private final BooleanProperty visibility = new BooleanProperty("Hidden", new String[]{"hide"}, false);
+
     private boolean enabled;
-    public BooleanProperty hidden = new BooleanProperty("Hidden", new String[]{"hide"}, false);
 
     public Module(String name, String[] aliases, Type type) {
         super(name, aliases);
         this.type = type;
         this.propertyManager = new PropertyManager();
-        this.propertyManager.setConfigurationFile(new File(Client.MODULE_MANAGER.getConfigurationFile(), getName() + ".txt"));
+        this.propertyManager.setDataFile(new File(Client.MODULE_MANAGER.getDataFile(), getName() + ".txt"));
 
-        hidden.setValue(type.equals(Type.VISUAL));
-        propertyManager.add(hidden);
+        visibility.setValue(type.equals(Type.VISUAL));
+        propertyManager.add(visibility);
+    }
+
+    public Type getType() {
+        return type;
+    }
+
+    public PropertyManager getPropertyManager() {
+        return propertyManager;
+    }
+
+    public BooleanProperty getVisibility() {
+        return visibility;
     }
 
     public boolean isEnabled() {
@@ -43,14 +56,6 @@ public class Module extends Feature {
 
         // EVENT
         Client.EVENT_BUS.post(new ModuleToggleEvent(this));
-    }
-
-    public Type getType() {
-        return type;
-    }
-
-    public PropertyManager getPropertyManager() {
-        return propertyManager;
     }
 
     public void toggle() {

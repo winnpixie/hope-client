@@ -135,7 +135,7 @@ public class HUD extends Module {
 
         float y = 2;
         List<Module> enabled = Client.MODULE_MANAGER.getChildren().stream().filter(Module::isEnabled)
-                .filter(module -> !module.hidden.getValue()).sorted(moduleSorter).collect(Collectors.toList());
+                .filter(module -> !module.getVisibility().getValue()).sorted(moduleSorter).collect(Collectors.toList());
         for (Module module : enabled) {
             float textWidth = VisualHelper.MC_FONT.getStringWidth(module.getName());
             float x = display.getScaledWidth() - textWidth;

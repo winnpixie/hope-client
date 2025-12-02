@@ -7,18 +7,18 @@ import java.util.List;
 public class FeatureManager<T extends Feature> {
     private final List<T> children = new ArrayList<>();
 
-    private File configurationFile;
+    private File dataFile;
 
     public List<T> getChildren() {
         return children;
     }
 
-    public File getConfigurationFile() {
-        return configurationFile;
+    public File getDataFile() {
+        return dataFile;
     }
 
-    public void setConfigurationFile(File configurationFile) {
-        this.configurationFile = configurationFile;
+    public void setDataFile(File dataFile) {
+        this.dataFile = dataFile;
     }
 
     public void add(T feature) {

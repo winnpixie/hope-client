@@ -30,6 +30,8 @@ public class Freecam extends Module {
 
     @Override
     public void onDisable() {
+        EntityHelper.getUser().setSpeed(0);
+
         EntityHelper.getUser().copyLocationAndAnglesFrom(clone);
         EntityHelper.getUser().rotationYawHead = clone.rotationYawHead;
         WorldHelper.getWorld().removeEntityFromWorld(clone.getEntityId());
@@ -52,7 +54,7 @@ public class Freecam extends Module {
     @Subscribe
     private void onPacketWrite(EventPacket.Write event) {
         if (event.getPacket() instanceof C02PacketUseEntity || event.getPacket() instanceof C0BPacketEntityAction
-                || event.getPacket() instanceof C07PacketPlayerDigging | event.getPacket() instanceof C0APacketAnimation
+                || event.getPacket() instanceof C07PacketPlayerDigging || event.getPacket() instanceof C0APacketAnimation
                 || event.getPacket() instanceof C08PacketPlayerBlockPlacement) {
             event.cancel();
         }

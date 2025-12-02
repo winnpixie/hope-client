@@ -5,13 +5,10 @@ import io.github.alerithe.client.features.commands.ErrorMessages;
 import io.github.alerithe.client.utilities.GameHelper;
 import io.github.alerithe.mojang.MinecraftAPI;
 import io.github.alerithe.mojang.Profile;
-import org.lwjgl.Sys;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Arrays;
-import java.util.Comparator;
 import java.util.Date;
 
 public class CommandWhois extends Command {

@@ -11,12 +11,13 @@ import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.client.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.ArrayDeque;
+import java.util.Deque;
 
 public class Blink extends Module {
+    private final Deque<Packet<?>> packetDeque = new ArrayDeque<>();
+
     private EntityOtherPlayerMP clone;
-    private final List<Packet<?>> packetQueue = new ArrayList<>();
     private long startTime;
 
     public Blink() {
@@ -39,10 +40,14 @@ public class Blink extends Module {
     public void onDisable() {
         WorldHelper.getWorld().removeEntityFromWorld(clone.getEntityId());
         clone = null;
-        packetQueue.forEach(NetworkHelper::sendPacket);
+        int packetCount = packetDeque.size();
+
+        while (!packetDeque.isEmpty()) {
+            NetworkHelper.sendPacket(packetDeque.poll());
+        }
+
         GameHelper.printChatMessage(String.format("%dms elapsed, %d packets captured.",
-                System.currentTimeMillis() - startTime, packetQueue.size()));
-        packetQueue.clear();
+                System.currentTimeMillis() - startTime, packetCount));
     }
 
     @Subscribe
@@ -51,7 +56,7 @@ public class Blink extends Module {
                 || event.getPacket() instanceof C02PacketUseEntity || event.getPacket() instanceof C0BPacketEntityAction
                 || event.getPacket() instanceof C07PacketPlayerDigging
                 || event.getPacket() instanceof C08PacketPlayerBlockPlacement) {
-            packetQueue.add(event.getPacket());
+            packetDeque.offer(event.getPacket());
             event.cancel();
         }
     }

@@ -14,10 +14,10 @@ import java.nio.file.Files;
 public class FriendManager extends FeatureManager<Friend> {
     @Override
     public void load() {
-        setConfigurationFile(new File(Client.DATA_DIR, "friends.txt"));
+        setDataFile(new File(Client.DATA_DIR, "friends.txt"));
 
         try {
-            Files.readAllLines(getConfigurationFile().toPath()).forEach(line -> {
+            Files.readAllLines(getDataFile().toPath()).forEach(line -> {
                 String[] data = line.split(":");
                 add(new Friend(data[0], data[1]));
             });
@@ -125,7 +125,7 @@ public class FriendManager extends FeatureManager<Friend> {
                 .append(friend.getAliases()[0]).append('\n'));
 
         try {
-            Files.write(getConfigurationFile().toPath(), builder.toString().getBytes());
+            Files.write(getDataFile().toPath(), builder.toString().getBytes());
         } catch (IOException e) {
             e.printStackTrace();
         }

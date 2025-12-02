@@ -13,6 +13,7 @@ public class CommandManager extends FeatureManager<Command> {
     public void load() {
         add(new CommandBadItem());
         add(new CommandBind());
+        add(new CommandClient());
         add(new CommandEditSign());
         add(new CommandEntityInfo());
         add(new CommandForward());

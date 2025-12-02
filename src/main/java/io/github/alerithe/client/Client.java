@@ -1,7 +1,6 @@
 package io.github.alerithe.client;
 
 import io.github.alerithe.client.events.game.EventProgramExit;
-import io.github.alerithe.client.extensions.IngameGui;
 import io.github.alerithe.client.features.commands.CommandManager;
 import io.github.alerithe.client.features.friends.FriendManager;
 import io.github.alerithe.client.features.keybinds.KeybindManager;
@@ -45,8 +44,6 @@ public class Client {
         KEYBIND_MANAGER.load();
         FRIEND_MANAGER.load();
         PLUGIN_MANAGER.load();
-
-        GameHelper.getGame().ingameGUI = new IngameGui(GameHelper.getGame());
 
         EVENT_BUS.subscribe(EventProgramExit.class, event -> {
             MODULE_MANAGER.save();

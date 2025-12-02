@@ -60,7 +60,7 @@ public class NameTags extends Module {
 
             float[] projection = VisualHelper.project((float) x, (float) y, (float) z);
 
-            if (projection == null) continue;
+            if (projection.length == 0) continue;
             if (projection[2] < 0f) continue;
             if (projection[2] >= 1f) continue;
 

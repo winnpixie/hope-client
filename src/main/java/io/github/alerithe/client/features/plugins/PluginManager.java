@@ -3,14 +3,8 @@ package io.github.alerithe.client.features.plugins;
 import io.github.alerithe.client.Client;
 import io.github.alerithe.client.features.FeatureManager;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
@@ -19,8 +13,8 @@ public class PluginManager extends FeatureManager<Plugin> {
 
     @Override
     public void load() {
-        setConfigurationFile(new File(Client.DATA_DIR, "plugins"));
-        if (!getConfigurationFile().exists() && !getConfigurationFile().mkdir()) {
+        setDataFile(new File(Client.DATA_DIR, "plugins"));
+        if (!getDataFile().exists() && !getDataFile().mkdir()) {
             Client.LOGGER.warn("Could not create plugins directory (does it already exist?)!");
         }
 
@@ -36,7 +30,7 @@ public class PluginManager extends FeatureManager<Plugin> {
     }
 
     private void loadPluginsFromFiles() {
-        File[] pluginFiles = getConfigurationFile().listFiles();
+        File[] pluginFiles = getDataFile().listFiles();
         if (pluginFiles == null) return;
         if (pluginFiles.length < 1) return;
 

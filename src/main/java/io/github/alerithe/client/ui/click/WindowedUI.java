@@ -1,6 +1,7 @@
 package io.github.alerithe.client.ui.click;
 
 import io.github.alerithe.client.Client;
+import io.github.alerithe.client.features.keybinds.Keybind;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.features.properties.Property;
 import io.github.alerithe.client.features.properties.impl.*;
@@ -17,6 +18,7 @@ import io.github.alerithe.client.ui.click.elements.styling.text.TextAlignment;
 import io.github.alerithe.client.ui.click.elements.styling.text.TextPosition;
 import io.github.alerithe.client.utilities.MathHelper;
 import net.minecraft.client.gui.GuiScreen;
+import org.lwjgl.input.Keyboard;
 
 import java.io.IOException;
 import java.util.List;
@@ -97,11 +99,22 @@ public class WindowedUI extends GuiScreen {
             float x = 0;
             float y = height * i;
 
-            Button moduleBtn = new Button(module.getName(), x, y, WINDOW_WIDTH / 4f, height);
+            Keybind bind = Client.KEYBIND_MANAGER.find(module.getName());
+            Button moduleBtn = new Button(String.format("%s [%s]",
+                    module.getName(), Keyboard.getKeyName(bind.getKey())),
+                    x, y, WINDOW_WIDTH / 4f, height);
             moduleBtn.getNormalStyle().setBackgroundColor(0xFF222222);
             moduleBtn.getNormalStyle().textStyle.setColor(module.isEnabled() ? 0xFFFFFFFF : 0xFFAAAAAA);
 
             moduleBtn.addListener(new ElementEventListener() {
+                private boolean waiting;
+
+                @Override
+                public void onMiddleClick(int mouseX, int mouseY) {
+                    moduleBtn.setText(String.format("%s [... (Repeat for NONE)]", module.getName()));
+                    waiting = true;
+                }
+
                 @Override
                 public void onMouseDown(int mouseX, int mouseY, int button) {
                     if (button == 0) {
@@ -112,6 +125,17 @@ public class WindowedUI extends GuiScreen {
                         propertyContainer.clearChildren();
 
                         buildProperties(module, propertyContainer);
+                    }
+                }
+
+                @Override
+                public void onKeyPressed(char charCode, int keyCode) {
+                    if (waiting) {
+                        waiting = false;
+
+                        bind.setKey(keyCode == bind.getKey() ? Keyboard.KEY_NONE : keyCode);
+                        moduleBtn.setText(String.format("%s [%s]",
+                                module.getName(), Keyboard.getKeyName(bind.getKey())));
                     }
                 }
             });

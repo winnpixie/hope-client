@@ -17,21 +17,28 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Map;
 
 public class ModuleManager extends FeatureManager<Module> {
-    private File moduleStatesFile;
+    private File statesDataFile;
     private boolean restoredStates;
+
+    private final Map<Module.Type, List<Module>> modulesInType = new EnumMap<>(Module.Type.class);
 
     @Override
     public void load() {
-        setConfigurationFile(new File(Client.DATA_DIR, "modules"));
-        if (!getConfigurationFile().exists() && !getConfigurationFile().mkdir()) {
+        setDataFile(new File(Client.DATA_DIR, "modules"));
+        if (!getDataFile().exists() && !getDataFile().mkdir()) {
             Client.LOGGER.warn("Could not create modules directory (does it already exist?)!");
         }
 
-        moduleStatesFile = new File(getConfigurationFile(), "enabled.txt");
+        statesDataFile = new File(getDataFile(), "enabled.txt");
+
+        for (Module.Type type : Module.Type.values()) {
+            modulesInType.put(type, new ArrayList<>());
+        }
 
         // Combat
         add(new AntiBot());
@@ -115,16 +122,12 @@ public class ModuleManager extends FeatureManager<Module> {
             module.getPropertyManager().load();
         });
 
-        List<Module> toEnable = new ArrayList<>();
+        List<Module> toRestore = new ArrayList<>();
 
         try {
-            Files.readAllLines(moduleStatesFile.toPath()).forEach(line -> {
-                String[] data = line.split(":", 2);
-                Module module = find(data[0]);
-                if (module == null) return;
-                if (data[1].equalsIgnoreCase("false")) return;
-
-                toEnable.add(module);
+            Files.readAllLines(statesDataFile.toPath()).forEach(line -> {
+                Module module = find(line);
+                if (module != null) toRestore.add(module);
             });
         } catch (IOException e) {
             e.printStackTrace();
@@ -136,15 +139,22 @@ public class ModuleManager extends FeatureManager<Module> {
                 if (!event.isInGame()) return;
                 if (restoredStates) return; // Just in case.
 
-                toEnable.forEach(Module::toggle);
+                toRestore.forEach(Module::toggle);
                 restoredStates = true;
                 Client.EVENT_BUS.unsubscribe(this);
             }
         });
     }
 
+    @Override
+    public void add(Module feature) {
+        modulesInType.get(feature.getType()).add(feature);
+
+        super.add(feature);
+    }
+
     public List<Module> getAllInType(Module.Type type) {
-        return getChildren().stream().filter(module -> module.getType().equals(type)).collect(Collectors.toList());
+        return modulesInType.get(type);
     }
 
     @Override
@@ -153,11 +163,15 @@ public class ModuleManager extends FeatureManager<Module> {
         if (!restoredStates) return;
 
         StringBuilder builder = new StringBuilder();
-        getChildren().forEach(module -> builder.append(module.getName()).append(':')
-                .append(module.isEnabled()).append('\n'));
+
+        for (Module module : getChildren()) {
+            if (module.isEnabled()) {
+                builder.append(module.getName()).append('\n');
+            }
+        }
 
         try {
-            Files.write(moduleStatesFile.toPath(), builder.toString().getBytes());
+            Files.write(statesDataFile.toPath(), builder.toString().getBytes());
         } catch (IOException e) {
             e.printStackTrace();
         }

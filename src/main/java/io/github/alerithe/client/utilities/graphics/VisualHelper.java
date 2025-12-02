@@ -3,7 +3,6 @@ package io.github.alerithe.client.utilities.graphics;
 import io.github.alerithe.client.utilities.GameHelper;
 import io.github.alerithe.client.utilities.graphics.drawing.MinecraftGraphicsDevice;
 import io.github.alerithe.client.utilities.graphics.text.MinecraftTextRenderer;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.culling.Frustum;
@@ -25,13 +24,13 @@ public class VisualHelper {
     private static ScaledResolution scaledResolution;
 
     // World to Screen projections
-    private final static FloatBuffer modelViewMatrix = BufferUtils.createFloatBuffer(16);
-    private final static FloatBuffer projectionMatrix = BufferUtils.createFloatBuffer(16);
-    private final static IntBuffer viewport = BufferUtils.createIntBuffer(16);
-    private final static FloatBuffer windowPosition = BufferUtils.createFloatBuffer(4);
+    private static final FloatBuffer modelViewMatrix = BufferUtils.createFloatBuffer(16);
+    private static final FloatBuffer projectionMatrix = BufferUtils.createFloatBuffer(16);
+    private static final IntBuffer viewport = BufferUtils.createIntBuffer(16);
+    private static final FloatBuffer windowPosition = BufferUtils.createFloatBuffer(4);
 
     // View checking
-    private final static Frustum frustum = new Frustum();
+    private static final Frustum frustum = new Frustum();
 
     // Fonts
     public static final MinecraftTextRenderer MC_FONT = new MinecraftTextRenderer();
@@ -58,7 +57,7 @@ public class VisualHelper {
         GlStateManager.getFloat(GL11.GL_PROJECTION_MATRIX, projectionMatrix);
         GL11.glGetInteger(GL11.GL_VIEWPORT, viewport);
 
-        if (!GLU.gluProject(x, y, z, modelViewMatrix, projectionMatrix, viewport, windowPosition)) return null;
+        if (!GLU.gluProject(x, y, z, modelViewMatrix, projectionMatrix, viewport, windowPosition)) return new float[0];
 
         float scale = getDisplay().getScaleFactor();
         return new float[]{

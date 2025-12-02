@@ -52,7 +52,7 @@ public class Rectangle extends EntityESPMode {
             float[] position = new float[]{Float.MAX_VALUE, Float.MAX_VALUE, -1, -1};
             for (double[] vector : vectors) {
                 float[] projection = VisualHelper.project((float) vector[0], (float) vector[1], (float) vector[2]);
-                if (projection == null) continue;
+                if (projection.length == 0) continue;
                 if (projection[2] < 0f) continue;
                 if (projection[2] >= 1f) continue;
 
