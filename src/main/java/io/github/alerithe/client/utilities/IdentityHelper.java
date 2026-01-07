@@ -11,13 +11,16 @@ import java.security.NoSuchAlgorithmException;
 
 // This class is serves no purpose unless I go paid/private.
 public class IdentityHelper {
-    private static String RAW_ID = "";
-    private static String HASHED_ID = "";
+    private static String rawId = "";
+    private static String hashedId = "";
+
+    private IdentityHelper() {
+    }
 
     // TODO: Pick out information to deem as personally identifiable
     public static String getRawId() {
-        if (RAW_ID.isEmpty()) {
-            RAW_ID = System.getProperty("os.name")
+        if (rawId.isEmpty()) {
+            rawId = System.getProperty("os.name")
                     + ';' + System.getProperty("os.arch")
                     + '/' + System.getProperty("user.name")
                     + ';' + System.getProperty("user.home")
@@ -26,7 +29,7 @@ public class IdentityHelper {
                     + '/' + getPublicIPv4();
         }
 
-        return RAW_ID;
+        return rawId;
     }
 
     public static String getPublicIPv4() {
@@ -36,8 +39,8 @@ public class IdentityHelper {
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
                 return reader.readLine();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
             return "127.0.0.1";
         } finally {
             if (connection != null) connection.disconnect();
@@ -45,30 +48,34 @@ public class IdentityHelper {
     }
 
     public static String getId() {
-        if (HASHED_ID.isEmpty()) {
+        if (hashedId.isEmpty()) {
             MessageDigest md = null;
             try {
                 md = MessageDigest.getInstance("SHA-256");
                 md.reset();
                 byte[] hash = md.digest(getRawId().getBytes(StandardCharsets.UTF_8));
-    
+
                 StringBuilder builder = new StringBuilder();
                 for (byte b : hash) {
                     String hex = Integer.toString(b & 0xFF, 16);
-                    if (hex.length() < 2) hex = '0' + hex;
-    
+                    if (hex.length() < 2) {
+                        builder.append('0');
+                    }
+
                     builder.append(hex);
                 }
-    
+
                 return builder.toString();
-            } catch (NoSuchAlgorithmException e) {
-                e.printStackTrace();
-                HASHED_ID = getRawId();
+            } catch (NoSuchAlgorithmException nsae) {
+                nsae.printStackTrace();
+                hashedId = getRawId();
             } finally {
-                if (md != null) md.reset();
+                if (md != null) {
+                    md.reset();
+                }
             }
         }
-        
-        return HASHED_ID;
+
+        return hashedId;
     }
 }

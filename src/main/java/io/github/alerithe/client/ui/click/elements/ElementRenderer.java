@@ -135,7 +135,7 @@ public class ElementRenderer {
 
         if (style.isLineWrap()) {
             // FIXME: Develop own way to handle this instead of lazily depending on Minecraft's built-in way.
-            GameHelper.getGame().fontRenderer.drawSplitString(text,
+            GameHelper.getGame().fontRendererObj.drawSplitString(text,
                     eX + xOffset,
                     eY + yOffset,
                     eWidth,

@@ -21,7 +21,7 @@ import net.minecraft.util.MathHelper;
 
 public class EntityHelper {
     public static LocalPlayer getUser() {
-        return GameHelper.getGame().player;
+        return GameHelper.getGame().thePlayer;
     }
 
     public static boolean isUser(Entity entity) {

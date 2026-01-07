@@ -48,7 +48,7 @@ public class ScaffoldWalk extends Module {
 
     @Subscribe
     private void onPreUpdate(EventUpdate.Pre event) {
-        event.setPitch(90);
+        event.setPitch(90f);
 
         BlockPos pos = new BlockPos(EntityHelper.getUser().posX, EntityHelper.getUser().posY - 1, EntityHelper.getUser().posZ);
         Block block = WorldHelper.getBlock(pos);

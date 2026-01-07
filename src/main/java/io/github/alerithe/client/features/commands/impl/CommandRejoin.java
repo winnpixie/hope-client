@@ -24,11 +24,7 @@ public class CommandRejoin extends Command {
         ServerData serverData = GameHelper.getGame().getCurrentServerData();
 
         WorldHelper.getWorld().sendQuittingDisconnectingPacket();
-        GameHelper.getGame().loadWorld(null);
-        GameHelper.getGame().displayGuiScreen(new GuiMultiplayer(new GuiMainMenu()));
         GameHelper.getGame().displayGuiScreen(new GuiConnecting(new GuiMultiplayer(new GuiMainMenu()), GameHelper.getGame(),
                 serverData));
-
-        GameHelper.getGame().setServerData(serverData);
     }
 }

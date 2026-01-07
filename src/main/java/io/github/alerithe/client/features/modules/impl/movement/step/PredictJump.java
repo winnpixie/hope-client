@@ -6,6 +6,7 @@ import io.github.alerithe.client.utilities.EntityHelper;
 import io.github.alerithe.client.utilities.GameHelper;
 import io.github.alerithe.client.utilities.WorldHelper;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockCactus;
 import net.minecraft.block.BlockSlab;
 import net.minecraft.block.BlockStairs;
 import net.minecraft.block.state.IBlockState;
@@ -13,9 +14,9 @@ import net.minecraft.client.settings.GameSettings;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.util.BlockPos;
 
-public class Smart extends StepMode {
-    public Smart(Step module) {
-        super("Smart", new String[0], module);
+public class PredictJump extends StepMode {
+    public PredictJump(Step module) {
+        super("PredictJump", new String[0], module);
     }
 
     @Override
@@ -28,11 +29,9 @@ public class Smart extends StepMode {
 
         float[] heading = EntityHelper.getUser().getMoveVector();
 
-        // Try jumping farther back
-        if (tryJump(heading, EntityHelper.getUser().isSprinting() ? 1.5 : 1.25)) return;
-
-        // Try jumping near (potentially next to/colliding with a block)
-        tryJump(heading, EntityHelper.getUser().isSprinting() ? 0.25 : 0.125);
+        for (int i = 1; i < 23; i++) {
+            if (tryJump(heading, i / 10.0)) break;
+        }
     }
 
     private boolean isFullBlock(IBlockState state) {
@@ -46,6 +45,7 @@ public class Smart extends StepMode {
         }
 
         if (block instanceof BlockStairs) return true;
+        if (block instanceof BlockCactus) return true;
 
         return false;
     }
@@ -73,8 +73,8 @@ public class Smart extends StepMode {
         if (!isNotFullBlock(WorldHelper.getBlockState(new BlockPos(ox, y + 2, oz)))) return false;
         if (!isNotFullBlock(WorldHelper.getBlockState(new BlockPos(ox, y + 1, oz)))) return false;
 
-        ox = x + (heading[0] * -0.125);
-        oz = z + (heading[1] * -0.125);
+        ox = x - (heading[0] * 0.125);
+        oz = z - (heading[1] * 0.125);
         if (!isNotFullBlock(WorldHelper.getBlockState(new BlockPos(ox, y + 2, oz)))) return false;
 
         KeyBinding.setKeyBindState(GameHelper.getSettings().keyBindJump, true);

@@ -9,7 +9,7 @@ import net.minecraft.util.BlockPos;
 
 public class WorldHelper {
     public static WorldClient getWorld() {
-        return GameHelper.getGame().world;
+        return GameHelper.getGame().theWorld;
     }
 
     public static Block getBlock(int x, int y, int z) {

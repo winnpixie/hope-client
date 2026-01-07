@@ -31,6 +31,9 @@ public class Client {
 
     public static File DATA_DIR;
 
+    private Client() {
+    }
+
     public static void load() {
         LOGGER.info(IdentityHelper.getId());
 

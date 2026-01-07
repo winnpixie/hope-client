@@ -65,10 +65,10 @@ public class GuiScreenCapeOF extends GuiScreen {
                     break;
                 case 220:
                     this.showMessage("The cape will be reloaded in 15 seconds.", 15000L);
-                    if (this.mc.player != null) {
+                    if (this.mc.thePlayer != null) {
                         long delayMs = 15000L;
                         long reloadTimeMs = System.currentTimeMillis() + delayMs;
-                        this.mc.player.setReloadCapeTimeMs(reloadTimeMs);
+                        this.mc.thePlayer.setReloadCapeTimeMs(reloadTimeMs);
                     }
                     break;
                 case 230:

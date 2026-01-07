@@ -11,7 +11,7 @@ import io.github.alerithe.events.impl.Subscribe;
 
 public class Step extends Module {
     private final ObjectProperty<StepMode> mode = new ObjectProperty<>("Mode", new String[0],
-            new Smart(this), new Packets(this), new Motion(this), new Vanilla(this));
+            new PredictJump(this), new Packets(this), new Motion(this), new Vanilla(this));
     public final BooleanProperty oneAndAHalf = new BooleanProperty("1.5", new String[0], false);
     public final BooleanProperty motion = new BooleanProperty("Motion", new String[0], false);
 
