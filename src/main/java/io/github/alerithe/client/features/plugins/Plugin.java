@@ -1,16 +1,16 @@
 package io.github.alerithe.client.features.plugins;
 
 import io.github.alerithe.client.features.Feature;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+
+import java.util.logging.Logger;
 
 public class Plugin extends Feature {
-    private final Logger logger = LogManager.getLogger(this.getName());
+    private Logger logger;
 
     private PluginManifest manifest;
 
     public Plugin() {
-        super("");
+        super("ERR_MISSING_MANIFEST");
     }
 
     public Logger getLogger() {
@@ -21,8 +21,15 @@ public class Plugin extends Feature {
         return manifest;
     }
 
-    protected final void setManifest(PluginManifest manifest) {
+    @Override
+    public String getName() {
+        return manifest.getName();
+    }
+
+    final void configure(PluginManifest manifest) {
         this.manifest = manifest;
+
+        this.logger = Logger.getLogger(manifest.getName());
     }
 
     public void onLoad() {

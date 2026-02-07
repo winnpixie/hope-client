@@ -17,9 +17,11 @@ public class CommandManager extends FeatureManager<Command> {
         add(new CommandEditSign());
         add(new CommandEntityInfo());
         add(new CommandForward());
+        add(new CommandFriend());
         add(new CommandHClip());
         add(new CommandHelp());
         add(new CommandModule());
+        add(new CommandPlugins());
         add(new CommandRejoin());
         add(new CommandSay());
         add(new CommandServerInfo());

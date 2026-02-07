@@ -11,7 +11,7 @@ public class PropertyManager extends FeatureManager<Property<?>> {
     @Override
     public void load() {
         try {
-            Files.readAllLines(getDataFile().toPath()).forEach(line -> {
+            Files.readAllLines(getDataPath()).forEach(line -> {
                 String[] data = line.split(":", 2);
                 Property<?> property = find(data[0]);
                 if (property == null) return;
@@ -42,7 +42,7 @@ public class PropertyManager extends FeatureManager<Property<?>> {
                 .append(property.getValue().toString()).append('\n'));
 
         try {
-            Files.write(getDataFile().toPath(), builder.toString().getBytes());
+            Files.write(getDataPath(), builder.toString().getBytes());
         } catch (IOException e) {
             e.printStackTrace();
         }

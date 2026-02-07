@@ -13,28 +13,32 @@ import io.github.alerithe.client.features.modules.impl.world.*;
 import io.github.alerithe.events.Subscriber;
 import org.lwjgl.input.Keyboard;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
 public class ModuleManager extends FeatureManager<Module> {
-    private File statesDataFile;
+    private Path statePath;
     private boolean restored;
 
     private final Map<Module.Type, List<Module>> modulesInType = new EnumMap<>(Module.Type.class);
 
     @Override
     public void load() {
-        setDataFile(new File(Client.DATA_DIR, "modules"));
-        if (!getDataFile().exists() && !getDataFile().mkdir()) {
-            Client.LOGGER.warn("Could not create modules directory (does it already exist?)!");
+        setDataPath(Client.DATA_PATH.resolve("modules"));
+        if (Files.notExists(getDataPath())) {
+            try {
+                Files.createDirectory(getDataPath());
+            } catch (IOException ioe) {
+                Client.LOGGER.warn("Could not create modules directory (does it already exist?)!");
+            }
         }
 
-        statesDataFile = new File(getDataFile(), "RESTORE_ON_PLAY");
+        statePath = getDataPath().resolve("RESTORE_ON_PLAY");
 
         for (Module.Type type : Module.Type.values()) {
             modulesInType.put(type, new ArrayList<>());
@@ -125,7 +129,7 @@ public class ModuleManager extends FeatureManager<Module> {
         List<Module> toRestore = new ArrayList<>();
 
         try {
-            Files.readAllLines(statesDataFile.toPath()).forEach(line -> {
+            Files.readAllLines(statePath).forEach(line -> {
                 Module module = find(line);
                 if (module != null) toRestore.add(module);
             });
@@ -169,7 +173,7 @@ public class ModuleManager extends FeatureManager<Module> {
         }
 
         try {
-            Files.write(statesDataFile.toPath(), builder.toString().getBytes());
+            Files.write(statePath, builder.toString().getBytes());
         } catch (IOException e) {
             e.printStackTrace();
         }

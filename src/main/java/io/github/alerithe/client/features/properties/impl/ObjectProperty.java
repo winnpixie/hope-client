@@ -41,7 +41,7 @@ public class ObjectProperty<T extends ObjectProperty.Value> extends Property<T> 
         private final String name;
         private final String[] aliases;
 
-        public Value(String name, String[] aliases) {
+        public Value(String name, String... aliases) {
             this.name = name;
             this.aliases = aliases;
         }

@@ -6,8 +6,6 @@ import io.github.alerithe.client.features.Feature;
 import io.github.alerithe.client.features.properties.PropertyManager;
 import io.github.alerithe.client.features.properties.impl.BooleanProperty;
 
-import java.io.File;
-
 public class Module extends Feature {
     private final Type type;
     private final PropertyManager propertyManager;
@@ -17,9 +15,11 @@ public class Module extends Feature {
 
     public Module(String name, String[] aliases, Type type) {
         super(name, aliases);
+
         this.type = type;
         this.propertyManager = new PropertyManager();
-        this.propertyManager.setDataFile(new File(Client.MODULE_MANAGER.getDataFile(), getName() + ".properties"));
+
+        propertyManager.setDataPath(Client.MODULE_MANAGER.getDataPath().resolve(String.format("%s.properties", getName())));
 
         visibility.setValue(type.equals(Type.VISUAL));
         propertyManager.add(visibility);

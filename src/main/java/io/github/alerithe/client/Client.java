@@ -13,7 +13,9 @@ import io.github.alerithe.events.impl.EventBusImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 public class Client {
     public static final Logger LOGGER = LogManager.getLogger(Client.class);
@@ -29,7 +31,7 @@ public class Client {
     public static final FriendManager FRIEND_MANAGER = new FriendManager();
     public static final PluginManager PLUGIN_MANAGER = new PluginManager();
 
-    public static File DATA_DIR;
+    public static Path DATA_PATH;
 
     private Client() {
     }
@@ -37,9 +39,13 @@ public class Client {
     public static void load() {
         LOGGER.info(IdentityHelper.getId());
 
-        DATA_DIR = new File(GameHelper.getGame().mcDataDir, NAME);
-        if (!DATA_DIR.exists() && !DATA_DIR.mkdir()) {
-            throw new RuntimeException("Could not create save directory!");
+        DATA_PATH = GameHelper.getGame().mcDataDir.toPath().resolve(NAME);
+        if (Files.notExists(DATA_PATH)) {
+            try {
+                Files.createDirectory(DATA_PATH);
+            } catch (IOException ioe) {
+                throw new RuntimeException(ioe);
+            }
         }
 
         COMMAND_MANAGER.load();

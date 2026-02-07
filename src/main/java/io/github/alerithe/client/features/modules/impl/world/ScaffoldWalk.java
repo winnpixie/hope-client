@@ -48,16 +48,19 @@ public class ScaffoldWalk extends Module {
 
     @Subscribe
     private void onPreUpdate(EventUpdate.Pre event) {
-        event.setPitch(90f);
-
-        BlockPos pos = new BlockPos(EntityHelper.getUser().posX, EntityHelper.getUser().posY - 1, EntityHelper.getUser().posZ);
-        Block block = WorldHelper.getBlock(pos);
         data = null;
-
-        if (!blacklist.contains(block)) return;
         if (!isHoldingBlock()) return;
 
-        data = makeData(pos);
+        double px = EntityHelper.getUser().posX;
+        double py = EntityHelper.getUser().posY - 1;
+        double pz = EntityHelper.getUser().posZ;
+
+        BlockPos below = new BlockPos(px, py, pz);
+        Block blockBelow = WorldHelper.getBlock(below);
+
+        if (!blacklist.contains(blockBelow)) return;
+
+        data = makeData(below);
         if (data == null) return;
 
         float[] angles = EntityHelper.getRotationToBlock(data.pos);

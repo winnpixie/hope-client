@@ -5,17 +5,16 @@ import io.github.alerithe.client.events.game.EventInput;
 import io.github.alerithe.client.features.FeatureManager;
 import org.lwjgl.input.Keyboard;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 
 public class KeybindManager extends FeatureManager<Keybind> {
     @Override
     public void load() {
-        setDataFile(new File(Client.DATA_DIR, "keybinds.properties"));
+        setDataPath(Client.DATA_PATH.resolve("keybinds.properties"));
 
         try {
-            Files.readAllLines(getDataFile().toPath()).forEach(line -> {
+            Files.readAllLines(getDataPath()).forEach(line -> {
                 String[] data = line.split(":", 2);
                 Keybind kb = find(data[0]);
                 if (kb == null) return;
@@ -40,7 +39,7 @@ public class KeybindManager extends FeatureManager<Keybind> {
                 .append(Keyboard.getKeyName(kb.getKey())).append('\n'));
 
         try {
-            Files.write(getDataFile().toPath(), builder.toString().getBytes());
+            Files.write(getDataPath(), builder.toString().getBytes());
         } catch (IOException e) {
             e.printStackTrace();
         }

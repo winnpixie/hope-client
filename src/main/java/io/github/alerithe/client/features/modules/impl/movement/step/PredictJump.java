@@ -5,10 +5,7 @@ import io.github.alerithe.client.features.modules.impl.movement.Step;
 import io.github.alerithe.client.utilities.EntityHelper;
 import io.github.alerithe.client.utilities.GameHelper;
 import io.github.alerithe.client.utilities.WorldHelper;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockCactus;
-import net.minecraft.block.BlockSlab;
-import net.minecraft.block.BlockStairs;
+import net.minecraft.block.*;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.client.settings.KeyBinding;
@@ -44,8 +41,15 @@ public class PredictJump extends StepMode {
             return state.getValue(BlockSlab.HALF) == BlockSlab.EnumBlockHalf.TOP;
         }
 
+        if (block instanceof BlockSnow) {
+            return state.getValue(BlockSnow.LAYERS) > 5;
+        }
+
         if (block instanceof BlockStairs) return true;
         if (block instanceof BlockCactus) return true;
+        if (block instanceof BlockChest) return true;
+        if (block instanceof BlockEnderChest) return true;
+        if (block instanceof BlockEnchantmentTable) return true;
 
         return false;
     }

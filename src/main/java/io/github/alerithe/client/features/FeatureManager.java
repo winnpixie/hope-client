@@ -1,24 +1,24 @@
 package io.github.alerithe.client.features;
 
-import java.io.File;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
 public class FeatureManager<T extends Feature> {
     private final List<T> children = new ArrayList<>();
 
-    private File dataFile;
+    private Path dataPath;
 
     public List<T> getChildren() {
         return children;
     }
 
-    public File getDataFile() {
-        return dataFile;
+    public Path getDataPath() {
+        return dataPath;
     }
 
-    public void setDataFile(File dataFile) {
-        this.dataFile = dataFile;
+    public void setDataPath(Path dataPath) {
+        this.dataPath = dataPath;
     }
 
     public void add(T feature) {
@@ -31,7 +31,9 @@ public class FeatureManager<T extends Feature> {
 
     public <V extends T> V find(Class<V> cls) {
         for (T feature : children) {
-            if (cls.isInstance(feature)) return cls.cast(feature);
+            if (cls.isInstance(feature)) {
+                return cls.cast(feature);
+            }
         }
 
         return null;
@@ -39,10 +41,14 @@ public class FeatureManager<T extends Feature> {
 
     public T find(String handle) {
         for (T feature : children) {
-            if (feature.getName().equalsIgnoreCase(handle)) return feature;
+            if (feature.getName().equalsIgnoreCase(handle)) {
+                return feature;
+            }
 
             for (String alias : feature.getAliases()) {
-                if (alias.equalsIgnoreCase(handle)) return feature;
+                if (alias.equalsIgnoreCase(handle)) {
+                    return feature;
+                }
             }
         }
 
