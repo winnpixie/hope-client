@@ -21,7 +21,7 @@ public class Switch extends AuraMode {
 
         if (switchTimer.hasPassed(500)) {
             index++;
-            switchTimer.update();
+            switchTimer.reset();
         }
         index %= module.near.size();
         module.target = module.near.get(index);
@@ -30,6 +30,6 @@ public class Switch extends AuraMode {
             return;
 
         module.attacking = true;
-        timer.update();
+        timer.reset();
     }
 }

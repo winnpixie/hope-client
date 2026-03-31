@@ -1,4 +1,4 @@
-package io.github.alerithe.events.impl;
+package io.github.alerithe.client.events.bus;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

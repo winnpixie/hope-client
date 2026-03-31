@@ -8,12 +8,14 @@ import net.minecraft.client.gui.ScaledResolution;
 public class Draggable extends ElementEventListener {
     private boolean dragging;
 
-    public float initialX;
-    public float initialY;
+    private float initialX;
+    private float initialY;
 
     @Override
     public void onDraw(int mouseX, int mouseY, float partialTicks) {
-        if (!dragging) return;
+        if (!dragging) {
+            return;
+        }
 
         float newX = mouseX + initialX;
         float newY = mouseY + initialY;
@@ -22,16 +24,16 @@ public class Draggable extends ElementEventListener {
         float minY = 1;
 
         ScaledResolution display = VisualHelper.getDisplay();
-        float maxX = display.getScaledWidth() - 1;
-        float maxY = display.getScaledHeight() - 1;
+        float maxX = display.getScaledWidth() - 1f;
+        float maxY = display.getScaledHeight() - 1f;
 
         Element parent = getSource().getParent();
         if (parent != null) {
             minX = parent.getX() + 1;
             minY = parent.getY() + 1;
 
-            maxX = parent.getX() + parent.getWidth() - 1;
-            maxY = parent.getY() + parent.getHeight() - 1;
+            maxX = parent.getX() + parent.getWidth() - 1f;
+            maxY = parent.getY() + parent.getHeight() - 1f;
         }
 
         float deltaX = newX - getSource().getX();
@@ -60,7 +62,9 @@ public class Draggable extends ElementEventListener {
 
     @Override
     public void onMouseDown(int mouseX, int mouseY, int button) {
-        if (button != 0) return;
+        if (button != 0) {
+            return;
+        }
 
         initialX = getSource().getX() - mouseX;
         initialY = getSource().getY() - mouseY;
@@ -69,6 +73,8 @@ public class Draggable extends ElementEventListener {
 
     @Override
     public void onMouseUp(int mouseX, int mouseY, int button) {
-        if (button == 0) dragging = false;
+        if (button == 0) {
+            dragging = false;
+        }
     }
 }

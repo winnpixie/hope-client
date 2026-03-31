@@ -7,6 +7,9 @@ import java.util.concurrent.ThreadLocalRandom;
 public class MathHelper {
     private static final ThreadLocalRandom LOCAL_RANDOM = ThreadLocalRandom.current();
 
+    private MathHelper() {
+    }
+
     public static int min(int a, int b) {
         return a < b ? a : b;
     }
@@ -60,9 +63,9 @@ public class MathHelper {
         return ivalue > value ? ivalue - 1 : ivalue;
     }
 
-    public static int floor(double value) {
-        int ivalue = (int) value;
-        return ivalue > value ? ivalue - 1 : ivalue;
+    public static long floor(double value) {
+        long lvalue = (long) value;
+        return lvalue > value ? lvalue - 1 : lvalue;
     }
 
     public static int ceil(float value) {
@@ -70,9 +73,9 @@ public class MathHelper {
         return ivalue < value ? ivalue + 1 : ivalue;
     }
 
-    public static int ceil(double value) {
-        int ivalue = (int) value;
-        return ivalue < value ? ivalue + 1 : ivalue;
+    public static long ceil(double value) {
+        long lvalue = (long) value;
+        return lvalue < value ? lvalue + 1 : lvalue;
     }
 
     // Linear interpolation, https://en.wikipedia.org/wiki/Linear_interpolation

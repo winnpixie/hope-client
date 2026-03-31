@@ -1,8 +1,9 @@
 package io.github.alerithe.client.events.game;
 
+import io.github.alerithe.client.events.bus.Event;
 import net.minecraft.client.gui.GuiScreen;
 
-public class EventGameScreen {
+public class EventGameScreen implements Event {
     private final GuiScreen screen;
 
     public EventGameScreen(GuiScreen screen) {

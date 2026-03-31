@@ -1,5 +1,6 @@
 package io.github.alerithe.client;
 
+import io.github.alerithe.client.events.bus.EventBus;
 import io.github.alerithe.client.events.game.EventProgramExit;
 import io.github.alerithe.client.features.commands.CommandManager;
 import io.github.alerithe.client.features.friends.FriendManager;
@@ -9,7 +10,6 @@ import io.github.alerithe.client.features.plugins.PluginManager;
 import io.github.alerithe.client.utilities.GameHelper;
 import io.github.alerithe.client.utilities.IdentityHelper;
 import io.github.alerithe.client.utilities.sessions.SessionHelper;
-import io.github.alerithe.events.impl.EventBusImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -24,7 +24,7 @@ public class Client {
 
     public static final int ACCENT_COLOR = 0xFFB00B1E;
 
-    public static final EventBusImpl EVENT_BUS = new EventBusImpl();
+    public static final EventBus EVENT_BUS = new EventBus();
     public static final CommandManager COMMAND_MANAGER = new CommandManager();
     public static final ModuleManager MODULE_MANAGER = new ModuleManager();
     public static final KeybindManager KEYBIND_MANAGER = new KeybindManager();

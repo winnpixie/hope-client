@@ -202,7 +202,7 @@ public class WindowedUI extends GuiScreen {
                         intProp.getValue(), intProp.getMinimum(), intProp.getMaximum()) {
                     @Override
                     public void onValueChanged(double oldValue, double newValue) {
-                        intProp.setValue(MathHelper.floor(newValue));
+                        intProp.setValue((int) MathHelper.floor(newValue));
                     }
                 };
                 valueSlider.addChildren(nameLbl, valueLbl);

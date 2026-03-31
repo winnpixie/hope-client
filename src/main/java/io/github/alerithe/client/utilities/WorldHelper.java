@@ -8,6 +8,9 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.BlockPos;
 
 public class WorldHelper {
+    private WorldHelper() {
+    }
+
     public static WorldClient getWorld() {
         return GameHelper.getGame().theWorld;
     }

@@ -5,7 +5,7 @@ import io.github.alerithe.client.events.game.EventInput;
 import io.github.alerithe.client.features.friends.Friend;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.utilities.GameHelper;
-import io.github.alerithe.events.impl.Subscribe;
+import io.github.alerithe.client.events.bus.Subscribe;
 import net.minecraft.entity.Entity;
 
 public class MiddleClickFriend extends Module {

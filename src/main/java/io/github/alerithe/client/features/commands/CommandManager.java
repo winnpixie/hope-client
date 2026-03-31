@@ -20,6 +20,7 @@ public class CommandManager extends FeatureManager<Command> {
         add(new CommandFriend());
         add(new CommandHClip());
         add(new CommandHelp());
+        add(new CommandIP());
         add(new CommandModule());
         add(new CommandPlugins());
         add(new CommandRejoin());

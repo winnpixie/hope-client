@@ -2,7 +2,7 @@ package io.github.alerithe.client.features.modules.impl.miscellaneous;
 
 import io.github.alerithe.client.events.game.EventPacket;
 import io.github.alerithe.client.features.modules.Module;
-import io.github.alerithe.events.impl.Subscribe;
+import io.github.alerithe.client.events.bus.Subscribe;
 import net.minecraft.network.play.client.C01PacketChatMessage;
 import net.minecraft.network.play.server.S02PacketChat;
 

@@ -3,7 +3,7 @@ package io.github.alerithe.client.features.modules.impl.world;
 import io.github.alerithe.client.events.game.EventBlockCollision;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.features.properties.impl.BooleanProperty;
-import io.github.alerithe.events.impl.Subscribe;
+import io.github.alerithe.client.events.bus.Subscribe;
 import net.minecraft.block.BlockCactus;
 import net.minecraft.util.AxisAlignedBB;
 

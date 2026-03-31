@@ -3,7 +3,7 @@ package io.github.alerithe.client.features.modules.impl.visual;
 import io.github.alerithe.client.events.game.EventTick;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.utilities.EntityHelper;
-import io.github.alerithe.events.impl.Subscribe;
+import io.github.alerithe.client.events.bus.Subscribe;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 

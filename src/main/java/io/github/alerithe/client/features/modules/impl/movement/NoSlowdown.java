@@ -6,7 +6,7 @@ import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.features.properties.impl.BooleanProperty;
 import io.github.alerithe.client.utilities.EntityHelper;
 import io.github.alerithe.client.utilities.NetworkHelper;
-import io.github.alerithe.events.impl.Subscribe;
+import io.github.alerithe.client.events.bus.Subscribe;
 import net.minecraft.block.BlockSoulSand;
 import net.minecraft.block.BlockWeb;
 import net.minecraft.network.play.client.C07PacketPlayerDigging;

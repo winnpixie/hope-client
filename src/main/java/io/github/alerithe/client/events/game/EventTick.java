@@ -1,6 +1,8 @@
 package io.github.alerithe.client.events.game;
 
-public class EventTick {
+import io.github.alerithe.client.events.bus.Event;
+
+public class EventTick implements Event {
     private final boolean isInGame;
 
     public EventTick(boolean isInGame) {

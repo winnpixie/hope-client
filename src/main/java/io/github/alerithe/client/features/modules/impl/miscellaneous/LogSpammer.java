@@ -5,7 +5,7 @@ import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.features.properties.impl.BooleanProperty;
 import io.github.alerithe.client.utilities.GameHelper;
 import io.github.alerithe.client.utilities.NetworkHelper;
-import io.github.alerithe.events.impl.Subscribe;
+import io.github.alerithe.client.events.bus.Subscribe;
 import io.netty.buffer.Unpooled;
 import net.minecraft.client.gui.GuiEnchantment;
 import net.minecraft.client.gui.GuiRepair;

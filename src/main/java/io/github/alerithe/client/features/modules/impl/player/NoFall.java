@@ -3,7 +3,7 @@ package io.github.alerithe.client.features.modules.impl.player;
 import io.github.alerithe.client.events.game.EventUpdate;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.utilities.EntityHelper;
-import io.github.alerithe.events.impl.Subscribe;
+import io.github.alerithe.client.events.bus.Subscribe;
 
 public class NoFall extends Module {
     public NoFall() {

@@ -3,7 +3,7 @@ package io.github.alerithe.client.features.modules.impl.miscellaneous;
 import io.github.alerithe.client.events.game.EventPacket;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.utilities.MathHelper;
-import io.github.alerithe.events.impl.Subscribe;
+import io.github.alerithe.client.events.bus.Subscribe;
 import net.minecraft.item.ItemFirework;
 import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement;
 

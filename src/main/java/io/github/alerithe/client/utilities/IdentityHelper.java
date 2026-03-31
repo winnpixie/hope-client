@@ -1,10 +1,8 @@
 package io.github.alerithe.client.utilities;
 
-import java.io.BufferedReader;
+import io.github.alerithe.http.HttpClient;
+
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -33,17 +31,17 @@ public class IdentityHelper {
     }
 
     public static String getPublicIPv4() {
-        HttpURLConnection connection = null;
         try {
-            connection = (HttpURLConnection) new URL("https://checkip.amazonaws.com/").openConnection();
-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
-                return reader.readLine();
-            }
+            return HttpClient.send(
+                    HttpClient.newRequest()
+                            .url("https://checkip.amazonaws.com/")
+                            .header("User-Agent", "identity")
+                            .build()
+            ).getBodyAsString().split("\n")[0];
         } catch (IOException ioe) {
             ioe.printStackTrace();
+
             return "127.0.0.1";
-        } finally {
-            if (connection != null) connection.disconnect();
         }
     }
 
@@ -68,6 +66,7 @@ public class IdentityHelper {
                 return builder.toString();
             } catch (NoSuchAlgorithmException nsae) {
                 nsae.printStackTrace();
+
                 hashedId = getRawId();
             } finally {
                 if (md != null) {

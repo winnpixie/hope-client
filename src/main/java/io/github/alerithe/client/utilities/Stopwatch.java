@@ -4,7 +4,7 @@ public class Stopwatch {
     private long instant;
 
     public Stopwatch() {
-        update();
+        reset();
     }
 
     public boolean hasPassed(long duration) {
@@ -15,7 +15,7 @@ public class Stopwatch {
         return getNow() - instant;
     }
 
-    public void update() {
+    public void reset() {
         instant = getNow();
     }
 

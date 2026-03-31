@@ -5,7 +5,7 @@ import io.github.alerithe.client.events.game.EventInput;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.ui.tab.TabContainer;
 import io.github.alerithe.client.utilities.GameHelper;
-import io.github.alerithe.events.impl.Subscribe;
+import io.github.alerithe.client.events.bus.Subscribe;
 
 public class TabUI extends Module {
     private TabContainer container;

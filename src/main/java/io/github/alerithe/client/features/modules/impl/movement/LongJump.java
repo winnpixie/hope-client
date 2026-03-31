@@ -4,7 +4,7 @@ import io.github.alerithe.client.events.game.EventUpdate;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.features.properties.impl.DoubleProperty;
 import io.github.alerithe.client.utilities.EntityHelper;
-import io.github.alerithe.events.impl.Subscribe;
+import io.github.alerithe.client.events.bus.Subscribe;
 
 public class LongJump extends Module {
     private final DoubleProperty strength = new DoubleProperty("Boost", new String[0],

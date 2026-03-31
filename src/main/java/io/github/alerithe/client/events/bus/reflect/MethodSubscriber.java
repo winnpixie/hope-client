@@ -1,6 +1,6 @@
-package io.github.alerithe.events.impl;
+package io.github.alerithe.client.events.bus.reflect;
 
-import io.github.alerithe.events.Subscriber;
+import io.github.alerithe.client.events.bus.Subscriber;
 
 import java.lang.invoke.*;
 import java.lang.reflect.Constructor;

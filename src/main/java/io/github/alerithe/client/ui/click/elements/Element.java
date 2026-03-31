@@ -250,8 +250,10 @@ public class Element {
     }
 
     public void onDraw(int mouseX, int mouseY, float partialTicks) {
+        // Can be empty.
     }
 
     public void onUpdate() {
+        // Can be empty.
     }
 }

@@ -11,7 +11,7 @@ import io.github.alerithe.client.features.modules.impl.player.antiaim.yaw.LBYBre
 import io.github.alerithe.client.features.modules.impl.player.antiaim.yaw.NormalYaw;
 import io.github.alerithe.client.features.modules.impl.player.antiaim.yaw.SpinYaw;
 import io.github.alerithe.client.features.properties.impl.ObjectProperty;
-import io.github.alerithe.events.impl.Subscribe;
+import io.github.alerithe.client.events.bus.Subscribe;
 
 public class AntiAim extends Module {
     private final ObjectProperty<RotationMode> yawMode = new ObjectProperty<>("YawMode", new String[0], new SpinYaw(),

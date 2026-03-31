@@ -8,6 +8,9 @@ import net.minecraft.network.Packet;
 import java.util.UUID;
 
 public class NetworkHelper {
+    private NetworkHelper() {
+    }
+
     public static int getPing() {
         return getPing(EntityHelper.getUser());
     }

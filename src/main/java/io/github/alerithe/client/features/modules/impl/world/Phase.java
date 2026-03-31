@@ -9,7 +9,7 @@ import io.github.alerithe.client.features.modules.impl.world.phase.Latest;
 import io.github.alerithe.client.features.modules.impl.world.phase.NullAABB;
 import io.github.alerithe.client.features.modules.impl.world.phase.PhaseMode;
 import io.github.alerithe.client.features.properties.impl.ObjectProperty;
-import io.github.alerithe.events.impl.Subscribe;
+import io.github.alerithe.client.events.bus.Subscribe;
 
 public class Phase extends Module {
     private final ObjectProperty<PhaseMode> mode = new ObjectProperty<>("Mode", new String[0], new Latest(), new NullAABB());

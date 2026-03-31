@@ -7,7 +7,7 @@ import io.github.alerithe.client.features.modules.impl.movement.step.*;
 import io.github.alerithe.client.features.properties.impl.BooleanProperty;
 import io.github.alerithe.client.features.properties.impl.ObjectProperty;
 import io.github.alerithe.client.utilities.EntityHelper;
-import io.github.alerithe.events.impl.Subscribe;
+import io.github.alerithe.client.events.bus.Subscribe;
 
 public class Step extends Module {
     private final ObjectProperty<StepMode> mode = new ObjectProperty<>("Mode", new String[0],

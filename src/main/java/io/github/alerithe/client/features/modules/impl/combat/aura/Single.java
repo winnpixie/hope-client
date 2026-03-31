@@ -23,6 +23,6 @@ public class Single extends AuraMode {
             return;
 
         module.attacking = true;
-        timer.update();
+        timer.reset();
     }
 }

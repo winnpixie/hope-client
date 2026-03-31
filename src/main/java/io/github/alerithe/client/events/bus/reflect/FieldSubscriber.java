@@ -1,6 +1,6 @@
-package io.github.alerithe.events.impl;
+package io.github.alerithe.client.events.bus.reflect;
 
-import io.github.alerithe.events.Subscriber;
+import io.github.alerithe.client.events.bus.Subscriber;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
@@ -12,7 +12,6 @@ public class FieldSubscriber implements ReflectSubscriber {
 
     public FieldSubscriber(Object parent, Field field) {
         Type genericType = field.getGenericType();
-        System.out.println(genericType.getTypeName());
         if (!(genericType instanceof ParameterizedType)) return;
 
         ParameterizedType paramType = (ParameterizedType) genericType;

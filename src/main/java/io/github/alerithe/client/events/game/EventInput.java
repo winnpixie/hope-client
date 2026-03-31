@@ -1,6 +1,6 @@
 package io.github.alerithe.client.events.game;
 
-import io.github.alerithe.events.CancellableEvent;
+import io.github.alerithe.client.events.bus.CancellableEvent;
 
 public class EventInput extends CancellableEvent {
     public static class KeyPress {

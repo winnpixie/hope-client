@@ -7,6 +7,9 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.IChatComponent;
 
 public class GameHelper {
+    private GameHelper() {
+    }
+
     public static Minecraft getGame() {
         return Minecraft.getMinecraft();
     }

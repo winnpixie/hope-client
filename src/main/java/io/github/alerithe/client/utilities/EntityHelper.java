@@ -20,6 +20,9 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.MathHelper;
 
 public class EntityHelper {
+    private EntityHelper() {
+    }
+
     public static LocalPlayer getUser() {
         return GameHelper.getGame().thePlayer;
     }

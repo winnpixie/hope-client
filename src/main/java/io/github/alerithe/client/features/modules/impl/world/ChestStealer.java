@@ -7,7 +7,7 @@ import io.github.alerithe.client.features.properties.impl.IntProperty;
 import io.github.alerithe.client.utilities.EntityHelper;
 import io.github.alerithe.client.utilities.GameHelper;
 import io.github.alerithe.client.utilities.Stopwatch;
-import io.github.alerithe.events.impl.Subscribe;
+import io.github.alerithe.client.events.bus.Subscribe;
 import net.minecraft.client.gui.inventory.GuiChest;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
@@ -31,7 +31,7 @@ public class ChestStealer extends Module {
         if (!(event.getScreen() instanceof GuiChest)) return;
 
         index = 0;
-        timer.update();
+        timer.reset();
     }
 
     @Subscribe
@@ -51,7 +51,7 @@ public class ChestStealer extends Module {
         Slot slot = gui.inventorySlots.inventorySlots.get(index);
         if (slot.getHasStack()) {
             EntityHelper.getUser().clickWindow(gui.inventorySlots.windowId, index, 0, 1);
-            timer.update();
+            timer.reset();
         }
         index++;
     }

@@ -1,4 +1,6 @@
 package io.github.alerithe.client.events.game;
 
-public class EventProgramExit {   
+import io.github.alerithe.client.events.bus.Event;
+
+public class EventProgramExit implements Event {
 }

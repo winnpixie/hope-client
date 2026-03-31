@@ -1,6 +1,6 @@
 package io.github.alerithe.client.events.game;
 
-import io.github.alerithe.events.CancellableEvent;
+import io.github.alerithe.client.events.bus.CancellableEvent;
 import net.minecraft.block.Block;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;

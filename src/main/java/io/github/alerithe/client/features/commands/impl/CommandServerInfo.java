@@ -1,6 +1,7 @@
 package io.github.alerithe.client.features.commands.impl;
 
 import io.github.alerithe.client.Client;
+import io.github.alerithe.client.events.bus.Subscriber;
 import io.github.alerithe.client.events.game.EventPacket;
 import io.github.alerithe.client.features.commands.Command;
 import io.github.alerithe.client.features.commands.ErrorMessages;
@@ -8,7 +9,6 @@ import io.github.alerithe.client.utilities.EntityHelper;
 import io.github.alerithe.client.utilities.GameHelper;
 import io.github.alerithe.client.utilities.NetworkHelper;
 import io.github.alerithe.client.utilities.Stopwatch;
-import io.github.alerithe.events.Subscriber;
 import net.minecraft.network.play.client.C14PacketTabComplete;
 import net.minecraft.network.play.server.S3APacketTabComplete;
 

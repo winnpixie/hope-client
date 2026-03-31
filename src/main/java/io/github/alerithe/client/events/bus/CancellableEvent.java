@@ -1,4 +1,4 @@
-package io.github.alerithe.events;
+package io.github.alerithe.client.events.bus;
 
 public class CancellableEvent implements Event {
     private boolean cancelled;

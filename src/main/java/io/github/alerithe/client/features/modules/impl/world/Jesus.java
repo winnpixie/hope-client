@@ -7,7 +7,7 @@ import io.github.alerithe.client.features.modules.impl.world.jesus.Bounce;
 import io.github.alerithe.client.features.modules.impl.world.jesus.JesusMode;
 import io.github.alerithe.client.features.modules.impl.world.jesus.Solid;
 import io.github.alerithe.client.features.properties.impl.ObjectProperty;
-import io.github.alerithe.events.impl.Subscribe;
+import io.github.alerithe.client.events.bus.Subscribe;
 
 public class Jesus extends Module {
     private final ObjectProperty<JesusMode> mode = new ObjectProperty<>("Mode", new String[0], new Solid(), new Bounce());

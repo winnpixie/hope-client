@@ -9,7 +9,7 @@ import io.github.alerithe.client.utilities.EntityHelper;
 import io.github.alerithe.client.utilities.GameHelper;
 import io.github.alerithe.client.utilities.Stopwatch;
 import io.github.alerithe.client.utilities.WorldHelper;
-import io.github.alerithe.events.impl.Subscribe;
+import io.github.alerithe.client.events.bus.Subscribe;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
@@ -88,7 +88,7 @@ public class ScaffoldWalk extends Module {
         }
 
         EntityHelper.getUser().swingItem();
-        timer.update();
+        timer.reset();
     }
 
     @Subscribe
