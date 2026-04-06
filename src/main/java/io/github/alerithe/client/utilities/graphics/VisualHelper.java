@@ -57,7 +57,9 @@ public class VisualHelper {
         GlStateManager.getFloat(GL11.GL_PROJECTION_MATRIX, projectionMatrix);
         GL11.glGetInteger(GL11.GL_VIEWPORT, viewport);
 
-        if (!GLU.gluProject(x, y, z, modelViewMatrix, projectionMatrix, viewport, windowPosition)) return new float[0];
+        if (!GLU.gluProject(x, y, z, modelViewMatrix, projectionMatrix, viewport, windowPosition)) {
+            return new float[0];
+        }
 
         float scale = getDisplay().getScaleFactor();
         return new float[]{

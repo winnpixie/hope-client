@@ -1,6 +1,7 @@
 package io.github.alerithe.client.features.modules.impl.visual;
 
 import io.github.alerithe.client.Client;
+import io.github.alerithe.client.events.bus.Subscribe;
 import io.github.alerithe.client.events.game.EventDraw;
 import io.github.alerithe.client.features.friends.Friend;
 import io.github.alerithe.client.features.modules.Module;
@@ -8,15 +9,18 @@ import io.github.alerithe.client.features.modules.impl.combat.AntiBot;
 import io.github.alerithe.client.features.properties.impl.BooleanProperty;
 import io.github.alerithe.client.utilities.*;
 import io.github.alerithe.client.utilities.graphics.VisualHelper;
-import io.github.alerithe.client.events.bus.Subscribe;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class NameTags extends Module {
     private final BooleanProperty players = new BooleanProperty("Players", new String[0], true);
@@ -27,6 +31,8 @@ public class NameTags extends Module {
     private final BooleanProperty items = new BooleanProperty("Items", new String[0], false);
     private final BooleanProperty ping = new BooleanProperty("ShowPing", new String[0], true);
     private final BooleanProperty showHealth = new BooleanProperty("ShowHealth", new String[]{"hp"}, true);
+
+    private final Map<Entity, float[]> projections = new TreeMap<>(Comparator.comparing(e -> -WorldHelper.distanceSq(e)));
 
     public NameTags() {
         super("NameTags", new String[]{"tags"}, Type.VISUAL);
@@ -43,11 +49,11 @@ public class NameTags extends Module {
 
     @Subscribe
     private void onOverlayDraw(EventDraw.Overlay event) {
-        List<Entity> entities = new ArrayList<>();
-        Map<Entity, float[]> projections = new HashMap<>();
+        projections.clear();
 
         GlStateManager.pushMatrix();
         GameHelper.getGame().entityRenderer.setupCameraTransform(event.getPartialTicks(), 0);
+
         for (Entity entity : WorldHelper.getWorld().loadedEntityList) {
             if (!qualifies(entity)) continue;
 
@@ -60,52 +66,30 @@ public class NameTags extends Module {
 
             float[] projection = VisualHelper.project((float) x, (float) y, (float) z);
 
-            if (projection.length == 0) continue;
-            if (projection[2] < 0f) continue;
-            if (projection[2] >= 1f) continue;
+            if (projection.length == 0
+                    || projection[2] < 0f
+                    || projection[2] >= 1f) continue;
 
-            entities.add(entity);
             projections.put(entity, projection);
         }
+
         GameHelper.getGame().entityRenderer.setupOverlayRendering();
         GlStateManager.popMatrix();
-        entities.sort(Comparator.comparingDouble(entity -> -WorldHelper.distanceSq(entity)));
 
-        for (Entity entity : entities) {
-            String text = entity.getDisplayName().getFormattedText();
-            if (entity instanceof EntityItem) {
-                text = ((EntityItem) entity).getEntityItem().getDisplayName();
-            } else {
-                Friend friend = Client.FRIEND_MANAGER.find(entity.getName());
-                if (friend != null) {
-                    text = String.format("\247b%s", friend.getAliases()[0]);
-                }
-            }
+        for (Map.Entry<Entity, float[]> projection : projections.entrySet()) {
+            Entity entity = projection.getKey();
+            float[] position = projection.getValue();
 
-            if (ping.getValue() && entity instanceof EntityPlayer) {
-                EntityPlayer player = (EntityPlayer) entity;
-                if (player.getGameProfile() != null) {
-                    NetworkPlayerInfo npi = NetworkHelper.getInfo(player);
-                    if (npi != null) {
-                        text = String.format("\247a%dms\247r %s", npi.getResponseTime(), text);
-                    }
-                }
-            }
-
-            if (showHealth.getValue() && entity instanceof EntityLivingBase) {
-                EntityLivingBase living = (EntityLivingBase) entity;
-                text += String.format(" \247%s%d\u2764",
-                        EntityHelper.getHealthColorCode(living), MathHelper.ceil(EntityHelper.getTotalHealth(living)));
-            }
-
-            float[] position = projections.get(entity);
             GlStateManager.pushMatrix();
             GlStateManager.translate(position[0], position[1], 0f);
             GlStateManager.scale(0.5f, 0.5f, 1f);
+
+            String text = getText(entity);
             float width = VisualHelper.MC_FONT.getStringWidth(text);
 
             VisualHelper.MC_GFX.drawBorderedSquare(-width / 2f - 1f, -1f, width + 2f, 10f, 1f, 0x69000000, 0x69AAAAAA);
             VisualHelper.MC_FONT.drawStringWithShadow(text, -width / 2f, 0, -1);
+
             GlStateManager.popMatrix();
         }
     }
@@ -123,5 +107,36 @@ public class NameTags extends Module {
                 || (this.items.getValue() && entity instanceof EntityItem))
                 && (this.invisibles.getValue() || !entity.isInvisible())
                 && VisualHelper.isInView(entity);
+    }
+
+    private String getText(Entity entity) {
+        String text = entity.getDisplayName().getFormattedText();
+
+        if (entity instanceof EntityItem) {
+            text = ((EntityItem) entity).getEntityItem().getDisplayName();
+        } else {
+            Friend friend = Client.FRIEND_MANAGER.find(entity.getName());
+            if (friend != null) {
+                text = String.format("\247b%s", friend.getAliases()[0]);
+            }
+        }
+
+        if (ping.getValue() && entity instanceof EntityPlayer) {
+            EntityPlayer player = (EntityPlayer) entity;
+            if (player.getGameProfile() != null) {
+                NetworkPlayerInfo npi = NetworkHelper.getInfo(player);
+                if (npi != null) {
+                    text = String.format("\247a%dms\247r %s", npi.getResponseTime(), text);
+                }
+            }
+        }
+
+        if (showHealth.getValue() && entity instanceof EntityLivingBase) {
+            EntityLivingBase living = (EntityLivingBase) entity;
+            text += String.format(" \247%s%.1f \u2764",
+                    EntityHelper.getHealthColorCode(living), MathHelper.ceil(EntityHelper.getTotalHealth(living)) / 2f);
+        }
+
+        return text;
     }
 }

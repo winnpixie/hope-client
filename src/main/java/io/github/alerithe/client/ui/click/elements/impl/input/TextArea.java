@@ -26,7 +26,7 @@ public class TextArea extends Element {
             }
         });
 
-        getNormalStyle().textStyle.setLineWrap(true);
+        getNormalStyle().textStyle.setTextWrap(true);
     }
 
     public void onValueChanged(String oldValue, String newValue) {

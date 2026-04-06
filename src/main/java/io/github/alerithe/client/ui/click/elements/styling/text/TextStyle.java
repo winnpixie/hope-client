@@ -37,8 +37,11 @@ public class TextStyle extends Style<TextStyle> {
     private TextPosition position = TextPosition.TOP;
     private boolean inheritsPosition = true;
 
-    private boolean lineWrap = false;
-    private boolean inheritsLineWrap = true;
+    private boolean textWrap = false;
+    private boolean inheritsTextWrap = true;
+
+    private WordWrapping wordWrapping = WordWrapping.NORMAL;
+    private boolean inheritsWordWrap = true;
 
     public int getColor() {
         return inheritsColor && getParent() != null
@@ -230,22 +233,41 @@ public class TextStyle extends Style<TextStyle> {
         this.inheritsPosition = inheritsPosition;
     }
 
-    public boolean isLineWrap() {
-        return inheritsLineWrap && getParent() != null
-                ? getParent().isLineWrap() : lineWrap;
+    public boolean isTextWrap() {
+        return inheritsTextWrap && getParent() != null
+                ? getParent().isTextWrap() : textWrap;
     }
 
-    public void setLineWrap(boolean lineWrap) {
-        this.lineWrap = lineWrap;
+    public void setTextWrap(boolean textWrap) {
+        this.textWrap = textWrap;
 
-        setInheritsLineWrap(false);
+        setInheritsTextWrap(false);
     }
 
-    public boolean isInheritsLineWrap() {
-        return inheritsLineWrap;
+    public boolean isInheritsTextWrap() {
+        return inheritsTextWrap;
     }
 
-    public void setInheritsLineWrap(boolean inheritsLineWrap) {
-        this.inheritsLineWrap = inheritsLineWrap;
+    public void setInheritsTextWrap(boolean inheritsTextWrap) {
+        this.inheritsTextWrap = inheritsTextWrap;
+    }
+
+    public boolean isInheritsWordWrap() {
+        return inheritsWordWrap;
+    }
+
+    public void setInheritsWordWrap(boolean inheritsWordWrap) {
+        this.inheritsWordWrap = inheritsWordWrap;
+    }
+
+    public WordWrapping getWordWrapping() {
+        return inheritsWordWrap && getParent() != null
+                ? getParent().getWordWrapping() : wordWrapping;
+    }
+
+    public void setWordWrapping(WordWrapping wordWrapping) {
+        this.wordWrapping = wordWrapping;
+
+        setInheritsWordWrap(false);
     }
 }
