@@ -13,7 +13,7 @@ public class ClickUI extends Module {
     private GuiScreen controller;
 
     public ClickUI() {
-        super("ClickUI", new String[]{"clickgui"}, Type.VISUAL);
+        super("ClickGUI", new String[]{"clickui", "cui", "gui", "ui"}, Type.VISUAL);
 
         getPropertyManager().add(newUI);
     }

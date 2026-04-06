@@ -135,7 +135,7 @@ public class MathHelper {
     }
 
     public static int getRandomInt(int min, int max) {
-        return min + floor(LOCAL_RANDOM.nextFloat() * (max - min + 1));
+        return LOCAL_RANDOM.nextInt(min, max);
     }
 
     public static float getRandomFloat(float min, float max) {
@@ -143,6 +143,6 @@ public class MathHelper {
     }
 
     public static double getRandomDouble(double min, double max) {
-        return min + (LOCAL_RANDOM.nextDouble() * (max - min));
+        return LOCAL_RANDOM.nextDouble(min, max);
     }
 }

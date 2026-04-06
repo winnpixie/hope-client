@@ -1,12 +1,12 @@
 package io.github.alerithe.client.features.modules.impl.combat;
 
-import io.github.alerithe.client.events.game.EventTick;
+import io.github.alerithe.client.events.bus.Subscribe;
+import io.github.alerithe.client.events.game.EventUpdate;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.features.properties.impl.IntProperty;
 import io.github.alerithe.client.utilities.GameHelper;
 import io.github.alerithe.client.utilities.MathHelper;
 import io.github.alerithe.client.utilities.Stopwatch;
-import io.github.alerithe.client.events.bus.Subscribe;
 import net.minecraft.client.settings.GameSettings;
 
 public class AutoClicker extends Module {
@@ -25,8 +25,7 @@ public class AutoClicker extends Module {
     }
 
     @Subscribe
-    private void onEndTick(EventTick.End event) {
-        if (!event.isInGame()) return;
+    private void onEndTick(EventUpdate.Post event) {
         if (!GameSettings.isKeyDown(GameHelper.getSettings().keyBindAttack)) return;
         if (GameHelper.getGame().currentScreen != null) return;
         if (!timer.hasPassed(1000 / MathHelper.getRandomInt(minCps.getValue(), maxCps.getValue()))) return;

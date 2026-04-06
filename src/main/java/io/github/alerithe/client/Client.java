@@ -31,7 +31,7 @@ public class Client {
     public static final FriendManager FRIEND_MANAGER = new FriendManager();
     public static final PluginManager PLUGIN_MANAGER = new PluginManager();
 
-    public static Path DATA_PATH;
+    public static Path dataPath;
 
     private Client() {
     }
@@ -39,10 +39,10 @@ public class Client {
     public static void load() {
         LOGGER.info(IdentityHelper.getId());
 
-        DATA_PATH = GameHelper.getGame().mcDataDir.toPath().resolve(NAME);
-        if (Files.notExists(DATA_PATH)) {
+        dataPath = GameHelper.getGame().mcDataDir.toPath().resolve(NAME);
+        if (Files.notExists(dataPath)) {
             try {
-                Files.createDirectory(DATA_PATH);
+                Files.createDirectory(dataPath);
             } catch (IOException ioe) {
                 throw new RuntimeException(ioe);
             }

@@ -15,7 +15,7 @@ public class PluginManager extends FeatureManager<Plugin> {
 
     @Override
     public void load() {
-        setDataPath(Client.DATA_PATH.resolve("plugins"));
+        setDataPath(Client.dataPath.resolve("plugins"));
         if (Files.notExists(getDataPath())) {
             try {
                 Files.createDirectory(getDataPath());

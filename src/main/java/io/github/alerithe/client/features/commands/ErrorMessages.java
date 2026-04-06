@@ -7,6 +7,9 @@ public class ErrorMessages {
     public static final String INVALID_TARGET = format("No target found.");
     public static final String INVALID_COMMAND = format("No command found.");
 
+    private ErrorMessages() {
+    }
+
     public static String format(String message) {
         return "\247c" + message;
     }

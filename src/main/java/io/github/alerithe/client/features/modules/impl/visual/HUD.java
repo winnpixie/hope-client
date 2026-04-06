@@ -108,9 +108,9 @@ public class HUD extends Module {
         if (tickRate.getValue() && ticks.size() > 1) {
             long oldestTick = ticks.get(0);
             long latestTick = ticks.get(ticks.size() - 1);
-            double tickRate = 20.0 / MathHelper.max((latestTick - oldestTick) / (1000.0 * (ticks.size() - 1)), 1.0);
+            double tps = 20.0 / MathHelper.max((latestTick - oldestTick) / (1000.0 * (ticks.size() - 1)), 1.0);
 
-            text += String.format(" \2477[\247f%.2f TPS\2477]", tickRate);
+            text += String.format(" \2477[\247f%.2f TPS\2477]", tps);
         }
 
         // CPS

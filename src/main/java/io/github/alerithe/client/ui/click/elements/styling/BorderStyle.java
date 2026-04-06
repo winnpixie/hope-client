@@ -26,7 +26,7 @@ public class BorderStyle extends Style<BorderStyle> {
     private int colorLeft = 0x00000000;
     private boolean inheritsColorLeft = true;
 
-    public int colorRight = 0x00000000;
+    private int colorRight = 0x00000000;
     private boolean inheritsColorRight = true;
 
     public float getTop() {

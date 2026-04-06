@@ -1,6 +1,7 @@
 package io.github.alerithe.client.features.modules.impl.combat;
 
 import io.github.alerithe.client.Client;
+import io.github.alerithe.client.events.bus.Subscribe;
 import io.github.alerithe.client.events.game.EventUpdate;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.features.modules.impl.combat.aura.*;
@@ -10,7 +11,6 @@ import io.github.alerithe.client.features.properties.impl.DoubleProperty;
 import io.github.alerithe.client.features.properties.impl.IntProperty;
 import io.github.alerithe.client.features.properties.impl.ObjectProperty;
 import io.github.alerithe.client.utilities.*;
-import io.github.alerithe.client.events.bus.Subscribe;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -28,7 +28,7 @@ public class KillAura extends Module {
     private final ObjectProperty<AuraMode> mode = new ObjectProperty<>("Mode", new String[0], new Switch(this),
             new Tick(this), new Single(this), new LockOn(this));
     private final ObjectProperty<SortingMode> sortingMode = new ObjectProperty<>("SortingMode", new String[]{"sorting"},
-            new SortingMode.AngleSort(), new SortingMode.DistanceSort());
+            new SortingMode.AngleSort(), new SortingMode.DistanceSort(), new SortingMode.HealthSort());
     public final IntProperty minAps = new IntProperty("MinHitsPerSecond", new String[]{"minaps", "mincps", "minspeed"},
             8, 1, 20);
     public final IntProperty maxAps = new IntProperty("MaxHitsPerSecond", new String[]{"maxaps", "maxcps", "maxspeed"},
@@ -37,8 +37,9 @@ public class KillAura extends Module {
             2.5, 0.0, 5.0);
     public final DoubleProperty distance = new DoubleProperty("Distance", new String[]{"reach", "range", "dist", "distance"},
             4.0, 0.1, 6.0);
-    private final BooleanProperty smartAngles = new BooleanProperty("SmartAngles", new String[0], false);
-    private final BooleanProperty look = new BooleanProperty("Look", new String[0], false);
+    private final BooleanProperty look = new BooleanProperty("Look", new String[0], true);
+    private final BooleanProperty smartAngles = new BooleanProperty("SmartAngles", new String[0], true);
+    private final BooleanProperty cameraLock = new BooleanProperty("CameraLock", new String[0], false);
     public final BooleanProperty autoBlock = new BooleanProperty("AutoBlock", new String[]{"ab"}, true);
     private final BooleanProperty players = new BooleanProperty("Players", new String[0], true);
     private final BooleanProperty hostiles = new BooleanProperty("Hostiles", new String[]{"monsters", "mobs"}, false);
@@ -60,9 +61,10 @@ public class KillAura extends Module {
         getPropertyManager().add(distance);
         getPropertyManager().add(autoBlock);
         getPropertyManager().add(sortingMode);
+        getPropertyManager().add(look);
         getPropertyManager().add(smartAngles);
         getPropertyManager().add(angleOffset);
-        getPropertyManager().add(look);
+        getPropertyManager().add(cameraLock);
         getPropertyManager().add(players);
         getPropertyManager().add(hostiles);
         getPropertyManager().add(animals);
@@ -78,15 +80,17 @@ public class KillAura extends Module {
         mode.getValue().onPreUpdate(event);
         if (target == null) return;
 
-        float[] angles = getRotationsToTarget(target);
-        float offsetValue = angleOffset.getValue().floatValue();
-        float yawDelta = (((angles[0] - (event.getYaw() % 360)) + 180f) % 360f) - 180f;
-        event.setYaw(event.getYaw() + yawDelta + MathHelper.getRandomFloat(-offsetValue, offsetValue));
-        event.setPitch(MathHelper.clamp(angles[1] + MathHelper.getRandomFloat(-offsetValue, offsetValue), -90f, 90f));
-
         if (look.getValue()) {
-            EntityHelper.getUser().rotationYaw = event.getYaw();
-            EntityHelper.getUser().rotationPitch = event.getPitch();
+            float[] angles = getRotationsToTarget(target);
+            float offsetValue = angleOffset.getValue().floatValue();
+            float yawDelta = (((angles[0] - (event.getYaw() % 360)) + 180f) % 360f) - 180f;
+            event.setYaw(event.getYaw() + yawDelta + MathHelper.getRandomFloat(-offsetValue, offsetValue));
+            event.setPitch(MathHelper.clamp(angles[1] + MathHelper.getRandomFloat(-offsetValue, offsetValue), -90f, 90f));
+
+            if (cameraLock.getValue()) {
+                EntityHelper.getUser().rotationYaw = event.getYaw();
+                EntityHelper.getUser().rotationPitch = event.getPitch();
+            }
         }
 
         if (EntityHelper.getUser().getHeldItem() != null
@@ -179,6 +183,18 @@ public class KillAura extends Module {
         private static class DistanceSort extends SortingMode {
             public DistanceSort() {
                 super("Distance", new String[]{"dist"}, Comparator.comparingDouble(WorldHelper::distanceSq));
+            }
+        }
+
+        private static class HealthSort extends SortingMode {
+            public HealthSort() {
+                super("Health", new String[0], Comparator.comparingDouble(entity -> {
+                    if (entity instanceof EntityLivingBase) {
+                        return ((EntityLivingBase) entity).getHealth();
+                    }
+
+                    return Double.MAX_VALUE;
+                }));
             }
         }
     }

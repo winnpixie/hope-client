@@ -5,7 +5,7 @@ import io.github.alerithe.client.features.Feature;
 public abstract class Command extends Feature {
     private final String usage;
 
-    public Command(String name, String[] aliases, String usage) {
+    protected Command(String name, String[] aliases, String usage) {
         super(name, aliases);
         this.usage = usage;
     }

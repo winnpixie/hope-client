@@ -29,7 +29,7 @@ public class ModuleManager extends FeatureManager<Module> {
 
     @Override
     public void load() {
-        setDataPath(Client.DATA_PATH.resolve("modules"));
+        setDataPath(Client.dataPath.resolve("modules"));
         if (Files.notExists(getDataPath())) {
             try {
                 Files.createDirectory(getDataPath());
@@ -52,7 +52,7 @@ public class ModuleManager extends FeatureManager<Module> {
         add(new Criticals());
         add(new KillAura());
         add(new SuperKnockback());
-        add(new Triggerbot()); // TODO: Finish
+        add(new TriggerBot());
         add(new Velocity());
 
         // Movement
@@ -118,7 +118,7 @@ public class ModuleManager extends FeatureManager<Module> {
         add(new PingSpoof());
         add(new TextSpammer()); // TODO: Finish
 
-        Client.LOGGER.info(String.format("Registered %d Module(s)", getChildren().size()));
+        Client.LOGGER.info("Registered {} Module(s)", getChildren().size());
 
         getChildren().forEach(module -> {
             Client.KEYBIND_MANAGER.add(new Keybind(module.getName(), module.getAliases(), Keyboard.KEY_NONE, module::toggle));

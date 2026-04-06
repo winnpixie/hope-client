@@ -32,7 +32,7 @@ public class GuiPasswordField extends GuiTextField {
                 k = s.length();
             }
 
-            if (s.length() > 0) {
+            if (!s.isEmpty()) {
                 String s1 = flag ? s.substring(0, j) : s;
                 j1 = this.fontRenderer.drawStringWithShadow(s1, (float) l, (float) i1, i);
             }
@@ -47,7 +47,7 @@ public class GuiPasswordField extends GuiTextField {
                 --j1;
             }
 
-            if (s.length() > 0 && flag && j < s.length()) {
+            if (!s.isEmpty() && flag && j < s.length()) {
                 j1 = this.fontRenderer.drawStringWithShadow(s.substring(j), (float) j1, (float) i1, i);
             }
 

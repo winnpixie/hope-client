@@ -6,6 +6,7 @@ import io.github.alerithe.client.ui.click.elements.styling.ElementStyle;
 import io.github.alerithe.client.ui.click.elements.styling.text.TextAlignment;
 import io.github.alerithe.client.ui.click.elements.styling.text.TextPosition;
 import io.github.alerithe.client.ui.click.elements.styling.text.TextStyle;
+import io.github.alerithe.client.ui.click.elements.styling.text.WordWrapping;
 import io.github.alerithe.client.utilities.graphics.VisualHelper;
 import net.minecraft.client.renderer.GlStateManager;
 
@@ -88,7 +89,7 @@ public class ElementRenderer {
                     elementY,
                     borderRight,
                     elementHeight + borderBottom,
-                    style.getColorBottom());
+                    style.getColorRight());
         }
     }
 
@@ -134,13 +135,11 @@ public class ElementRenderer {
 
         if (style.isTextWrap()) {
             List<String> lines = Collections.emptyList();
-            switch (style.getWordWrapping()) {
-                case NORMAL:
-                    lines = VisualHelper.MC_FONT.wrapStringPerWord(text, elementWidth);
-                    break;
-                case BREAK_WORD:
-                    lines = VisualHelper.MC_FONT.wrapStringPerCharacter(text, elementWidth);
-                    break;
+            WordWrapping wordWrap = style.getWordWrapping();
+            if (wordWrap == WordWrapping.NORMAL) {
+                lines = VisualHelper.MC_FONT.wrapStringPerWord(text, elementWidth);
+            } else if (wordWrap == WordWrapping.BREAK_WORD) {
+                lines = VisualHelper.MC_FONT.wrapStringPerCharacter(text, elementWidth);
             }
 
             if (position == TextPosition.BOTTOM) {

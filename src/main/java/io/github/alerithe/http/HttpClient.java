@@ -6,6 +6,9 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 
 public class HttpClient {
+    private HttpClient() {
+    }
+
     public static HttpRequest.Builder newRequest() {
         return new HttpRequest.Builder();
     }

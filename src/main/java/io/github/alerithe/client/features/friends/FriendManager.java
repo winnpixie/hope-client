@@ -2,10 +2,6 @@ package io.github.alerithe.client.features.friends;
 
 import io.github.alerithe.client.Client;
 import io.github.alerithe.client.features.FeatureManager;
-import io.github.alerithe.client.features.commands.Command;
-import io.github.alerithe.client.features.commands.ErrorMessages;
-import io.github.alerithe.client.utilities.GameHelper;
-import io.github.alerithe.client.utilities.MathHelper;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -13,7 +9,7 @@ import java.nio.file.Files;
 public class FriendManager extends FeatureManager<Friend> {
     @Override
     public void load() {
-        setDataPath(Client.DATA_PATH.resolve("friends.properties"));
+        setDataPath(Client.dataPath.resolve("friends.properties"));
 
         try {
             Files.readAllLines(getDataPath()).forEach(line -> {

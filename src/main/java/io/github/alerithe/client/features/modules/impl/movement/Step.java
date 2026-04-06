@@ -1,5 +1,6 @@
 package io.github.alerithe.client.features.modules.impl.movement;
 
+import io.github.alerithe.client.events.bus.Subscribe;
 import io.github.alerithe.client.events.game.EventPacket;
 import io.github.alerithe.client.events.game.EventUpdate;
 import io.github.alerithe.client.features.modules.Module;
@@ -7,7 +8,6 @@ import io.github.alerithe.client.features.modules.impl.movement.step.*;
 import io.github.alerithe.client.features.properties.impl.BooleanProperty;
 import io.github.alerithe.client.features.properties.impl.ObjectProperty;
 import io.github.alerithe.client.utilities.EntityHelper;
-import io.github.alerithe.client.events.bus.Subscribe;
 
 public class Step extends Module {
     private final ObjectProperty<StepMode> mode = new ObjectProperty<>("Mode", new String[0],
@@ -41,6 +41,7 @@ public class Step extends Module {
         mode.getValue().onPreUpdate(event);
     }
 
+    @Subscribe
     private void onPacketWrite(EventPacket.Write event) {
         mode.getValue().onPacketWrite(event);
     }

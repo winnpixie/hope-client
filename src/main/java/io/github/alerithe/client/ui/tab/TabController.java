@@ -22,8 +22,6 @@ public class TabController extends TabComponent {
         switch (key) {
             case Keyboard.KEY_LEFT:
                 switch (getContainer().getSection()) {
-                    case TYPE:
-                        break;
                     case MODULE:
                         getContainer().setSection(TabSection.TYPE);
                         break;
@@ -44,6 +42,8 @@ public class TabController extends TabComponent {
                             index = ((index - 1) + objProp.getValues().size()) % objProp.getValues().size();
                             objProp.setValue(objProp.getValues().get(index));
                         }
+                        break;
+                    default:
                         break;
                 }
                 break;
@@ -74,6 +74,8 @@ public class TabController extends TabComponent {
                             objProp.setValue(objProp.getValues().get(index));
                         }
                         break;
+                    default:
+                        break;
                 }
                 break;
             case Keyboard.KEY_UP:
@@ -87,6 +89,8 @@ public class TabController extends TabComponent {
                     case PROPERTY:
                         propertyIndex = ((propertyIndex - 1) + getContainer().getProperties().size()) % getContainer().getProperties().size();
                         break;
+                    default:
+                        break;
                 }
                 break;
             case Keyboard.KEY_DOWN:
@@ -99,6 +103,8 @@ public class TabController extends TabComponent {
                         break;
                     case PROPERTY:
                         propertyIndex = (propertyIndex + 1) % getContainer().getProperties().size();
+                        break;
+                    default:
                         break;
                 }
                 break;
@@ -116,7 +122,11 @@ public class TabController extends TabComponent {
                         propertyIndex = 0;
                         getContainer().setSection(TabSection.MODULE);
                         break;
+                    default:
+                        break;
                 }
+                break;
+            default:
                 break;
         }
     }

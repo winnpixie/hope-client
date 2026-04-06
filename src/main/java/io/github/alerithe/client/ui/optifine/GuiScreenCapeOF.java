@@ -74,6 +74,8 @@ public class GuiScreenCapeOF extends GuiScreen {
                 case 230:
                     if (this.linkUrl != null) GuiScreen.setClipboardString(this.linkUrl);
                     break;
+                default:
+                    break;
             }
         }
     }

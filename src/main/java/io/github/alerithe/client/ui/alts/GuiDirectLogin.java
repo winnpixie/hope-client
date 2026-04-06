@@ -56,6 +56,8 @@ public class GuiDirectLogin extends GuiScreen {
             case 2:
                 mc.displayGuiScreen(new GuiMainMenu());
                 break;
+            default:
+                break;
         }
     }
 
@@ -90,10 +92,10 @@ public class GuiDirectLogin extends GuiScreen {
         drawDefaultBackground();
         drawCenteredString(fontRenderer, message, width / 2, 10, -1);
 
-        fontRenderer.drawStringWithShadow("Username", this.width / 2 - 100, this.height / 2 - 40, -1);
+        fontRenderer.drawStringWithShadow("Username", this.width / 2f - 100f, this.height / 2f - 40f, -1);
         username.drawTextBox();
 
-        fontRenderer.drawStringWithShadow("Password", this.width / 2 - 100, this.height / 2, -1);
+        fontRenderer.drawStringWithShadow("Password", this.width / 2f - 100f, this.height / 2f, -1);
         password.drawTextBox();
 
         super.drawScreen(mouseX, mouseY, partialTicks);

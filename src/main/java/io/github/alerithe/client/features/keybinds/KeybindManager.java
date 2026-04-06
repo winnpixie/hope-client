@@ -11,7 +11,7 @@ import java.nio.file.Files;
 public class KeybindManager extends FeatureManager<Keybind> {
     @Override
     public void load() {
-        setDataPath(Client.DATA_PATH.resolve("keybinds.properties"));
+        setDataPath(Client.dataPath.resolve("keybinds.properties"));
 
         try {
             Files.readAllLines(getDataPath()).forEach(line -> {
@@ -25,11 +25,10 @@ public class KeybindManager extends FeatureManager<Keybind> {
             e.printStackTrace();
         }
 
-        Client.EVENT_BUS.subscribe(EventInput.KeyPress.class, event -> {
-            getChildren().forEach(kb -> {
-                if (kb.getKey() == event.getKey()) kb.getAction().run();
-            });
-        });
+        Client.EVENT_BUS.subscribe(EventInput.KeyPress.class, event ->
+                getChildren().forEach(kb -> {
+                    if (kb.getKey() == event.getKey()) kb.getAction().run();
+                }));
     }
 
     @Override

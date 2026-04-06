@@ -1,7 +1,6 @@
 package io.github.alerithe.client.ui.click;
 
 import io.github.alerithe.client.Client;
-import io.github.alerithe.client.features.keybinds.Keybind;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.features.properties.Property;
 import io.github.alerithe.client.features.properties.impl.*;
@@ -18,7 +17,6 @@ import io.github.alerithe.client.ui.click.elements.styling.text.TextAlignment;
 import io.github.alerithe.client.ui.click.elements.styling.text.TextPosition;
 import io.github.alerithe.client.utilities.MathHelper;
 import net.minecraft.client.gui.GuiScreen;
-import org.lwjgl.input.Keyboard;
 
 import java.io.IOException;
 import java.util.List;
@@ -26,23 +24,23 @@ import java.util.List;
 public class WindowedUI extends GuiScreen {
     private final Element root = new Element(0, 0, 8192, 8192);
 
-    private final float windowWidth = 480;
-    private final float windowHeight = 240;
+    private static final float WINDOW_WIDTH = 480;
+    private static final float WINDOW_HEIGHT = 240;
 
-    private final Element moduleContainer = new Element(windowWidth / 4f, 0, windowWidth / 4f, windowHeight);
-    private final Element propertyContainer = new Element(windowWidth / 2f, 0, windowWidth / 2f, windowHeight);
+    private final Element moduleContainer = new Element(WINDOW_WIDTH / 4f, 0, WINDOW_WIDTH / 4f, WINDOW_HEIGHT);
+    private final Element propertyContainer = new Element(WINDOW_WIDTH / 2f, 0, WINDOW_WIDTH / 2f, WINDOW_HEIGHT);
 
     public WindowedUI() {
         root.getNormalStyle().setShowBackground(false);
 
-        Label windowTitle = new Label("Configuration", 1, 1, windowWidth, 20);
+        Label windowTitle = new Label("Configuration", 1, 1, WINDOW_WIDTH, 20);
         windowTitle.getNormalStyle().setBackgroundColor(0xFF000000);
         windowTitle.getNormalStyle().textStyle.setColor(0xFFFFFFFF);
         windowTitle.getNormalStyle().textStyle.setAlignment(TextAlignment.CENTER);
         windowTitle.getNormalStyle().textStyle.setPosition(TextPosition.MIDDLE);
         windowTitle.addListener(new Draggable());
 
-        Element windowContainer = new Element(0, 20, windowWidth, windowHeight);
+        Element windowContainer = new Element(0, 20, WINDOW_WIDTH, WINDOW_HEIGHT);
         windowContainer.getNormalStyle().setBackgroundColor(0xFF111111);
 
         moduleContainer.getNormalStyle().setShowBackground(false);
@@ -58,7 +56,7 @@ public class WindowedUI extends GuiScreen {
     private void buildCategories(Element container) {
         Module.Type[] types = Module.Type.values();
         int count = types.length;
-        float height = windowHeight / count;
+        float height = WINDOW_HEIGHT / count;
 
         for (int i = 0; i < count; i++) {
             Module.Type type = types[i];
@@ -66,7 +64,7 @@ public class WindowedUI extends GuiScreen {
             float x = 0;
             float y = height * i;
 
-            Button typeLbl = new Button(type.getLabel(), x, y, windowWidth / 4f, height);
+            Button typeLbl = new Button(type.getLabel(), x, y, WINDOW_WIDTH / 4f, height);
             typeLbl.addListener(new ElementEventListener() {
                 @Override
                 public void onLeftClick(int mouseX, int mouseY) {
@@ -91,7 +89,7 @@ public class WindowedUI extends GuiScreen {
     private void buildModules(Module.Type type, Element container) {
         List<Module> modules = Client.MODULE_MANAGER.getAllInType(type);
         int count = modules.size();
-        float height = windowHeight / count;
+        float height = WINDOW_HEIGHT / count;
 
         for (int i = 0; i < count; i++) {
             Module module = modules.get(i);
@@ -99,22 +97,12 @@ public class WindowedUI extends GuiScreen {
             float x = 0;
             float y = height * i;
 
-            Keybind bind = Client.KEYBIND_MANAGER.find(module.getName());
-            Button moduleBtn = new Button(String.format("%s [%s]",
-                    module.getName(), Keyboard.getKeyName(bind.getKey())),
-                    x, y, windowWidth / 4f, height);
+            Button moduleBtn = new Button(module.getName(),
+                    x, y, WINDOW_WIDTH / 4f, height);
             moduleBtn.getNormalStyle().setBackgroundColor(0xFF222222);
             moduleBtn.getNormalStyle().textStyle.setColor(module.isEnabled() ? 0xFFFFFFFF : 0xFFAAAAAA);
 
             moduleBtn.addListener(new ElementEventListener() {
-                private boolean waiting;
-
-                @Override
-                public void onMiddleClick(int mouseX, int mouseY) {
-                    moduleBtn.setText(String.format("%s [... (Repeat for NONE)]", module.getName()));
-                    waiting = true;
-                }
-
                 @Override
                 public void onMouseDown(int mouseX, int mouseY, int button) {
                     if (button == 0) {
@@ -127,17 +115,6 @@ public class WindowedUI extends GuiScreen {
                         buildProperties(module, propertyContainer);
                     }
                 }
-
-                @Override
-                public void onKeyPressed(char charCode, int keyCode) {
-                    if (waiting) {
-                        waiting = false;
-
-                        bind.setKey(keyCode == bind.getKey() ? Keyboard.KEY_NONE : keyCode);
-                        moduleBtn.setText(String.format("%s [%s]",
-                                module.getName(), Keyboard.getKeyName(bind.getKey())));
-                    }
-                }
             });
 
             container.addChild(moduleBtn);
@@ -147,8 +124,8 @@ public class WindowedUI extends GuiScreen {
     private void buildProperties(Module module, Element container) {
         List<Property<?>> properties = module.getPropertyManager().getChildren();
         int count = properties.size();
-        float width = windowWidth / 2f;
-        float height = windowHeight / count;
+        float width = WINDOW_WIDTH / 2f;
+        float height = WINDOW_HEIGHT / count;
 
         for (int i = 0; i < count; i++) {
             Property<?> property = properties.get(i);
@@ -173,12 +150,7 @@ public class WindowedUI extends GuiScreen {
                 ElementStyle unchecked = valueCheckBox.uncheckedStyle;
                 unchecked.setBackgroundColor(0xFF696969);
 
-                boolProp.addChangeListener(prop -> {
-                            valueCheckBox.setChecked(prop.getValue());
-
-                            System.out.println("changed");
-                        }
-                );
+                boolProp.addChangeListener(prop -> valueCheckBox.setChecked(prop.getValue()));
 
                 propElem = valueCheckBox;
             } else if (property instanceof IntProperty) {

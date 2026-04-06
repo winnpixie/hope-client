@@ -29,7 +29,7 @@ public class CommandForward extends Command {
         float[] vector = EntityHelper.getUser().getLookVector();
         if (MathHelper.abs(distance) > 1.28) {
             GameHelper.getGame().timer.timerSpeed = 0f;
-            for (double i = 0; i < MathHelper.abs(distance) * 3; i++) {
+            for (double i = 0; i < MathHelper.abs(distance) * 3; i += 1.0) {
                 double x;
                 double z;
 

@@ -1,5 +1,6 @@
 package io.github.alerithe.client.features.modules.impl.world;
 
+import io.github.alerithe.client.events.bus.Subscribe;
 import io.github.alerithe.client.events.game.EventGameScreen;
 import io.github.alerithe.client.events.game.EventUpdate;
 import io.github.alerithe.client.features.modules.Module;
@@ -7,9 +8,7 @@ import io.github.alerithe.client.features.properties.impl.IntProperty;
 import io.github.alerithe.client.utilities.EntityHelper;
 import io.github.alerithe.client.utilities.GameHelper;
 import io.github.alerithe.client.utilities.Stopwatch;
-import io.github.alerithe.client.events.bus.Subscribe;
 import net.minecraft.client.gui.inventory.GuiChest;
-import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 
 public class ChestStealer extends Module {
@@ -54,14 +53,5 @@ public class ChestStealer extends Module {
             timer.reset();
         }
         index++;
-    }
-
-    // TODO: Move to a utility class eventually
-    private boolean isFull(Container container) {
-        for (Slot slot : container.inventorySlots) {
-            if (!slot.getHasStack()) return false;
-        }
-
-        return true;
     }
 }

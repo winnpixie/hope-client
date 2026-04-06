@@ -38,6 +38,9 @@ public class VisualHelper {
     // Graphics Device
     public static final MinecraftGraphicsDevice MC_GFX = new MinecraftGraphicsDevice();
 
+    private VisualHelper() {
+    }
+
     public static ScaledResolution getDisplay() {
         if (scaledResolution == null
                 || previousWidth != Display.getWidth()
