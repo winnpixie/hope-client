@@ -5,7 +5,7 @@ import net.minecraft.network.play.server.S00PacketKeepAlive;
 
 public class ZeroPing extends SpoofMode {
     public ZeroPing() {
-        super("0Ping", new String[]{"zeroping"});
+        super("0Ping", "zeroping", "0");
     }
 
     @Override

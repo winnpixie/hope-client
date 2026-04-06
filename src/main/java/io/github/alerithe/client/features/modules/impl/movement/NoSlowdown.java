@@ -1,12 +1,12 @@
 package io.github.alerithe.client.features.modules.impl.movement;
 
+import io.github.alerithe.client.events.bus.Subscribe;
 import io.github.alerithe.client.events.game.EventSlowdown;
 import io.github.alerithe.client.events.game.EventUpdate;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.features.properties.impl.BooleanProperty;
 import io.github.alerithe.client.utilities.EntityHelper;
 import io.github.alerithe.client.utilities.NetworkHelper;
-import io.github.alerithe.client.events.bus.Subscribe;
 import net.minecraft.block.BlockSoulSand;
 import net.minecraft.block.BlockWeb;
 import net.minecraft.network.play.client.C07PacketPlayerDigging;
@@ -38,6 +38,8 @@ public class NoSlowdown extends Module {
 
     @Subscribe
     private void onEnvironmentSlowdown(EventSlowdown.Environment event) {
+        // TODO: Water
+        
         if (webs.getValue() && event.getBlock() instanceof BlockWeb) event.cancel();
         if (soulSand.getValue() && event.getBlock() instanceof BlockSoulSand) event.cancel();
     }

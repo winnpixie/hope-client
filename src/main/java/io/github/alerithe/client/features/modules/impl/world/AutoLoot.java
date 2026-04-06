@@ -11,7 +11,7 @@ import io.github.alerithe.client.utilities.Stopwatch;
 import net.minecraft.client.gui.inventory.GuiChest;
 import net.minecraft.inventory.Slot;
 
-public class ChestStealer extends Module {
+public class AutoLoot extends Module {
     private final IntProperty cps = new IntProperty("CPS", new String[0],
             15, 1, 20);
 
@@ -19,8 +19,8 @@ public class ChestStealer extends Module {
 
     private int index;
 
-    public ChestStealer() {
-        super("ChestStealer", new String[]{"autoloot", "autosteal"}, Type.WORLD);
+    public AutoLoot() {
+        super("AutoLoot", new String[]{"cheststealer", "autosteal"}, Type.WORLD);
 
         getPropertyManager().add(cps);
     }

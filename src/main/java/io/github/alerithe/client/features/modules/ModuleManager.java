@@ -47,12 +47,13 @@ public class ModuleManager extends FeatureManager<Module> {
         // Combat
         add(new AntiBot());
         add(new AutoArmor()); // TODO: Finish
+        add(new AutoAttack());
         add(new AutoClicker());
         add(new AutoHeal()); // TODO: Finish
         add(new Criticals());
         add(new KillAura());
+        add(new QuickDraw()); // TODO: Finish
         add(new SuperKnockback());
-        add(new TriggerBot());
         add(new Velocity());
 
         // Movement
@@ -60,27 +61,27 @@ public class ModuleManager extends FeatureManager<Module> {
         add(new AutoJump());
         add(new AutoSprint());
         add(new AutoWalk());
-        add(new FastLadder());
         add(new Flight());
         add(new InventoryMove());
+        add(new LadderBoost());
         add(new LongJump());
-        add(new NoSlowdown()); // TODO: Water
+        add(new NoSlowdown());
         add(new SafeWalk());
         add(new Speed());
-        add(new Spider()); // FIXME: Try to find original motion value?
+        add(new Spider());
         add(new Step());
 
         // Player
         add(new AntiAim());
         add(new AutoRespawn());
-        add(new AutoShear());
         add(new Blink());
-        add(new FastUse());
+        add(new FastHeal());
         add(new Freecam());
         add(new InventoryCleaner()); // TODO: Finish
         add(new NoFall());
+        add(new NoHunger());
         add(new NoRotate());
-        add(new Regen());
+        add(new QuickConsume());
 
         // Visual
         add(new Breadcrumbs()); // TODO: Finish
@@ -97,24 +98,24 @@ public class ModuleManager extends FeatureManager<Module> {
         add(new Tracers());
 
         // World
-        add(new ChestStealer());
+        add(new AutoBridge());
+        add(new AutoLoot());
+        add(new AutoShear());
         add(new FastPlace());
-        add(new Jesus());
         add(new NoPrick());
         add(new Nuker()); // TODO: Finish
         add(new Phase());
-        add(new ScaffoldWalk());
+        add(new WaterWalk());
 
         // Misc
         add(new AntiExploit());
         add(new AutoCaptcha());
+        add(new ConsoleSpam());
         add(new Crasher());
         add(new CreativeDrop());
         add(new FireUnwork());
         add(new GameSpeed());
-        add(new LogSpammer());
         add(new MiddleClickFriend());
-        add(new NoHunger());
         add(new PingSpoof());
         add(new TextSpammer()); // TODO: Finish
 

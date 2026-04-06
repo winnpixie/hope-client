@@ -1,4 +1,4 @@
-package io.github.alerithe.client.features.modules.impl.world.jesus;
+package io.github.alerithe.client.features.modules.impl.world.waterwalk;
 
 import io.github.alerithe.client.events.game.EventUpdate;
 import io.github.alerithe.client.utilities.EntityHelper;
@@ -6,9 +6,9 @@ import io.github.alerithe.client.utilities.WorldHelper;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.util.BlockPos;
 
-public class Bounce extends JesusMode {
+public class Bounce extends WaterWalkMode {
     public Bounce() {
-        super("Bounce", new String[0]);
+        super("Bounce");
     }
 
     @Override

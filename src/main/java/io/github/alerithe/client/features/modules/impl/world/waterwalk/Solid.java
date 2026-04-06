@@ -1,4 +1,4 @@
-package io.github.alerithe.client.features.modules.impl.world.jesus;
+package io.github.alerithe.client.features.modules.impl.world.waterwalk;
 
 import io.github.alerithe.client.events.game.EventBlockCollision;
 import io.github.alerithe.client.events.game.EventUpdate;
@@ -6,11 +6,11 @@ import io.github.alerithe.client.utilities.EntityHelper;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.util.AxisAlignedBB;
 
-public class Solid extends JesusMode {
+public class Solid extends WaterWalkMode {
     private boolean isOnLiquid;
 
     public Solid() {
-        super("Solid", new String[0]);
+        super("Solid");
     }
 
     @Override

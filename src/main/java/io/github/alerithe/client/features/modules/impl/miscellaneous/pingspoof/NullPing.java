@@ -8,7 +8,7 @@ import net.minecraft.network.play.server.S00PacketKeepAlive;
 
 public class NullPing extends SpoofMode {
     public NullPing() {
-        super("NullPing", new String[]{"negping", "negativeping", "noping"});
+        super("NullPing", "negping", "negativeping", "noping");
     }
 
     @Override

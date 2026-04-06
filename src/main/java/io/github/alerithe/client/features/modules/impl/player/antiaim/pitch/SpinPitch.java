@@ -5,7 +5,7 @@ import io.github.alerithe.client.features.modules.impl.player.antiaim.RotationMo
 
 public class SpinPitch extends RotationMode {
     public SpinPitch() {
-        super("Spin", new String[0]);
+        super("Spin");
     }
 
     @Override

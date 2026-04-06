@@ -13,9 +13,9 @@ import io.github.alerithe.client.utilities.Stopwatch;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 
-public class TriggerBot extends Module {
+public class AutoAttack extends Module {
     public final IntProperty minAps = new IntProperty("MinHitsPerSecond", new String[]{"minaps", "mincps", "minspeed"},
-            8, 1, 20);
+            9, 1, 20);
     public final IntProperty maxAps = new IntProperty("MaxHitsPerSecond", new String[]{"maxaps", "maxcps", "maxspeed"},
             12, 1, 20);
     private final BooleanProperty players = new BooleanProperty("Players", new String[0], true);
@@ -27,8 +27,8 @@ public class TriggerBot extends Module {
 
     private final Stopwatch timer = new Stopwatch();
 
-    public TriggerBot() {
-        super("TriggerBot", new String[0], Type.COMBAT);
+    public AutoAttack() {
+        super("AutoAttack", new String[]{"triggerbot"}, Type.COMBAT);
 
         getPropertyManager().add(minAps);
         getPropertyManager().add(maxAps);
@@ -41,7 +41,7 @@ public class TriggerBot extends Module {
     }
 
     @Subscribe
-    private void onPostUpdate(EventUpdate.Post event) {
+    private void onPreUpdate(EventUpdate.Pre event) {
         if (GameHelper.getGame().objectMouseOver == null) return;
         if (GameHelper.getGame().objectMouseOver.entityHit == null) return;
 

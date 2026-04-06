@@ -1,9 +1,9 @@
 package io.github.alerithe.client.features.modules.impl.movement;
 
+import io.github.alerithe.client.events.bus.Subscribe;
 import io.github.alerithe.client.events.game.EventUpdate;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.utilities.EntityHelper;
-import io.github.alerithe.client.events.bus.Subscribe;
 
 public class Spider extends Module {
     public Spider() {
@@ -12,6 +12,7 @@ public class Spider extends Module {
 
     @Subscribe
     private void onPreUpdate(EventUpdate.Pre event) {
+        // FIXME: Try to find original motion value?
         if (!EntityHelper.getUser().isCollidedHorizontally) return;
 
         if (EntityHelper.getUser().fallDistance > 0) {

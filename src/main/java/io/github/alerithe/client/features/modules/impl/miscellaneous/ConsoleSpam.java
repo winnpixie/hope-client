@@ -14,13 +14,13 @@ import net.minecraft.network.play.client.C09PacketHeldItemChange;
 import net.minecraft.network.play.client.C11PacketEnchantItem;
 import net.minecraft.network.play.client.C17PacketCustomPayload;
 
-public class LogSpammer extends Module {
+public class ConsoleSpam extends Module {
     private final BooleanProperty anvilText = new BooleanProperty("Anvil", new String[0], true);
     private final BooleanProperty enchantSlot = new BooleanProperty("EnchantTable", new String[0], true);
     private final BooleanProperty nullHand = new BooleanProperty("NullHand", new String[0], true);
 
-    public LogSpammer() {
-        super("LogSpammer", new String[]{"logspam"}, Type.MISCELLANEOUS);
+    public ConsoleSpam() {
+        super("ConsoleSpam", new String[]{"logspam"}, Type.MISCELLANEOUS);
 
         getPropertyManager().add(anvilText);
         getPropertyManager().add(enchantSlot);

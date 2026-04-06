@@ -1,7 +1,7 @@
 package io.github.alerithe.client.features.modules.impl.combat;
 
 import io.github.alerithe.client.events.bus.Subscribe;
-import io.github.alerithe.client.events.game.EventUpdate;
+import io.github.alerithe.client.events.game.EventTick;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.features.properties.impl.IntProperty;
 import io.github.alerithe.client.utilities.GameHelper;
@@ -11,7 +11,7 @@ import net.minecraft.client.settings.GameSettings;
 
 public class AutoClicker extends Module {
     public final IntProperty minCps = new IntProperty("MinClicksPerSecond", new String[]{"mincps", "minspeed"},
-            8, 1, 20);
+            9, 1, 20);
     public final IntProperty maxCps = new IntProperty("MaxClicksPerSecond", new String[]{"maxcps", "maxspeed"},
             12, 1, 20);
 
@@ -25,9 +25,10 @@ public class AutoClicker extends Module {
     }
 
     @Subscribe
-    private void onEndTick(EventUpdate.Post event) {
-        if (!GameSettings.isKeyDown(GameHelper.getSettings().keyBindAttack)) return;
+    private void onStartTick(EventTick.Start event) {
+        if (!event.isInGame()) return;
         if (GameHelper.getGame().currentScreen != null) return;
+        if (!GameSettings.isKeyDown(GameHelper.getSettings().keyBindAttack)) return;
         if (!timer.hasPassed(1000 / MathHelper.getRandomInt(minCps.getValue(), maxCps.getValue()))) return;
 
         timer.reset();

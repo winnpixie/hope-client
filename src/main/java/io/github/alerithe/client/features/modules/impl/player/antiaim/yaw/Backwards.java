@@ -5,7 +5,7 @@ import io.github.alerithe.client.features.modules.impl.player.antiaim.RotationMo
 
 public class Backwards extends RotationMode {
     public Backwards() {
-        super("Backwards", new String[0]);
+        super("Backwards");
     }
 
     @Override

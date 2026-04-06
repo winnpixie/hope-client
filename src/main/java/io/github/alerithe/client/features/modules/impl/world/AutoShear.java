@@ -1,4 +1,4 @@
-package io.github.alerithe.client.features.modules.impl.player;
+package io.github.alerithe.client.features.modules.impl.world;
 
 import io.github.alerithe.client.events.game.EventUpdate;
 import io.github.alerithe.client.features.modules.Module;
@@ -13,7 +13,7 @@ import net.minecraft.network.play.client.C02PacketUseEntity;
 
 public class AutoShear extends Module {
     public AutoShear() {
-        super("AutoShear", new String[0], Type.PLAYER);
+        super("AutoShear", new String[0], Type.WORLD);
     }
 
     @Subscribe

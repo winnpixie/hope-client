@@ -4,6 +4,6 @@ import io.github.alerithe.client.features.modules.impl.player.antiaim.RotationMo
 
 public class NormalPitch extends RotationMode {
     public NormalPitch() {
-        super("Normal", new String[0]);
+        super("Normal");
     }
 }

@@ -1,5 +1,6 @@
 package io.github.alerithe.client.features.modules.impl.visual;
 
+import io.github.alerithe.client.events.bus.Subscribe;
 import io.github.alerithe.client.events.game.EventDraw;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.features.modules.impl.combat.AntiBot;
@@ -10,7 +11,6 @@ import io.github.alerithe.client.features.properties.impl.BooleanProperty;
 import io.github.alerithe.client.features.properties.impl.ObjectProperty;
 import io.github.alerithe.client.utilities.EntityHelper;
 import io.github.alerithe.client.utilities.graphics.VisualHelper;
-import io.github.alerithe.client.events.bus.Subscribe;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -28,7 +28,7 @@ public class EntityESP extends Module {
     public final BooleanProperty showNames = new BooleanProperty("ShowNames", new String[]{"names"}, true);
 
     public EntityESP() {
-        super("ESP", new String[0], Type.VISUAL);
+        super("EntityESP", new String[]{"esp"}, Type.VISUAL);
 
         getPropertyManager().add(mode);
         getPropertyManager().add(players);

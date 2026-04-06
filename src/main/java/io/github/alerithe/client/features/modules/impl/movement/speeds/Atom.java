@@ -4,9 +4,9 @@ import io.github.alerithe.client.events.game.EventUpdate;
 import io.github.alerithe.client.utilities.EntityHelper;
 import io.github.alerithe.client.utilities.WorldHelper;
 
-public class Offset extends SpeedMode {
-    public Offset() {
-        super("Offset", new String[]{"latest"});
+public class Atom extends SpeedMode {
+    public Atom() {
+        super("Atom", "old");
     }
 
     @Override
@@ -27,6 +27,6 @@ public class Offset extends SpeedMode {
             event.setOnGround(false);
         }
 
-        EntityHelper.getUser().setSpeed(EntityHelper.getUser().getSpeed() * (boost ? 2 : 0.705));
+        EntityHelper.getUser().setSpeed(EntityHelper.getUser().getSpeed() * (boost ? 3.3 : 0.705));
     }
 }

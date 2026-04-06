@@ -17,17 +17,17 @@ import net.minecraft.entity.player.EntityPlayer;
 
 public class Radar extends Module {
     private final BooleanProperty players = new BooleanProperty("Players", new String[0], true);
-    private final BooleanProperty hostiles = new BooleanProperty("Hostiles", new String[]{"monsters", "mobs"}, false);
-    private final BooleanProperty animals = new BooleanProperty("Animals", new String[0], false);
-    private final BooleanProperty passive = new BooleanProperty("Passive", new String[0], false);
+    private final BooleanProperty hostiles = new BooleanProperty("Hostiles", new String[]{"monsters", "mobs"}, true);
+    private final BooleanProperty animals = new BooleanProperty("Animals", new String[0], true);
+    private final BooleanProperty passive = new BooleanProperty("Passive", new String[0], true);
     private final BooleanProperty invisibles = new BooleanProperty("Invisibles", new String[]{"invis"}, true);
-    private final BooleanProperty items = new BooleanProperty("Items", new String[0], false);
+    private final BooleanProperty items = new BooleanProperty("Items", new String[0], true);
     private final IntProperty x = new IntProperty("X", new String[0],
             2, 0, 8192);
     private final IntProperty y = new IntProperty("Y", new String[0],
             85, 0, 8192);
     private final IntProperty size = new IntProperty("Size", new String[0],
-            70, 25, 512);
+            75, 25, 512);
 
     public Radar() {
         super("Radar", new String[0], Type.VISUAL);

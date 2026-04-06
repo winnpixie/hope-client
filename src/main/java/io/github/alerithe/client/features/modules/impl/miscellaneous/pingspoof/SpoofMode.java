@@ -4,7 +4,7 @@ import io.github.alerithe.client.events.game.EventPacket;
 import io.github.alerithe.client.features.properties.impl.ObjectProperty;
 
 public class SpoofMode extends ObjectProperty.Value {
-    public SpoofMode(String name, String[] aliases) {
+    public SpoofMode(String name, String... aliases) {
         super(name, aliases);
     }
 

@@ -8,9 +8,9 @@ import io.github.alerithe.client.utilities.WorldHelper;
 import net.minecraft.block.BlockAir;
 import net.minecraft.network.play.client.C03PacketPlayer;
 
-public class Latest extends PhaseMode {
-    public Latest() {
-        super("Latest", new String[0]);
+public class Alerithe extends PhaseMode {
+    public Alerithe() {
+        super("Alerithe", "latest");
     }
 
     @Override

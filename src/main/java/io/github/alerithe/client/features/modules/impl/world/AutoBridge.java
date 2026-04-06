@@ -1,5 +1,6 @@
 package io.github.alerithe.client.features.modules.impl.world;
 
+import io.github.alerithe.client.events.bus.Subscribe;
 import io.github.alerithe.client.events.game.EventBlockEdgeTest;
 import io.github.alerithe.client.events.game.EventUpdate;
 import io.github.alerithe.client.features.modules.Module;
@@ -9,7 +10,6 @@ import io.github.alerithe.client.utilities.EntityHelper;
 import io.github.alerithe.client.utilities.GameHelper;
 import io.github.alerithe.client.utilities.Stopwatch;
 import io.github.alerithe.client.utilities.WorldHelper;
-import io.github.alerithe.client.events.bus.Subscribe;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
@@ -20,7 +20,7 @@ import net.minecraft.util.Vec3;
 import java.util.Arrays;
 import java.util.List;
 
-public class ScaffoldWalk extends Module {
+public class AutoBridge extends Module {
     private final BooleanProperty tower = new BooleanProperty("Tower", new String[0], true);
     private final IntProperty bps = new IntProperty("BPS", new String[]{"cps", "speed"},
             20, 1, 20);
@@ -33,8 +33,8 @@ public class ScaffoldWalk extends Module {
     private Data data;
     private int blocksPlaced;
 
-    public ScaffoldWalk() {
-        super("ScaffoldWalk", new String[]{"scaffold"}, Type.WORLD);
+    public AutoBridge() {
+        super("AutoBridge", new String[]{"scaffoldwalk", "scaffold"}, Type.WORLD);
 
         getPropertyManager().add(tower);
         getPropertyManager().add(bps);

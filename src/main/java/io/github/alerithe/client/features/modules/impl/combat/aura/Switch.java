@@ -23,7 +23,9 @@ public class Switch extends AuraMode {
             index++;
             switchTimer.reset();
         }
+
         index %= module.near.size();
+
         module.target = module.near.get(index);
 
         if (!timer.hasPassed(1000 / MathHelper.getRandomInt(module.minAps.getValue(), module.maxAps.getValue())))

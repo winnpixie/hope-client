@@ -1,18 +1,18 @@
 package io.github.alerithe.client.features.modules.impl.player;
 
+import io.github.alerithe.client.events.bus.Subscribe;
 import io.github.alerithe.client.events.game.EventUpdate;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.features.properties.impl.IntProperty;
 import io.github.alerithe.client.utilities.EntityHelper;
 import io.github.alerithe.client.utilities.NetworkHelper;
-import io.github.alerithe.client.events.bus.Subscribe;
 import net.minecraft.network.play.client.C03PacketPlayer;
 
-public class Regen extends Module {
+public class FastHeal extends Module {
     private final IntProperty minHealth = new IntProperty("HP", new String[]{"health"}, 6, 1, 19);
 
-    public Regen() {
-        super("Regen", new String[0], Type.PLAYER);
+    public FastHeal() {
+        super("FastHeal", new String[]{"regen"}, Type.PLAYER);
 
         getPropertyManager().add(minHealth);
     }

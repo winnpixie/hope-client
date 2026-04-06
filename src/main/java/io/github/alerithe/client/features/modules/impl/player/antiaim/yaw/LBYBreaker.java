@@ -7,7 +7,7 @@ import io.github.alerithe.client.utilities.MathHelper;
 
 public class LBYBreaker extends RotationMode {
     public LBYBreaker() {
-        super("LBY", new String[0]);
+        super("LBY");
     }
 
     @Override

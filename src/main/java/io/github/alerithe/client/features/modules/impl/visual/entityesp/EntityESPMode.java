@@ -5,7 +5,7 @@ import io.github.alerithe.client.features.modules.impl.visual.EntityESP;
 import io.github.alerithe.client.features.properties.impl.ObjectProperty;
 
 public class EntityESPMode extends ObjectProperty.Value {
-    protected EntityESP module;
+    protected final EntityESP module;
 
     public EntityESPMode(String name, String[] aliases, EntityESP module) {
         super(name, aliases);

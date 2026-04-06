@@ -4,6 +4,6 @@ import io.github.alerithe.client.features.modules.impl.player.antiaim.RotationMo
 
 public class NormalYaw extends RotationMode {
     public NormalYaw() {
-        super("Normal", new String[0]);
+        super("Normal");
     }
 }

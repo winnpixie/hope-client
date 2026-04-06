@@ -1,20 +1,20 @@
 package io.github.alerithe.client.features.modules.impl.player;
 
+import io.github.alerithe.client.events.bus.Subscribe;
 import io.github.alerithe.client.events.game.EventUpdate;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.features.properties.impl.IntProperty;
 import io.github.alerithe.client.utilities.EntityHelper;
 import io.github.alerithe.client.utilities.NetworkHelper;
-import io.github.alerithe.client.events.bus.Subscribe;
 import net.minecraft.item.*;
 import net.minecraft.network.play.client.C03PacketPlayer;
 
-public class FastUse extends Module {
+public class QuickConsume extends Module {
     private final IntProperty useTicks = new IntProperty("UseTicks", new String[]{"ticks"},
             15, 0, 32);
 
-    public FastUse() {
-        super("FastUse", new String[]{"fasteat"}, Type.PLAYER);
+    public QuickConsume() {
+        super("QuickConsume", new String[]{"fastconsume", "fastuse", "fasteat"}, Type.PLAYER);
 
         getPropertyManager().add(useTicks);
     }

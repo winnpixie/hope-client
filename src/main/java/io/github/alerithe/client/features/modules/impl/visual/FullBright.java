@@ -1,15 +1,15 @@
 package io.github.alerithe.client.features.modules.impl.visual;
 
+import io.github.alerithe.client.events.bus.Subscribe;
 import io.github.alerithe.client.events.game.EventTick;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.utilities.EntityHelper;
-import io.github.alerithe.client.events.bus.Subscribe;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 
 public class FullBright extends Module {
     public FullBright() {
-        super("FullBright", new String[]{"brightness"}, Type.VISUAL);
+        super("FullBright", new String[]{"brightness", "gamma"}, Type.VISUAL);
     }
 
     @Override

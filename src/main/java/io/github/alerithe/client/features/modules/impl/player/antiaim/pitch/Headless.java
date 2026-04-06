@@ -5,7 +5,7 @@ import io.github.alerithe.client.features.modules.impl.player.antiaim.RotationMo
 
 public class Headless extends RotationMode {
     public Headless() {
-        super("Headless", new String[0]);
+        super("Headless");
     }
 
     @Override

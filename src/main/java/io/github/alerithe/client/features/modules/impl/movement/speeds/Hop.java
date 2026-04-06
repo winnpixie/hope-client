@@ -7,7 +7,7 @@ public class Hop extends SpeedMode {
     private boolean boost;
 
     public Hop() {
-        super("Hop", new String[]{"bhop"});
+        super("Hop", "hop");
     }
 
     @Override

@@ -4,8 +4,10 @@ import io.github.alerithe.client.Client;
 import io.github.alerithe.client.events.bus.Subscribe;
 import io.github.alerithe.client.events.game.EventUpdate;
 import io.github.alerithe.client.features.modules.Module;
-import io.github.alerithe.client.features.modules.impl.combat.aura.*;
-import io.github.alerithe.client.features.modules.impl.movement.NoSlowdown;
+import io.github.alerithe.client.features.modules.impl.combat.aura.AuraMode;
+import io.github.alerithe.client.features.modules.impl.combat.aura.LockOn;
+import io.github.alerithe.client.features.modules.impl.combat.aura.Switch;
+import io.github.alerithe.client.features.modules.impl.combat.aura.Tick;
 import io.github.alerithe.client.features.properties.impl.BooleanProperty;
 import io.github.alerithe.client.features.properties.impl.DoubleProperty;
 import io.github.alerithe.client.features.properties.impl.IntProperty;
@@ -25,12 +27,12 @@ import java.util.Comparator;
 import java.util.List;
 
 public class KillAura extends Module {
-    private final ObjectProperty<AuraMode> mode = new ObjectProperty<>("Mode", new String[0], new Switch(this),
-            new Tick(this), new Single(this), new LockOn(this));
+    private final ObjectProperty<AuraMode> mode = new ObjectProperty<>("Mode", new String[0],
+            new LockOn(this), new Switch(this), new Tick(this));
     private final ObjectProperty<SortingMode> sortingMode = new ObjectProperty<>("SortingMode", new String[]{"sorting"},
             new SortingMode.AngleSort(), new SortingMode.DistanceSort(), new SortingMode.HealthSort());
     public final IntProperty minAps = new IntProperty("MinHitsPerSecond", new String[]{"minaps", "mincps", "minspeed"},
-            8, 1, 20);
+            9, 1, 20);
     public final IntProperty maxAps = new IntProperty("MaxHitsPerSecond", new String[]{"maxaps", "maxcps", "maxspeed"},
             12, 1, 20);
     private final DoubleProperty angleOffset = new DoubleProperty("AngleOffset", new String[0],
@@ -104,8 +106,7 @@ public class KillAura extends Module {
             EntityHelper.getUser().setItemInUse(EntityHelper.getUser().getHeldItem(),
                     EntityHelper.getUser().getHeldItem().getMaxItemUseDuration());
 
-            if (!GameHelper.getSettings().keyBindUseItem.isKeyDown()
-                    && !Client.MODULE_MANAGER.find(NoSlowdown.class).isEnabled()) {
+            if (!GameHelper.getSettings().keyBindUseItem.isKeyDown()) {
                 EntityHelper.getUser().setSpeed(EntityHelper.getUser().getSpeed() * 0.2);
                 EntityHelper.getUser().setSprinting(false);
             }
