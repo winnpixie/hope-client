@@ -1,5 +1,6 @@
 package io.github.alerithe.client.features.modules.impl.visual;
 
+import io.github.alerithe.client.events.bus.Subscribe;
 import io.github.alerithe.client.events.game.EventDraw;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.features.modules.impl.combat.AntiBot;
@@ -10,7 +11,6 @@ import io.github.alerithe.client.utilities.GameHelper;
 import io.github.alerithe.client.utilities.MathHelper;
 import io.github.alerithe.client.utilities.WorldHelper;
 import io.github.alerithe.client.utilities.graphics.VisualHelper;
-import io.github.alerithe.client.events.bus.Subscribe;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -55,9 +55,9 @@ public class Radar extends Module {
         float centerY = rY + (rHeight / 2f);
 
         VisualHelper.MC_GFX.drawBorderedSquare(rX, rY, rWidth, rHeight, 1f, 0xFF111111, 0xFF333333); // Background
-        VisualHelper.MC_GFX.drawSquare(rX, centerY, rWidth, 1f, 0xFF333333); // Horizontal Bar
-        VisualHelper.MC_GFX.drawSquare(centerX, rY, 1f, rHeight, 0xFF333333); // Vertical Bar
-        VisualHelper.MC_GFX.drawSquare(centerX - 1, centerY - 1, 2, 2, 0xFFFFFF00); // Player
+        VisualHelper.MC_GFX.drawSquare(rX, centerY - 0.5f, rWidth, 1f, 0xFF333333); // Horizontal Bar
+        VisualHelper.MC_GFX.drawSquare(centerX - 0.5f, rY, 1f, rHeight, 0xFF333333); // Vertical Bar
+        VisualHelper.MC_GFX.drawSquare(centerX - 1f, centerY - 1f, 2, 2, 0xFFFFFFFF); // Player
 
         float maxDist = size.getValue() / 2f;
         for (Entity entity : WorldHelper.getWorld().loadedEntityList) {

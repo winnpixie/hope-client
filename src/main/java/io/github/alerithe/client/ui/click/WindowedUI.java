@@ -75,12 +75,12 @@ public class WindowedUI extends GuiScreen {
                 }
             });
 
-            typeLbl.getNormalStyle().setBackgroundColor(0xFFB00B1E);
+            typeLbl.getNormalStyle().setBackgroundColor(Client.ACCENT_COLOR);
             typeLbl.getNormalStyle().textStyle.setColor(0xFFFFFFFF);
             typeLbl.getNormalStyle().textStyle.setAlignment(TextAlignment.CENTER);
             typeLbl.getNormalStyle().textStyle.setPosition(TextPosition.MIDDLE);
 
-            typeLbl.getHoveredStyle().setBackgroundColor(0xFF990000);
+            typeLbl.getHoveredStyle().setBackgroundColor(0xFFB00B1E);
 
             container.addChild(typeLbl);
         }
@@ -145,7 +145,7 @@ public class WindowedUI extends GuiScreen {
                 };
 
                 ElementStyle checked = valueCheckBox.checkedStyle;
-                checked.setBackgroundColor(0xFFB00B1E);
+                checked.setBackgroundColor(Client.ACCENT_COLOR);
 
                 ElementStyle unchecked = valueCheckBox.uncheckedStyle;
                 unchecked.setBackgroundColor(0xFF696969);
@@ -281,7 +281,7 @@ public class WindowedUI extends GuiScreen {
 
     private void setupPropertyElement(Element element) {
         element.getNormalStyle().setBackgroundColor(0xFF111111);
-        element.getNormalStyle().setForegroundColor(0xFFB00B1E);
+        element.getNormalStyle().setForegroundColor(Client.ACCENT_COLOR);
         element.getNormalStyle().textStyle.setColor(0xFFAAAAAA);
         element.getNormalStyle().textStyle.setOffsetX(4);
         element.getNormalStyle().textStyle.setAlignment(TextAlignment.LEFT);

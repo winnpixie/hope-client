@@ -22,7 +22,7 @@ public class Client {
     public static final String NAME = "Hope";
     public static final String BUILD = "0.1";
 
-    public static final int ACCENT_COLOR = 0xFFB00B1E;
+    public static final int ACCENT_COLOR = 0xFFF0111E;
 
     public static final EventBus EVENT_BUS = new EventBus();
     public static final CommandManager COMMAND_MANAGER = new CommandManager();

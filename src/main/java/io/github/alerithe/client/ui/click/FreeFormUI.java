@@ -40,7 +40,7 @@ public class FreeFormUI extends GuiScreen {
             Label typeLbl = new Label(type.getLabel(), x, y, width, height);
             typeLbl.addListener(new Draggable());
 
-            typeLbl.getNormalStyle().setBackgroundColor(0xFFB00B1E);
+            typeLbl.getNormalStyle().setBackgroundColor(Client.ACCENT_COLOR);
             typeLbl.getNormalStyle().textStyle.setColor(0xFFFFFFFF);
             typeLbl.getNormalStyle().textStyle.setAlignment(TextAlignment.CENTER);
             typeLbl.getNormalStyle().textStyle.setPosition(TextPosition.MIDDLE);
@@ -104,7 +104,7 @@ public class FreeFormUI extends GuiScreen {
 
     private void setupPropertyElement(Element element) {
         element.getNormalStyle().setBackgroundColor(0xEE111111);
-        element.getNormalStyle().setForegroundColor(0xFFB00B1E);
+        element.getNormalStyle().setForegroundColor(Client.ACCENT_COLOR);
         element.getNormalStyle().textStyle.setColor(0xFFAAAAAA);
         element.getNormalStyle().textStyle.setOffsetX(4f);
         element.getNormalStyle().textStyle.setAlignment(TextAlignment.LEFT);
@@ -126,7 +126,7 @@ public class FreeFormUI extends GuiScreen {
             };
 
             ElementStyle checked = valueCheckBox.checkedStyle;
-            checked.setBackgroundColor(0xFFB00B1E);
+            checked.setBackgroundColor(Client.ACCENT_COLOR);
 
             ElementStyle unchecked = valueCheckBox.uncheckedStyle;
             unchecked.setBackgroundColor(0xFF222222);

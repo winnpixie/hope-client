@@ -36,7 +36,7 @@ public class TabRenderer extends TabComponent {
     private float drawCategories(float xOffset) {
         float width = 0;
         for (Module.Type type : Module.Type.values()) {
-            width = MathHelper.max(width, VisualHelper.MC_FONT.getStringWidth(type.getLabel()) + 4);
+            width = MathHelper.max(width, VisualHelper.MC_FONT.getStringWidth(type.getLabel()) + 9);
         }
 
         float x = xOffset + 1;
