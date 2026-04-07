@@ -39,14 +39,14 @@ public class FeatureManager<T extends Feature> {
         return null;
     }
 
-    public T find(String handle) {
+    public T find(String id) {
         for (T feature : children) {
-            if (feature.getName().equalsIgnoreCase(handle)) {
+            if (feature.getName().equalsIgnoreCase(id)) {
                 return feature;
             }
 
             for (String alias : feature.getAliases()) {
-                if (alias.equalsIgnoreCase(handle)) {
+                if (alias.equalsIgnoreCase(id)) {
                     return feature;
                 }
             }

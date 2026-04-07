@@ -18,31 +18,53 @@ public class Alerithe extends PhaseMode {
         if (EntityHelper.getUser().isUserMoving()) {
             EntityHelper.getUser().setSprinting(false);
             float[] vector = EntityHelper.getUser().getMoveVector();
-            if (EntityHelper.getUser().isCollidedHorizontally) { // THIS pushes you into the block
+            if (EntityHelper.getUser().isCollidedHorizontally || EntityHelper.getUser().ticksExisted % 10 == 0) { // THIS pushes you into the block
                 double x = vector[0] * 0.006;
                 double z = vector[1] * 0.006;
-                NetworkHelper.sendPacket(new C03PacketPlayer.C04PacketPlayerPosition(EntityHelper.getUser().posX + x,
-                        EntityHelper.getUser().posY, EntityHelper.getUser().posZ + z, false));
-                NetworkHelper.sendPacket(new C03PacketPlayer.C04PacketPlayerPosition(EntityHelper.getUser().posX + x * 11,
-                        EntityHelper.getUser().posY - 11, EntityHelper.getUser().posZ + z * 11, false));
-                EntityHelper.getUser().setPosition(EntityHelper.getUser().posX + x, EntityHelper.getUser().posY,
+
+                NetworkHelper.sendPacket(new C03PacketPlayer.C04PacketPlayerPosition(
+                        EntityHelper.getUser().posX + x,
+                        EntityHelper.getUser().posY,
+                        EntityHelper.getUser().posZ + z, false));
+                NetworkHelper.sendPacket(new C03PacketPlayer.C04PacketPlayerPosition(
+                        EntityHelper.getUser().posX + x * 11,
+                        EntityHelper.getUser().posY - 301,
+                        EntityHelper.getUser().posZ + z * 11, false));
+
+                EntityHelper.getUser().setPosition(
+                        EntityHelper.getUser().posX + x,
+                        EntityHelper.getUser().posY,
                         EntityHelper.getUser().posZ + z);
-            } else if (EntityHelper.getUser().hurtTime == 9 || EntityHelper.getUser().isSneaking()) { // THIS sends you through the block
-                double x = vector[0] * 0.3;
-                double z = vector[1] * 0.3;
-                NetworkHelper.sendPacket(new C03PacketPlayer.C04PacketPlayerPosition(EntityHelper.getUser().posX + x,
-                        EntityHelper.getUser().posY, EntityHelper.getUser().posZ + z, false));
-                NetworkHelper.sendPacket(new C03PacketPlayer.C04PacketPlayerPosition(EntityHelper.getUser().posX + x * 11,
-                        EntityHelper.getUser().posY - 11, EntityHelper.getUser().posZ + z * 11, false));
-                EntityHelper.getUser().setPosition(EntityHelper.getUser().posX + x, EntityHelper.getUser().posY,
+            }
+            if (EntityHelper.getUser().hurtTime == 9 || EntityHelper.getUser().isSneaking()) { // THIS sends you through the block
+                double x = vector[0] * 0.5;
+                double z = vector[1] * 0.5;
+
+                NetworkHelper.sendPacket(new C03PacketPlayer.C04PacketPlayerPosition(
+                        EntityHelper.getUser().posX + x,
+                        EntityHelper.getUser().posY,
+                        EntityHelper.getUser().posZ + z, false));
+                NetworkHelper.sendPacket(new C03PacketPlayer.C04PacketPlayerPosition(
+                        EntityHelper.getUser().posX + x * 11,
+                        EntityHelper.getUser().posY - 301,
+                        EntityHelper.getUser().posZ + z * 11, false));
+
+                EntityHelper.getUser().setPosition(
+                        EntityHelper.getUser().posX + x,
+                        EntityHelper.getUser().posY,
                         EntityHelper.getUser().posZ + z);
             }
         } else if (EntityHelper.getUser().isSneaking()) { // DownClip because NCP is broken, lol.
             if (WorldHelper.getBlock(EntityHelper.getUser().getPosition().up()) instanceof BlockAir) {
-                NetworkHelper.sendPacket(new C03PacketPlayer.C04PacketPlayerPosition(EntityHelper.getUser().posX,
-                        EntityHelper.getUser().posY - 1, EntityHelper.getUser().posZ, true));
+                NetworkHelper.sendPacket(new C03PacketPlayer.C04PacketPlayerPosition(
+                        EntityHelper.getUser().posX,
+                        EntityHelper.getUser().posY - 1,
+                        EntityHelper.getUser().posZ, true));
             } else if (EntityHelper.getUser().ticksExisted % 4 == 0) {
-                EntityHelper.getUser().setPosition(EntityHelper.getUser().posX, EntityHelper.getUser().posY - 0.7, EntityHelper.getUser().posZ);
+                EntityHelper.getUser().setPosition(
+                        EntityHelper.getUser().posX,
+                        EntityHelper.getUser().posY - 0.7,
+                        EntityHelper.getUser().posZ);
             }
         }
     }

@@ -16,20 +16,24 @@ public class Solid extends WaterWalkMode {
     @Override
     public void onPreUpdate(EventUpdate.Pre event) {
         if (!isOnLiquid) return;
-        if (EntityHelper.getUser().ticksExisted % 2 == 0) return;
 
-        event.setY(event.getY() + 0.02);
-        event.setOnGround(false);
+        if (EntityHelper.getUser().ticksExisted % 2 == 0) {
+            event.setY(event.getY() + 0.02);
+            event.setOnGround(false);
+        } else {
+            event.setOnGround(true);
+        }
+
         isOnLiquid = false;
     }
 
     @Override
     public void onBlockCollide(EventBlockCollision event) {
         if (!(event.getBlock() instanceof BlockLiquid)) return;
+        if (event.getPos().getY() > EntityHelper.getUser().posY) return;
+        if (EntityHelper.getUser().isSneaking()) return;
 
         event.setBoundingBox(new AxisAlignedBB(event.getPos(), event.getPos().add(1, 1, 1)));
-        if (event.getPos().getY() < EntityHelper.getUser().posY) {
-            isOnLiquid = true;
-        }
+        isOnLiquid = true;
     }
 }

@@ -9,7 +9,7 @@ import io.github.alerithe.client.features.modules.ModuleManager;
 import io.github.alerithe.client.features.plugins.PluginManager;
 import io.github.alerithe.client.utilities.GameHelper;
 import io.github.alerithe.client.utilities.IdentityHelper;
-import io.github.alerithe.client.utilities.sessions.SessionHelper;
+import io.github.alerithe.client.utilities.SessionHelper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -66,7 +66,7 @@ public class Client {
         String password = System.getProperty("mc.pass", "");
         if (!username.isEmpty() && !password.isEmpty()) {
             try {
-                GameHelper.getGame().setSession(SessionHelper.MICROSOFT.createSession(username, password));
+                GameHelper.getGame().setSession(SessionHelper.logInWithMicrosoft(username, password));
             } catch (Exception e) {
                 e.printStackTrace();
             }

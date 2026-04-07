@@ -23,7 +23,7 @@ import java.util.List;
 public class AutoBridge extends Module {
     private final BooleanProperty tower = new BooleanProperty("Tower", new String[0], true);
     private final IntProperty bps = new IntProperty("BPS", new String[]{"cps", "speed"},
-            20, 1, 20);
+            9, 1, 20);
 
     private final List<Block> blacklist = Arrays.asList(Blocks.cocoa, Blocks.water, Blocks.flowing_water, Blocks.lava,
             Blocks.flowing_lava, Blocks.air, Blocks.flower_pot, Blocks.red_flower, Blocks.yellow_flower,
@@ -51,6 +51,8 @@ public class AutoBridge extends Module {
         data = null;
         if (!isHoldingBlock()) return;
 
+        event.setPitch(90f);
+
         double px = EntityHelper.getUser().posX;
         double py = EntityHelper.getUser().posY - 1;
         double pz = EntityHelper.getUser().posZ;
@@ -59,6 +61,7 @@ public class AutoBridge extends Module {
         Block blockBelow = WorldHelper.getBlock(below);
 
         if (!blacklist.contains(blockBelow)) return;
+
 
         data = makeData(below);
         if (data == null) return;

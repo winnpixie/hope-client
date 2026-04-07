@@ -1,6 +1,6 @@
 package io.github.alerithe.client.ui.alts;
 
-import io.github.alerithe.client.utilities.sessions.SessionHelper;
+import io.github.alerithe.client.utilities.SessionHelper;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.GuiScreen;
@@ -12,12 +12,15 @@ import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
+import java.net.URI;
 import java.util.UUID;
 
 public class GuiDirectLogin extends GuiScreen {
+    private GuiButton modeButton;
     private GuiTextField username;
     private GuiPasswordField password;
     private String message;
+    private int mode;
 
     @Override
     public void initGui() {
@@ -30,9 +33,11 @@ public class GuiDirectLogin extends GuiScreen {
         username.setFocused(true);
         password = new GuiPasswordField(1, fontRenderer, width / 2 - 100, height / 2 + 10, 200, 20);
         password.setMaxStringLength(32767);
-        buttonList.add(new GuiButton(0, width / 2 - 100, height / 2 + 35, "Login w/ MS (Shift = MOJ)"));
-        buttonList.add(new GuiButton(1, width / 2 - 100, height / 2 + 55, "Import USER:PASS"));
-        buttonList.add(new GuiButton(2, width / 2 - 100, height / 2 + 75, "Exit"));
+        buttonList.add(new GuiButton(0, width / 2 - 100, height / 2 + 35, 98, 20, "Log In"));
+        buttonList.add(modeButton = new GuiButton(1, width / 2 + 2, height / 2 + 35, 98, 20, "Microsoft OAuth"));
+        buttonList.add(new GuiButton(2, width / 2 - 100, height / 2 + 56, 98, 20, "Set Cracked"));
+        buttonList.add(new GuiButton(3, width / 2 + 2, height / 2 + 56, 98, 20, "Import Clipboard"));
+        buttonList.add(new GuiButton(4, width / 2 - 100, height / 2 + 77, "Exit"));
     }
 
     @Override
@@ -42,9 +47,39 @@ public class GuiDirectLogin extends GuiScreen {
                 logIn();
                 break;
             case 1:
+                mode = (mode + 1) % 3;
+
+                switch (mode) {
+                    case 0:
+                        modeButton.displayString = "Microsoft OAuth";
+                        break;
+                    case 1:
+                        modeButton.displayString = "Microsoft";
+                        break;
+                    case 2:
+                        modeButton.displayString = "Mojang";
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            case 2:
+                if (username.getText().isEmpty()) {
+                    message = "\247cMissing username.";
+                    break;
+                }
+
+                String user = username.getText();
+                if (user.length() > 16) user = user.substring(0, 16);
+
+                mc.setSession(new Session(user, UUID.randomUUID().toString(), "", "legacy"));
+                message = String.format("[Cracked] \247eCurrent User : \247r%s", mc.getSession().getUsername());
+                break;
+            case 3:
                 try {
                     String text = (String) Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor);
                     String[] data = text.split(":", 2);
+
                     username.setText(data[0]);
                     if (data.length > 1) {
                         password.setText(data[1]);
@@ -53,7 +88,7 @@ public class GuiDirectLogin extends GuiScreen {
                     e.printStackTrace();
                 }
                 break;
-            case 2:
+            case 4:
                 mc.displayGuiScreen(new GuiMainMenu());
                 break;
             default:
@@ -102,29 +137,52 @@ public class GuiDirectLogin extends GuiScreen {
     }
 
     private void logIn() {
-        if (!username.getText().isEmpty()) {
-            if (!password.getText().isEmpty()) {
-                message = "\247aLogging in...";
-                new Thread(() -> {
-                    try {
-                        if (isShiftKeyDown()) {
-                            mc.setSession(SessionHelper.MOJANG.createSession(username.getText(), password.getText()));
-                        } else {
-                            mc.setSession(SessionHelper.MICROSOFT.createSession(username.getText(), password.getText()));
-                        }
-
-                        message = String.format("\247eCurrent User : \247r%s", mc.getSession().getUsername());
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        message = String.format("\247c%s", e.getMessage());
-                    }
-                }).start();
-            } else {
-                mc.setSession(new Session(username.getText(), UUID.randomUUID().toString(), "", "legacy"));
-                message = String.format("[Cracked] \247eCurrent User : \247r%s", mc.getSession().getUsername());
-            }
-        } else {
+        if (mode > 0
+                && (username.getText().isEmpty() || password.getText().isEmpty())) {
             message = "\247cInsufficient information provided.";
+            return;
         }
+
+        message = "\247aLogging in...";
+        new Thread(() -> {
+            try {
+                Session session;
+
+                switch (mode) {
+                    case 0: // Microsoft OAuth
+                        session = SessionHelper.logInWithMicrosoft(deviceCode -> {
+                            message = String.format("\247eVISIT: \247f%s", deviceCode.getDirectVerificationUri());
+
+                            try {
+                                Desktop.getDesktop().browse(
+                                        URI.create(deviceCode.getDirectVerificationUri()));
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        });
+                        break;
+                    case 1: // Microsoft Credentials
+                        session = SessionHelper.logInWithMicrosoft(username.getText(), password.getText());
+                        break;
+                    case 2: // Mojang Credentials
+                        session = SessionHelper.logInWithMojang(username.getText(), password.getText());
+                        break;
+                    default:
+                        session = null;
+                        break;
+                }
+
+                if (session == null) {
+                    throw new IllegalStateException("session should not be null!");
+                }
+
+                mc.setSession(session);
+                message = String.format("\247eCurrent User : \247r%s", mc.getSession().getUsername());
+            } catch (Exception e) {
+                e.printStackTrace();
+
+                message = String.format("\247c%s", e.getMessage());
+            }
+        }).start();
     }
 }
