@@ -10,6 +10,7 @@ import io.github.alerithe.client.features.plugins.PluginManager;
 import io.github.alerithe.client.utilities.GameHelper;
 import io.github.alerithe.client.utilities.IdentityHelper;
 import io.github.alerithe.client.utilities.SessionHelper;
+import io.github.alerithe.client.utilities.SpeechEngine;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -24,6 +25,7 @@ public class Client {
 
     public static final int ACCENT_COLOR = 0xFFF0111E;
 
+    public static final SpeechEngine SPEECH_ENGINE = new SpeechEngine();
     public static final EventBus EVENT_BUS = new EventBus();
     public static final CommandManager COMMAND_MANAGER = new CommandManager();
     public static final ModuleManager MODULE_MANAGER = new ModuleManager();
@@ -40,13 +42,16 @@ public class Client {
         LOGGER.info(IdentityHelper.getId());
 
         dataPath = GameHelper.getGame().mcDataDir.toPath().resolve(NAME);
+
         if (Files.notExists(dataPath)) {
             try {
                 Files.createDirectory(dataPath);
             } catch (IOException ioe) {
-                throw new RuntimeException(ioe);
+                throw new IllegalStateException(ioe);
             }
         }
+
+        SPEECH_ENGINE.init();
 
         COMMAND_MANAGER.load();
         MODULE_MANAGER.load();
@@ -59,7 +64,14 @@ public class Client {
             KEYBIND_MANAGER.save();
             FRIEND_MANAGER.save();
             PLUGIN_MANAGER.save();
+
+            SPEECH_ENGINE.cleanUp();
         });
+
+        if (System.getProperty("client.silentStart", "").isEmpty()) {
+            SPEECH_ENGINE.queue(String.format("Hello, %s. Welcome to %s client, built for Minecraft 1 point 8 point 8",
+                    GameHelper.getGame().getSession().getUsername(), Client.NAME));
+        }
 
         // Debug log-in
         String username = System.getProperty("mc.email", "");
@@ -68,7 +80,7 @@ public class Client {
             try {
                 GameHelper.getGame().setSession(SessionHelper.logInWithMicrosoft(username, password));
             } catch (Exception e) {
-                e.printStackTrace();
+                LOGGER.warn("Error logging in from system properties", e);
             }
         }
     }

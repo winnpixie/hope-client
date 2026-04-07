@@ -85,7 +85,7 @@ public class GuiDirectLogin extends GuiScreen {
                         password.setText(data[1]);
                     }
                 } catch (UnsupportedFlavorException e) {
-                    e.printStackTrace();
+                    message = String.format("\247e%s", e.getMessage());
                 }
                 break;
             case 4:
@@ -156,8 +156,8 @@ public class GuiDirectLogin extends GuiScreen {
                             try {
                                 Desktop.getDesktop().browse(
                                         URI.create(deviceCode.getDirectVerificationUri()));
-                            } catch (IOException e) {
-                                e.printStackTrace();
+                            } catch (IOException ioe) {
+                                message = String.format("\247e%s", ioe.getMessage());
                             }
                         });
                         break;
@@ -179,8 +179,6 @@ public class GuiDirectLogin extends GuiScreen {
                 mc.setSession(session);
                 message = String.format("\247eCurrent User : \247r%s", mc.getSession().getUsername());
             } catch (Exception e) {
-                e.printStackTrace();
-
                 message = String.format("\247c%s", e.getMessage());
             }
         }).start();

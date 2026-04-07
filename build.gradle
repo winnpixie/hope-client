@@ -26,6 +26,8 @@ dependencies {
     shaded 'net.raphimc:MinecraftAuth:5.0.0'
 
     implementation fileTree('libraries/')
+
+    shaded fileTree('include/')
 }
 
 test {

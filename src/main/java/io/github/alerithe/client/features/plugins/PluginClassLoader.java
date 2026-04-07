@@ -52,8 +52,8 @@ public class PluginClassLoader extends URLClassLoader {
             }
 
             classData = output.toByteArray();
-        } catch (IOException e) {
-            throw new ClassNotFoundException(name, e);
+        } catch (IOException ioe) {
+            throw new ClassNotFoundException(name, ioe);
         }
 
         int dotIdx = name.lastIndexOf('.');

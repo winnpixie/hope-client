@@ -11,6 +11,6 @@ public class ErrorMessages {
     }
 
     public static String format(String message) {
-        return "\247c" + message;
+        return String.format("\247c%s", message);
     }
 }
