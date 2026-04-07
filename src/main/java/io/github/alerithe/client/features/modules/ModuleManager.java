@@ -84,7 +84,7 @@ public class ModuleManager extends FeatureManager<Module> {
         add(new QuickConsume());
 
         // Visual
-        add(new Breadcrumbs()); // TODO: Finish
+        add(new BreadCrumbs());
         add(new ChatPlus());
         add(new ClickUI());
         add(new EntityESP());
@@ -93,7 +93,7 @@ public class ModuleManager extends FeatureManager<Module> {
         add(new HUD());
         add(new NameTags());
         add(new Radar());
-        add(new StorageESP()); // TODO: Finish, also maybe just add this to ESP instead?
+        add(new StorageESP()); // TODO: Finish
         add(new TabUI());
         add(new Tracers());
 
