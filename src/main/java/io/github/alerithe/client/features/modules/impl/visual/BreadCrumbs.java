@@ -55,13 +55,15 @@ public class BreadCrumbs extends Module {
         if (noDepth) {
             GlStateManager.disableDepth();
         }
+
         GlStateManager.disableTexture2D();
+        GlStateManager.disableLighting();
         GlStateManager.enableBlend();
         GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
 
 
         GL11.glEnable(GL11.GL_LINE_SMOOTH);
-        GL11.glLineWidth(1f);
+        GL11.glLineWidth(2f);
         GL11.glBegin(GL11.GL_LINE_STRIP);
         for (double[] position : positions) {
             int color = Color.HSBtoRGB((hue % 360) / 360f, 1f, 1f);
@@ -79,6 +81,7 @@ public class BreadCrumbs extends Module {
 
         GL11.glDisable(GL11.GL_LINE_SMOOTH);
         GlStateManager.disableBlend();
+        GlStateManager.enableLighting();
         GlStateManager.enableTexture2D();
         if (noDepth) {
             GlStateManager.enableDepth();

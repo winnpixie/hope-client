@@ -12,22 +12,23 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.AxisAlignedBB;
 import org.lwjgl.opengl.GL11;
 
-import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class Pillar extends EntityESPMode {
+    private final Set<Entity> entities = new TreeSet<>(Comparator.comparing(e -> -WorldHelper.distanceSq(e)));
+
     public Pillar(EntityESP module) {
         super("3D", new String[]{"pillar"}, module);
     }
 
     @Override
     public void onWorldDraw(EventDraw.World event) {
-        List<Entity> entities = new ArrayList<>();
+        entities.clear();
         for (Entity entity : WorldHelper.getWorld().loadedEntityList) {
             if (module.qualifies(entity)) entities.add(entity);
         }
-        entities.sort(Comparator.comparingDouble(entity -> -WorldHelper.distanceSq(entity)));
 
         for (Entity entity : entities) {
             GlStateManager.pushMatrix();
@@ -50,7 +51,7 @@ public class Pillar extends EntityESPMode {
                     x + entity.width / 2d, y + entity.height + 0.2, z + entity.width / 2d);
 
             GL11.glEnable(GL11.GL_LINE_SMOOTH);
-            GL11.glLineWidth(1f);
+            GL11.glLineWidth(2f);
             VisualHelper.MC_GFX.drawPrism(aabb.minX, aabb.minY, aabb.minZ,
                     aabb.maxX, aabb.maxY, aabb.maxZ,
                     EntityHelper.getColor(entity));

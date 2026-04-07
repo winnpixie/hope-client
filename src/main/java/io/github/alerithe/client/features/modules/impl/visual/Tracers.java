@@ -88,7 +88,7 @@ public class Tracers extends Module {
 
             GlStateManager.pushMatrix();
             GL11.glEnable(GL11.GL_LINE_SMOOTH);
-            GL11.glLineWidth(1f);
+            GL11.glLineWidth(2f);
             VisualHelper.MC_GFX.drawLine(centerX, centerY, x, y, EntityHelper.getColor(entity));
             GL11.glDisable(GL11.GL_LINE_SMOOTH);
             GlStateManager.popMatrix();
