@@ -17,6 +17,7 @@ libraries/
 run/
 
 # Legally Gray Area
+src/main/java/Start.java
 src/main/java/net/minecraft
 src/main/java/net/minecraftforge
 src/main/java/optifine/
