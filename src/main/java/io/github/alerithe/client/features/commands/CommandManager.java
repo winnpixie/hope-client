@@ -33,7 +33,7 @@ public class CommandManager extends FeatureManager<Command> {
         add(new CommandVClip());
         add(new CommandWhois());
 
-        Client.LOGGER.info("Registered {} command(s)", getChildren().size());
+        Client.LOGGER.info("Registered {} command(s)", getElements().size());
 
         Client.EVENT_BUS.subscribe(EventChat.class, event -> {
             if (event.getMessage().indexOf('.') != 0) return;

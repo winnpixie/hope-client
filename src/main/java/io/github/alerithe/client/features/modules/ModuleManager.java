@@ -22,14 +22,14 @@ import java.util.List;
 import java.util.Map;
 
 public class ModuleManager extends FeatureManager<Module> {
-    private Path statePath;
-    private boolean restored;
+    private Path toggleRestorePath;
+    private boolean restoredToggles = false;
 
     private final Map<Module.Type, List<Module>> modulesInType = new EnumMap<>(Module.Type.class);
 
     @Override
     public void load() {
-        setDataPath(Client.dataPath.resolve("modules"));
+        setDataPath(Client.DATA_PATH.resolve("modules"));
         if (Files.notExists(getDataPath())) {
             try {
                 Files.createDirectory(getDataPath());
@@ -38,7 +38,7 @@ public class ModuleManager extends FeatureManager<Module> {
             }
         }
 
-        statePath = getDataPath().resolve("RESTORE_ON_PLAY");
+        this.toggleRestorePath = getDataPath().resolve("RESTORE_ON_PLAY");
 
         for (Module.Type type : Module.Type.values()) {
             modulesInType.put(type, new ArrayList<>());
@@ -119,43 +119,45 @@ public class ModuleManager extends FeatureManager<Module> {
         add(new PingSpoof());
         add(new TextSpammer()); // TODO: Finish
 
-        Client.LOGGER.info("Registered {} Module(s)", getChildren().size());
+        Client.LOGGER.info("Registered {} Module(s)", getElements().size());
 
-        getChildren().forEach(module -> {
-            Client.KEYBIND_MANAGER.add(new Keybind(module.getName(), module.getAliases(), Keyboard.KEY_NONE, module::toggle));
+        getElements().forEach(module -> {
+            Client.KEYBIND_MANAGER.add(
+                    new Keybind(module.getName(), module.getAliases(), Keyboard.KEY_NONE, module::toggle));
 
             module.getPropertyManager().load();
         });
 
-        List<Module> toRestore = new ArrayList<>();
-
+        List<Module> toBeToggled = new ArrayList<>(getElements().size());
         try {
-            Files.readAllLines(statePath).forEach(line -> {
+            Files.readAllLines(toggleRestorePath).forEach(line -> {
                 Module module = find(line);
-                if (module != null) toRestore.add(module);
+                if (module == null) return;
+
+                toBeToggled.add(module);
             });
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
         }
 
         Client.EVENT_BUS.subscribe(EventTick.End.class, new Subscriber<EventTick.End>() {
             @Override
             public void handle(EventTick.End event) {
                 if (!event.isInGame()) return;
-                if (restored) return; // Just in case.
+                if (restoredToggles) return; // just in case?
 
-                toRestore.forEach(Module::toggle);
-                restored = true;
+                toBeToggled.forEach(Module::toggle);
+                restoredToggles = true;
                 Client.EVENT_BUS.unsubscribe(this);
             }
         });
     }
 
     @Override
-    public void add(Module feature) {
-        modulesInType.get(feature.getType()).add(feature);
+    public void add(Module item) {
+        modulesInType.get(item.getType()).add(item);
 
-        super.add(feature);
+        super.add(item);
     }
 
     public List<Module> getAllInType(Module.Type type) {
@@ -164,17 +166,19 @@ public class ModuleManager extends FeatureManager<Module> {
 
     @Override
     public void save() {
-        getChildren().forEach(module -> module.getPropertyManager().save());
-        if (!restored) return;
+        getElements().forEach(module -> module.getPropertyManager().save());
+        if (!restoredToggles) return;
 
         StringBuilder builder = new StringBuilder();
 
-        for (Module module : getChildren()) {
-            if (module.isEnabled()) builder.append(module.getName()).append('\n');
+        for (Module module : getElements()) {
+            if (!module.isEnabled()) continue;
+
+            builder.append(module.getName()).append('\n');
         }
 
         try {
-            Files.write(statePath, builder.toString().getBytes());
+            Files.write(toggleRestorePath, builder.toString().getBytes());
         } catch (IOException e) {
             e.printStackTrace();
         }

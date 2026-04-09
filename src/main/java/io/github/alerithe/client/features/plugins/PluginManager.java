@@ -15,7 +15,7 @@ public class PluginManager extends FeatureManager<Plugin> {
 
     @Override
     public void load() {
-        setDataPath(Client.dataPath.resolve("plugins"));
+        setDataPath(Client.DATA_PATH.resolve("plugins"));
         if (Files.notExists(getDataPath())) {
             try {
                 Files.createDirectory(getDataPath());
@@ -27,9 +27,9 @@ public class PluginManager extends FeatureManager<Plugin> {
         this.parentClassLoader = getClass().getClassLoader();
         loadPluginsFromFiles();
 
-        Client.LOGGER.info("Registered {} plugin(s)", getChildren().size());
+        Client.LOGGER.info("Registered {} plugin(s)", getElements().size());
 
-        getChildren().forEach(plugin -> {
+        getElements().forEach(plugin -> {
             plugin.getLogger().info(() -> String.format("Loading %s v%s", plugin.getName(), plugin.getManifest().getVersion()));
             plugin.onLoad();
         });
@@ -41,7 +41,7 @@ public class PluginManager extends FeatureManager<Plugin> {
                 Plugin plugin = loadPluginFromFile(path);
                 if (plugin == null) return;
 
-                getChildren().add(plugin);
+                getElements().add(plugin);
                 Client.LOGGER.info("Registered plugin {}", plugin.getName());
             });
         } catch (IOException ioe) {
@@ -86,7 +86,7 @@ public class PluginManager extends FeatureManager<Plugin> {
 
     @Override
     public void save() {
-        getChildren().forEach(plugin -> {
+        getElements().forEach(plugin -> {
             plugin.getLogger().info(() -> String.format("Unloading %s", plugin.getName()));
             plugin.onExit();
 

@@ -11,7 +11,7 @@ import java.nio.file.Files;
 public class KeybindManager extends FeatureManager<Keybind> {
     @Override
     public void load() {
-        setDataPath(Client.dataPath.resolve("keybinds.properties"));
+        setDataPath(Client.DATA_PATH.resolve("keybinds.properties"));
 
         try {
             Files.readAllLines(getDataPath()).forEach(line -> {
@@ -26,7 +26,7 @@ public class KeybindManager extends FeatureManager<Keybind> {
         }
 
         Client.EVENT_BUS.subscribe(EventInput.KeyPress.class, event ->
-                getChildren().forEach(kb -> {
+                getElements().forEach(kb -> {
                     if (kb.getKey() == event.getKey()) kb.getAction().run();
                 }));
     }
@@ -34,7 +34,7 @@ public class KeybindManager extends FeatureManager<Keybind> {
     @Override
     public void save() {
         StringBuilder builder = new StringBuilder();
-        getChildren().forEach(kb -> builder.append(kb.getName()).append(':')
+        getElements().forEach(kb -> builder.append(kb.getName()).append(':')
                 .append(Keyboard.getKeyName(kb.getKey())).append('\n'));
 
         try {

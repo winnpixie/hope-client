@@ -1,11 +1,11 @@
 package io.github.alerithe.client.features.modules.impl.player;
 
+import io.github.alerithe.client.events.bus.Subscribe;
 import io.github.alerithe.client.events.game.*;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.utilities.EntityHelper;
 import io.github.alerithe.client.utilities.GameHelper;
 import io.github.alerithe.client.utilities.WorldHelper;
-import io.github.alerithe.client.events.bus.Subscribe;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.network.play.client.*;
 import net.minecraft.network.play.server.S08PacketPlayerPosLook;
@@ -53,21 +53,24 @@ public class Freecam extends Module {
 
     @Subscribe
     private void onPacketWrite(EventPacket.Write event) {
-        if (event.getPacket() instanceof C02PacketUseEntity || event.getPacket() instanceof C0BPacketEntityAction
-                || event.getPacket() instanceof C07PacketPlayerDigging || event.getPacket() instanceof C0APacketAnimation
+        if (event.getPacket() instanceof C02PacketUseEntity
+                || event.getPacket() instanceof C0BPacketEntityAction
+                || event.getPacket() instanceof C07PacketPlayerDigging
+                || event.getPacket() instanceof C0APacketAnimation
                 || event.getPacket() instanceof C08PacketPlayerBlockPlacement) {
             event.cancel();
-        }
-
-        if (event.getPacket() instanceof C03PacketPlayer.C06PacketPlayerPosLook) {
-            event.setPacket(new C03PacketPlayer.C06PacketPlayerPosLook(clone.posX, clone.posY, clone.posZ,
+        } else if (event.getPacket() instanceof C03PacketPlayer.C06PacketPlayerPosLook) {
+            event.setPacket(new C03PacketPlayer.C06PacketPlayerPosLook(
+                    clone.posX, clone.posY, clone.posZ,
                     clone.rotationYaw, clone.rotationPitch,
                     clone.onGround));
         } else if (event.getPacket() instanceof C03PacketPlayer.C05PacketPlayerLook) {
-            event.setPacket(new C03PacketPlayer.C05PacketPlayerLook(clone.rotationYaw, clone.rotationPitch,
+            event.setPacket(new C03PacketPlayer.C05PacketPlayerLook(
+                    clone.rotationYaw, clone.rotationPitch,
                     clone.onGround));
         } else if (event.getPacket() instanceof C03PacketPlayer.C04PacketPlayerPosition) {
-            event.setPacket(new C03PacketPlayer.C04PacketPlayerPosition(clone.posX, clone.posY, clone.posZ,
+            event.setPacket(new C03PacketPlayer.C04PacketPlayerPosition(
+                    clone.posX, clone.posY, clone.posZ,
                     clone.onGround));
         } else if (event.getPacket() instanceof C03PacketPlayer) {
             event.setPacket(new C03PacketPlayer(clone.onGround));
@@ -76,6 +79,7 @@ public class Freecam extends Module {
 
     @Subscribe
     private void onPacketRead(EventPacket.Read event) {
+        // FIXME: Process other entity move packets
         if (!(event.getPacket() instanceof S08PacketPlayerPosLook)) return;
 
         S08PacketPlayerPosLook packet = (S08PacketPlayerPosLook) event.getPacket();

@@ -35,14 +35,14 @@ public class CommandHelp extends Command {
             }
         }
 
-        int pageCount = MathHelper.ceil(Client.COMMAND_MANAGER.getChildren().size() / (float) COMMANDS_PER_PAGE); // 7 COMMANDS PER PAGE
+        int pageCount = MathHelper.ceil(Client.COMMAND_MANAGER.getElements().size() / (float) COMMANDS_PER_PAGE); // 7 COMMANDS PER PAGE
         GameHelper.printChatMessage(String.format("\247eCommands (Page %d/%d)", page, pageCount));
         GameHelper.printChatMessage("\2477<arg> = Required, [arg] = Optional");
         for (int i = 0; i < COMMANDS_PER_PAGE; i++) {
             int idx = i + ((page - 1) * COMMANDS_PER_PAGE);
-            if (idx > Client.COMMAND_MANAGER.getChildren().size() - 1) break;
+            if (idx > Client.COMMAND_MANAGER.getElements().size() - 1) break;
 
-            Command command = Client.COMMAND_MANAGER.getChildren().get(idx);
+            Command command = Client.COMMAND_MANAGER.getElements().get(idx);
             GameHelper.printChatMessage(String.format("\247a> \247r.%s %s", command.getName(), command.getUsage()));
         }
     }

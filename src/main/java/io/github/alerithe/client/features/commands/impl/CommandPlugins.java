@@ -15,7 +15,7 @@ public class CommandPlugins extends Command {
 
     @Override
     public void execute(String[] args) {
-        List<Plugin> plugins = Client.PLUGIN_MANAGER.getChildren();
+        List<Plugin> plugins = Client.PLUGIN_MANAGER.getElements();
         GameHelper.printChatMessage(String.format("\247ePlugins (%d)", plugins.size()));
         GameHelper.printChatMessage(plugins.stream()
                 .map(plugin -> String.format("\247f%s \2477v%s", plugin.getName(), plugin.getManifest().getVersion()))

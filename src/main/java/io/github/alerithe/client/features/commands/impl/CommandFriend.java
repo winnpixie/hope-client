@@ -90,15 +90,15 @@ public class CommandFriend extends Command {
     }
 
     private void listFriends(int page) {
-        int pageCount = (Client.FRIEND_MANAGER.getChildren().size() - 1) / COMMANDS_PER_PAGE; // 7 FRIENDS PER PAGE
+        int pageCount = (Client.FRIEND_MANAGER.getElements().size() - 1) / COMMANDS_PER_PAGE; // 7 FRIENDS PER PAGE
 
         GameHelper.printChatMessage(String.format("\247eFriends (Page %d/%d)", page, pageCount + 1));
         GameHelper.printChatMessage("\2477Name (Alias)");
         for (int i = 0; i < COMMANDS_PER_PAGE; i++) {
             int idx = i + ((page - 1) * COMMANDS_PER_PAGE);
-            if (idx > Client.FRIEND_MANAGER.getChildren().size() - 1) break;
+            if (idx > Client.FRIEND_MANAGER.getElements().size() - 1) break;
 
-            Friend friend = Client.FRIEND_MANAGER.getChildren().get(idx);
+            Friend friend = Client.FRIEND_MANAGER.getElements().get(idx);
             GameHelper.printChatMessage(String.format("%s (%s)", friend.getName(), friend.getAliases()[0]));
         }
     }

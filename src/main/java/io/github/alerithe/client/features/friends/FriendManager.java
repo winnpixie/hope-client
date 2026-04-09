@@ -9,7 +9,7 @@ import java.nio.file.Files;
 public class FriendManager extends FeatureManager<Friend> {
     @Override
     public void load() {
-        setDataPath(Client.dataPath.resolve("friends.properties"));
+        setDataPath(Client.DATA_PATH.resolve("friends.properties"));
 
         try {
             Files.readAllLines(getDataPath()).forEach(line -> {
@@ -24,7 +24,7 @@ public class FriendManager extends FeatureManager<Friend> {
     @Override
     public void save() {
         StringBuilder builder = new StringBuilder();
-        getChildren().forEach(friend -> builder.append(friend.getName()).append(':')
+        getElements().forEach(friend -> builder.append(friend.getName()).append(':')
                 .append(friend.getAliases()[0]).append('\n'));
 
         try {

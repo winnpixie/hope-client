@@ -1,6 +1,7 @@
 package io.github.alerithe.client.features.modules.impl.visual;
 
 import io.github.alerithe.client.Client;
+import io.github.alerithe.client.events.bus.Subscribe;
 import io.github.alerithe.client.events.game.EventDraw;
 import io.github.alerithe.client.events.game.EventInput;
 import io.github.alerithe.client.events.game.EventPacket;
@@ -9,7 +10,6 @@ import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.features.properties.impl.BooleanProperty;
 import io.github.alerithe.client.utilities.*;
 import io.github.alerithe.client.utilities.graphics.VisualHelper;
-import io.github.alerithe.client.events.bus.Subscribe;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
@@ -37,23 +37,24 @@ public class HUD extends Module {
     private final BooleanProperty arrayList = new BooleanProperty("ArrayList", new String[0], true);
     private final BooleanProperty potionEffects = new BooleanProperty("PotionEffects", new String[]{"potions", "effects"}, true);
     private final BooleanProperty coordinates = new BooleanProperty("Coordinates", new String[]{"coords"}, true);
-    private final BooleanProperty lCps = new BooleanProperty("LeftClicksPerSecond", new String[]{"lcps", "cps"}, true);
-    private final BooleanProperty rCps = new BooleanProperty("RightClicksPerSecond", new String[]{"rcps"}, true);
+    private final BooleanProperty leftClicks = new BooleanProperty("LeftClicksPerSecond", new String[]{"lcps", "cps"}, true);
+    private final BooleanProperty rightClicks = new BooleanProperty("RightClicksPerSecond", new String[]{"rcps"}, true);
 
-    private final Comparator<Module> moduleSorter = Comparator.comparingDouble(module -> -VisualHelper.MC_FONT.getStringWidth(module.getName()));
-    private final Comparator<PotionEffect> potionSorter = Comparator.comparingDouble(effect -> {
+    private final Comparator<Module> moduleComparator = Comparator.comparingDouble(module ->
+            -VisualHelper.MC_FONT.getStringWidth(module.getName()));
+    private final Comparator<PotionEffect> potionComparator = Comparator.comparingDouble(effect -> {
         Potion potion = Potion.potionTypes[effect.getPotionID()];
         String text = String.format("%s %s", I18n.format(potion.getName()), formatPotionEffect(effect));
 
         return -VisualHelper.MC_FONT.getStringWidth(text);
     });
-    private final List<Long> leftClicks = new CopyOnWriteArrayList<>();
-    private final List<Long> rightClicks = new CopyOnWriteArrayList<>();
-    private final List<Long> ticks = new CopyOnWriteArrayList<>();
+    private final List<Long> leftClickTimes = new CopyOnWriteArrayList<>();
+    private final List<Long> rightTickTimes = new CopyOnWriteArrayList<>();
+    private final List<Long> serverTickTimes = new CopyOnWriteArrayList<>();
 
-    private boolean awaitingStatResponse;
-    private long statRequestTime;
-    private long statResponseTime;
+    private boolean waitingForPong;
+    private long pingRequestTime;
+    private long pongResponseTime;
 
     public HUD() {
         super("HUD", new String[0], Type.VISUAL);
@@ -62,8 +63,8 @@ public class HUD extends Module {
         getPropertyManager().add(latency);
         getPropertyManager().add(realPing);
         getPropertyManager().add(tickRate);
-        getPropertyManager().add(lCps);
-        getPropertyManager().add(rCps);
+        getPropertyManager().add(leftClicks);
+        getPropertyManager().add(rightClicks);
         getPropertyManager().add(arrayList);
         getPropertyManager().add(coordinates);
         getPropertyManager().add(potionEffects);
@@ -71,9 +72,9 @@ public class HUD extends Module {
 
     @Override
     public void onEnable() {
-        leftClicks.clear();
-        rightClicks.clear();
-        ticks.clear();
+        leftClickTimes.clear();
+        rightTickTimes.clear();
+        serverTickTimes.clear();
     }
 
     @Subscribe
@@ -99,29 +100,38 @@ public class HUD extends Module {
         if (latency.getValue()) {
             text += String.format(" \2477[\247f%dms", NetworkHelper.getPing());
 
-            if (realPing.getValue()) text += String.format(" : %dms", statResponseTime);
+            if (realPing.getValue()) text += String.format(" : %dms", pongResponseTime);
 
             text += "\2477]";
         }
 
         // TPS
-        if (tickRate.getValue() && ticks.size() > 1) {
-            long oldestTick = ticks.get(0);
-            long latestTick = ticks.get(ticks.size() - 1);
-            double tps = 20.0 / MathHelper.max((latestTick - oldestTick) / (1000.0 * (ticks.size() - 1)), 1.0);
+        if (tickRate.getValue()) {
+            text += " \2477[\247f";
 
-            text += String.format(" \2477[\247f%.2f TPS\2477]", tps);
+            if (serverTickTimes.size() < 2) {
+                text += "??.??";
+            } else {
+                long oldestTick = serverTickTimes.get(0);
+                long latestTick = serverTickTimes.get(serverTickTimes.size() - 1);
+                double tps = 20.0 / MathHelper.max((latestTick - oldestTick) / (1000.0 * (serverTickTimes.size() - 1)), 1.0);
+
+                text += String.format("%.2f", tps);
+            }
+
+            text += " TPS\2477]";
         }
 
         // CPS
-        if (lCps.getValue() || rCps.getValue()) {
+        if (leftClicks.getValue() || rightClicks.getValue()) {
             text += " \2477[\247f";
-            if (lCps.getValue()) text += leftClicks.size();
 
-            if (rCps.getValue()) {
-                if (lCps.getValue()) text += " : ";
+            if (leftClicks.getValue()) text += leftClickTimes.size();
 
-                text += rightClicks.size();
+            if (rightClicks.getValue()) {
+                if (leftClicks.getValue()) text += " : ";
+
+                text += rightTickTimes.size();
             }
 
             text += "\2477]";
@@ -134,8 +144,8 @@ public class HUD extends Module {
         if (!arrayList.getValue()) return;
 
         float y = 2;
-        List<Module> enabled = Client.MODULE_MANAGER.getChildren().stream().filter(Module::isEnabled)
-                .filter(module -> !module.getVisibility().getValue()).sorted(moduleSorter).collect(Collectors.toList());
+        List<Module> enabled = Client.MODULE_MANAGER.getElements().stream().filter(Module::isEnabled)
+                .filter(module -> !module.getVisibility().getValue()).sorted(moduleComparator).collect(Collectors.toList());
         for (Module module : enabled) {
             float textWidth = VisualHelper.MC_FONT.getStringWidth(module.getName());
             float x = display.getScaledWidth() - textWidth;
@@ -188,7 +198,7 @@ public class HUD extends Module {
 
         float chatOffset = GameHelper.getGame().ingameGUI.getChatGUI().getChatOpen() ? 24 : 10;
         float y = chatOffset + 4;
-        List<PotionEffect> effects = EntityHelper.getUser().getActivePotionEffects().stream().sorted(potionSorter)
+        List<PotionEffect> effects = EntityHelper.getUser().getActivePotionEffects().stream().sorted(potionComparator)
                 .collect(Collectors.toList());
         for (PotionEffect effect : effects) {
             GlStateManager.color(1f, 1f, 1f, 1f);
@@ -215,52 +225,50 @@ public class HUD extends Module {
         if (!event.isInGame()) return;
 
         if (realPing.getValue()) {
-            if (!awaitingStatResponse) {
+            if (!waitingForPong) {
                 NetworkHelper.sendPacket(new C16PacketClientStatus(C16PacketClientStatus.EnumState.REQUEST_STATS));
-                statRequestTime = Stopwatch.getNow();
-                awaitingStatResponse = true;
+                pingRequestTime = Stopwatch.getNow();
+
+                waitingForPong = true;
             }
         }
 
-        List<Long> old = new ArrayList<>();
-        for (long ms : leftClicks) {
-            if (Stopwatch.getNow() - ms >= 1000) old.add(ms);
+        List<Long> oldClicks = new ArrayList<>();
+        for (long ms : leftClickTimes) {
+            if (Stopwatch.getNow() - ms >= 1000) oldClicks.add(ms);
         }
-        leftClicks.removeAll(old);
+        leftClickTimes.removeAll(oldClicks);
 
-        old.clear();
-        for (long ms : rightClicks) {
-            if (Stopwatch.getNow() - ms >= 1000) old.add(ms);
+        oldClicks.clear();
+        for (long ms : rightTickTimes) {
+            if (Stopwatch.getNow() - ms >= 1000) oldClicks.add(ms);
         }
-        rightClicks.removeAll(old);
+        rightTickTimes.removeAll(oldClicks);
 
-        if (ticks.size() > 20) ticks.remove(0);
+        if (serverTickTimes.size() > 20) serverTickTimes.remove(0);
     }
 
     @Subscribe
     private void onLeftClick(EventInput.LeftClick event) {
-        leftClicks.add(Stopwatch.getNow());
+        leftClickTimes.add(Stopwatch.getNow());
     }
 
     @Subscribe
     private void onRightClick(EventInput.RightClick event) {
-        rightClicks.add(Stopwatch.getNow());
+        rightTickTimes.add(Stopwatch.getNow());
     }
 
     @Subscribe
     private void onPacketRead(EventPacket.Read event) {
         if (event.getPacket() instanceof S02PacketLoginSuccess) {
-            ticks.clear();
-        }
+            serverTickTimes.clear();
+        } else if (event.getPacket() instanceof S03PacketTimeUpdate) {
+            serverTickTimes.add(Stopwatch.getNow());
+        } else if (event.getPacket() instanceof S37PacketStatistics) {
+            if (waitingForPong) {
+                pongResponseTime = Stopwatch.getNow() - pingRequestTime;
 
-        if (event.getPacket() instanceof S03PacketTimeUpdate) {
-            ticks.add(Stopwatch.getNow());
-        }
-
-        if (event.getPacket() instanceof S37PacketStatistics) {
-            if (awaitingStatResponse) {
-                statResponseTime = Stopwatch.getNow() - statRequestTime;
-                awaitingStatResponse = false;
+                waitingForPong = false;
             }
         }
     }

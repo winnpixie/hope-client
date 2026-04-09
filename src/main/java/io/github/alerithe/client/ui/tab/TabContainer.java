@@ -51,6 +51,6 @@ public class TabContainer {
     }
 
     public List<Property<?>> getProperties() {
-        return getModule().getPropertyManager().getChildren();
+        return getModule().getPropertyManager().getElements();
     }
 }

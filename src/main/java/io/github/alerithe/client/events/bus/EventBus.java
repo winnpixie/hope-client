@@ -7,26 +7,27 @@ import io.github.alerithe.client.events.bus.reflect.ReflectSubscriber;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class EventBus {
-    private static final Map<Object, ReflectSubscriber<?>[]> REFLECT_CACHE = new HashMap<>();
+    private static final Map<Object, List<ReflectSubscriber<?>>> REFLECT_CACHE = new ConcurrentHashMap<>();
 
-    private final Map<Class<?>, List<Subscriber<?>>> registry = new HashMap<>();
+    private final Map<Class<?>, List<Subscriber<?>>> registry = new ConcurrentHashMap<>();
 
     public void subscribeAll(Object parent) {
-        if (REFLECT_CACHE.containsKey(parent)) {
-            for (ReflectSubscriber<?> subscriber : REFLECT_CACHE.get(parent)) {
+        List<ReflectSubscriber<?>> existingCache = REFLECT_CACHE.get(parent);
+        if (existingCache != null) {
+            for (ReflectSubscriber<?> subscriber : existingCache) {
                 subscribeReflective(subscriber);
             }
 
             return;
         }
 
-        List<ReflectSubscriber<?>> reflectionCache = new ArrayList<>();
+        List<ReflectSubscriber<?>> newCache = new ArrayList<>();
 
         for (Method method : parent.getClass().getDeclaredMethods()) {
             if (!method.isAnnotationPresent(Subscribe.class)
@@ -40,7 +41,7 @@ public class EventBus {
 
             MethodSubscriber methodSub = new MethodSubscriber(parent, method);
             subscribeReflective(methodSub);
-            reflectionCache.add(methodSub);
+            newCache.add(methodSub);
         }
 
         for (Field field : parent.getClass().getDeclaredFields()) {
@@ -54,10 +55,10 @@ public class EventBus {
 
             FieldSubscriber fieldSub = new FieldSubscriber(parent, field);
             subscribeReflective(fieldSub);
-            reflectionCache.add(fieldSub);
+            newCache.add(fieldSub);
         }
 
-        REFLECT_CACHE.put(parent, reflectionCache.toArray(new ReflectSubscriber[0]));
+        REFLECT_CACHE.put(parent, newCache);
     }
 
     private <T> void subscribeReflective(ReflectSubscriber<T> subscriber) {
@@ -65,25 +66,28 @@ public class EventBus {
     }
 
     public <T> void subscribe(Class<T> event, Subscriber<T> subscriber) {
-        registry.computeIfAbsent(event, v -> new CopyOnWriteArrayList<>())
+        registry.computeIfAbsent(event, k -> new CopyOnWriteArrayList<>())
                 .add(subscriber);
     }
 
     public void unsubscribeAll(Object parent) {
-        if (!REFLECT_CACHE.containsKey(parent)) return;
+        List<ReflectSubscriber<?>> cache = REFLECT_CACHE.get(parent);
+        if (cache == null) return;
 
-        for (ReflectSubscriber<?> subscriber : REFLECT_CACHE.get(parent)) {
+        for (ReflectSubscriber<?> subscriber : cache) {
             unsubscribe(subscriber.getSubscriber());
         }
     }
 
     public <T> void unsubscribe(Subscriber<T> subscriber) {
-        registry.values().forEach(list -> list.remove(subscriber));
+        for (List<Subscriber<?>> subscribers : registry.values()) {
+            subscribers.remove(subscriber);
+        }
     }
 
     public <T> T post(T value) {
         List<Subscriber<?>> list = registry.get(value.getClass());
-        if (list == null || list.isEmpty()) {
+        if (list == null) {
             return value;
         }
 

@@ -122,7 +122,7 @@ public class WindowedUI extends GuiScreen {
     }
 
     private void buildProperties(Module module, Element container) {
-        List<Property<?>> properties = module.getPropertyManager().getChildren();
+        List<Property<?>> properties = module.getPropertyManager().getElements();
         int count = properties.size();
         float width = WINDOW_WIDTH / 2f;
         float height = WINDOW_HEIGHT / count;

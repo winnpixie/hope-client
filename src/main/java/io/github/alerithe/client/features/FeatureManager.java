@@ -5,12 +5,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FeatureManager<T extends Feature> {
-    private final List<T> children = new ArrayList<>();
+    private final List<T> elements = new ArrayList<>();
 
     private Path dataPath;
 
-    public List<T> getChildren() {
-        return children;
+    public List<T> getElements() {
+        return elements;
     }
 
     public Path getDataPath() {
@@ -21,16 +21,16 @@ public class FeatureManager<T extends Feature> {
         this.dataPath = dataPath;
     }
 
-    public void add(T feature) {
-        children.add(feature);
+    public void add(T item) {
+        elements.add(item);
     }
 
-    public void remove(T feature) {
-        children.remove(feature);
+    public void remove(T item) {
+        elements.remove(item);
     }
 
     public <V extends T> V find(Class<V> cls) {
-        for (T feature : children) {
+        for (T feature : elements) {
             if (cls.isInstance(feature)) {
                 return cls.cast(feature);
             }
@@ -40,7 +40,7 @@ public class FeatureManager<T extends Feature> {
     }
 
     public T find(String id) {
-        for (T feature : children) {
+        for (T feature : elements) {
             if (feature.getName().equalsIgnoreCase(id)) {
                 return feature;
             }

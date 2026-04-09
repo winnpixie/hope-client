@@ -20,7 +20,8 @@ import java.util.Map;
 import java.util.TreeMap;
 
 public class Rectangle extends EntityESPMode {
-    private final Map<Entity, float[]> projections = new TreeMap<>(Comparator.comparing(e -> -WorldHelper.distanceSq(e)));
+    private final Map<Entity, float[]> projections = new TreeMap<>(
+            Comparator.comparing(e -> -WorldHelper.distanceSq(e)));
 
     public Rectangle(EntityESP module) {
         super("2D", new String[]{"rectangle", "rect"}, module);

@@ -1,10 +1,10 @@
 package io.github.alerithe.mojang;
 
 import com.google.gson.JsonSyntaxException;
+import io.github.alerithe.http.HttpClient;
+import io.github.alerithe.http.HttpResponse;
 
 import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
 
 public class Profile {
     public String name;
@@ -17,24 +17,24 @@ public class Profile {
     }
 
     public boolean hasCape(CapeProvider provider) {
-        if (provider == CapeProvider.MOJANG) {
-            // TODO: Implement
-            return false;
-        } else if (provider == CapeProvider.OPTIFINE) {
-            HttpURLConnection conn = null;
-            try {
-                conn = (HttpURLConnection) new URL(String.format("http://s.optifine.net/capes/%s.png", name)).openConnection();
-                conn.setUseCaches(false);
-
-                return conn.getResponseCode() == 200;
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                if (conn != null) conn.disconnect();
-            }
+        switch (provider) {
+            case MOJANG:
+                // TODO: Implement
+                return false;
+            case OPTIFINE:
+                try {
+                    HttpResponse response = HttpClient.send(
+                            HttpClient.newRequest()
+                                    .url(String.format("http://s.optifine.net/capes/%s.png", name))
+                                    .build());
+                    return response.getCode() == 200;
+                } catch (IOException ioe) {
+                    ioe.printStackTrace();
+                    return false;
+                }
+            default:
+                return false;
         }
-
-        return false;
     }
 
     public static class NameEntry {

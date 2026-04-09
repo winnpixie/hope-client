@@ -39,10 +39,9 @@ public class MinecraftAPI {
         ).getBodyAsString();
 
         JsonArray entries = GSON.fromJson(body, JsonArray.class);
-        int count = entries.size();
-        Profile.NameEntry[] history = new Profile.NameEntry[count];
+        Profile.NameEntry[] history = new Profile.NameEntry[entries.size()];
 
-        for (int i = 0; i < count; i++) {
+        for (int i = 0; i < history.length; i++) {
             history[i] = GSON.fromJson(entries.get(i),
                     Profile.NameEntry.class);
         }

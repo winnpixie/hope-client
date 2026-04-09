@@ -93,7 +93,7 @@ public class FreeFormUI extends GuiScreen {
 
     private void buildProperties(Module module, Element container) {
         float y = 0f;
-        for (Property<?> property : module.getPropertyManager().getChildren()) {
+        for (Property<?> property : module.getPropertyManager().getElements()) {
             Element propElem = createPropertyElement(property, y);
             setupPropertyElement(propElem);
 

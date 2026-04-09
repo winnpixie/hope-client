@@ -30,7 +30,8 @@ public class NameTags extends Module {
     private final BooleanProperty ping = new BooleanProperty("ShowPing", new String[0], true);
     private final BooleanProperty showHealth = new BooleanProperty("ShowHealth", new String[]{"hp"}, true);
 
-    private final Map<Entity, float[]> projections = new TreeMap<>(Comparator.comparing(e -> -WorldHelper.distanceSq(e)));
+    private final Map<Entity, float[]> projections = new TreeMap<>(
+            Comparator.comparing(e -> -WorldHelper.distanceSq(e)));
 
     public NameTags() {
         super("NameTags", new String[]{"tags"}, Type.VISUAL);
@@ -85,8 +86,9 @@ public class NameTags extends Module {
             String text = getText(entity);
             float width = VisualHelper.MC_FONT.getStringWidth(text);
 
-            VisualHelper.MC_GFX.drawBorderedSquare(-width / 2f - 1f, -1f, width + 2f, 10f, 1f, 0x69000000, 0x69AAAAAA);
-            VisualHelper.MC_FONT.drawStringWithShadow(text, -width / 2f, 0, -1);
+            VisualHelper.MC_GFX.drawBorderedSquare(-width / 2f - 1f, -1f, width + 2f, 10f, 1f,
+                    0x69000000, 0x69FFFFFF);
+            VisualHelper.MC_FONT.drawString(text, -width / 2f, 0, 0xFFFFFFFF);
 
             GlStateManager.popMatrix();
         }

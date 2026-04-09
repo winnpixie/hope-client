@@ -18,8 +18,8 @@ public class CommandClient extends Command {
         GameHelper.printChatMessage("Name: \247e" + Client.NAME);
         GameHelper.printChatMessage("Build: \247e" + Client.BUILD);
         GameHelper.printChatMessage("Accent Color: \247e(RGBA) " + Arrays.toString(VisualHelper.toRGBAIntArray(Client.ACCENT_COLOR, true)));
-        GameHelper.printChatMessage("Modules: \247e" + Client.MODULE_MANAGER.getChildren().size());
-        GameHelper.printChatMessage("Commands: \247e" + Client.COMMAND_MANAGER.getChildren().size());
-        GameHelper.printChatMessage("Plugins: \247e" + Client.PLUGIN_MANAGER.getChildren().size());
+        GameHelper.printChatMessage("Modules: \247e" + Client.MODULE_MANAGER.getElements().size());
+        GameHelper.printChatMessage("Commands: \247e" + Client.COMMAND_MANAGER.getElements().size());
+        GameHelper.printChatMessage("Plugins: \247e" + Client.PLUGIN_MANAGER.getElements().size());
     }
 }

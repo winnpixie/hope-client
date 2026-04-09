@@ -38,7 +38,7 @@ public class PropertyManager extends FeatureManager<Property<?>> {
     @Override
     public void save() {
         StringBuilder builder = new StringBuilder();
-        getChildren().forEach(property -> builder.append(property.getName()).append(':')
+        getElements().forEach(property -> builder.append(property.getName()).append(':')
                 .append(property.getValue().toString()).append('\n'));
 
         try {
