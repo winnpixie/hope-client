@@ -1,10 +1,10 @@
 package io.github.alerithe.client.features.modules.impl.movement;
 
+import io.github.alerithe.client.events.bus.Subscribe;
 import io.github.alerithe.client.events.game.EventUpdate;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.features.properties.impl.DoubleProperty;
 import io.github.alerithe.client.utilities.EntityHelper;
-import io.github.alerithe.client.events.bus.Subscribe;
 
 public class LongJump extends Module {
     private final DoubleProperty strength = new DoubleProperty("Boost", new String[0],
@@ -25,7 +25,7 @@ public class LongJump extends Module {
     }
 
     @Subscribe
-    private void onPreUpdate(EventUpdate.Pre event) {
+    public void onPreUpdate(EventUpdate.Pre event) {
         if (!EntityHelper.getUser().isUserMoving()) return;
 
         if (EntityHelper.getUser().onGround && !EntityHelper.getUser().isInLiquid()) {

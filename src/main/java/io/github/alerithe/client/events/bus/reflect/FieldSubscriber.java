@@ -12,7 +12,9 @@ public class FieldSubscriber implements ReflectSubscriber {
 
     public FieldSubscriber(Object parent, Field field) {
         Type genericType = field.getGenericType();
-        if (!(genericType instanceof ParameterizedType)) return;
+        if (!(genericType instanceof ParameterizedType)) {
+            return;
+        }
 
         ParameterizedType paramType = (ParameterizedType) genericType;
         Type actualType = paramType.getActualTypeArguments()[0];

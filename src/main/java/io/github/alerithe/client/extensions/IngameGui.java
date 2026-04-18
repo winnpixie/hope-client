@@ -7,8 +7,8 @@ import net.minecraft.client.gui.GuiIngame;
 import net.minecraft.client.renderer.GlStateManager;
 
 public class IngameGui extends GuiIngame {
-    public IngameGui(Minecraft mcIn) {
-        super(mcIn);
+    public IngameGui(Minecraft mc) {
+        super(mc);
     }
 
     @Override

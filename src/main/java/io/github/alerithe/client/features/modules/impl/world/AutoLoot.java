@@ -26,7 +26,7 @@ public class AutoLoot extends Module {
     }
 
     @Subscribe
-    private void onScreenOpen(EventGameScreen.Open event) {
+    public void onScreenOpen(EventGameScreen.Open event) {
         if (!(event.getScreen() instanceof GuiChest)) return;
 
         index = 0;
@@ -34,7 +34,7 @@ public class AutoLoot extends Module {
     }
 
     @Subscribe
-    private void onPreUpdate(EventUpdate.Pre event) {
+    public void onPreUpdate(EventUpdate.Pre event) {
         if (!(GameHelper.getGame().currentScreen instanceof GuiChest)) return;
 
         GuiChest gui = (GuiChest) GameHelper.getGame().currentScreen;

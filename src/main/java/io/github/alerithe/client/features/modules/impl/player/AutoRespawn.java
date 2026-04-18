@@ -1,9 +1,9 @@
 package io.github.alerithe.client.features.modules.impl.player;
 
+import io.github.alerithe.client.events.bus.Subscribe;
 import io.github.alerithe.client.events.game.EventGameScreen;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.utilities.EntityHelper;
-import io.github.alerithe.client.events.bus.Subscribe;
 import net.minecraft.client.gui.GuiGameOver;
 
 public class AutoRespawn extends Module {
@@ -12,7 +12,7 @@ public class AutoRespawn extends Module {
     }
 
     @Subscribe
-    private void onScreenOpen(EventGameScreen.Open event) {
+    public void onScreenOpen(EventGameScreen.Open event) {
         if (!(event.getScreen() instanceof GuiGameOver)) return;
 
         // TODO: Add configurable delay?

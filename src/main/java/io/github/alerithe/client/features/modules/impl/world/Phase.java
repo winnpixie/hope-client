@@ -21,22 +21,22 @@ public class Phase extends Module {
     }
 
     @Subscribe
-    private void onPreUpdate(EventUpdate.Pre event) {
+    public void onPreUpdate(EventUpdate.Pre event) {
         mode.getValue().onPreUpdate(event);
     }
 
     @Subscribe
-    private void onOpaqueCheck(EventOpaqueBlockCheck event) {
+    public void onOpaqueCheck(EventOpaqueBlockCheck event) {
         event.cancel();
     }
 
     @Subscribe
-    private void onBlockPush(EventBlockPush event) {
+    public void onBlockPush(EventBlockPush event) {
         event.cancel();
     }
 
     @Subscribe
-    private void onCollision(EventBlockCollision event) {
+    public void onCollision(EventBlockCollision event) {
         mode.getValue().onCollision(event);
     }
 }

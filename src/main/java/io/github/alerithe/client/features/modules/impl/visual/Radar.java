@@ -44,7 +44,7 @@ public class Radar extends Module {
     }
 
     @Subscribe
-    private void onOverlayDraw(EventDraw.Overlay event) {
+    public void onOverlayDraw(EventDraw.Overlay event) {
         if (GameHelper.getSettings().showDebugInfo) return;
 
         int rX = x.getValue();

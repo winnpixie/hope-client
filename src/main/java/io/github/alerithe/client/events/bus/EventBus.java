@@ -35,10 +35,6 @@ public class EventBus {
                 continue;
             }
 
-            if (!method.isAccessible()) {
-                method.setAccessible(true);
-            }
-
             MethodSubscriber methodSub = new MethodSubscriber(parent, method);
             subscribeReflective(methodSub);
             newCache.add(methodSub);
@@ -47,10 +43,6 @@ public class EventBus {
         for (Field field : parent.getClass().getDeclaredFields()) {
             if (!field.isAnnotationPresent(Subscribe.class)) {
                 continue;
-            }
-
-            if (!field.isAccessible()) {
-                field.setAccessible(true);
             }
 
             FieldSubscriber fieldSub = new FieldSubscriber(parent, field);

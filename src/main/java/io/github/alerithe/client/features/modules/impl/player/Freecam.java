@@ -39,7 +39,7 @@ public class Freecam extends Module {
     }
 
     @Subscribe
-    private void onPreUpdate(EventUpdate.Pre event) {
+    public void onPreUpdate(EventUpdate.Pre event) {
         EntityHelper.getUser().setSpeed(EntityHelper.getUser().isUserMoving() ? 2 : 0);
 
         if (EntityHelper.getUser().movementInput.jump) {
@@ -52,7 +52,7 @@ public class Freecam extends Module {
     }
 
     @Subscribe
-    private void onPacketWrite(EventPacket.Write event) {
+    public void onPacketWrite(EventPacket.Write event) {
         if (event.getPacket() instanceof C02PacketUseEntity
                 || event.getPacket() instanceof C0BPacketEntityAction
                 || event.getPacket() instanceof C07PacketPlayerDigging
@@ -78,7 +78,7 @@ public class Freecam extends Module {
     }
 
     @Subscribe
-    private void onPacketRead(EventPacket.Read event) {
+    public void onPacketRead(EventPacket.Read event) {
         // FIXME: Process other entity move packets
         if (!(event.getPacket() instanceof S08PacketPlayerPosLook)) return;
 
@@ -90,17 +90,17 @@ public class Freecam extends Module {
     }
 
     @Subscribe
-    private void onOpaqueCheck(EventOpaqueBlockCheck event) {
+    public void onOpaqueCheck(EventOpaqueBlockCheck event) {
         event.cancel();
     }
 
     @Subscribe
-    private void onBlockPush(EventBlockPush event) {
+    public void onBlockPush(EventBlockPush event) {
         event.cancel();
     }
 
     @Subscribe
-    private void onCollision(EventBlockCollision event) {
+    public void onCollision(EventBlockCollision event) {
         event.cancel();
     }
 }

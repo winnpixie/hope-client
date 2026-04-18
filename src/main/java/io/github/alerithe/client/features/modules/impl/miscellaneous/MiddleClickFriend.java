@@ -1,11 +1,11 @@
 package io.github.alerithe.client.features.modules.impl.miscellaneous;
 
 import io.github.alerithe.client.Client;
+import io.github.alerithe.client.events.bus.Subscribe;
 import io.github.alerithe.client.events.game.EventInput;
 import io.github.alerithe.client.features.friends.Friend;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.utilities.GameHelper;
-import io.github.alerithe.client.events.bus.Subscribe;
 import net.minecraft.entity.Entity;
 
 public class MiddleClickFriend extends Module {
@@ -14,7 +14,7 @@ public class MiddleClickFriend extends Module {
     }
 
     @Subscribe
-    private void onMiddleClick(EventInput.MiddleClick event) {
+    public void onMiddleClick(EventInput.MiddleClick event) {
         if (GameHelper.getGame().objectMouseOver == null) return;
         if (GameHelper.getGame().objectMouseOver.entityHit == null) return;
 

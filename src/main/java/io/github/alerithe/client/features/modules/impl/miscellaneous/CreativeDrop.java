@@ -1,10 +1,10 @@
 package io.github.alerithe.client.features.modules.impl.miscellaneous;
 
+import io.github.alerithe.client.events.bus.Subscribe;
 import io.github.alerithe.client.events.game.EventUpdate;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.utilities.EntityHelper;
 import io.github.alerithe.client.utilities.NetworkHelper;
-import io.github.alerithe.client.events.bus.Subscribe;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -19,7 +19,7 @@ public class CreativeDrop extends Module {
     }
 
     @Subscribe
-    private void onPreUpdate(EventUpdate.Pre event) {
+    public void onPreUpdate(EventUpdate.Pre event) {
         if (!EntityHelper.getUser().capabilities.isCreativeMode) return;
 
         ItemStack stack = new ItemStack(Items.cake, 64);

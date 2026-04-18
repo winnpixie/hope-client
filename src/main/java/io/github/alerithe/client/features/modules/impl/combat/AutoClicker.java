@@ -25,7 +25,7 @@ public class AutoClicker extends Module {
     }
 
     @Subscribe
-    private void onStartTick(EventTick.Start event) {
+    public void onStartTick(EventTick.Start event) {
         if (!event.isInGame()) return;
         if (GameHelper.getGame().currentScreen != null) return;
         if (!GameSettings.isKeyDown(GameHelper.getSettings().keyBindAttack)) return;

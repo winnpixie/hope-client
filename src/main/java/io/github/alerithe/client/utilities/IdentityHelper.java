@@ -1,14 +1,17 @@
 package io.github.alerithe.client.utilities;
 
-import io.github.alerithe.http.HttpClient;
 
-import java.io.IOException;
+import io.github.winnpixie.http4j.client.HttpClient;
+import io.github.winnpixie.http4j.shared.throwables.HttpException;
+
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 // This class is serves no purpose unless I go paid/private.
 public class IdentityHelper {
+    private static final HttpClient HTTP = HttpClient.newClient();
+
     private static String rawId = "";
     private static String hashedId = "";
 
@@ -32,15 +35,13 @@ public class IdentityHelper {
 
     public static String getPublicIPv4() {
         try {
-            return HttpClient.send(
-                    HttpClient.newRequest()
-                            .url("https://checkip.amazonaws.com/")
-                            .header("User-Agent", "identity")
-                            .build()
+            return HTTP.send(HTTP.newRequest()
+                    .setUrl("https://checkip.amazonaws.com/")
+                    .setHeader("User-Agent", "identity")
+                    .build()
             ).getBodyAsString().split("\n")[0];
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-
+        } catch (HttpException he) {
+            // ignore throw
             return "127.0.0.1";
         }
     }
@@ -63,7 +64,7 @@ public class IdentityHelper {
                     builder.append(hex);
                 }
 
-                return builder.toString();
+                hashedId = builder.toString();
             } catch (NoSuchAlgorithmException nsae) {
                 nsae.printStackTrace();
 

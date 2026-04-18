@@ -20,7 +20,7 @@ public class QuickConsume extends Module {
     }
 
     @Subscribe
-    private void onPreUpdate(EventUpdate.Pre event) {
+    public void onPreUpdate(EventUpdate.Pre event) {
         if (EntityHelper.getUser().isUsingItem() && isUsable(EntityHelper.getUser().getItemInUse())
                 && EntityHelper.getUser().onGround && EntityHelper.getUser().getItemInUseDuration() >= useTicks.getValue()) {
             for (int i = 0; i < (32 - useTicks.getValue()); i++) {

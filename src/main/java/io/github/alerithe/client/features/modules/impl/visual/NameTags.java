@@ -47,7 +47,7 @@ public class NameTags extends Module {
     }
 
     @Subscribe
-    private void onOverlayDraw(EventDraw.Overlay event) {
+    public void onOverlayDraw(EventDraw.Overlay event) {
         projections.clear();
 
         GlStateManager.pushMatrix();
@@ -95,7 +95,7 @@ public class NameTags extends Module {
     }
 
     @Subscribe
-    private void onTagDraw(EventDraw.Tag event) {
+    public void onTagDraw(EventDraw.Tag event) {
         if (qualifies(event.getEntity())) event.cancel();
     }
 

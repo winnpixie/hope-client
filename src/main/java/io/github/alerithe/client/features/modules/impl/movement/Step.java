@@ -35,14 +35,14 @@ public class Step extends Module {
     }
 
     @Subscribe
-    private void onPreUpdate(EventUpdate.Pre event) {
+    public void onPreUpdate(EventUpdate.Pre event) {
         EntityHelper.getUser().stepHeight = oldStepHeight;
 
         mode.getValue().onPreUpdate(event);
     }
 
     @Subscribe
-    private void onPacketWrite(EventPacket.Write event) {
+    public void onPacketWrite(EventPacket.Write event) {
         mode.getValue().onPacketWrite(event);
     }
 }

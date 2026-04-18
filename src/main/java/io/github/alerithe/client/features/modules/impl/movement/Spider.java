@@ -11,7 +11,7 @@ public class Spider extends Module {
     }
 
     @Subscribe
-    private void onPreUpdate(EventUpdate.Pre event) {
+    public void onPreUpdate(EventUpdate.Pre event) {
         // FIXME: Try to find original motion value?
         if (!EntityHelper.getUser().isCollidedHorizontally) return;
 

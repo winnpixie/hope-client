@@ -23,7 +23,7 @@ public class Velocity extends Module {
     }
 
     @Subscribe
-    private void onPacketRead(EventPacket.Read event) {
+    public void onPacketRead(EventPacket.Read event) {
         if (event.getPacket() instanceof S12PacketEntityVelocity) {
             S12PacketEntityVelocity packet = (S12PacketEntityVelocity) event.getPacket();
             if (packet.getEntityID() != EntityHelper.getUser().getEntityId()) return;

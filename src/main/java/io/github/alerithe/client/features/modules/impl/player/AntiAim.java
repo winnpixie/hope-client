@@ -1,5 +1,6 @@
 package io.github.alerithe.client.features.modules.impl.player;
 
+import io.github.alerithe.client.events.bus.Subscribe;
 import io.github.alerithe.client.events.game.EventUpdate;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.features.modules.impl.player.antiaim.RotationMode;
@@ -11,7 +12,6 @@ import io.github.alerithe.client.features.modules.impl.player.antiaim.yaw.LBYBre
 import io.github.alerithe.client.features.modules.impl.player.antiaim.yaw.NormalYaw;
 import io.github.alerithe.client.features.modules.impl.player.antiaim.yaw.SpinYaw;
 import io.github.alerithe.client.features.properties.impl.ObjectProperty;
-import io.github.alerithe.client.events.bus.Subscribe;
 
 public class AntiAim extends Module {
     private final ObjectProperty<RotationMode> yawMode = new ObjectProperty<>("YawMode", new String[0], new SpinYaw(),
@@ -27,7 +27,7 @@ public class AntiAim extends Module {
     }
 
     @Subscribe
-    private void onPreUpdate(EventUpdate.Pre event) {
+    public void onPreUpdate(EventUpdate.Pre event) {
         yawMode.getValue().onPreUpdate(event);
         pitchMode.getValue().onPreUpdate(event);
     }

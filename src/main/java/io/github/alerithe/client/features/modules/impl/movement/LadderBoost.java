@@ -11,7 +11,7 @@ public class LadderBoost extends Module {
     }
 
     @Subscribe
-    private void onPreUpdate(EventUpdate.Pre event) {
+    public void onPreUpdate(EventUpdate.Pre event) {
         if (EntityHelper.getUser().isOnLadder()) EntityHelper.getUser().motionY = 0.42;
     }
 }

@@ -1,9 +1,9 @@
 package io.github.alerithe.client.features.modules.impl.miscellaneous;
 
+import io.github.alerithe.client.events.bus.Subscribe;
 import io.github.alerithe.client.events.game.EventPacket;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.utilities.MathHelper;
-import io.github.alerithe.client.events.bus.Subscribe;
 import net.minecraft.item.ItemFirework;
 import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement;
 
@@ -13,7 +13,7 @@ public class FireUnwork extends Module {
     }
 
     @Subscribe
-    private void onPacketWrite(EventPacket.Write event) {
+    public void onPacketWrite(EventPacket.Write event) {
         if (!(event.getPacket() instanceof C08PacketPlayerBlockPlacement)) return;
 
         C08PacketPlayerBlockPlacement packet = (C08PacketPlayerBlockPlacement) event.getPacket();

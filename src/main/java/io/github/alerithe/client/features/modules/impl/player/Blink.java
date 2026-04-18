@@ -1,12 +1,12 @@
 package io.github.alerithe.client.features.modules.impl.player;
 
+import io.github.alerithe.client.events.bus.Subscribe;
 import io.github.alerithe.client.events.game.EventPacket;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.utilities.EntityHelper;
 import io.github.alerithe.client.utilities.GameHelper;
 import io.github.alerithe.client.utilities.NetworkHelper;
 import io.github.alerithe.client.utilities.WorldHelper;
-import io.github.alerithe.client.events.bus.Subscribe;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.client.*;
@@ -51,7 +51,7 @@ public class Blink extends Module {
     }
 
     @Subscribe
-    private void onPacketWrite(EventPacket.Write event) {
+    public void onPacketWrite(EventPacket.Write event) {
         if (event.getPacket() instanceof C03PacketPlayer
                 || event.getPacket() instanceof C02PacketUseEntity || event.getPacket() instanceof C0BPacketEntityAction
                 || event.getPacket() instanceof C07PacketPlayerDigging

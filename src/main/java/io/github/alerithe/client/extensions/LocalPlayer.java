@@ -21,44 +21,59 @@ public class LocalPlayer extends EntityPlayerSP {
 
     @Override
     public boolean isEntityInsideOpaqueBlock() {
-        return !Client.EVENT_BUS.post(new EventOpaqueBlockCheck()).isCancelled() && super.isEntityInsideOpaqueBlock();
+        return !Client.EVENT_BUS.post(new EventOpaqueBlockCheck()).isCancelled()
+                && super.isEntityInsideOpaqueBlock();
     }
 
     @Override
     protected boolean pushOutOfBlocks(double x, double y, double z) {
-        return !Client.EVENT_BUS.post(new EventBlockPush()).isCancelled() && super.pushOutOfBlocks(x, y, z);
+        return !Client.EVENT_BUS.post(new EventBlockPush()).isCancelled()
+                && super.pushOutOfBlocks(x, y, z);
     }
 
     @Override
     public void sendChatMessage(String message) {
         EventChat event = Client.EVENT_BUS.post(new EventChat(message));
+        if (event.isCancelled()) {
+            return;
+        }
 
-        if (!event.isCancelled()) super.sendChatMessage(event.getMessage());
+        super.sendChatMessage(event.getMessage());
     }
 
     // prplz/MouseDelayFix
     @Override
     public Vec3 getLook(float partialTicks) {
-        if (partialTicks == 1f) return this.getVectorForRotation(this.rotationPitch, this.rotationYaw);
+        if (partialTicks == 1f) {
+            return this.getVectorForRotation(rotationPitch, rotationYaw);
+        }
 
-        float pitch = this.prevRotationPitch + (this.rotationPitch - this.prevRotationPitch) * partialTicks;
-        float yaw = this.prevRotationYaw + (this.rotationYaw - this.prevRotationYaw) * partialTicks;
+        float pitch = prevRotationPitch + (rotationPitch - prevRotationPitch) * partialTicks;
+        float yaw = prevRotationYaw + (rotationYaw - prevRotationYaw) * partialTicks;
         return this.getVectorForRotation(pitch, yaw);
     }
 
     @Override
     public float getFovModifier() {
-        return Config.zoomMode ? super.getFovModifier() / 4f : super.getFovModifier();
+        float fovModifier = super.getFovModifier();
+        if (!Config.zoomMode) {
+            return fovModifier;
+        }
+
+        return fovModifier / 4f;
     }
 
     public boolean isInLiquid() {
-        return isInWater() || isInLava();
+        return isInWater()
+                || isInLava();
     }
 
     public boolean isInventoryFull() {
         for (int i = 0; i < 36; i++) {
             Slot slot = inventoryContainer.inventorySlots.get(9 + i);
-            if (!slot.getHasStack()) return false;
+            if (!slot.getHasStack()) {
+                return false;
+            }
         }
 
         return true;
@@ -81,19 +96,26 @@ public class LocalPlayer extends EntityPlayerSP {
     }
 
     public boolean isUserMoving() {
-        return movementInput.moveForward != 0f || movementInput.moveStrafe != 0f;
+        return movementInput.moveForward != 0f
+                || movementInput.moveStrafe != 0f;
     }
 
     public float[] getMoveVector() {
         float yaw = rotationYawHead;
         float forward = movementInput.moveForward;
         float strafe = movementInput.moveStrafe;
-        float strafeFactor = forward > 0f ? 0.5f : forward < 0 ? -0.5f : 1f;
+
+        float factor = 1f;
+        if (forward > 0f) {
+            factor = 0.5f;
+        } else if (forward < 0f) {
+            factor = -0.5f;
+        }
 
         if (strafe > 0f) {
-            yaw -= 90f * strafeFactor;
+            yaw -= 90f * factor;
         } else if (strafe < 0f) {
-            yaw += 90f * strafeFactor;
+            yaw += 90f * factor;
         }
 
         if (forward < 0f) {
@@ -123,7 +145,7 @@ public class LocalPlayer extends EntityPlayerSP {
     public void setSpeed(double speed) {
         float[] vector = getMoveVector();
 
-        motionX = vector[0] * speed;
-        motionZ = vector[1] * speed;
+        this.motionX = vector[0] * speed;
+        this.motionZ = vector[1] * speed;
     }
 }

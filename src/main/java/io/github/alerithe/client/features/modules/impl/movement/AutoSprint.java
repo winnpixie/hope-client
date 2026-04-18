@@ -35,7 +35,7 @@ public class AutoSprint extends Module {
     }
 
     @Subscribe
-    private void onPreUpdate(EventUpdate.Pre event) {
+    public void onPreUpdate(EventUpdate.Pre event) {
         mode.getValue().onPreUpdate(event);
     }
 }

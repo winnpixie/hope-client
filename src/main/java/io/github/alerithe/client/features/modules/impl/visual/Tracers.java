@@ -42,7 +42,7 @@ public class Tracers extends Module {
     }
 
     @Subscribe
-    private void onOverlayDraw(EventDraw.Overlay event) {
+    public void onOverlayDraw(EventDraw.Overlay event) {
         projections.clear();
 
         GlStateManager.pushMatrix();

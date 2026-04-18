@@ -35,7 +35,11 @@ public class Client {
     public static final FriendManager FRIEND_MANAGER = new FriendManager();
     public static final PluginManager PLUGIN_MANAGER = new PluginManager();
 
-    public static final Path DATA_PATH = GameHelper.getGame().mcDataDir.toPath().resolve(NAME);
+    public static final Path DATA_PATH;
+
+    static {
+        DATA_PATH = GameHelper.getGame().mcDataDir.toPath().resolve(NAME);
+    }
 
     private Client() {
     }
@@ -68,7 +72,7 @@ public class Client {
             SPEECH_ENGINE.cleanUp();
         });
 
-        if (System.getProperty("client.silentStart", "").isEmpty()) {
+        if (!System.getProperty("client.no_tts", "").equalsIgnoreCase("true")) {
             SPEECH_ENGINE.queue(String.format("Hello, %s. Welcome to %s client, built for Minecraft 1 point 8 point 8",
                     GameHelper.getGame().getSession().getUsername(), Client.NAME));
         }
@@ -80,8 +84,10 @@ public class Client {
     private static void authenticateFromProperties() {
         String username = System.getProperty("mc.email", "");
         String password = System.getProperty("mc.pass", "");
-        if (username.isEmpty()) return;
-        if (password.isEmpty()) return;
+        if (username.isEmpty()
+                || password.isEmpty()) {
+            return;
+        }
 
         try {
             GameHelper.getGame().setSession(SessionHelper.logInWithMicrosoft(username, password));

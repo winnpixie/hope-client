@@ -1,11 +1,11 @@
 package io.github.alerithe.client.features.modules.impl.world;
 
+import io.github.alerithe.client.events.bus.Subscribe;
 import io.github.alerithe.client.events.game.EventUpdate;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.utilities.EntityHelper;
 import io.github.alerithe.client.utilities.NetworkHelper;
 import io.github.alerithe.client.utilities.WorldHelper;
-import io.github.alerithe.client.events.bus.Subscribe;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.item.ItemShears;
@@ -17,7 +17,7 @@ public class AutoShear extends Module {
     }
 
     @Subscribe
-    private void onPreUpdate(EventUpdate.Pre event) {
+    public void onPreUpdate(EventUpdate.Pre event) {
         if (EntityHelper.getUser().getHeldItem() == null) return;
         if (!(EntityHelper.getUser().getHeldItem().getItem() instanceof ItemShears)) return;
 

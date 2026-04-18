@@ -23,7 +23,7 @@ public class FullBright extends Module {
     }
 
     @Subscribe
-    private void onStartTick(EventTick.Start event) {
+    public void onStartTick(EventTick.Start event) {
         // attempt to update the restore value if the player changed it while toggled
         float currentGamma = GameHelper.getSettings().gammaSetting;
         if (currentGamma < 10f) {

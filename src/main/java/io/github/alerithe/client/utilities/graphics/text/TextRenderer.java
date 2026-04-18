@@ -2,6 +2,7 @@ package io.github.alerithe.client.utilities.graphics.text;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.BiFunction;
 
 public interface TextRenderer {
     float getFontHeight();
@@ -19,76 +20,52 @@ public interface TextRenderer {
     void drawString(String text, float x, float y, int color, boolean shadow);
 
     default List<String> wrapStringPerCharacter(String text, float maxWidth) {
-        List<String> wrapped = new ArrayList<>();
-
-        int remaining = text.length();
-        int start = 0;
-        int length = text.length();
-
-        while (remaining > 0) {
-            String sub = text.substring(start, start + length);
-
-            if (getStringWidth(sub) > maxWidth) {
-                length--;
-
-                // Force add to avoid infinite loop
-                if (length == 0) {
-                    wrapped.add(sub);
-
-                    remaining--;
-                    start++;
-                    length = remaining;
-                }
-            } else {
-                wrapped.add(sub);
-
-                remaining -= sub.length();
-                start += sub.length();
-                length = remaining;
-            }
-        }
-
-        return wrapped;
+        return wrapTokens((start, length) -> text.substring(start, start + length),
+                text.length(), maxWidth);
     }
 
     default List<String> wrapStringPerWord(String text, float maxWidth) {
-        List<String> wrapped = new ArrayList<>();
         String[] words = text.split(" ");
 
-        int remaining = words.length;
-        int start = 0;
-        int length = words.length;
-
-        while (remaining > 0) {
+        return wrapTokens((start, length) -> {
             StringBuilder builder = new StringBuilder();
-
-            int count = 0;
             for (int i = 0; i < length; i++) {
                 builder.append(words[start + i]).append(' ');
-                count++;
             }
-            String sub = builder.toString();
+
+            return builder.toString();
+        }, words.length, maxWidth);
+    }
+
+    default List<String> wrapTokens(BiFunction<Integer, Integer, String> supplier, int count, float maxWidth) {
+        List<String> wraps = new ArrayList<>();
+
+        int start = 0;
+        int length = count;
+
+        while (count > 0) {
+            String sub = supplier.apply(start, length);
 
             if (getStringWidth(sub) > maxWidth) {
                 length--;
 
-                // Force add to avoid infinite loop
+                // Force to avoid infinite loop
                 if (length == 0) {
-                    wrapped.add(sub);
+                    wraps.add(sub);
 
-                    remaining--;
+                    count--;
                     start++;
-                    length = remaining;
+                    length = count;
                 }
             } else {
-                wrapped.add(sub);
+                wraps.add(sub);
 
-                remaining -= count;
-                start += count;
-                length = remaining;
+                count -= length;
+                start += length;
+                length = count;
             }
         }
 
-        return wrapped;
+        return wraps;
     }
 }

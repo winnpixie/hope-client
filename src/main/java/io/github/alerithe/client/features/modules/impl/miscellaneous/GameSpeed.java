@@ -1,10 +1,10 @@
 package io.github.alerithe.client.features.modules.impl.miscellaneous;
 
+import io.github.alerithe.client.events.bus.Subscribe;
 import io.github.alerithe.client.events.game.EventTick;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.features.properties.impl.DoubleProperty;
 import io.github.alerithe.client.utilities.GameHelper;
-import io.github.alerithe.client.events.bus.Subscribe;
 
 public class GameSpeed extends Module {
     private final DoubleProperty speed = new DoubleProperty("Speed", new String[0],
@@ -22,7 +22,7 @@ public class GameSpeed extends Module {
     }
 
     @Subscribe
-    private void onStartTick(EventTick.Start event) {
+    public void onStartTick(EventTick.Start event) {
         GameHelper.getGame().timer.timerSpeed = speed.getValue().floatValue();
     }
 }

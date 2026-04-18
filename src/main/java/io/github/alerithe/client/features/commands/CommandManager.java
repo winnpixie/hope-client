@@ -6,8 +6,6 @@ import io.github.alerithe.client.features.FeatureManager;
 import io.github.alerithe.client.features.commands.impl.*;
 import io.github.alerithe.client.utilities.GameHelper;
 
-import java.util.Arrays;
-
 public class CommandManager extends FeatureManager<Command> {
     @Override
     public void load() {
@@ -36,18 +34,26 @@ public class CommandManager extends FeatureManager<Command> {
         Client.LOGGER.info("Registered {} command(s)", getElements().size());
 
         Client.EVENT_BUS.subscribe(EventChat.class, event -> {
-            if (event.getMessage().indexOf('.') != 0) return;
-            if (event.getMessage().length() < 2) return;
+            String message = event.getMessage();
+            if (message.length() < 2
+                    || message.indexOf('.') != 0) {
+                return;
+            }
 
             event.cancel();
-            String[] args = event.getMessage().substring(1).split(" ");
-            Command command = find(args[0]);
+            String[] tokens = message.substring(1).split(" ");
+            Command command = find(tokens[0]);
             if (command == null) {
                 GameHelper.printChatMessage(ErrorMessages.INVALID_COMMAND);
                 return;
             }
 
-            command.execute(args.length > 1 ? Arrays.copyOfRange(args, 1, args.length) : new String[0]);
+            String[] arguments = new String[tokens.length - 1];
+            if (tokens.length > 1) {
+                System.arraycopy(tokens, 1, arguments, 0, arguments.length);
+            }
+
+            command.execute(arguments);
         });
     }
 }

@@ -3,13 +3,15 @@ package io.github.alerithe.client.features.commands.impl;
 import io.github.alerithe.client.features.commands.Command;
 import io.github.alerithe.client.features.commands.ErrorMessages;
 import io.github.alerithe.client.utilities.GameHelper;
-import io.github.alerithe.http.HttpClient;
+import io.github.winnpixie.http4j.client.HttpClient;
+import io.github.winnpixie.http4j.shared.throwables.HttpException;
 
-import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 public class CommandIP extends Command {
+    private final HttpClient http = HttpClient.newClient();
+
     public CommandIP() {
         super("ip", new String[0], "<resolve|query> <domain|ip>");
     }
@@ -40,17 +42,20 @@ public class CommandIP extends Command {
                 break;
             case "query":
                 try {
-                    String infoBody = HttpClient.send(
-                            HttpClient.newRequest()
-                                    .url("https://ipinfo.io/" + target + "/json")
-                                    .header("User-Agent", "ipinfo")
-                                    .build()
-                    ).getBodyAsString();
+                    http.sendAsync(http.newRequest()
+                                    .setUrl(String.format("https://ipinfo.io/%s/json", target))
+                                    .setHeader("User-Agent", "query")
+                                    .build())
+                            .whenComplete(((response, throwable) -> {
+                                if (throwable != null) {
+                                    return;
+                                }
 
-                    GameHelper.printChatMessage(String.format("\247eQuery for\247r %s", target));
-                    GameHelper.printChatMessage(infoBody);
-                } catch (IOException ioe) {
-                    ioe.printStackTrace();
+                                GameHelper.printChatMessage(String.format("\247eQuery for\247r %s", target));
+                                GameHelper.printChatMessage(response.getBodyAsString());
+                            }));
+                } catch (HttpException he) {
+                    he.printStackTrace();
                 }
                 break;
             default:

@@ -14,7 +14,7 @@ public class NoRotate extends Module {
     }
 
     @Subscribe
-    private void onPacketRead(EventPacket.Read event) {
+    public void onPacketRead(EventPacket.Read event) {
         if (EntityHelper.getUser() == null) return;
 
         if (event.getPacket() instanceof S08PacketPlayerPosLook) {

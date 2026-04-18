@@ -1,12 +1,12 @@
 package io.github.alerithe.client.features.modules.impl.movement;
 
+import io.github.alerithe.client.events.bus.Subscribe;
 import io.github.alerithe.client.events.game.EventUpdate;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.features.properties.impl.DoubleProperty;
 import io.github.alerithe.client.utilities.EntityHelper;
 import io.github.alerithe.client.utilities.GameHelper;
 import io.github.alerithe.client.utilities.MathHelper;
-import io.github.alerithe.client.events.bus.Subscribe;
 import net.minecraft.client.gui.GuiScreenBook;
 import net.minecraft.client.gui.inventory.GuiEditSign;
 import net.minecraft.client.settings.GameSettings;
@@ -32,7 +32,7 @@ public class InventoryMove extends Module {
     }
 
     @Subscribe
-    private void onPreUpdate(EventUpdate.Pre event) {
+    public void onPreUpdate(EventUpdate.Pre event) {
         if (GameHelper.getGame().currentScreen == null) return;
         if (GameHelper.getGame().ingameGUI.getChatGUI().getChatOpen()) return;
         if (GameHelper.getGame().currentScreen instanceof GuiEditSign) return;

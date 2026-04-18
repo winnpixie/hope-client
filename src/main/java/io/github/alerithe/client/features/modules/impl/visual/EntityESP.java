@@ -42,17 +42,17 @@ public class EntityESP extends Module {
     }
 
     @Subscribe
-    private void onOverlayDraw(EventDraw.Overlay event) {
+    public void onOverlayDraw(EventDraw.Overlay event) {
         mode.getValue().onOverlayDraw(event);
     }
 
     @Subscribe
-    private void onWorldDraw(EventDraw.World event) {
+    public void onWorldDraw(EventDraw.World event) {
         mode.getValue().onWorldDraw(event);
     }
 
     @Subscribe
-    private void onTagDraw(EventDraw.Tag event) {
+    public void onTagDraw(EventDraw.Tag event) {
         if (showNames.getValue() && qualifies(event.getEntity())) event.cancel();
     }
 

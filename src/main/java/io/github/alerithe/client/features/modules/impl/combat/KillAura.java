@@ -76,7 +76,7 @@ public class KillAura extends Module {
     }
 
     @Subscribe
-    private void onPreUpdate(EventUpdate.Pre event) {
+    public void onPreUpdate(EventUpdate.Pre event) {
         near = getNear();
 
         mode.getValue().onPreUpdate(event);
@@ -114,7 +114,7 @@ public class KillAura extends Module {
     }
 
     @Subscribe
-    private void onPostUpdate(EventUpdate.Post event) {
+    public void onPostUpdate(EventUpdate.Post event) {
         if (!attacking) return;
 
         attacking = false;

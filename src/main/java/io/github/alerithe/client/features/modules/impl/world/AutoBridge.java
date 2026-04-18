@@ -47,7 +47,7 @@ public class AutoBridge extends Module {
     }
 
     @Subscribe
-    private void onPreUpdate(EventUpdate.Pre event) {
+    public void onPreUpdate(EventUpdate.Pre event) {
         data = null;
         if (!isHoldingBlock()) return;
 
@@ -72,7 +72,7 @@ public class AutoBridge extends Module {
     }
 
     @Subscribe
-    private void onPostUpdate(EventUpdate.Post event) {
+    public void onPostUpdate(EventUpdate.Post event) {
         if (data == null) return;
         if (!timer.hasPassed(1000 / bps.getValue())) return;
         if (!GameHelper.getController().onPlayerRightClick(EntityHelper.getUser(), WorldHelper.getWorld(),
@@ -95,7 +95,7 @@ public class AutoBridge extends Module {
     }
 
     @Subscribe
-    private void onBlockEdge(EventBlockEdgeTest event) {
+    public void onBlockEdge(EventBlockEdgeTest event) {
         event.cancel();
     }
 

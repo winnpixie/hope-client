@@ -43,7 +43,7 @@ public class BreadCrumbs extends Module {
     }
 
     @Subscribe
-    private void onWorldDraw(EventDraw.World event) {
+    public void onWorldDraw(EventDraw.World event) {
         if (positions.size() < 2) return;
 
         baseHue = (baseHue + (0.5f * event.getPartialTicks())) % 360;

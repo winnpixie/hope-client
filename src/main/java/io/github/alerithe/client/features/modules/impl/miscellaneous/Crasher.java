@@ -1,5 +1,6 @@
 package io.github.alerithe.client.features.modules.impl.miscellaneous;
 
+import io.github.alerithe.client.events.bus.Subscribe;
 import io.github.alerithe.client.events.game.EventTick;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.features.modules.impl.combat.AntiBot;
@@ -8,7 +9,6 @@ import io.github.alerithe.client.features.properties.impl.IntProperty;
 import io.github.alerithe.client.utilities.EntityHelper;
 import io.github.alerithe.client.utilities.NetworkHelper;
 import io.github.alerithe.client.utilities.WorldHelper;
-import io.github.alerithe.client.events.bus.Subscribe;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.play.client.C03PacketPlayer;
 import net.minecraft.network.play.client.C0APacketAnimation;
@@ -31,7 +31,7 @@ public class Crasher extends Module {
     }
 
     @Subscribe
-    private void onStartTick(EventTick.Start event) {
+    public void onStartTick(EventTick.Start event) {
         if (!event.isInGame()) return;
 
         sendBoxerCrash();

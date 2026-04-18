@@ -36,12 +36,12 @@ public class StorageESP extends Module {
     }
 
     @Subscribe
-    private void onWorldDraw(EventDraw.World event) {
+    public void onWorldDraw(EventDraw.World event) {
         mode.getValue().onWorldDraw(event);
     }
 
     @Subscribe
-    private void onOverlayDraw(EventDraw.Overlay event) {
+    public void onOverlayDraw(EventDraw.Overlay event) {
         mode.getValue().onOverlayDraw(event);
     }
 

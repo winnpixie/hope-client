@@ -18,7 +18,7 @@ public class FastHeal extends Module {
     }
 
     @Subscribe
-    private void onPreUpdate(EventUpdate.Pre event) {
+    public void onPreUpdate(EventUpdate.Pre event) {
         if (EntityHelper.getUser().getHealth() > minHealth.getValue()) return;
         if (EntityHelper.getUser().getFoodStats().getFoodLevel() < 17) return;
         if (!EntityHelper.getUser().onGround) return;

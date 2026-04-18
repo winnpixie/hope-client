@@ -1,11 +1,11 @@
 package io.github.alerithe.client.features.modules.impl.visual;
 
+import io.github.alerithe.client.events.bus.Subscribe;
 import io.github.alerithe.client.events.game.EventDraw;
 import io.github.alerithe.client.events.game.EventInput;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.ui.tab.TabContainer;
 import io.github.alerithe.client.utilities.GameHelper;
-import io.github.alerithe.client.events.bus.Subscribe;
 
 public class TabUI extends Module {
     private TabContainer container;
@@ -20,12 +20,12 @@ public class TabUI extends Module {
     }
 
     @Subscribe
-    private void onOverlayDraw(EventDraw.Overlay event) {
+    public void onOverlayDraw(EventDraw.Overlay event) {
         if (!GameHelper.getSettings().showDebugInfo) container.getRenderer().draw(event.getPartialTicks());
     }
 
     @Subscribe
-    private void onKeyPress(EventInput.KeyPress event) {
+    public void onKeyPress(EventInput.KeyPress event) {
         if (!GameHelper.getSettings().showDebugInfo) container.getController().onKeyPress(event.getKey());
     }
 }

@@ -1,12 +1,12 @@
 package io.github.alerithe.client.features.modules.impl.world;
 
+import io.github.alerithe.client.events.bus.Subscribe;
 import io.github.alerithe.client.events.game.EventUpdate;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.features.modules.impl.world.nuker.Creative;
 import io.github.alerithe.client.features.modules.impl.world.nuker.NukerMode;
 import io.github.alerithe.client.features.modules.impl.world.nuker.Survival;
 import io.github.alerithe.client.features.properties.impl.ObjectProperty;
-import io.github.alerithe.client.events.bus.Subscribe;
 
 public class Nuker extends Module {
     private final ObjectProperty<NukerMode> mode = new ObjectProperty<>("Mode", new String[0], new Creative(), new Survival());
@@ -18,12 +18,12 @@ public class Nuker extends Module {
     }
 
     @Subscribe
-    private void onPreUpdate(EventUpdate.Pre event) {
+    public void onPreUpdate(EventUpdate.Pre event) {
         mode.getValue().onPreUpdate(event);
     }
 
     @Subscribe
-    private void onPostUpdate(EventUpdate.Post event) {
+    public void onPostUpdate(EventUpdate.Post event) {
         mode.getValue().onPostUpdate(event);
     }
 }

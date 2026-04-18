@@ -17,7 +17,7 @@ public class NoPrick extends Module {
     }
 
     @Subscribe
-    private void onCollision(EventBlockCollision event) {
+    public void onCollision(EventBlockCollision event) {
         if (!(event.getBlock() instanceof BlockCactus)) return;
 
         event.setBoundingBox(new AxisAlignedBB(

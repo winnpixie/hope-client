@@ -32,20 +32,20 @@ public class NoSlowdown extends Module {
     }
 
     @Subscribe
-    private void onItemSlowdown(EventSlowdown.Item event) {
+    public void onItemSlowdown(EventSlowdown.Item event) {
         if (items.getValue()) event.cancel();
     }
 
     @Subscribe
-    private void onEnvironmentSlowdown(EventSlowdown.Environment event) {
+    public void onEnvironmentSlowdown(EventSlowdown.Environment event) {
         // TODO: Water
-        
+
         if (webs.getValue() && event.getBlock() instanceof BlockWeb) event.cancel();
         if (soulSand.getValue() && event.getBlock() instanceof BlockSoulSand) event.cancel();
     }
 
     @Subscribe
-    private void onPreUpdate(EventUpdate.Pre event) {
+    public void onPreUpdate(EventUpdate.Pre event) {
         if (!packets.getValue()) return;
         if (!EntityHelper.getUser().onGround) return;
         if (!EntityHelper.getUser().isUserMoving()) return;
@@ -57,7 +57,7 @@ public class NoSlowdown extends Module {
     }
 
     @Subscribe
-    private void onPostUpdate(EventUpdate.Post event) {
+    public void onPostUpdate(EventUpdate.Post event) {
         if (!block) return;
         if (!EntityHelper.getUser().isBlocking()) return;
 

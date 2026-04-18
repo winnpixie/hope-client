@@ -78,7 +78,7 @@ public class HUD extends Module {
     }
 
     @Subscribe
-    private void onOverlayDraw(EventDraw.Overlay event) {
+    public void onOverlayDraw(EventDraw.Overlay event) {
         ScaledResolution display = VisualHelper.getDisplay();
 
         if (!GameHelper.getSettings().showDebugInfo) {

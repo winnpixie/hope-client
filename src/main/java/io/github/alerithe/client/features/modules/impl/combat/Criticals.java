@@ -1,10 +1,10 @@
 package io.github.alerithe.client.features.modules.impl.combat;
 
+import io.github.alerithe.client.events.bus.Subscribe;
 import io.github.alerithe.client.events.game.EventPacket;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.features.properties.impl.BooleanProperty;
 import io.github.alerithe.client.utilities.EntityHelper;
-import io.github.alerithe.client.events.bus.Subscribe;
 import net.minecraft.network.play.client.C02PacketUseEntity;
 import net.minecraft.network.play.client.C03PacketPlayer;
 
@@ -21,7 +21,7 @@ public class Criticals extends Module {
     }
 
     @Subscribe
-    private void onPacketWrite(EventPacket.Write event) {
+    public void onPacketWrite(EventPacket.Write event) {
         if (!(event.getPacket() instanceof C02PacketUseEntity)) return;
 
         C02PacketUseEntity packet = (C02PacketUseEntity) event.getPacket();
