@@ -15,6 +15,7 @@ import io.github.alerithe.client.ui.click.elements.impl.input.TextArea;
 import io.github.alerithe.client.ui.click.elements.styling.ElementStyle;
 import io.github.alerithe.client.ui.click.elements.styling.text.TextAlignment;
 import io.github.alerithe.client.ui.click.elements.styling.text.TextPosition;
+import io.github.alerithe.client.utilities.GameHelper;
 import io.github.alerithe.client.utilities.MathHelper;
 import net.minecraft.client.gui.GuiScreen;
 
@@ -22,23 +23,37 @@ import java.io.IOException;
 import java.util.List;
 
 public class WindowedUI extends GuiScreen {
-    private final Element root = new Element(0, 0, 8192, 8192);
-
     private static final float WINDOW_WIDTH = 480;
     private static final float WINDOW_HEIGHT = 240;
 
-    private final Element moduleContainer = new Element(WINDOW_WIDTH / 4f, 0, WINDOW_WIDTH / 4f, WINDOW_HEIGHT);
-    private final Element propertyContainer = new Element(WINDOW_WIDTH / 2f, 0, WINDOW_WIDTH / 2f, WINDOW_HEIGHT);
+    private static final int TEXT_COLOR = 0xFFDEDEDE;
+
+    private final Element root = new Element(0, 0, 8192, 8192);
+    private final Element moduleContainer = new Element(WINDOW_WIDTH / 4f, 0f, WINDOW_WIDTH / 4f, WINDOW_HEIGHT);
+    private final Element propertyContainer = new Element(WINDOW_WIDTH / 2f, 0f, WINDOW_WIDTH / 2f, WINDOW_HEIGHT);
 
     public WindowedUI() {
         root.getNormalStyle().setShowBackground(false);
 
-        Label windowTitle = new Label("Configuration", 1, 1, WINDOW_WIDTH, 20);
+        Label windowTitle = new Label("Configuration", 1f, 1f, WINDOW_WIDTH, 20f);
         windowTitle.getNormalStyle().setBackgroundColor(0xFF000000);
-        windowTitle.getNormalStyle().textStyle.setColor(0xFFFFFFFF);
+        windowTitle.getNormalStyle().textStyle.setColor(TEXT_COLOR);
         windowTitle.getNormalStyle().textStyle.setAlignment(TextAlignment.CENTER);
         windowTitle.getNormalStyle().textStyle.setPosition(TextPosition.MIDDLE);
         windowTitle.addListener(new Draggable());
+
+        Button closeBtn = new Button("X", WINDOW_WIDTH - windowTitle.getHeight(), 0f, windowTitle.getHeight(), windowTitle.getHeight());
+        closeBtn.addListener(new ElementEventListener() {
+            @Override
+            public void onLeftClick(int mouseX, int mouseY) {
+                root.release(0, 0, 0);
+                GameHelper.getGame().displayGuiScreen(null);
+            }
+        });
+        closeBtn.getNormalStyle().textStyle.setColor(TEXT_COLOR);
+        closeBtn.getHoveredStyle().setBackgroundColor(Client.ACCENT_COLOR);
+
+        windowTitle.addChild(closeBtn);
 
         Element windowContainer = new Element(0, 20, WINDOW_WIDTH, WINDOW_HEIGHT);
         windowContainer.getNormalStyle().setBackgroundColor(0xFF111111);
@@ -76,7 +91,7 @@ public class WindowedUI extends GuiScreen {
             });
 
             typeLbl.getNormalStyle().setBackgroundColor(Client.ACCENT_COLOR);
-            typeLbl.getNormalStyle().textStyle.setColor(0xFFFFFFFF);
+            typeLbl.getNormalStyle().textStyle.setColor(TEXT_COLOR);
             typeLbl.getNormalStyle().textStyle.setAlignment(TextAlignment.CENTER);
             typeLbl.getNormalStyle().textStyle.setPosition(TextPosition.MIDDLE);
 
@@ -165,7 +180,7 @@ public class WindowedUI extends GuiScreen {
                 Label valueLbl = new Label(intProp.getValue().toString(),
                         x + (width / 3f), 0, width / 6f, height);
                 valueLbl.getNormalStyle().setBackgroundColor(0xFF111111);
-                valueLbl.getNormalStyle().textStyle.setColor(0xFFFFFFFF);
+                valueLbl.getNormalStyle().textStyle.setColor(TEXT_COLOR);
                 valueLbl.getNormalStyle().textStyle.setOffsetX(4);
                 valueLbl.getNormalStyle().textStyle.setAlignment(TextAlignment.RIGHT);
                 valueLbl.getNormalStyle().textStyle.setPosition(TextPosition.MIDDLE);
@@ -197,7 +212,7 @@ public class WindowedUI extends GuiScreen {
                 Label valueLbl = new Label(dblProp.getValue().toString(),
                         x + (width / 3f), 0, width / 6f, height);
                 valueLbl.getNormalStyle().setBackgroundColor(0xFF111111);
-                valueLbl.getNormalStyle().textStyle.setColor(0xFFFFFFFF);
+                valueLbl.getNormalStyle().textStyle.setColor(TEXT_COLOR);
                 valueLbl.getNormalStyle().textStyle.setOffsetX(4);
                 valueLbl.getNormalStyle().textStyle.setAlignment(TextAlignment.RIGHT);
                 valueLbl.getNormalStyle().textStyle.setPosition(TextPosition.MIDDLE);
@@ -239,7 +254,7 @@ public class WindowedUI extends GuiScreen {
                 });
                 valueBtn.getNormalStyle().setShowBackground(false);
                 valueBtn.getHoveredStyle().setInheritsShowBackground(false);
-                valueBtn.getNormalStyle().textStyle.setColor(0xFFFFFFFF);
+                valueBtn.getNormalStyle().textStyle.setColor(TEXT_COLOR);
                 valueBtn.getNormalStyle().textStyle.setOffsetX(4);
                 valueBtn.getNormalStyle().textStyle.setAlignment(TextAlignment.RIGHT);
 

@@ -16,16 +16,22 @@ public class TabUI extends Module {
 
     @Override
     public void onEnable() {
-        if (container == null) container = new TabContainer();
+        if (container == null) {
+            container = new TabContainer();
+        }
     }
 
     @Subscribe
     public void onOverlayDraw(EventDraw.Overlay event) {
-        if (!GameHelper.getSettings().showDebugInfo) container.getRenderer().draw(event.getPartialTicks());
+        if (!GameHelper.getSettings().showDebugInfo) {
+            container.getRenderer().draw(event.getPartialTicks());
+        }
     }
 
     @Subscribe
     public void onKeyPress(EventInput.KeyPress event) {
-        if (!GameHelper.getSettings().showDebugInfo) container.getController().onKeyPress(event.getKey());
+        if (!GameHelper.getSettings().showDebugInfo) {
+            container.getController().onKeyPress(event.getKey());
+        }
     }
 }

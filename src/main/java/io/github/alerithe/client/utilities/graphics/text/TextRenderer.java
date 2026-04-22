@@ -9,15 +9,15 @@ public interface TextRenderer {
 
     float getStringWidth(String text);
 
-    default void drawString(String text, float x, float y, int color) {
-        drawString(text, x, y, color, false);
+    default void drawString(String text, float x, float y, int baseColor) {
+        drawString(text, x, y, baseColor, false);
     }
 
-    default void drawStringWithShadow(String text, float x, float y, int color) {
-        drawString(text, x, y, color, true);
+    default void drawStringWithShadow(String text, float x, float y, int baseColor) {
+        drawString(text, x, y, baseColor, true);
     }
 
-    void drawString(String text, float x, float y, int color, boolean shadow);
+    void drawString(String text, float x, float y, int baseColor, boolean hasShadow);
 
     default List<String> wrapStringPerCharacter(String text, float maxWidth) {
         return wrapTokens((start, length) -> text.substring(start, start + length),

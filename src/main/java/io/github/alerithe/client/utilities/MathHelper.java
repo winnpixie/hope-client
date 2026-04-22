@@ -26,6 +26,22 @@ public class MathHelper {
         return value < min ? min : value > max ? max : value;
     }
 
+    public static long min(long a, long b) {
+        return a < b ? a : b;
+    }
+
+    public static long max(long a, long b) {
+        return a > b ? a : b;
+    }
+
+    public static long abs(long val) {
+        return val < 0 ? -val : val;
+    }
+
+    public static long clamp(long value, long min, long max) {
+        return value < min ? min : value > max ? max : value;
+    }
+
     public static float min(float a, float b) {
         return a < b ? a : b;
     }

@@ -1,8 +1,11 @@
 package io.github.alerithe.client.utilities.graphics;
 
 import io.github.alerithe.client.utilities.GameHelper;
+import io.github.alerithe.client.utilities.graphics.drawing.GraphicsDevice;
 import io.github.alerithe.client.utilities.graphics.drawing.MinecraftGraphicsDevice;
+import io.github.alerithe.client.utilities.graphics.text.GLAWTTextRenderer;
 import io.github.alerithe.client.utilities.graphics.text.MinecraftTextRenderer;
+import io.github.alerithe.client.utilities.graphics.text.TextRenderer;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.culling.Frustum;
@@ -13,6 +16,7 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
 
+import java.awt.*;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
@@ -33,10 +37,11 @@ public class VisualHelper {
     private static final Frustum frustum = new Frustum();
 
     // Fonts
-    public static final MinecraftTextRenderer MC_FONT = new MinecraftTextRenderer();
+    public static final TextRenderer MC_FONT = new MinecraftTextRenderer();
+    public static final TextRenderer HELVETICA = new GLAWTTextRenderer(new Font("Helvetica", Font.PLAIN, 18));
 
     // Graphics Device
-    public static final MinecraftGraphicsDevice MC_GFX = new MinecraftGraphicsDevice();
+    public static final GraphicsDevice MC_GFX = new MinecraftGraphicsDevice();
 
     private VisualHelper() {
     }
@@ -83,17 +88,17 @@ public class VisualHelper {
         return frustum.isBoundingBoxInFrustum(aabb);
     }
 
-    public static int[] toRGBAIntArray(int argbColor, boolean hasAlpha) {
+    public static int[] toRGBAIntArray(int argb, boolean hasAlpha) {
         return new int[]{
-                (argbColor >> 16) & 255,                      // R
-                (argbColor >> 8) & 255,                       // G
-                argbColor & 255,                              // B
-                (!hasAlpha ? 255 : ((argbColor >> 24) & 255)) // A
+                (argb >> 16) & 255,                      // R
+                (argb >> 8) & 255,                       // G
+                argb & 255,                              // B
+                !hasAlpha ? 255 : ((argb >> 24) & 255)   // A
         };
     }
 
-    public static float[] toRGBAFloatArray(int argbColor, boolean hasAlpha) {
-        int[] rgba = toRGBAIntArray(argbColor, hasAlpha);
+    public static float[] toRGBAFloatArray(int argb, boolean hasAlpha) {
+        int[] rgba = toRGBAIntArray(argb, hasAlpha);
 
         return new float[]{
                 rgba[0] / 255f,
@@ -120,12 +125,12 @@ public class VisualHelper {
         return toARGBInt(red, green, blue, 1f);
     }
 
-    public static int toARGBInt(float r, float g, float b, float a) {
+    public static int toARGBInt(float red, float green, float blue, float alpha) {
         return toARGBInt(
-                (int) (r * 255f),
-                (int) (g * 255f),
-                (int) (b * 255f),
-                (int) (a * 255f)
+                (int) (red * 255f),
+                (int) (green * 255f),
+                (int) (blue * 255f),
+                (int) (alpha * 255f)
         );
     }
 }

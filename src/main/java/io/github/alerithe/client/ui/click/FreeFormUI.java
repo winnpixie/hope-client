@@ -22,6 +22,8 @@ import net.minecraft.client.gui.GuiScreen;
 import java.io.IOException;
 
 public class FreeFormUI extends GuiScreen {
+    private static final int TEXT_COLOR = 0xFFDEDEDE;
+
     private final Element root = new Element(0f, 0f, 8192f, 8192f);
 
     public FreeFormUI() {
@@ -41,7 +43,7 @@ public class FreeFormUI extends GuiScreen {
             typeLbl.addListener(new Draggable());
 
             typeLbl.getNormalStyle().setBackgroundColor(Client.ACCENT_COLOR);
-            typeLbl.getNormalStyle().textStyle.setColor(0xFFFFFFFF);
+            typeLbl.getNormalStyle().textStyle.setColor(TEXT_COLOR);
             typeLbl.getNormalStyle().textStyle.setAlignment(TextAlignment.CENTER);
             typeLbl.getNormalStyle().textStyle.setPosition(TextPosition.MIDDLE);
 
@@ -148,7 +150,7 @@ public class FreeFormUI extends GuiScreen {
             Label valueLbl = new Label(intProp.getValue().toString(),
                     x + (width * 0.75f), 0f, width / 4f, height);
             valueLbl.getNormalStyle().setBackgroundColor(0xEE111111);
-            valueLbl.getNormalStyle().textStyle.setColor(0xFFFFFFFF);
+            valueLbl.getNormalStyle().textStyle.setColor(TEXT_COLOR);
             valueLbl.getNormalStyle().textStyle.setOffsetX(4f);
             valueLbl.getNormalStyle().textStyle.setAlignment(TextAlignment.RIGHT);
             valueLbl.getNormalStyle().textStyle.setPosition(TextPosition.MIDDLE);
@@ -182,7 +184,7 @@ public class FreeFormUI extends GuiScreen {
             Label valueLbl = new Label(dblProp.getValue().toString(),
                     x + (width * 0.75f), 0f, width / 4f, height);
             valueLbl.getNormalStyle().setBackgroundColor(0xEE111111);
-            valueLbl.getNormalStyle().textStyle.setColor(0xFFFFFFFF);
+            valueLbl.getNormalStyle().textStyle.setColor(TEXT_COLOR);
             valueLbl.getNormalStyle().textStyle.setOffsetX(4);
             valueLbl.getNormalStyle().textStyle.setAlignment(TextAlignment.RIGHT);
             valueLbl.getNormalStyle().textStyle.setPosition(TextPosition.MIDDLE);
@@ -224,7 +226,7 @@ public class FreeFormUI extends GuiScreen {
             });
             valueBtn.getNormalStyle().setShowBackground(false);
             valueBtn.getHoveredStyle().setInheritsShowBackground(false);
-            valueBtn.getNormalStyle().textStyle.setColor(0xFFFFFFFF);
+            valueBtn.getNormalStyle().textStyle.setColor(TEXT_COLOR);
             valueBtn.getNormalStyle().textStyle.setOffsetX(4);
             valueBtn.getNormalStyle().textStyle.setAlignment(TextAlignment.RIGHT);
 

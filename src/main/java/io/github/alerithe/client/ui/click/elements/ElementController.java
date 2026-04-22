@@ -10,17 +10,25 @@ public class ElementController {
     }
 
     public void update() {
-        if (!element.getNormalStyle().isVisible()) return;
+        if (!element.getNormalStyle().isVisible()) {
+            return;
+        }
 
-        for (ElementEventListener handler : element.getEventListeners()) handler.onUpdate();
+        for (ElementEventListener handler : element.getEventListeners()) {
+            handler.onUpdate();
+        }
 
         element.onUpdate();
 
-        for (Element child : element.getChildren()) child.update();
+        for (Element child : element.getChildren()) {
+            child.update();
+        }
     }
 
     public void click(int mouseX, int mouseY, int button) {
-        if (!element.getNormalStyle().isVisible()) return;
+        if (!element.getNormalStyle().isVisible()) {
+            return;
+        }
 
         if (element.isInBounds(mouseX, mouseY)) {
             element.setFocused(true);
@@ -41,24 +49,38 @@ public class ElementController {
             element.setFocused(false);
         }
 
-        for (Element child : element.getChildren()) child.click(mouseX, mouseY, button);
+        for (Element child : element.getChildren()) {
+            child.click(mouseX, mouseY, button);
+        }
     }
 
     public void release(int mouseX, int mouseY, int button) {
-        if (!element.getNormalStyle().isVisible()) return;
+        if (!element.getNormalStyle().isVisible()) {
+            return;
+        }
 
-        for (ElementEventListener handler : element.getEventListeners()) handler.onMouseUp(mouseX, mouseY, button);
+        for (ElementEventListener handler : element.getEventListeners()) {
+            handler.onMouseUp(mouseX, mouseY, button);
+        }
 
-        for (Element child : element.getChildren()) child.release(mouseX, mouseY, button);
+        for (Element child : element.getChildren()) {
+            child.release(mouseX, mouseY, button);
+        }
     }
 
     public void pressKey(char charCode, int keyCode) {
-        if (!element.getNormalStyle().isVisible()) return;
-
-        if (element.isFocused()) {
-            for (ElementEventListener handler : element.getEventListeners()) handler.onKeyPressed(charCode, keyCode);
+        if (!element.getNormalStyle().isVisible()) {
+            return;
         }
 
-        for (Element child : element.getChildren()) child.pressKey(charCode, keyCode);
+        if (element.isFocused()) {
+            for (ElementEventListener handler : element.getEventListeners()) {
+                handler.onKeyPressed(charCode, keyCode);
+            }
+        }
+
+        for (Element child : element.getChildren()) {
+            child.pressKey(charCode, keyCode);
+        }
     }
 }

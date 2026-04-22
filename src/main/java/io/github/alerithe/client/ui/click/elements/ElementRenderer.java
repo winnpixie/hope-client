@@ -111,7 +111,7 @@ public class ElementRenderer {
         if (style.isItalic()) text = "\247o" + text;
         if (style.isBold()) text = "\247l" + text;
 
-        float textWidth = VisualHelper.MC_FONT.getStringWidth(text);
+        float textWidth = VisualHelper.HELVETICA.getStringWidth(text);
 
         float xOffset = style.getOffsetX();
         if (alignment == TextAlignment.CENTER) {
@@ -120,7 +120,7 @@ public class ElementRenderer {
             xOffset = elementWidth - textWidth - xOffset;
         }
 
-        float fontHeight = VisualHelper.MC_FONT.getFontHeight();
+        float fontHeight = VisualHelper.HELVETICA.getFontHeight();
         float yOffset = style.getOffsetY();
         if (position == TextPosition.MIDDLE) {
             yOffset += (elementHeight / 2f) - (fontHeight / 2f);
@@ -137,9 +137,9 @@ public class ElementRenderer {
             List<String> lines = Collections.emptyList();
             WordWrapping wordWrap = style.getWordWrapping();
             if (wordWrap == WordWrapping.NORMAL) {
-                lines = VisualHelper.MC_FONT.wrapStringPerWord(text, elementWidth);
+                lines = VisualHelper.HELVETICA.wrapStringPerWord(text, elementWidth);
             } else if (wordWrap == WordWrapping.BREAK_WORD) {
-                lines = VisualHelper.MC_FONT.wrapStringPerCharacter(text, elementWidth);
+                lines = VisualHelper.HELVETICA.wrapStringPerCharacter(text, elementWidth);
             }
 
             if (position == TextPosition.BOTTOM) {
@@ -150,7 +150,7 @@ public class ElementRenderer {
             for (String line : lines) {
                 // Re-calculate x-offset and text-width per line
                 xOffset = style.getOffsetX();
-                textWidth = VisualHelper.MC_FONT.getStringWidth(line);
+                textWidth = VisualHelper.HELVETICA.getStringWidth(line);
 
                 if (alignment == TextAlignment.CENTER) {
                     xOffset += (elementWidth / 2f) - (textWidth / 2f);
@@ -158,7 +158,7 @@ public class ElementRenderer {
                     xOffset = elementWidth - textWidth - xOffset;
                 }
 
-                VisualHelper.MC_FONT.drawString(line,
+                VisualHelper.HELVETICA.drawString(line,
                         elementX + xOffset,
                         lineY,
                         style.getColor(),
@@ -166,7 +166,7 @@ public class ElementRenderer {
                 lineY += fontHeight;
             }
         } else {
-            VisualHelper.MC_FONT.drawString(text,
+            VisualHelper.HELVETICA.drawString(text,
                     elementX + xOffset,
                     elementY + yOffset,
                     style.getColor(),

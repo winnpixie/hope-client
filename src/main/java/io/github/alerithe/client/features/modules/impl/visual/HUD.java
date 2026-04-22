@@ -13,7 +13,7 @@ import io.github.alerithe.client.utilities.graphics.VisualHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.gui.inventory.GuiInventory;
+import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.network.login.server.S02PacketLoginSuccess;
@@ -41,12 +41,12 @@ public class HUD extends Module {
     private final BooleanProperty rightClicks = new BooleanProperty("RightClicksPerSecond", new String[]{"rcps"}, true);
 
     private final Comparator<Module> moduleComparator = Comparator.comparingDouble(module ->
-            -VisualHelper.MC_FONT.getStringWidth(module.getName()));
+            -VisualHelper.HELVETICA.getStringWidth(module.getName()));
     private final Comparator<PotionEffect> potionComparator = Comparator.comparingDouble(effect -> {
         Potion potion = Potion.potionTypes[effect.getPotionID()];
         String text = String.format("%s %s", I18n.format(potion.getName()), formatPotionEffect(effect));
 
-        return -VisualHelper.MC_FONT.getStringWidth(text);
+        return -VisualHelper.HELVETICA.getStringWidth(text);
     });
     private final List<Long> leftClickTimes = new CopyOnWriteArrayList<>();
     private final List<Long> rightTickTimes = new CopyOnWriteArrayList<>();
@@ -91,16 +91,20 @@ public class HUD extends Module {
     }
 
     private void drawInfo(ScaledResolution display) {
-        String text = String.format("\247o%s \2477%s \247r", Client.NAME, Client.BUILD);
+        String text = String.format("\247o%s \247f%s \247r", Client.NAME, Client.BUILD);
 
         // FPS
-        if (frameRate.getValue()) text += String.format(" \2477[\247f%d FPS\2477]", Minecraft.getDebugFPS());
+        if (frameRate.getValue()) {
+            text += String.format(" \2477[\247f%d FPS\2477]", Minecraft.getDebugFPS());
+        }
 
         // Ping
         if (latency.getValue()) {
             text += String.format(" \2477[\247f%dms", NetworkHelper.getPing());
 
-            if (realPing.getValue()) text += String.format(" : %dms", pongResponseTime);
+            if (realPing.getValue()) {
+                text += String.format(" : %dms", pongResponseTime);
+            }
 
             text += "\2477]";
         }
@@ -126,10 +130,14 @@ public class HUD extends Module {
         if (leftClicks.getValue() || rightClicks.getValue()) {
             text += " \2477[\247f";
 
-            if (leftClicks.getValue()) text += leftClickTimes.size();
+            if (leftClicks.getValue()) {
+                text += leftClickTimes.size();
+            }
 
             if (rightClicks.getValue()) {
-                if (leftClicks.getValue()) text += " : ";
+                if (leftClicks.getValue()) {
+                    text += " : ";
+                }
 
                 text += rightTickTimes.size();
             }
@@ -137,33 +145,35 @@ public class HUD extends Module {
             text += "\2477]";
         }
 
-        VisualHelper.MC_FONT.drawStringWithShadow(text, 1, 1, Client.ACCENT_COLOR);
+        VisualHelper.HELVETICA.drawStringWithShadow(text, 1, 1, Client.ACCENT_COLOR);
     }
 
     private void drawArrayList(ScaledResolution display) {
-        if (!arrayList.getValue()) return;
+        if (!arrayList.getValue()) {
+            return;
+        }
 
         float y = 2;
         List<Module> enabled = Client.MODULE_MANAGER.getElements().stream().filter(Module::isEnabled)
                 .filter(module -> !module.getVisibility().getValue()).sorted(moduleComparator).collect(Collectors.toList());
         for (Module module : enabled) {
-            float textWidth = VisualHelper.MC_FONT.getStringWidth(module.getName());
+            float textWidth = VisualHelper.HELVETICA.getStringWidth(module.getName());
             float x = display.getScaledWidth() - textWidth;
 
-            VisualHelper.MC_GFX.drawSquare(x - 4, y - 2, textWidth + 4, VisualHelper.MC_FONT.getFontHeight() + 4,
+            VisualHelper.MC_GFX.drawSquare(x - 4, y - 2, textWidth + 4, VisualHelper.HELVETICA.getFontHeight() + 4,
                     Client.ACCENT_COLOR);
-            VisualHelper.MC_GFX.drawSquare(x - 3, y - 2, textWidth + 3, VisualHelper.MC_FONT.getFontHeight() + 3,
+            VisualHelper.MC_GFX.drawSquare(x - 3, y - 2, textWidth + 3, VisualHelper.HELVETICA.getFontHeight() + 3,
                     0xFF111111);
 
-            VisualHelper.MC_FONT.drawStringWithShadow(module.getName(), x - 1, y, -1);
-            y += 12;
+            VisualHelper.HELVETICA.drawStringWithShadow(module.getName(), x - 1, y, -1);
+            y += VisualHelper.HELVETICA.getFontHeight() + 3;
         }
     }
 
     private void drawCoordinates(ScaledResolution display) {
-        if (!coordinates.getValue()) return;
-
-        float chatOffset = GameHelper.getGame().ingameGUI.getChatGUI().getChatOpen() ? 24 : 10;
+        if (!coordinates.getValue()) {
+            return;
+        }
 
         double uX = EntityHelper.getUser().posX;
         double uY = EntityHelper.getUser().posY;
@@ -184,7 +194,7 @@ public class HUD extends Module {
 
         builder.append(" \2477]");
 
-        VisualHelper.MC_FONT.drawStringWithShadow(builder.toString(), 2, display.getScaledHeight() - chatOffset, -1);
+        VisualHelper.HELVETICA.drawStringWithShadow(builder.toString(), 2, display.getScaledHeight() - getLowerOffset(), -1);
     }
 
     private String formatPotionEffect(PotionEffect effect) {
@@ -194,10 +204,11 @@ public class HUD extends Module {
     }
 
     private void drawPotionEffects(ScaledResolution display) {
-        if (!potionEffects.getValue()) return;
+        if (!potionEffects.getValue()) {
+            return;
+        }
 
-        float chatOffset = GameHelper.getGame().ingameGUI.getChatGUI().getChatOpen() ? 24 : 10;
-        float y = chatOffset + 4;
+        float y = getLowerOffset();
         List<PotionEffect> effects = EntityHelper.getUser().getActivePotionEffects().stream().sorted(potionComparator)
                 .collect(Collectors.toList());
         for (PotionEffect effect : effects) {
@@ -207,17 +218,22 @@ public class HUD extends Module {
 
             String label = formatPotionEffect(effect);
 
-            GameHelper.getGame().getTextureManager().bindTexture(GuiInventory.inventoryBackground);
+            GameHelper.getGame().getTextureManager().bindTexture(GuiContainer.inventoryBackground);
             int potionIndex = potion.getStatusIconIndex();
-            Gui.drawTexturedModalRect2(display.getScaledWidth() - VisualHelper.MC_FONT.getStringWidth(label) - 20,
-                    display.getScaledHeight() - y - 5, potionIndex % 8 * 18, 198 + potionIndex / 8 * 18, 18, 18);
+            Gui.drawTexturedModalRect2(display.getScaledWidth() - VisualHelper.HELVETICA.getStringWidth(label) - 20,
+                    display.getScaledHeight() - y - 5, potionIndex % 8 * 18.0, 198 + potionIndex / 8 * 18.0, 18, 18);
 
-            VisualHelper.MC_FONT.drawStringWithShadow(label,
-                    display.getScaledWidth() - VisualHelper.MC_FONT.getStringWidth(label) - 1,
+            VisualHelper.HELVETICA.drawStringWithShadow(label,
+                    display.getScaledWidth() - VisualHelper.HELVETICA.getStringWidth(label) - 1f,
                     display.getScaledHeight() - y, potion.getLiquidColor());
 
-            y += 16f;
+            y += 18f;
         }
+    }
+
+    private static float getLowerOffset() {
+        return 1f + (GameHelper.getGame().ingameGUI.getChatGUI().getChatOpen() ?
+                VisualHelper.HELVETICA.getFontHeight() * 2f + 4f : VisualHelper.HELVETICA.getFontHeight());
     }
 
     @Subscribe

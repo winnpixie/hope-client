@@ -115,7 +115,6 @@ public class Rectangle extends EntityESPMode {
     private void drawName(Entity entity, float x, float y, float width) {
         GlStateManager.pushMatrix();
         GlStateManager.translate(x, y, 0f);
-        GlStateManager.scale(0.5f, 0.5f, 0.5f);
 
         String text = entity.getDisplayName().getFormattedText();
         if (entity instanceof EntityItem) {
@@ -127,9 +126,9 @@ public class Rectangle extends EntityESPMode {
             }
         }
 
-        VisualHelper.MC_FONT.drawStringWithShadow(text,
-                width - (VisualHelper.MC_FONT.getStringWidth(text) / 2f),
-                -VisualHelper.MC_FONT.getFontHeight() - 2, -1);
+        VisualHelper.HELVETICA.drawStringWithShadow(text,
+                (width - VisualHelper.HELVETICA.getStringWidth(text)) / 2f,
+                -VisualHelper.HELVETICA.getFontHeight() - 2f, -1);
         GlStateManager.popMatrix();
     }
 

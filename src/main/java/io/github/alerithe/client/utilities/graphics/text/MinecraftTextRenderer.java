@@ -14,7 +14,7 @@ public class MinecraftTextRenderer implements TextRenderer {
     }
 
     @Override
-    public void drawString(String text, float x, float y, int color, boolean shadow) {
-        GameHelper.getGame().fontRendererObj.drawString(text, x, y, color, shadow);
+    public void drawString(String text, float x, float y, int baseColor, boolean hasShadow) {
+        GameHelper.getGame().fontRendererObj.drawString(text, x, y, baseColor, hasShadow);
     }
 }

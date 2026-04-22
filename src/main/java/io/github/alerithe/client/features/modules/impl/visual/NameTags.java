@@ -81,14 +81,13 @@ public class NameTags extends Module {
 
             GlStateManager.pushMatrix();
             GlStateManager.translate(position[0], position[1], 0f);
-            GlStateManager.scale(0.5f, 0.5f, 1f);
 
             String text = getText(entity);
-            float width = VisualHelper.MC_FONT.getStringWidth(text);
+            float width = VisualHelper.HELVETICA.getStringWidth(text);
 
-            VisualHelper.MC_GFX.drawBorderedSquare(-width / 2f - 1f, -1f, width + 2f, 10f, 1f,
-                    0x69000000, 0x69FFFFFF);
-            VisualHelper.MC_FONT.drawString(text, -width / 2f, 0, 0xFFFFFFFF);
+            VisualHelper.MC_GFX.drawBorderedSquare(-width / 2f - 1f, -1f, width + 2f, VisualHelper.HELVETICA.getFontHeight() + 1f,
+                    1f, 0x69000000, 0x69FFFFFF);
+            VisualHelper.HELVETICA.drawString(text, -width / 2f, 0, 0xFFFFFFFF);
 
             GlStateManager.popMatrix();
         }

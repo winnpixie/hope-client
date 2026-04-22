@@ -11,8 +11,8 @@ import java.util.List;
 // TODO: Why do I insist on using a tab UI.
 public class TabRenderer extends TabComponent {
     private static final int BACKGROUND_COLOR = 0x69000000;
-
-    private static final int TEXT_COLOR = 0xFFAAAAAA;
+    private static final int ACTIVE_COLOR = 0xFFDEDEDE;
+    private static final int TEXT_COLOR = 0xFF999999;
 
     public TabRenderer(TabContainer container) {
         super(container);
@@ -36,18 +36,18 @@ public class TabRenderer extends TabComponent {
     private float drawCategories(float xOffset) {
         float width = 0;
         for (Module.Type type : Module.Type.values()) {
-            width = MathHelper.max(width, VisualHelper.MC_FONT.getStringWidth(type.getLabel()) + 9);
+            width = MathHelper.max(width, VisualHelper.HELVETICA.getStringWidth(type.getLabel()) + 9);
         }
 
         float x = xOffset + 1;
-        float y = 11;
+        float y = VisualHelper.HELVETICA.getFontHeight() + 1f;
         for (Module.Type type : Module.Type.values()) {
             boolean active = getContainer().getType() == type;
-            VisualHelper.MC_GFX.drawSquare(x, y, width, 12,
+            VisualHelper.MC_GFX.drawSquare(x, y, width, VisualHelper.HELVETICA.getFontHeight() + 3f,
                     active ? Client.ACCENT_COLOR : BACKGROUND_COLOR);
-            VisualHelper.MC_FONT.drawStringWithShadow(type.getLabel(), x + 2, y + 2,
-                    active ? 0xFFFFFFFF : TEXT_COLOR);
-            y += 12;
+            VisualHelper.HELVETICA.drawString(type.getLabel(), x + 2, y + 2,
+                    active ? ACTIVE_COLOR : TEXT_COLOR);
+            y += VisualHelper.HELVETICA.getFontHeight() + 3f;
         }
 
         return width;
@@ -57,17 +57,17 @@ public class TabRenderer extends TabComponent {
         List<Module> modules = getContainer().getModules();
         float width = 0;
         for (Module module : modules) {
-            width = MathHelper.max(width, VisualHelper.MC_FONT.getStringWidth(module.getName()) + 4);
+            width = MathHelper.max(width, VisualHelper.HELVETICA.getStringWidth(module.getName()) + 4);
         }
 
         float x = xOffset + 1;
-        float y = 11;
+        float y = VisualHelper.HELVETICA.getFontHeight() + 1f;
         for (Module module : modules) {
-            VisualHelper.MC_GFX.drawSquare(x, y, width, 12,
+            VisualHelper.MC_GFX.drawSquare(x, y, width, VisualHelper.HELVETICA.getFontHeight() + 3f,
                     getContainer().getModule() == module ? Client.ACCENT_COLOR : BACKGROUND_COLOR);
-            VisualHelper.MC_FONT.drawStringWithShadow(module.getName(), x + 2, y + 2,
-                    module.isEnabled() ? 0xFFFFFFFF : TEXT_COLOR);
-            y += 12;
+            VisualHelper.HELVETICA.drawString(module.getName(), x + 2, y + 2,
+                    module.isEnabled() ? ACTIVE_COLOR : TEXT_COLOR);
+            y += VisualHelper.HELVETICA.getFontHeight() + 3f;
         }
 
         return width;
@@ -77,17 +77,17 @@ public class TabRenderer extends TabComponent {
         List<Property<?>> properties = getContainer().getProperties();
         float width = 0;
         for (Property<?> property : properties) {
-            width = MathHelper.max(width, VisualHelper.MC_FONT.getStringWidth(format(property)) + 4);
+            width = MathHelper.max(width, VisualHelper.HELVETICA.getStringWidth(format(property)) + 4);
         }
 
         float x = xOffset + 1;
-        float y = 11;
+        float y = VisualHelper.HELVETICA.getFontHeight() + 1f;
         for (Property<?> property : properties) {
-            VisualHelper.MC_GFX.drawSquare(x, y, width, 12,
+            VisualHelper.MC_GFX.drawSquare(x, y, width, VisualHelper.HELVETICA.getFontHeight() + 3f,
                     getContainer().getProperty() == property ? Client.ACCENT_COLOR : BACKGROUND_COLOR);
-            VisualHelper.MC_FONT.drawStringWithShadow(format(property), x + 2, y + 2,
+            VisualHelper.HELVETICA.drawString(format(property), x + 2, y + 2,
                     TEXT_COLOR);
-            y += 12;
+            y += VisualHelper.HELVETICA.getFontHeight() + 3f;
         }
 
         return width;
