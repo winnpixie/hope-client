@@ -305,7 +305,7 @@ public class GLAWTTextRenderer implements TextRenderer {
 
         @Override
         protected void finalize() throws Throwable {
-            // On GC: release texture from VRAM
+            // release texture data on GC
             GL11.glDeleteTextures(textureId);
         }
     }

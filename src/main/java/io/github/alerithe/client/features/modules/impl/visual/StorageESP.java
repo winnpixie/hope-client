@@ -8,8 +8,10 @@ import io.github.alerithe.client.features.modules.impl.visual.storageesp.Rectang
 import io.github.alerithe.client.features.modules.impl.visual.storageesp.StorageESPMode;
 import io.github.alerithe.client.features.properties.impl.BooleanProperty;
 import io.github.alerithe.client.features.properties.impl.ObjectProperty;
+import io.github.alerithe.client.utilities.graphics.VisualHelper;
 import net.minecraft.block.BlockJukebox;
 import net.minecraft.tileentity.*;
+import net.minecraft.util.AxisAlignedBB;
 
 public class StorageESP extends Module {
     private final ObjectProperty<StorageESPMode> mode = new ObjectProperty<>("Mode", new String[0],
@@ -46,18 +48,29 @@ public class StorageESP extends Module {
     }
 
     public boolean qualifies(TileEntity tile) {
+        boolean included = false;
+
         if (tile instanceof TileEntityChest) {
             TileEntityChest chest = (TileEntityChest) tile;
 
-            return (chest.getChestType() == 0 && normalChests.getValue())
+            included = (chest.getChestType() == 0 && normalChests.getValue())
                     || (chest.getChestType() == 1 && trappedChests.getValue());
         }
 
-        return (tile instanceof TileEntityEnderChest && enderChests.getValue())
+        included |= (tile instanceof TileEntityEnderChest && enderChests.getValue())
                 || (tile instanceof TileEntityFurnace && furnaces.getValue())
                 || (tile instanceof TileEntityDropper && droppers.getValue())
                 || (tile instanceof TileEntityDispenser && dispensers.getValue())
                 || (tile instanceof BlockJukebox.TileEntityJukebox && jukeBoxes.getValue());
+
+        if (included) {
+            AxisAlignedBB aabb = tile.getBlockType().getSelectedBoundingBox(tile.getWorld(), tile.getPos());
+            if (!VisualHelper.isInView(aabb)) {
+                return false;
+            }
+        }
+
+        return included;
     }
 
     public int getTileColor(TileEntity tile) {
