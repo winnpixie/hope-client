@@ -11,15 +11,25 @@ import java.awt.image.BufferedImage;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.Map;
+import java.util.Objects;
 import java.util.WeakHashMap;
 
 public class GLAWTTextRenderer implements TextRenderer {
-    private static final BufferedImage TEMPLATE = new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB);
+    private static final GraphicsConfiguration DISPLAY;
+    private static final BufferedImage TEMPLATE;
 
-    private final Map<String, BakedImage> bakery = new WeakHashMap<>();
+    private final Map<Integer, BakedImage> bakery = new WeakHashMap<>();
 
     private final Font font;
     private final Graphics2D context;
+
+    static {
+        DISPLAY = GraphicsEnvironment.getLocalGraphicsEnvironment()
+                .getDefaultScreenDevice()
+                .getDefaultConfiguration();
+
+        TEMPLATE = DISPLAY.createCompatibleImage(2, 2, Transparency.TRANSLUCENT);
+    }
 
     public GLAWTTextRenderer(Font font) {
         this.font = font;
@@ -41,11 +51,8 @@ public class GLAWTTextRenderer implements TextRenderer {
 
     @Override
     public void drawString(String text, float x, float y, int baseColor, boolean hasShadow) {
-        BakedImage baked = bakery.computeIfAbsent(text, k -> bake(k, baseColor, hasShadow));
-        if (baked.baseColor != baseColor || baked.shadow != hasShadow) {
-            baked = bake(text, baseColor, hasShadow);
-            bakery.put(text, baked);
-        }
+        BakedImage baked = bakery.computeIfAbsent(Objects.hash(text, baseColor, hasShadow),
+                k -> bake(text, baseColor, hasShadow));
 
         GlStateManager.enableAlpha();
         GlStateManager.enableBlend();
@@ -55,7 +62,7 @@ public class GLAWTTextRenderer implements TextRenderer {
 
         GlStateManager.pushMatrix();
 
-        // free antialiasing!
+        // downscaling = free antialiasing!
         GlStateManager.translate(x, y, 0f);
         GlStateManager.scale(0.5f, 0.5f, 1f);
         GlStateManager.translate(-x, -y, 0f);
@@ -85,7 +92,7 @@ public class GLAWTTextRenderer implements TextRenderer {
 
         int width = (int) MathHelper.max(MathHelper.ceil(bounds.getWidth()), 1) + 1;
         int height = (int) MathHelper.max(MathHelper.ceil(bounds.getHeight()), 1) + 1;
-        BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        BufferedImage image = DISPLAY.createCompatibleImage(width, height, Transparency.TRANSLUCENT);
 
         Graphics2D graphics = image.createGraphics();
         graphics.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
@@ -119,7 +126,7 @@ public class GLAWTTextRenderer implements TextRenderer {
 
                 if (shadow) {
                     Graphics2D shadowGraphics = (Graphics2D) graphics.create();
-                    shadowGraphics.setColor(Color.BLACK);
+                    shadowGraphics.setColor(changeBrightness(shadowGraphics.getColor(), 0.1f));
                     shadowGraphics.drawString(segment, x + 1f, y + 1f);
                     shadowGraphics.dispose();
                 }
@@ -151,7 +158,7 @@ public class GLAWTTextRenderer implements TextRenderer {
 
             if (shadow) {
                 Graphics2D shadowGraphics = (Graphics2D) graphics.create();
-                shadowGraphics.setColor(Color.BLACK);
+                shadowGraphics.setColor(changeBrightness(shadowGraphics.getColor(), 0.1f));
                 shadowGraphics.drawString(segment, x + 1f, y + 1f);
                 shadowGraphics.dispose();
             }
@@ -161,7 +168,7 @@ public class GLAWTTextRenderer implements TextRenderer {
 
         graphics.dispose();
 
-        return new BakedImage(image, baseColor, shadow);
+        return new BakedImage(image);
     }
 
     private static String stripControlCodes(String str) {
@@ -186,6 +193,15 @@ public class GLAWTTextRenderer implements TextRenderer {
         }
 
         return new String(stripped, 0, len);
+    }
+
+    private static Color changeBrightness(Color color, float brightness) {
+        return new Color(
+                (color.getRed() * brightness) / 255f,
+                (color.getGreen() * brightness) / 255f,
+                (color.getBlue() * brightness) / 255f,
+                color.getAlpha() / 255f
+        );
     }
 
     private static int uploadImage(BufferedImage image) {
@@ -277,20 +293,19 @@ public class GLAWTTextRenderer implements TextRenderer {
         private final int textureId;
         private final int width;
         private final int height;
-        private final int baseColor;
-        private final boolean shadow;
 
-        BakedImage(BufferedImage image, int baseColor, boolean shadow) {
+        BakedImage(BufferedImage image) {
             this.textureId = uploadImage(image);
             this.width = image.getWidth();
             this.height = image.getHeight();
-            this.baseColor = baseColor;
-            this.shadow = shadow;
+
+            // release resources tied to image
+            image.flush();
         }
 
         @Override
         protected void finalize() throws Throwable {
-            // On GC: Delete texture from VRAM
+            // On GC: release texture from VRAM
             GL11.glDeleteTextures(textureId);
         }
     }
