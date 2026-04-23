@@ -17,7 +17,6 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
 
 import java.awt.*;
-import java.io.IOException;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
@@ -39,22 +38,10 @@ public class VisualHelper {
 
     // Fonts
     public static final TextRenderer MC_FONT = new MinecraftTextRenderer();
-    public static final TextRenderer TXT;
+    public static final TextRenderer HELVETICA = new GLAWTTextRenderer(new Font("Helvetica", Font.PLAIN, 18));
 
     // Graphics Device
     public static final GraphicsDevice MC_GFX = new MinecraftGraphicsDevice();
-
-    static {
-        Font font;
-        try {
-            font = Font.createFont(Font.TRUETYPE_FONT, VisualHelper.class.getResourceAsStream("/OpenDyslexic-Regular.otf"));
-            font = font.deriveFont(Font.PLAIN, 18);
-        } catch (FontFormatException | IOException e) {
-            font = new Font("Helvetica", Font.PLAIN, 18);
-        }
-
-        TXT = new GLAWTTextRenderer(font);
-    }
 
     private VisualHelper() {
     }

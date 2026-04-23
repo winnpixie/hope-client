@@ -126,9 +126,9 @@ public class Rectangle extends EntityESPMode {
             }
         }
 
-        VisualHelper.TXT.drawStringWithShadow(text,
-                (width - VisualHelper.TXT.getStringWidth(text)) / 2f,
-                -VisualHelper.TXT.getFontHeight() - 2f, -1);
+        VisualHelper.HELVETICA.drawStringWithShadow(text,
+                (width - VisualHelper.HELVETICA.getStringWidth(text)) / 2f,
+                -VisualHelper.HELVETICA.getFontHeight() - 2f, -1);
         GlStateManager.popMatrix();
     }
 
