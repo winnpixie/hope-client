@@ -27,7 +27,9 @@ public class PredictJump extends StepMode {
         float[] heading = EntityHelper.getUser().getMoveVector();
 
         for (int i = 1; i < 23; i++) {
-            if (tryJump(heading, i / 10.0)) break;
+            if (tryJump(heading, i / 10.0)) {
+                break;
+            }
         }
     }
 
