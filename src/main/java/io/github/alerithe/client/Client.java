@@ -8,7 +8,6 @@ import io.github.alerithe.client.features.keybinds.KeybindManager;
 import io.github.alerithe.client.features.modules.ModuleManager;
 import io.github.alerithe.client.features.plugins.PluginManager;
 import io.github.alerithe.client.utilities.GameHelper;
-import io.github.alerithe.client.utilities.IdentityHelper;
 import io.github.alerithe.client.utilities.SessionHelper;
 import io.github.alerithe.client.utilities.SpeechEngine;
 import org.apache.logging.log4j.LogManager;
@@ -45,8 +44,6 @@ public class Client {
     }
 
     public static void load() {
-        LOGGER.info(IdentityHelper.getId());
-
         if (Files.notExists(DATA_PATH)) {
             try {
                 Files.createDirectory(DATA_PATH);
