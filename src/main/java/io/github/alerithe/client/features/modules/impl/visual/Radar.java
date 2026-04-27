@@ -61,7 +61,9 @@ public class Radar extends Module {
 
         float maxDist = size.getValue() / 2f;
         for (Entity entity : WorldHelper.getWorld().loadedEntityList) {
-            if (!qualifies(entity)) continue;
+            if (!qualifies(entity)) {
+                continue;
+            }
 
             // X difference
             double deltaX = MathHelper.lerpd(entity.prevPosX, entity.posX, event.getPartialTicks())
@@ -72,7 +74,9 @@ public class Radar extends Module {
 
             // Make sure they're within the available rendering range
             double sqDist = (deltaX * deltaX) + (deltaZ * deltaZ);
-            if (sqDist > (maxDist * maxDist)) continue;
+            if (sqDist > (maxDist * maxDist)) {
+                continue;
+            }
 
             float dist = (float) Math.sqrt(sqDist);
             float[] vector = EntityHelper.getUser().getLookVector(
@@ -81,10 +85,8 @@ public class Radar extends Module {
                             EntityHelper.getUser().rotationYawHead, event.getPartialTicks()));
 
             VisualHelper.MC_GFX.drawSquare(
-                    centerX - 1 - (vector[0] * dist),
-                    centerY - 1 - (vector[1] * dist),
-                    2,
-                    2,
+                    centerX - 1f - (vector[0] * dist), centerY - 1f - (vector[1] * dist),
+                    2f, 2f,
                     EntityHelper.getColor(entity));
 
         }

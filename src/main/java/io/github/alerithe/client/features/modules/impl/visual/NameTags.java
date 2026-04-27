@@ -10,7 +10,6 @@ import io.github.alerithe.client.features.properties.impl.BooleanProperty;
 import io.github.alerithe.client.utilities.*;
 import io.github.alerithe.client.utilities.graphics.VisualHelper;
 import net.minecraft.client.network.NetworkPlayerInfo;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
@@ -47,14 +46,13 @@ public class NameTags extends Module {
     }
 
     @Subscribe
-    public void onOverlayDraw(EventDraw.Overlay event) {
+    public void onWorldDraw(EventDraw.World event) {
         projections.clear();
 
-        GlStateManager.pushMatrix();
-        GameHelper.getGame().entityRenderer.setupCameraTransform(event.getPartialTicks(), 0);
-
         for (Entity entity : WorldHelper.getWorld().loadedEntityList) {
-            if (!qualifies(entity)) continue;
+            if (!qualifies(entity)) {
+                continue;
+            }
 
             double x = (MathHelper.lerpd(entity.prevPosX, entity.posX, event.getPartialTicks())
                     - GameHelper.getGame().getRenderManager().viewerPosX);
@@ -67,29 +65,29 @@ public class NameTags extends Module {
 
             if (projection.length == 0
                     || projection[2] < 0f
-                    || projection[2] >= 1f) continue;
+                    || projection[2] >= 1f) {
+                continue;
+            }
 
             projections.put(entity, projection);
         }
+    }
 
-        GameHelper.getGame().entityRenderer.setupOverlayRendering();
-        GlStateManager.popMatrix();
-
+    @Subscribe
+    public void onOverlayDraw(EventDraw.Overlay event) {
         for (Map.Entry<Entity, float[]> projection : projections.entrySet()) {
             Entity entity = projection.getKey();
             float[] position = projection.getValue();
 
-            GlStateManager.pushMatrix();
-            GlStateManager.translate(position[0], position[1], 0f);
+            float x = position[0];
+            float y = position[1];
 
             String text = getText(entity);
             float width = VisualHelper.HELVETICA.getStringWidth(text);
 
-            VisualHelper.MC_GFX.drawBorderedSquare(-width / 2f - 1f, -1f, width + 2f, VisualHelper.HELVETICA.getFontHeight() + 1f,
+            VisualHelper.MC_GFX.drawBorderedSquare(x - (width / 2f) - 1f, y - 1f, width + 2f, VisualHelper.HELVETICA.getFontHeight() + 1f,
                     1f, 0x69000000, 0x69FFFFFF);
-            VisualHelper.HELVETICA.drawString(text, -width / 2f, 0, 0xFFFFFFFF);
-
-            GlStateManager.popMatrix();
+            VisualHelper.HELVETICA.drawString(text, x - (width / 2f), y, 0xFFFFFFFF);
         }
     }
 

@@ -102,7 +102,7 @@ public class WindowedUI extends GuiScreen {
     }
 
     private void buildModules(Module.Type type, Element container) {
-        List<Module> modules = Client.MODULE_MANAGER.getAllInType(type);
+        List<Module> modules = Client.MODULE_MANAGER.allOfType(type);
         int count = modules.size();
         float height = WINDOW_HEIGHT / count;
 

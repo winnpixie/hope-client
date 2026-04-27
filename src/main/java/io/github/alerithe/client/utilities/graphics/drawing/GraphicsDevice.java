@@ -20,11 +20,12 @@ public interface GraphicsDevice {
 
     void drawRect(double left, double top, double right, double bottom, int color);
 
-    void drawLine(double left, double top, double right, double bottom, int color);
+    void drawLine(double startX, double startY, double startZ, double endX, double endY, double endZ, int color);
 
-    default void drawPrism(double startX, double startY, double startZ, double endX, double endY, double endZ, int color) {
+    default void drawLine(double startX, double startY, double endX, double endY, int color) {
+        drawLine(startX, startY, 0.0, endX, endY, 0.0, color);
     }
 
-    default void drawLine(double startX, double startY, double startZ, double endX, double endY, double endZ, int color) {
+    default void drawPrism(double startX, double startY, double startZ, double endX, double endY, double endZ, int color) {
     }
 }

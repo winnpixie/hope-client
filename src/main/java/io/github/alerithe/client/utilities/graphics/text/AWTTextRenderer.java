@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.WeakHashMap;
 
-public class GLAWTTextRenderer implements TextRenderer {
+public class AWTTextRenderer implements TextRenderer {
     private static final GraphicsConfiguration DISPLAY;
     private static final BufferedImage TEMPLATE;
 
@@ -28,10 +28,10 @@ public class GLAWTTextRenderer implements TextRenderer {
                 .getDefaultScreenDevice()
                 .getDefaultConfiguration();
 
-        TEMPLATE = DISPLAY.createCompatibleImage(2, 2, Transparency.TRANSLUCENT);
+        TEMPLATE = DISPLAY.createCompatibleImage(1, 1, Transparency.OPAQUE);
     }
 
-    public GLAWTTextRenderer(Font font) {
+    public AWTTextRenderer(Font font) {
         this.font = font;
         this.context = TEMPLATE.createGraphics();
 
@@ -57,20 +57,12 @@ public class GLAWTTextRenderer implements TextRenderer {
         GlStateManager.enableAlpha();
         GlStateManager.enableBlend();
         GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
-
-        GlStateManager.bindTexture(baked.textureId);
-
-        GlStateManager.pushMatrix();
-
-        // downscaling = free antialiasing!
-        GlStateManager.translate(x, y, 0f);
-        GlStateManager.scale(0.5f, 0.5f, 1f);
-        GlStateManager.translate(-x, -y, 0f);
-
         GlStateManager.color(1f, 1f, 1f, 1f);
 
-        int width = baked.width;
-        int height = baked.height;
+        GlStateManager.bindTexture(baked.textureId);
+        // downscale = free AA :)
+        float width = baked.width / 2f;
+        float height = baked.height / 2f;
         GL11.glBegin(GL11.GL_TRIANGLE_STRIP);
         GL11.glTexCoord2f(0f, 0f);
         GL11.glVertex2f(x, y);
@@ -82,7 +74,6 @@ public class GLAWTTextRenderer implements TextRenderer {
         GL11.glVertex2f(x + width, y + height);
         GL11.glEnd();
 
-        GlStateManager.popMatrix();
         GlStateManager.disableBlend();
     }
 
@@ -96,7 +87,6 @@ public class GLAWTTextRenderer implements TextRenderer {
 
         Graphics2D graphics = image.createGraphics();
         graphics.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
-        graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
         Color originalColor = new Color(baseColor, true);
@@ -126,7 +116,7 @@ public class GLAWTTextRenderer implements TextRenderer {
 
                 if (shadow) {
                     Graphics2D shadowGraphics = (Graphics2D) graphics.create();
-                    shadowGraphics.setColor(changeBrightness(shadowGraphics.getColor(), 0.1f));
+                    shadowGraphics.setColor(brighten(shadowGraphics.getColor(), 0.1f));
                     shadowGraphics.drawString(segment, x + 1f, y + 1f);
                     shadowGraphics.dispose();
                 }
@@ -143,7 +133,7 @@ public class GLAWTTextRenderer implements TextRenderer {
                 }
 
                 if (newColor != null) {
-                    graphics.setColor(newColor);
+                    graphics.setColor(withAlpha(newColor, originalColor.getAlpha()));
                 }
 
                 i++;
@@ -158,7 +148,7 @@ public class GLAWTTextRenderer implements TextRenderer {
 
             if (shadow) {
                 Graphics2D shadowGraphics = (Graphics2D) graphics.create();
-                shadowGraphics.setColor(changeBrightness(shadowGraphics.getColor(), 0.1f));
+                shadowGraphics.setColor(brighten(shadowGraphics.getColor(), 0.1f));
                 shadowGraphics.drawString(segment, x + 1f, y + 1f);
                 shadowGraphics.dispose();
             }
@@ -195,7 +185,11 @@ public class GLAWTTextRenderer implements TextRenderer {
         return new String(stripped, 0, len);
     }
 
-    private static Color changeBrightness(Color color, float brightness) {
+    private static Color withAlpha(Color color, int alpha) {
+        return new Color(color.getRed(), color.getGreen(), color.getBlue(), alpha);
+    }
+
+    private static Color brighten(Color color, float brightness) {
         return new Color(
                 (color.getRed() * brightness) / 255f,
                 (color.getGreen() * brightness) / 255f,

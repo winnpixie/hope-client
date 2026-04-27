@@ -180,7 +180,9 @@ public class EntityHelper {
     }
 
     public static int getColor(Entity entity) {
-        if (Client.FRIEND_MANAGER.find(entity.getName()) != null) return 0xFF00FFFF;
+        if (Client.FRIEND_MANAGER.find(entity.getName()) != null) {
+            return 0xFF00FFFF;
+        }
 
         if (isPlayer(entity)) return 0xFFFF0000;
         if (isHostile(entity)) return 0xFFFF6600;

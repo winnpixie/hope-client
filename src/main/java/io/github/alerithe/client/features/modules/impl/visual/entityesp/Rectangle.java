@@ -9,7 +9,6 @@ import io.github.alerithe.client.utilities.GameHelper;
 import io.github.alerithe.client.utilities.MathHelper;
 import io.github.alerithe.client.utilities.WorldHelper;
 import io.github.alerithe.client.utilities.graphics.VisualHelper;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
@@ -28,24 +27,23 @@ public class Rectangle extends EntityESPMode {
     }
 
     @Override
-    public void onOverlayDraw(EventDraw.Overlay event) {
+    public void onWorldDraw(EventDraw.World event) {
         projections.clear();
 
-        GlStateManager.pushMatrix();
-        GameHelper.getGame().entityRenderer.setupCameraTransform(event.getPartialTicks(), 0);
-
         for (Entity entity : WorldHelper.getWorld().loadedEntityList) {
-            if (!module.qualifies(entity)) continue;
+            if (!module.qualifies(entity)) {
+                continue;
+            }
 
             double[][] boundingBox = getBoundingBox(entity, event.getPartialTicks());
             float[] projection = projectBoundingBox(boundingBox);
 
             projections.put(entity, projection);
         }
+    }
 
-        GameHelper.getGame().entityRenderer.setupOverlayRendering();
-        GlStateManager.popMatrix();
-
+    @Override
+    public void onOverlayDraw(EventDraw.Overlay event) {
         for (Map.Entry<Entity, float[]> projection : projections.entrySet()) {
             Entity entity = projection.getKey();
             float[] position = projection.getValue();
@@ -113,9 +111,6 @@ public class Rectangle extends EntityESPMode {
     }
 
     private void drawName(Entity entity, float x, float y, float width) {
-        GlStateManager.pushMatrix();
-        GlStateManager.translate(x, y, 0f);
-
         String text = entity.getDisplayName().getFormattedText();
         if (entity instanceof EntityItem) {
             text = ((EntityItem) entity).getEntityItem().getDisplayName();
@@ -127,13 +122,14 @@ public class Rectangle extends EntityESPMode {
         }
 
         VisualHelper.HELVETICA.drawStringWithShadow(text,
-                (width - VisualHelper.HELVETICA.getStringWidth(text)) / 2f,
-                -VisualHelper.HELVETICA.getFontHeight() - 2f, -1);
-        GlStateManager.popMatrix();
+                x + ((width - VisualHelper.HELVETICA.getStringWidth(text)) / 2f),
+                y - VisualHelper.HELVETICA.getFontHeight() - 2f, -1);
     }
 
     private void drawHealth(Entity entity, float x, float y, float height) {
-        if (!(entity instanceof EntityLivingBase)) return;
+        if (!(entity instanceof EntityLivingBase)) {
+            return;
+        }
 
         EntityLivingBase living = (EntityLivingBase) entity;
         float health = living.getHealth() + living.getAbsorptionAmount();

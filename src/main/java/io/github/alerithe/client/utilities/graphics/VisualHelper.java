@@ -3,7 +3,7 @@ package io.github.alerithe.client.utilities.graphics;
 import io.github.alerithe.client.utilities.GameHelper;
 import io.github.alerithe.client.utilities.graphics.drawing.GraphicsDevice;
 import io.github.alerithe.client.utilities.graphics.drawing.MinecraftGraphicsDevice;
-import io.github.alerithe.client.utilities.graphics.text.GLAWTTextRenderer;
+import io.github.alerithe.client.utilities.graphics.text.AWTTextRenderer;
 import io.github.alerithe.client.utilities.graphics.text.MinecraftTextRenderer;
 import io.github.alerithe.client.utilities.graphics.text.TextRenderer;
 import net.minecraft.client.gui.ScaledResolution;
@@ -38,7 +38,7 @@ public class VisualHelper {
 
     // Fonts
     public static final TextRenderer MC_FONT = new MinecraftTextRenderer();
-    public static final TextRenderer HELVETICA = new GLAWTTextRenderer(new Font("Helvetica", Font.PLAIN, 18));
+    public static final TextRenderer HELVETICA = new AWTTextRenderer(new Font("Helvetica", Font.PLAIN, 18));
 
     // Graphics Device
     public static final GraphicsDevice MC_GFX = new MinecraftGraphicsDevice();
@@ -88,17 +88,17 @@ public class VisualHelper {
         return frustum.isBoundingBoxInFrustum(aabb);
     }
 
-    public static int[] toRGBAIntArray(int argb, boolean hasAlpha) {
+    public static int[] toRGBAIntArray(int color, boolean hasAlpha) {
         return new int[]{
-                (argb >> 16) & 255,                      // R
-                (argb >> 8) & 255,                       // G
-                argb & 255,                              // B
-                !hasAlpha ? 255 : ((argb >> 24) & 255)   // A
+                (color >> 16) & 255,                      // R
+                (color >> 8) & 255,                       // G
+                color & 255,                              // B
+                !hasAlpha ? 255 : ((color >> 24) & 255)   // A
         };
     }
 
-    public static float[] toRGBAFloatArray(int argb, boolean hasAlpha) {
-        int[] rgba = toRGBAIntArray(argb, hasAlpha);
+    public static float[] toRGBAFloatArray(int color, boolean hasAlpha) {
+        int[] rgba = toRGBAIntArray(color, hasAlpha);
 
         return new float[]{
                 rgba[0] / 255f,

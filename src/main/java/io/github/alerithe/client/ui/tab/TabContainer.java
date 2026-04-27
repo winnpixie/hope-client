@@ -7,16 +7,10 @@ import io.github.alerithe.client.features.properties.Property;
 import java.util.List;
 
 public class TabContainer {
-    private final TabController controller;
-    private final TabRenderer renderer;
-    
-    private TabSection section;
+    private final TabController controller = new TabController(this);
+    private final TabRenderer renderer = new TabRenderer(this);
 
-    public TabContainer() {
-        this.controller = new TabController(this);
-        this.renderer = new TabRenderer(this);
-        section = TabSection.TYPE;
-    }
+    private TabSection section = TabSection.TYPE;
 
     public TabController getController() {
         return controller;
@@ -43,7 +37,7 @@ public class TabContainer {
     }
 
     public List<Module> getModules() {
-        return Client.MODULE_MANAGER.getAllInType(getType());
+        return Client.MODULE_MANAGER.allOfType(getType());
     }
 
     public Property<?> getProperty() {

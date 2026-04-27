@@ -44,12 +44,12 @@ public class BreadCrumbs extends Module {
 
     @Subscribe
     public void onWorldDraw(EventDraw.World event) {
-        if (positions.size() < 2) return;
+        if (positions.size() < 2) {
+            return;
+        }
 
         baseHue = (baseHue + (0.5f * event.getPartialTicks())) % 360;
         float hue = baseHue;
-
-        GlStateManager.pushMatrix();
 
         boolean noDepth = !testDepth.getValue();
         if (noDepth) {
@@ -60,7 +60,6 @@ public class BreadCrumbs extends Module {
         GlStateManager.disableLighting();
         GlStateManager.enableBlend();
         GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
-
 
         GL11.glEnable(GL11.GL_LINE_SMOOTH);
         GL11.glLineWidth(2f);
@@ -86,7 +85,5 @@ public class BreadCrumbs extends Module {
         if (noDepth) {
             GlStateManager.enableDepth();
         }
-
-        GlStateManager.popMatrix();
     }
 }

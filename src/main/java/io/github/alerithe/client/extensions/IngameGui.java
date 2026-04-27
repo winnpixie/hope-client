@@ -15,9 +15,7 @@ public class IngameGui extends GuiIngame {
     public void renderGameOverlay(float partialTicks) {
         super.renderGameOverlay(partialTicks);
 
-        GlStateManager.pushMatrix();
         GlStateManager.color(1f, 1f, 1f, 1f);
         Client.EVENT_BUS.post(new EventDraw.Overlay(partialTicks));
-        GlStateManager.popMatrix();
     }
 }

@@ -60,7 +60,6 @@ public class Box extends StorageESPMode {
                     -GameHelper.getGame().getRenderManager().viewerPosY,
                     -GameHelper.getGame().getRenderManager().viewerPosZ);
 
-            GlStateManager.pushMatrix();
             GlStateManager.disableDepth();
             GlStateManager.disableLighting();
 
@@ -73,7 +72,6 @@ public class Box extends StorageESPMode {
 
             GlStateManager.enableLighting();
             GlStateManager.enableDepth();
-            GlStateManager.popMatrix();
         }
     }
 }

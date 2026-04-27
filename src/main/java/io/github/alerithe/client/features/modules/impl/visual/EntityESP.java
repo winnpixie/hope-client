@@ -53,7 +53,9 @@ public class EntityESP extends Module {
 
     @Subscribe
     public void onTagDraw(EventDraw.Tag event) {
-        if (showNames.getValue() && qualifies(event.getEntity())) event.cancel();
+        if (showNames.getValue() && qualifies(event.getEntity())) {
+            event.cancel();
+        }
     }
 
     public boolean qualifies(Entity entity) {

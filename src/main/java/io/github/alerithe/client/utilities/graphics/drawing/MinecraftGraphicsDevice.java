@@ -21,15 +21,19 @@ public class MinecraftGraphicsDevice implements GraphicsDevice {
             bottom = swp;
         }
 
-        GlStateManager.disableTexture2D();
-        GlStateManager.enableBlend();
-        GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
-
         int r = (color >> 16) & 255;
         int g = (color >> 8) & 255;
         int b = color & 255;
         int a = (color >> 24) & 255;
+        if (a == 0) {
+            return;
+        }
+
         GlStateManager.color(r / 255f, g / 255f, b / 255f, a / 255f);
+
+        GlStateManager.disableTexture2D();
+        GlStateManager.enableBlend();
+        GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
 
         Tessellator tessellator = Tessellator.getInstance();
         WorldRenderer worldrenderer = tessellator.getWorldRenderer();
@@ -45,39 +49,20 @@ public class MinecraftGraphicsDevice implements GraphicsDevice {
     }
 
     @Override
-    public void drawLine(double left, double top, double right, double bottom, int color) {
-        GlStateManager.disableTexture2D();
-        GlStateManager.enableBlend();
-        GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
-
-        int r = (color >> 16) & 255;
-        int g = (color >> 8) & 255;
-        int b = color & 255;
-        int a = (color >> 24) & 255;
-        GlStateManager.color(r / 255f, g / 255f, b / 255f, a / 255f);
-
-        Tessellator tessellator = Tessellator.getInstance();
-        WorldRenderer worldrenderer = tessellator.getWorldRenderer();
-        worldrenderer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION);
-        worldrenderer.pos(left, top, 0.0).endVertex();
-        worldrenderer.pos(right, bottom, 0.0).endVertex();
-        tessellator.draw();
-
-        GlStateManager.disableBlend();
-        GlStateManager.enableTexture2D();
-    }
-
-    @Override
     public void drawPrism(double startX, double startY, double startZ, double endX, double endY, double endZ, int color) {
-        GlStateManager.disableTexture2D();
-        GlStateManager.enableBlend();
-        GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
-
         int r = (color >> 16) & 255;
         int g = (color >> 8) & 255;
         int b = color & 255;
         int a = (color >> 24) & 255;
+        if (a == 0) {
+            return;
+        }
+
         GlStateManager.color(r / 255f, g / 255f, b / 255f, a / 255f);
+
+        GlStateManager.disableTexture2D();
+        GlStateManager.enableBlend();
+        GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
 
         Tessellator tessellator = Tessellator.getInstance();
         WorldRenderer worldrenderer = tessellator.getWorldRenderer();
@@ -112,15 +97,19 @@ public class MinecraftGraphicsDevice implements GraphicsDevice {
 
     @Override
     public void drawLine(double startX, double startY, double startZ, double endX, double endY, double endZ, int color) {
-        GlStateManager.disableTexture2D();
-        GlStateManager.enableBlend();
-        GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
-
         int r = (color >> 16) & 255;
         int g = (color >> 8) & 255;
         int b = color & 255;
         int a = (color >> 24) & 255;
+        if (a == 0) {
+            return;
+        }
+
         GlStateManager.color(r / 255f, g / 255f, b / 255f, a / 255f);
+
+        GlStateManager.disableTexture2D();
+        GlStateManager.enableBlend();
+        GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
 
         Tessellator tessellator = Tessellator.getInstance();
         WorldRenderer worldrenderer = tessellator.getWorldRenderer();

@@ -154,13 +154,14 @@ public class ModuleManager extends FeatureManager<Module> {
     }
 
     @Override
-    public void add(Module item) {
-        modulesInType.get(item.getType()).add(item);
+    public void add(Module feature) {
+        modulesInType.get(feature.getType())
+                .add(feature);
 
-        super.add(item);
+        super.add(feature);
     }
 
-    public List<Module> getAllInType(Module.Type type) {
+    public List<Module> allOfType(Module.Type type) {
         return modulesInType.get(type);
     }
 
@@ -172,7 +173,9 @@ public class ModuleManager extends FeatureManager<Module> {
         StringBuilder builder = new StringBuilder();
 
         for (Module module : getElements()) {
-            if (!module.isEnabled()) continue;
+            if (!module.isEnabled()) {
+                continue;
+            }
 
             builder.append(module.getName()).append('\n');
         }

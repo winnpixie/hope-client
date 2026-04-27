@@ -65,7 +65,7 @@ public class FreeFormUI extends GuiScreen {
         float width = 98f;
         float height = 16f;
 
-        for (Module module : Client.MODULE_MANAGER.getAllInType(type)) {
+        for (Module module : Client.MODULE_MANAGER.allOfType(type)) {
             Button moduleBtn = new Button(module.getName(), x, y, width, height);
             moduleBtn.getNormalStyle().setBackgroundColor(0xEE111111);
             moduleBtn.getNormalStyle().textStyle.setColor(module.isEnabled() ? 0xFFFFFFFF : 0xFFAAAAAA);

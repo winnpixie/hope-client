@@ -17,12 +17,20 @@ public class NetworkHelper {
 
     public static int getPing(EntityPlayer player) {
         NetworkPlayerInfo info = getInfo(player);
-        return info == null ? -1 : info.getResponseTime();
+        if (info == null) {
+            return -1;
+        }
+
+        return info.getResponseTime();
     }
 
     public static int getPing(UUID id) {
-        NetworkPlayerInfo netInfo = getInfo(id);
-        return netInfo == null ? -1 : netInfo.getResponseTime();
+        NetworkPlayerInfo info = getInfo(id);
+        if (info == null) {
+            return -1;
+        }
+
+        return info.getResponseTime();
     }
 
     public static NetworkPlayerInfo getInfo() {
@@ -31,7 +39,9 @@ public class NetworkHelper {
 
     public static NetworkPlayerInfo getInfo(EntityPlayer player) {
         GameProfile profile = player.getGameProfile();
-        if (profile == null) return getInfo(player.getUniqueID());
+        if (profile == null) {
+            return getInfo(player.getUniqueID());
+        }
 
         return getInfo(profile.getId());
     }

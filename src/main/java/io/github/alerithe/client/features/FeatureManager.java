@@ -21,12 +21,12 @@ public class FeatureManager<T extends Feature> {
         this.dataPath = dataPath;
     }
 
-    public void add(T item) {
-        elements.add(item);
+    public void add(T feature) {
+        elements.add(feature);
     }
 
-    public void remove(T item) {
-        elements.remove(item);
+    public void remove(T feature) {
+        elements.remove(feature);
     }
 
     public <V extends T> V find(Class<V> cls) {

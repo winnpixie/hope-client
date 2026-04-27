@@ -11,7 +11,6 @@ import io.github.alerithe.client.utilities.MathHelper;
 import io.github.alerithe.client.utilities.WorldHelper;
 import io.github.alerithe.client.utilities.graphics.VisualHelper;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -42,14 +41,13 @@ public class Tracers extends Module {
     }
 
     @Subscribe
-    public void onOverlayDraw(EventDraw.Overlay event) {
+    public void onWorldDraw(EventDraw.World event) {
         projections.clear();
 
-        GlStateManager.pushMatrix();
-        GameHelper.getGame().entityRenderer.setupCameraTransform(event.getPartialTicks(), 0);
-
         for (Entity entity : WorldHelper.getWorld().loadedEntityList) {
-            if (!qualifies(entity)) continue;
+            if (!qualifies(entity)) {
+                continue;
+            }
 
             double x = (MathHelper.lerpd(entity.prevPosX, entity.posX, event.getPartialTicks())
                     - GameHelper.getGame().getRenderManager().viewerPosX);
@@ -59,14 +57,16 @@ public class Tracers extends Module {
                     - GameHelper.getGame().getRenderManager().viewerPosZ);
 
             float[] projection = VisualHelper.project((float) x, (float) y, (float) z);
-            if (projection.length == 0) continue;
+            if (projection.length == 0) {
+                continue;
+            }
 
             projections.put(entity, projection);
         }
+    }
 
-        GameHelper.getGame().entityRenderer.setupOverlayRendering();
-        GlStateManager.popMatrix();
-
+    @Subscribe
+    public void onOverlayDraw(EventDraw.Overlay event) {
         ScaledResolution display = VisualHelper.getDisplay();
         float windowWidth = display.getScaledWidth();
         float windowHeight = display.getScaledHeight();
@@ -82,16 +82,14 @@ public class Tracers extends Module {
             float z = position[2];
 
             if (z < 0f || z >= 1f) {
-                x = display.getScaledWidth() - x;
-                y = display.getScaledHeight() - y;
+                x = windowWidth - x;
+                y = windowHeight - y;
             }
 
-            GlStateManager.pushMatrix();
             GL11.glEnable(GL11.GL_LINE_SMOOTH);
             GL11.glLineWidth(2f);
             VisualHelper.MC_GFX.drawLine(centerX, centerY, x, y, EntityHelper.getColor(entity));
             GL11.glDisable(GL11.GL_LINE_SMOOTH);
-            GlStateManager.popMatrix();
         }
     }
 

@@ -6,7 +6,6 @@ import io.github.alerithe.client.utilities.GameHelper;
 import io.github.alerithe.client.utilities.MathHelper;
 import io.github.alerithe.client.utilities.WorldHelper;
 import io.github.alerithe.client.utilities.graphics.VisualHelper;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.AxisAlignedBB;
@@ -27,24 +26,23 @@ public class Rectangle extends StorageESPMode {
     }
 
     @Override
-    public void onOverlayDraw(EventDraw.Overlay event) {
+    public void onWorldDraw(EventDraw.World event) {
         projections.clear();
 
-        GlStateManager.pushMatrix();
-        GameHelper.getGame().entityRenderer.setupCameraTransform(event.getPartialTicks(), 0);
-
         for (TileEntity entity : WorldHelper.getWorld().loadedTileEntityList) {
-            if (!module.qualifies(entity)) continue;
+            if (!module.qualifies(entity)) {
+                continue;
+            }
 
             double[][] boundingBox = getBoundingBox(entity);
             float[] projection = projectBoundingBox(boundingBox);
 
             projections.put(entity, projection);
         }
+    }
 
-        GameHelper.getGame().entityRenderer.setupOverlayRendering();
-        GlStateManager.popMatrix();
-
+    @Override
+    public void onOverlayDraw(EventDraw.Overlay event) {
         for (Map.Entry<TileEntity, float[]> projection : projections.entrySet()) {
             TileEntity tile = projection.getKey();
             float[] position = projection.getValue();
@@ -54,9 +52,10 @@ public class Rectangle extends StorageESPMode {
             float width = position[2] - position[0];
             float height = position[3] - position[1];
 
-            VisualHelper.MC_GFX.drawBorderedSquare(x + 0.5f, y + 0.5f, width - 1f, height - 1f, 1.5f, 0x00000000, 0xFF000000);
-            VisualHelper.MC_GFX.drawBorderedSquare(x, y, width, height, 0.5f, 0x00000000,
-                    module.getTileColor(tile));
+            VisualHelper.MC_GFX.drawBorderedSquare(x + 0.5f, y + 0.5f, width - 1f, height - 1f,
+                    1.5f, 0x00000000, 0xFF000000);
+            VisualHelper.MC_GFX.drawBorderedSquare(x, y, width, height,
+                    0.5f, 0x00000000, module.getTileColor(tile));
         }
     }
 

@@ -37,6 +37,7 @@ public class EventBus {
 
             MethodSubscriber methodSub = new MethodSubscriber(parent, method);
             subscribeReflective(methodSub);
+
             newCache.add(methodSub);
         }
 
@@ -47,6 +48,7 @@ public class EventBus {
 
             FieldSubscriber fieldSub = new FieldSubscriber(parent, field);
             subscribeReflective(fieldSub);
+
             newCache.add(fieldSub);
         }
 
@@ -64,7 +66,9 @@ public class EventBus {
 
     public void unsubscribeAll(Object parent) {
         List<ReflectSubscriber<?>> cache = REFLECT_CACHE.get(parent);
-        if (cache == null) return;
+        if (cache == null) {
+            return;
+        }
 
         for (ReflectSubscriber<?> subscriber : cache) {
             unsubscribe(subscriber.getSubscriber());
