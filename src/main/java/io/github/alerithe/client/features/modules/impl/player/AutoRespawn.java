@@ -13,7 +13,9 @@ public class AutoRespawn extends Module {
 
     @Subscribe
     public void onScreenOpen(EventGameScreen.Open event) {
-        if (!(event.getScreen() instanceof GuiGameOver)) return;
+        if (!(event.getScreen() instanceof GuiGameOver)) {
+            return;
+        }
 
         // TODO: Add configurable delay?
         EntityHelper.getUser().respawnPlayer();

@@ -73,6 +73,9 @@ public class Tracers extends Module {
         float centerX = windowWidth / 2f;
         float centerY = windowHeight / 2f;
 
+        GL11.glEnable(GL11.GL_LINE_SMOOTH);
+        GL11.glLineWidth(2f);
+
         for (Map.Entry<Entity, float[]> projection : projections.entrySet()) {
             Entity entity = projection.getKey();
             float[] position = projection.getValue();
@@ -86,11 +89,10 @@ public class Tracers extends Module {
                 y = windowHeight - y;
             }
 
-            GL11.glEnable(GL11.GL_LINE_SMOOTH);
-            GL11.glLineWidth(2f);
             VisualHelper.MC_GFX.drawLine(centerX, centerY, x, y, EntityHelper.getColor(entity));
-            GL11.glDisable(GL11.GL_LINE_SMOOTH);
         }
+
+        GL11.glDisable(GL11.GL_LINE_SMOOTH);
     }
 
     private boolean qualifies(Entity entity) {

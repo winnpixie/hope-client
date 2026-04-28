@@ -8,9 +8,6 @@ import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.util.Session;
 import org.lwjgl.input.Keyboard;
 
-import java.awt.*;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
 import java.net.URI;
 import java.util.UUID;
@@ -28,20 +25,30 @@ public class GuiDirectLogin extends GuiScreen {
         if (mc.getSession().getToken().isEmpty()) {
             message = "[Cracked] " + message;
         }
+
         username = new GuiTextField(0, fontRenderer, width / 2 - 100, height / 2 - 30, 200, 20);
         username.setMaxStringLength(32767);
         username.setFocused(true);
+
         password = new GuiPasswordField(1, fontRenderer, width / 2 - 100, height / 2 + 10, 200, 20);
         password.setMaxStringLength(32767);
+
         buttonList.add(new GuiButton(0, width / 2 - 100, height / 2 + 35, 98, 20, "Log In"));
-        buttonList.add(modeButton = new GuiButton(1, width / 2 + 2, height / 2 + 35, 98, 20, "Microsoft OAuth"));
+
+        modeButton = new GuiButton(1, width / 2 + 2, height / 2 + 35, 98, 20, "Microsoft OAuth");
+        buttonList.add(modeButton);
+
         buttonList.add(new GuiButton(2, width / 2 - 100, height / 2 + 56, 98, 20, "Set Cracked"));
         buttonList.add(new GuiButton(3, width / 2 + 2, height / 2 + 56, 98, 20, "Import Clipboard"));
-        buttonList.add(new GuiButton(4, width / 2 - 100, height / 2 + 77, "Exit"));
+        buttonList.add(new GuiButton(99, width / 2 - 100, height / 2 + 77, "Exit"));
     }
 
     @Override
     protected void actionPerformed(GuiButton button) throws IOException {
+        if (!button.enabled) {
+            return;
+        }
+
         switch (button.id) {
             case 0:
                 logIn();
@@ -70,25 +77,23 @@ public class GuiDirectLogin extends GuiScreen {
                 }
 
                 String user = username.getText();
-                if (user.length() > 16) user = user.substring(0, 16);
+                if (user.length() > 16) {
+                    user = user.substring(0, 16);
+                }
 
                 mc.setSession(new Session(user, UUID.randomUUID().toString(), "", "legacy"));
                 message = String.format("[Cracked] \247eCurrent User : \247r%s", mc.getSession().getUsername());
                 break;
             case 3:
-                try {
-                    String text = (String) Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor);
-                    String[] data = text.split(":", 2);
+                String text = getClipboardString();
+                String[] data = text.split(":", 2);
 
-                    username.setText(data[0]);
-                    if (data.length > 1) {
-                        password.setText(data[1]);
-                    }
-                } catch (UnsupportedFlavorException e) {
-                    message = String.format("\247e%s", e.getMessage());
+                username.setText(data[0]);
+                if (data.length > 1) {
+                    password.setText(data[1]);
                 }
                 break;
-            case 4:
+            case 99:
                 mc.displayGuiScreen(new GuiMainMenu());
                 break;
             default:
@@ -153,12 +158,7 @@ public class GuiDirectLogin extends GuiScreen {
                         session = SessionHelper.logInWithMicrosoft(deviceCode -> {
                             message = String.format("\247eVISIT: \247f%s", deviceCode.getDirectVerificationUri());
 
-                            try {
-                                Desktop.getDesktop().browse(
-                                        URI.create(deviceCode.getDirectVerificationUri()));
-                            } catch (IOException ioe) {
-                                message = String.format("\247e%s", ioe.getMessage());
-                            }
+                            openWebLink(URI.create(deviceCode.getDirectVerificationUri()));
                         });
                         break;
                     case 1: // Microsoft Credentials

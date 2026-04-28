@@ -30,8 +30,16 @@ public class Box extends StorageESPMode {
     public void onWorldDraw(EventDraw.World event) {
         tiles.clear();
         for (TileEntity entity : WorldHelper.getWorld().loadedTileEntityList) {
-            if (module.qualifies(entity)) tiles.add(entity);
+            if (module.qualifies(entity)) {
+                tiles.add(entity);
+            }
         }
+
+        GlStateManager.disableDepth();
+        GlStateManager.disableLighting();
+
+        GL11.glEnable(GL11.GL_LINE_SMOOTH);
+        GL11.glLineWidth(2f);
 
         for (TileEntity tile : tiles) {
             AxisAlignedBB aabb = tile.getBlockType().getSelectedBoundingBox(tile.getWorld(), tile.getPos());
@@ -60,18 +68,14 @@ public class Box extends StorageESPMode {
                     -GameHelper.getGame().getRenderManager().viewerPosY,
                     -GameHelper.getGame().getRenderManager().viewerPosZ);
 
-            GlStateManager.disableDepth();
-            GlStateManager.disableLighting();
-
-            GL11.glEnable(GL11.GL_LINE_SMOOTH);
-            GL11.glLineWidth(2f);
             VisualHelper.MC_GFX.drawPrism(aabb.minX, aabb.minY, aabb.minZ,
                     aabb.maxX, aabb.maxY, aabb.maxZ,
                     module.getTileColor(tile));
-            GL11.glDisable(GL11.GL_LINE_SMOOTH);
-
-            GlStateManager.enableLighting();
-            GlStateManager.enableDepth();
         }
+
+        GL11.glDisable(GL11.GL_LINE_SMOOTH);
+
+        GlStateManager.enableLighting();
+        GlStateManager.enableDepth();
     }
 }

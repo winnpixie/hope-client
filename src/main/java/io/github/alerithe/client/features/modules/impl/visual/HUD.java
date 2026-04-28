@@ -27,7 +27,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.stream.Collectors;
 
 public class HUD extends Module {
     private final BooleanProperty frameRate = new BooleanProperty("FrameRate", new String[]{"fps"}, true);
@@ -48,8 +47,8 @@ public class HUD extends Module {
 
         return -VisualHelper.HELVETICA.getStringWidth(text);
     });
-    private final List<Long> leftClickTimes = new CopyOnWriteArrayList<>();
-    private final List<Long> rightTickTimes = new CopyOnWriteArrayList<>();
+    private final List<Long> leftClickTimes = new ArrayList<>();
+    private final List<Long> rightTickTimes = new ArrayList<>();
     private final List<Long> serverTickTimes = new CopyOnWriteArrayList<>();
 
     private boolean waitingForPong;
@@ -153,9 +152,18 @@ public class HUD extends Module {
             return;
         }
 
+        List<Module> enabled = new ArrayList<>();
+        for (Module module : Client.MODULE_MANAGER.getElements()) {
+            if (!module.isEnabled()
+                    || !module.getVisibility().getValue()) {
+                continue;
+            }
+
+            enabled.add(module);
+        }
+        enabled.sort(moduleComparator);
+
         float y = 2;
-        List<Module> enabled = Client.MODULE_MANAGER.getElements().stream().filter(Module::isEnabled)
-                .filter(module -> !module.getVisibility().getValue()).sorted(moduleComparator).collect(Collectors.toList());
         for (Module module : enabled) {
             float textWidth = VisualHelper.HELVETICA.getStringWidth(module.getName());
             float x = display.getScaledWidth() - textWidth;
@@ -208,9 +216,10 @@ public class HUD extends Module {
             return;
         }
 
+        List<PotionEffect> effects = new ArrayList<>(EntityHelper.getUser().getActivePotionEffects());
+        effects.sort(potionComparator);
+
         float y = getLowerOffset();
-        List<PotionEffect> effects = EntityHelper.getUser().getActivePotionEffects().stream().sorted(potionComparator)
-                .collect(Collectors.toList());
         for (PotionEffect effect : effects) {
             GlStateManager.color(1f, 1f, 1f, 1f);
             GlStateManager.disableLighting();
@@ -238,7 +247,9 @@ public class HUD extends Module {
 
     @Subscribe
     private void onEndTick(EventTick.End event) {
-        if (!event.isInGame()) return;
+        if (!event.isInGame()) {
+            return;
+        }
 
         if (realPing.getValue()) {
             if (!waitingForPong) {
@@ -251,17 +262,23 @@ public class HUD extends Module {
 
         List<Long> oldClicks = new ArrayList<>();
         for (long ms : leftClickTimes) {
-            if (Stopwatch.getNow() - ms >= 1000) oldClicks.add(ms);
+            if (Stopwatch.getNow() - ms >= 1000) {
+                oldClicks.add(ms);
+            }
         }
         leftClickTimes.removeAll(oldClicks);
 
         oldClicks.clear();
         for (long ms : rightTickTimes) {
-            if (Stopwatch.getNow() - ms >= 1000) oldClicks.add(ms);
+            if (Stopwatch.getNow() - ms >= 1000) {
+                oldClicks.add(ms);
+            }
         }
         rightTickTimes.removeAll(oldClicks);
 
-        if (serverTickTimes.size() > 20) serverTickTimes.remove(0);
+        if (serverTickTimes.size() > 20) {
+            serverTickTimes.remove(0);
+        }
     }
 
     @Subscribe

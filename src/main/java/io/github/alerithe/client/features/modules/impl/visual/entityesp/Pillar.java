@@ -27,8 +27,16 @@ public class Pillar extends EntityESPMode {
     public void onWorldDraw(EventDraw.World event) {
         entities.clear();
         for (Entity entity : WorldHelper.getWorld().loadedEntityList) {
-            if (module.qualifies(entity)) entities.add(entity);
+            if (module.qualifies(entity)) {
+                entities.add(entity);
+            }
         }
+
+        GlStateManager.disableDepth();
+        GlStateManager.disableLighting();
+
+        GL11.glEnable(GL11.GL_LINE_SMOOTH);
+        GL11.glLineWidth(2f);
 
         for (Entity entity : entities) {
             double x = MathHelper.lerpd(entity.prevPosX, entity.posX, event.getPartialTicks())
@@ -38,8 +46,6 @@ public class Pillar extends EntityESPMode {
             double z = MathHelper.lerpd(entity.prevPosZ, entity.posZ, event.getPartialTicks())
                     - GameHelper.getGame().getRenderManager().viewerPosZ;
 
-            GlStateManager.disableDepth();
-            GlStateManager.disableLighting();
 
             GlStateManager.pushMatrix();
             GlStateManager.translate(x, y, z);
@@ -50,17 +56,16 @@ public class Pillar extends EntityESPMode {
             AxisAlignedBB aabb = new AxisAlignedBB(x - entity.width / 2d, y, z - entity.width / 2d,
                     x + entity.width / 2d, y + entity.height + 0.2, z + entity.width / 2d);
 
-            GL11.glEnable(GL11.GL_LINE_SMOOTH);
-            GL11.glLineWidth(2f);
             VisualHelper.MC_GFX.drawPrism(aabb.minX, aabb.minY, aabb.minZ,
                     aabb.maxX, aabb.maxY, aabb.maxZ,
                     EntityHelper.getColor(entity));
-            GL11.glDisable(GL11.GL_LINE_SMOOTH);
 
             GlStateManager.popMatrix();
-
-            GlStateManager.enableLighting();
-            GlStateManager.enableDepth();
         }
+
+        GL11.glDisable(GL11.GL_LINE_SMOOTH);
+
+        GlStateManager.enableLighting();
+        GlStateManager.enableDepth();
     }
 }
