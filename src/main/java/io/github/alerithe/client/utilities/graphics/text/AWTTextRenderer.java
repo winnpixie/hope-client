@@ -3,6 +3,7 @@ package io.github.alerithe.client.utilities.graphics.text;
 import io.github.alerithe.client.utilities.MathHelper;
 import net.minecraft.client.renderer.GlStateManager;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL15;
 
 import java.awt.*;
 import java.awt.font.LineMetrics;
@@ -15,15 +16,36 @@ import java.util.Objects;
 import java.util.WeakHashMap;
 
 public class AWTTextRenderer implements TextRenderer {
+    private static final int TEX_COLOR_BUFFER = GL15.glGenBuffers();
+
     private static final GraphicsConfiguration DISPLAY;
     private static final BufferedImage TEMPLATE;
 
+    private final ByteBuffer vertexBuffer = ByteBuffer.allocateDirect(4 * 2 * 4)
+            .order(ByteOrder.nativeOrder());
     private final Map<Integer, BakedImage> bakery = new WeakHashMap<>();
 
     private final Font font;
     private final Graphics2D context;
 
     static {
+        ByteBuffer texColorBuffer = ByteBuffer.allocateDirect(4 * 2 * 4 + (4 * 4))
+                .order(ByteOrder.nativeOrder());
+        texColorBuffer
+                .putFloat(0f).putFloat(0f)
+                .put((byte) 255).put((byte) 255).put((byte) 255).put((byte) 255)
+                .putFloat(0f).putFloat(1f)
+                .put((byte) 255).put((byte) 255).put((byte) 255).put((byte) 255)
+                .putFloat(1f).putFloat(1f)
+                .put((byte) 255).put((byte) 255).put((byte) 255).put((byte) 255)
+                .putFloat(1f).putFloat(0f)
+                .put((byte) 255).put((byte) 255).put((byte) 255).put((byte) 255);
+        texColorBuffer.flip();
+
+        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, TEX_COLOR_BUFFER);
+        GL15.glBufferData(GL15.GL_ARRAY_BUFFER, texColorBuffer, GL15.GL_STATIC_DRAW);
+        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
+
         DISPLAY = GraphicsEnvironment.getLocalGraphicsEnvironment()
                 .getDefaultScreenDevice()
                 .getDefaultConfiguration();
@@ -57,22 +79,37 @@ public class AWTTextRenderer implements TextRenderer {
         GlStateManager.enableAlpha();
         GlStateManager.enableBlend();
         GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
-        GlStateManager.color(1f, 1f, 1f, 1f);
 
         GlStateManager.bindTexture(baked.textureId);
         // downscale = free AA :)
         float width = baked.width / 2f;
         float height = baked.height / 2f;
-        GL11.glBegin(GL11.GL_TRIANGLE_STRIP);
-        GL11.glTexCoord2f(0f, 0f);
-        GL11.glVertex2f(x, y);
-        GL11.glTexCoord2f(0f, 1f);
-        GL11.glVertex2f(x, y + height);
-        GL11.glTexCoord2f(1f, 0f);
-        GL11.glVertex2f(x + width, y);
-        GL11.glTexCoord2f(1f, 1f);
-        GL11.glVertex2f(x + width, y + height);
-        GL11.glEnd();
+
+        vertexBuffer
+                .putFloat(x).putFloat(y)
+                .putFloat(x).putFloat(y + height)
+                .putFloat(x + width).putFloat(y + height)
+                .putFloat(x + width).putFloat(y);
+
+        GL11.glEnableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
+        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, TEX_COLOR_BUFFER);
+        GL11.glTexCoordPointer(2, GL11.GL_FLOAT, 12, 0L);
+
+        GL11.glEnableClientState(GL11.GL_COLOR_ARRAY);
+        GL11.glColorPointer(4, GL11.GL_UNSIGNED_BYTE, 12, 8L);
+
+        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
+
+        vertexBuffer.flip();
+        GL11.glEnableClientState(GL11.GL_VERTEX_ARRAY);
+        GL11.glVertexPointer(2, GL11.GL_FLOAT, 0, vertexBuffer);
+        vertexBuffer.clear();
+
+        GL11.glDrawArrays(GL11.GL_TRIANGLE_FAN, 0, 4);
+
+        GL11.glDisableClientState(GL11.GL_VERTEX_ARRAY);
+        GL11.glDisableClientState(GL11.GL_COLOR_ARRAY);
+        GL11.glDisableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
 
         GlStateManager.disableBlend();
     }

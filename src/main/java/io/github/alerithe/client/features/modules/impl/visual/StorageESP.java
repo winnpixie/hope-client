@@ -8,6 +8,7 @@ import io.github.alerithe.client.features.modules.impl.visual.storageesp.Rectang
 import io.github.alerithe.client.features.modules.impl.visual.storageesp.StorageESPMode;
 import io.github.alerithe.client.features.properties.impl.BooleanProperty;
 import io.github.alerithe.client.features.properties.impl.ObjectProperty;
+import io.github.alerithe.client.utilities.GameHelper;
 import io.github.alerithe.client.utilities.graphics.VisualHelper;
 import net.minecraft.block.BlockJukebox;
 import net.minecraft.tileentity.*;
@@ -71,6 +72,34 @@ public class StorageESP extends Module {
         }
 
         return included;
+    }
+
+    public AxisAlignedBB getTileBoundingBox(TileEntity tile) {
+        AxisAlignedBB aabb = tile.getBlockType().getSelectedBoundingBox(tile.getWorld(), tile.getPos());
+
+        if (tile instanceof TileEntityChest) {
+            TileEntityChest chest = (TileEntityChest) tile;
+            TileEntityChest adjacent = null;
+
+            if (chest.adjacentChestXPos != null) {
+                adjacent = chest.adjacentChestXPos;
+            } else if (chest.adjacentChestXNeg != null) {
+                adjacent = chest.adjacentChestXNeg;
+            } else if (chest.adjacentChestZPos != null) {
+                adjacent = chest.adjacentChestZPos;
+            } else if (chest.adjacentChestZNeg != null) {
+                adjacent = chest.adjacentChestZNeg;
+            }
+
+            if (adjacent != null) {
+                AxisAlignedBB aabbAdjacent = adjacent.getBlockType().getSelectedBoundingBox(adjacent.getWorld(), adjacent.getPos());
+                aabb = aabb.union(aabbAdjacent);
+            }
+        }
+
+        return aabb.offset(-GameHelper.getGame().getRenderManager().viewerPosX,
+                -GameHelper.getGame().getRenderManager().viewerPosY,
+                -GameHelper.getGame().getRenderManager().viewerPosZ);
     }
 
     public int getTileColor(TileEntity tile) {

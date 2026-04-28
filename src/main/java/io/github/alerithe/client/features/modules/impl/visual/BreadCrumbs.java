@@ -12,6 +12,8 @@ import net.minecraft.client.renderer.GlStateManager;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,7 +37,9 @@ public class BreadCrumbs extends Module {
 
     @Subscribe
     private void onPostUpdate(EventUpdate.Post event) {
-        if (!EntityHelper.getUser().hasMoved()) return;
+        if (!EntityHelper.getUser().hasMoved()) {
+            return;
+        }
 
         positions.add(new double[]{
                 EntityHelper.getUser().posX, EntityHelper.getUser().posY + 0.5, EntityHelper.getUser().posZ,
@@ -44,7 +48,8 @@ public class BreadCrumbs extends Module {
 
     @Subscribe
     public void onWorldDraw(EventDraw.World event) {
-        if (positions.size() < 2) {
+        int count = positions.size();
+        if (count < 2) {
             return;
         }
 
@@ -63,20 +68,43 @@ public class BreadCrumbs extends Module {
 
         GL11.glEnable(GL11.GL_LINE_SMOOTH);
         GL11.glLineWidth(2f);
-        GL11.glBegin(GL11.GL_LINE_STRIP);
+
+        ByteBuffer buffer = ByteBuffer.allocateDirect((4 * 3 * count) + (4 * count))
+                .order(ByteOrder.nativeOrder());
+
         for (double[] position : positions) {
             int color = Color.HSBtoRGB((hue % 360) / 360f, 1f, 1f);
             hue = (hue + 2f) % 360;
 
-            float[] channels = VisualHelper.toRGBAFloatArray(color, false);
-            GL11.glColor3d(channels[0], channels[1], channels[2]);
+            int[] channels = VisualHelper.toRGBAIntArray(color, false);
+            double x = position[0] - GameHelper.getGame().getRenderManager().viewerPosX;
+            double y = position[1] - GameHelper.getGame().getRenderManager().viewerPosY;
+            double z = position[2] - GameHelper.getGame().getRenderManager().viewerPosZ;
 
-            GL11.glVertex3d(
-                    position[0] - GameHelper.getGame().getRenderManager().viewerPosX,
-                    position[1] - GameHelper.getGame().getRenderManager().viewerPosY,
-                    position[2] - GameHelper.getGame().getRenderManager().viewerPosZ);
+            // Color
+            buffer
+                    .put((byte) channels[0])
+                    .put((byte) channels[1])
+                    .put((byte) channels[2])
+                    .put((byte) channels[3]);
+
+            // Vertex
+            buffer
+                    .putFloat((float) x)
+                    .putFloat((float) y)
+                    .putFloat((float) z);
         }
-        GL11.glEnd();
+
+        GL11.glEnableClientState(GL11.GL_COLOR_ARRAY);
+        GL11.glEnableClientState(GL11.GL_VERTEX_ARRAY);
+
+        buffer.flip();
+        GL11.glInterleavedArrays(GL11.GL_C4UB_V3F, 16, buffer);
+
+        GL11.glDrawArrays(GL11.GL_LINE_STRIP, 0, count);
+
+        GL11.glDisableClientState(GL11.GL_VERTEX_ARRAY);
+        GL11.glDisableClientState(GL11.GL_COLOR_ARRAY);
 
         GL11.glDisable(GL11.GL_LINE_SMOOTH);
         GlStateManager.disableBlend();

@@ -6,7 +6,6 @@ import io.github.alerithe.client.features.plugins.Plugin;
 import io.github.alerithe.client.utilities.GameHelper;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class CommandPlugins extends Command {
     public CommandPlugins() {
@@ -16,9 +15,22 @@ public class CommandPlugins extends Command {
     @Override
     public void execute(String[] args) {
         List<Plugin> plugins = Client.PLUGIN_MANAGER.getElements();
-        GameHelper.printChatMessage(String.format("\247ePlugins (%d)", plugins.size()));
-        GameHelper.printChatMessage(plugins.stream()
-                .map(plugin -> String.format("\247f%s \2477v%s", plugin.getName(), plugin.getManifest().getVersion()))
-                .collect(Collectors.joining("\2478, ")));
+        int pluginCount = plugins.size();
+        GameHelper.printChatMessage(String.format("\247ePlugins (%d)", pluginCount));
+
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < pluginCount; i++) {
+            Plugin plugin = plugins.get(i);
+            builder.append("\247f")
+                    .append(plugin.getName())
+                    .append(" \2477v")
+                    .append(plugin.getManifest().getVersion());
+
+            if (i + 1 < pluginCount) {
+                builder.append("\2478, ");
+            }
+        }
+
+        GameHelper.printChatMessage(builder.toString());
     }
 }

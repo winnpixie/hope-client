@@ -2,12 +2,10 @@ package io.github.alerithe.client.features.modules.impl.visual.storageesp;
 
 import io.github.alerithe.client.events.game.EventDraw;
 import io.github.alerithe.client.features.modules.impl.visual.StorageESP;
-import io.github.alerithe.client.utilities.GameHelper;
 import io.github.alerithe.client.utilities.WorldHelper;
 import io.github.alerithe.client.utilities.graphics.VisualHelper;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
 import org.lwjgl.opengl.GL11;
@@ -42,31 +40,7 @@ public class Box extends StorageESPMode {
         GL11.glLineWidth(2f);
 
         for (TileEntity tile : tiles) {
-            AxisAlignedBB aabb = tile.getBlockType().getSelectedBoundingBox(tile.getWorld(), tile.getPos());
-
-            if (tile instanceof TileEntityChest) {
-                TileEntityChest chest = (TileEntityChest) tile;
-                TileEntityChest adjacent = null;
-
-                if (chest.adjacentChestXPos != null) {
-                    adjacent = chest.adjacentChestXPos;
-                } else if (chest.adjacentChestXNeg != null) {
-                    adjacent = chest.adjacentChestXNeg;
-                } else if (chest.adjacentChestZPos != null) {
-                    adjacent = chest.adjacentChestZPos;
-                } else if (chest.adjacentChestZNeg != null) {
-                    adjacent = chest.adjacentChestZNeg;
-                }
-
-                if (adjacent != null) {
-                    AxisAlignedBB aabbAdjacent = tile.getBlockType().getSelectedBoundingBox(adjacent.getWorld(), adjacent.getPos());
-                    aabb = aabb.union(aabbAdjacent);
-                }
-            }
-
-            aabb = aabb.offset(-GameHelper.getGame().getRenderManager().viewerPosX,
-                    -GameHelper.getGame().getRenderManager().viewerPosY,
-                    -GameHelper.getGame().getRenderManager().viewerPosZ);
+            AxisAlignedBB aabb = module.getTileBoundingBox(tile);
 
             VisualHelper.MC_GFX.drawPrism(aabb.minX, aabb.minY, aabb.minZ,
                     aabb.maxX, aabb.maxY, aabb.maxZ,

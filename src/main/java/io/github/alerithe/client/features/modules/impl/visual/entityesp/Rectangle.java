@@ -35,8 +35,8 @@ public class Rectangle extends EntityESPMode {
                 continue;
             }
 
-            double[][] boundingBox = getBoundingBox(entity, event.getPartialTicks());
-            float[] projection = projectBoundingBox(boundingBox);
+            double[][] vertices = getBoundingBoxVertices(entity, event.getPartialTicks());
+            float[] projection = projectBoundingBox(vertices);
 
             projections.put(entity, projection);
         }
@@ -46,15 +46,17 @@ public class Rectangle extends EntityESPMode {
     public void onOverlayDraw(EventDraw.Overlay event) {
         for (Map.Entry<Entity, float[]> projection : projections.entrySet()) {
             Entity entity = projection.getKey();
-            float[] position = projection.getValue();
+            float[] bounds = projection.getValue();
 
-            float x = position[0];
-            float y = position[1];
-            float width = position[2] - position[0];
-            float height = position[3] - position[1];
+            float x = bounds[0];
+            float y = bounds[1];
+            float width = bounds[2] - bounds[0];
+            float height = bounds[3] - bounds[1];
 
-            VisualHelper.MC_GFX.drawBorderedSquare(x + 0.5f, y + 0.5f, width - 1f, height - 1f, 1.5f, 0x00000000, 0xFF000000);
-            VisualHelper.MC_GFX.drawBorderedSquare(x, y, width, height, 0.5f, 0x00000000,
+            VisualHelper.MC_GFX.drawBorderedSquare(x + 0.5f, y + 0.5f, width - 1f, height - 1f, 1.5f,
+                    0x00000000, 0xFF000000);
+            VisualHelper.MC_GFX.drawBorderedSquare(x, y, width, height, 0.5f,
+                    0x00000000,
                     Client.FRIEND_MANAGER.find(entity.getName()) == null ? 0xFFFFFFFF : 0xFF00FFFF);
 
             if (module.showNames.getValue()) {
@@ -67,7 +69,7 @@ public class Rectangle extends EntityESPMode {
         }
     }
 
-    private double[][] getBoundingBox(Entity entity, float partialTicks) {
+    private double[][] getBoundingBoxVertices(Entity entity, float partialTicks) {
         double x = (MathHelper.lerpd(entity.prevPosX, entity.posX, partialTicks)
                 - GameHelper.getGame().getRenderManager().viewerPosX);
         double y = (MathHelper.lerpd(entity.prevPosY, entity.posY, partialTicks)
@@ -90,24 +92,24 @@ public class Rectangle extends EntityESPMode {
         };
     }
 
-    private float[] projectBoundingBox(double[][] boundingBox) {
-        float[] position = new float[]{Float.MAX_VALUE, Float.MAX_VALUE, -1, -1};
+    private float[] projectBoundingBox(double[][] vertices) {
+        float[] bounds = new float[]{Float.MAX_VALUE, Float.MAX_VALUE, -1, -1};
 
-        for (double[] vector : boundingBox) {
-            float[] projection = VisualHelper.project((float) vector[0], (float) vector[1], (float) vector[2]);
+        for (double[] vertex : vertices) {
+            float[] projection = VisualHelper.project((float) vertex[0], (float) vertex[1], (float) vertex[2]);
             if (projection.length == 0
                     || projection[2] < 0f
                     || projection[2] >= 1f) {
                 continue;
             }
 
-            position[0] = MathHelper.min(position[0], projection[0]);
-            position[1] = MathHelper.min(position[1], projection[1]);
-            position[2] = MathHelper.max(position[2], projection[0]);
-            position[3] = MathHelper.max(position[3], projection[1]);
+            bounds[0] = MathHelper.min(bounds[0], projection[0]);
+            bounds[1] = MathHelper.min(bounds[1], projection[1]);
+            bounds[2] = MathHelper.max(bounds[2], projection[0]);
+            bounds[3] = MathHelper.max(bounds[3], projection[1]);
         }
 
-        return position;
+        return bounds;
     }
 
     private void drawName(Entity entity, float x, float y, float width) {
