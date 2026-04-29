@@ -50,7 +50,7 @@ class ImageBakery {
 
                 if (shadow) {
                     Graphics2D shadowGraphics = (Graphics2D) graphics.create();
-                    shadowGraphics.setColor(brighten(shadowGraphics.getColor(), 0.1f));
+                    shadowGraphics.setColor(newBrightness(shadowGraphics.getColor(), 0.1f));
                     shadowGraphics.drawString(segment, x + 1f, y + 1f);
                     shadowGraphics.dispose();
                 }
@@ -67,7 +67,7 @@ class ImageBakery {
                 }
 
                 if (newColor != null) {
-                    graphics.setColor(withAlpha(newColor, originalColor.getAlpha()));
+                    graphics.setColor(newAlpha(newColor, originalColor.getAlpha()));
                 }
 
                 i++;
@@ -82,7 +82,7 @@ class ImageBakery {
 
             if (shadow) {
                 Graphics2D shadowGraphics = (Graphics2D) graphics.create();
-                shadowGraphics.setColor(brighten(shadowGraphics.getColor(), 0.1f));
+                shadowGraphics.setColor(newBrightness(shadowGraphics.getColor(), 0.1f));
                 shadowGraphics.drawString(segment, x + 1f, y + 1f);
                 shadowGraphics.dispose();
             }
@@ -95,11 +95,11 @@ class ImageBakery {
         return new BakedImage(image);
     }
 
-    private static Color withAlpha(Color color, int alpha) {
+    private static Color newAlpha(Color color, int alpha) {
         return new Color(color.getRed(), color.getGreen(), color.getBlue(), alpha);
     }
 
-    private static Color brighten(Color color, float brightness) {
+    private static Color newBrightness(Color color, float brightness) {
         return new Color(
                 (color.getRed() * brightness) / 255f,
                 (color.getGreen() * brightness) / 255f,
@@ -108,14 +108,14 @@ class ImageBakery {
         );
     }
 
-    private static int getStyle(char c, int originalStyle) {
+    private static int getStyle(char c, int original) {
         switch (c) {
             case 'l':
                 return Font.BOLD;
             case 'o':
                 return Font.ITALIC;
             case 'r':
-                return originalStyle;
+                return original;
             default:
                 return -1;
         }
@@ -125,37 +125,37 @@ class ImageBakery {
     private static Color getColor(char c, Color base) {
         switch (c) {
             case '0':
-                return Color.BLACK;
+                return AWTHelper.BLACK;
             case '1':
-                return Color.BLUE;
+                return AWTHelper.DARK_BLUE;
             case '2':
-                return Color.GREEN;
+                return AWTHelper.DARK_GREEN;
             case '3':
-                return Color.BLUE;
+                return AWTHelper.DARK_AQUA;
             case '4':
-                return Color.RED;
+                return AWTHelper.DARK_RED;
             case '5':
-                return Color.MAGENTA;
+                return AWTHelper.DARK_PURPLE;
             case '6':
-                return Color.ORANGE;
+                return AWTHelper.GOLD;
             case '7':
-                return Color.GRAY;
+                return AWTHelper.GRAY;
             case '8':
-                return Color.DARK_GRAY;
+                return AWTHelper.DARK_GRAY;
             case '9':
-                return Color.BLUE;
+                return AWTHelper.BLUE;
             case 'a':
-                return Color.GREEN;
+                return AWTHelper.GREEN;
             case 'b':
-                return Color.CYAN;
+                return AWTHelper.CYAN;
             case 'c':
-                return Color.RED;
+                return AWTHelper.RED;
             case 'd':
-                return Color.MAGENTA;
+                return AWTHelper.MAGENTA;
             case 'e':
-                return Color.YELLOW;
+                return AWTHelper.YELLOW;
             case 'f':
-                return Color.WHITE;
+                return AWTHelper.WHITE;
             case 'r':
                 return base;
             default:

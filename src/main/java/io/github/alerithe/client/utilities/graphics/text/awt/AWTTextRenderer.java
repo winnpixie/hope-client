@@ -2,20 +2,20 @@ package io.github.alerithe.client.utilities.graphics.text.awt;
 
 import io.github.alerithe.client.utilities.graphics.text.TextRenderer;
 import net.minecraft.client.renderer.GlStateManager;
+import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 
 import java.awt.*;
 import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
+import java.nio.FloatBuffer;
 import java.util.Map;
 import java.util.Objects;
 import java.util.WeakHashMap;
 
 public class AWTTextRenderer implements TextRenderer {
     private static final int TEX_COLOR_BUFFER = GL15.glGenBuffers();
-    private static final ByteBuffer VBO = ByteBuffer.allocateDirect(4 * 2 * 4) // V2F
-            .order(ByteOrder.nativeOrder());
+    private static final FloatBuffer VBO = BufferUtils.createFloatBuffer(2 * 4); // V2F
 
     private final Map<Integer, BakedImage> bakery = new WeakHashMap<>();
 
@@ -23,8 +23,7 @@ public class AWTTextRenderer implements TextRenderer {
     private final Graphics2D context;
 
     static {
-        ByteBuffer texColorBuffer = ByteBuffer.allocateDirect(((4 * 2) + 4) * 4) // T2F_C4UB
-                .order(ByteOrder.nativeOrder());
+        ByteBuffer texColorBuffer = BufferUtils.createByteBuffer(((4 * 2) + 4) * 4); // T2F_C4UB
         texColorBuffer
                 .putFloat(0f).putFloat(0f)
                 .put((byte) 255).put((byte) 255).put((byte) 255).put((byte) 255)
@@ -69,10 +68,10 @@ public class AWTTextRenderer implements TextRenderer {
         float height = baked.height / 2f;
 
         VBO
-                .putFloat(x).putFloat(y)
-                .putFloat(x).putFloat(y + height)
-                .putFloat(x + width).putFloat(y + height)
-                .putFloat(x + width).putFloat(y);
+                .put(x).put(y)
+                .put(x).put(y + height)
+                .put(x + width).put(y + height)
+                .put(x + width).put(y);
         VBO.flip();
 
         GL11.glEnableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
@@ -85,7 +84,7 @@ public class AWTTextRenderer implements TextRenderer {
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
 
         GL11.glEnableClientState(GL11.GL_VERTEX_ARRAY);
-        GL11.glVertexPointer(2, GL11.GL_FLOAT, 0, VBO);
+        GL11.glVertexPointer(2, 0, VBO);
         VBO.clear();
 
         GlStateManager.enableAlpha();

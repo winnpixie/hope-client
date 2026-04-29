@@ -9,11 +9,11 @@ import io.github.alerithe.client.utilities.EntityHelper;
 import io.github.alerithe.client.utilities.GameHelper;
 import io.github.alerithe.client.utilities.graphics.VisualHelper;
 import net.minecraft.client.renderer.GlStateManager;
+import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,9 +69,7 @@ public class BreadCrumbs extends Module {
         GL11.glEnable(GL11.GL_LINE_SMOOTH);
         GL11.glLineWidth(2f);
 
-        ByteBuffer vbo = ByteBuffer.allocateDirect(((4 * 3) + 4) * count)
-                .order(ByteOrder.nativeOrder());
-
+        ByteBuffer vbo = BufferUtils.createByteBuffer((4 + (4 * 3)) * count);
         for (double[] position : positions) {
             int color = Color.HSBtoRGB((hue % 360) / 360f, 1f, 1f);
             hue = (hue + 2f) % 360;

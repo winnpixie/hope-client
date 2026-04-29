@@ -1,22 +1,20 @@
 package io.github.alerithe.client.utilities.graphics.drawing;
 
+import net.minecraft.client.renderer.GlStateManager;
+import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL14;
 
 import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import java.nio.IntBuffer;
 
 public class BufferedDrawDevice implements DrawDevice {
-    private static final ByteBuffer VBO = ByteBuffer.allocateDirect((4 + (4 * 3)) * 8192) // C4UB_V3F
-            .order(ByteOrder.nativeOrder());
-    private static final IntBuffer INDICES = ByteBuffer.allocateDirect(4 * 8192)
-            .order(ByteOrder.nativeOrder()).asIntBuffer();
-    private static final IntBuffer COUNTS = ByteBuffer.allocateDirect(4 * 8192)
-            .order(ByteOrder.nativeOrder()).asIntBuffer();
+    private static final ByteBuffer VBO = BufferUtils.createByteBuffer((4 + (4 * 3)) * 65536); // C4UB_V3F
+    private static final IntBuffer INDICES = BufferUtils.createIntBuffer(65536);
+    private static final IntBuffer COUNTS = BufferUtils.createIntBuffer(65536);
 
+    private int mode;
     private int index;
-    private int count;
 
     @Override
     public void drawRect(double left, double top, double right, double bottom, int color) {
@@ -37,7 +35,7 @@ public class BufferedDrawDevice implements DrawDevice {
         color(r, g, b, a);
         position(right, top, 0.0);
 
-        push();
+        push(4);
     }
 
     @Override
@@ -55,7 +53,7 @@ public class BufferedDrawDevice implements DrawDevice {
         color(r, g, b, a);
         position(endX, endY, endZ);
 
-        push();
+        push(2);
     }
 
     private void color(int r, int g, int b, int a) {
@@ -73,17 +71,17 @@ public class BufferedDrawDevice implements DrawDevice {
                 .putFloat((float) z);
     }
 
-    private void push() {
+    private void push(int count) {
         INDICES.put((index++) * count);
         COUNTS.put(count);
     }
 
-    public void begin(int vertexCount) {
+    public void begin(int mode) {
+        this.mode = mode;
         this.index = 0;
-        this.count = vertexCount;
     }
 
-    public void end(int mode) {
+    public void end() {
         GL11.glEnableClientState(GL11.GL_COLOR_ARRAY);
         GL11.glEnableClientState(GL11.GL_VERTEX_ARRAY);
 
@@ -91,9 +89,9 @@ public class BufferedDrawDevice implements DrawDevice {
         GL11.glInterleavedArrays(GL11.GL_C4UB_V3F, 16, VBO);
         VBO.clear();
 
-        GL11.glDisable(GL11.GL_TEXTURE_2D);
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        GlStateManager.disableTexture2D();
+        GlStateManager.enableBlend();
+        GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
 
         INDICES.flip();
         COUNTS.flip();
@@ -101,8 +99,8 @@ public class BufferedDrawDevice implements DrawDevice {
         INDICES.clear();
         COUNTS.clear();
 
-        GL11.glDisable(GL11.GL_BLEND);
-        GL11.glEnable(GL11.GL_TEXTURE_2D);
+        GlStateManager.disableBlend();
+        GlStateManager.enableTexture2D();
 
         GL11.glDisableClientState(GL11.GL_COLOR_ARRAY);
         GL11.glDisableClientState(GL11.GL_VERTEX_ARRAY);

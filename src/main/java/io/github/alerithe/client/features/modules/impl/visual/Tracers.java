@@ -76,7 +76,8 @@ public class Tracers extends Module {
         GL11.glEnable(GL11.GL_LINE_SMOOTH);
         GL11.glLineWidth(2f);
 
-        VisualHelper.GFX_BUFFERED.begin(2);
+        VisualHelper.GFX_BUFFERED.begin(GL11.GL_LINES);
+
         for (Map.Entry<Entity, float[]> projection : projections.entrySet()) {
             Entity entity = projection.getKey();
             float[] position = projection.getValue();
@@ -92,7 +93,9 @@ public class Tracers extends Module {
 
             VisualHelper.GFX_BUFFERED.drawLine(centerX, centerY, x, y, EntityHelper.getColor(entity));
         }
-        VisualHelper.GFX_BUFFERED.end(GL11.GL_LINES);
+
+        VisualHelper.GFX_BUFFERED.end();
+
         GL11.glDisable(GL11.GL_LINE_SMOOTH);
     }
 

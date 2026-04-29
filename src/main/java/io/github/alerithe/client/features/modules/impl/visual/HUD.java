@@ -155,7 +155,7 @@ public class HUD extends Module {
         List<Module> enabled = new ArrayList<>();
         for (Module module : Client.MODULE_MANAGER.getElements()) {
             if (!module.isEnabled()
-                    || !module.getVisibility().getValue()) {
+                    || module.getVisibility().getValue()) {
                 continue;
             }
 
@@ -168,10 +168,8 @@ public class HUD extends Module {
             float textWidth = VisualHelper.TXT.getStringWidth(module.getName());
             float x = display.getScaledWidth() - textWidth;
 
-            VisualHelper.GFX.drawSquare(x - 4, y - 2, textWidth + 4, VisualHelper.TXT.getFontHeight() + 4,
-                    Client.ACCENT_COLOR);
             VisualHelper.GFX.drawSquare(x - 3, y - 2, textWidth + 3, VisualHelper.TXT.getFontHeight() + 3,
-                    0xFF111111);
+                    0x42000000);
 
             VisualHelper.TXT.drawStringWithShadow(module.getName(), x - 1, y, -1);
             y += VisualHelper.TXT.getFontHeight() + 3;
@@ -220,11 +218,10 @@ public class HUD extends Module {
         effects.sort(potionComparator);
 
         float y = getLowerOffset();
-        for (PotionEffect effect : effects) {
-            GlStateManager.color(1f, 1f, 1f, 1f);
-            GlStateManager.disableLighting();
-            Potion potion = Potion.potionTypes[effect.getPotionID()];
 
+        GlStateManager.disableLighting();
+        for (PotionEffect effect : effects) {
+            Potion potion = Potion.potionTypes[effect.getPotionID()];
             String label = formatPotionEffect(effect);
 
             GameHelper.getGame().getTextureManager().bindTexture(GuiContainer.inventoryBackground);
@@ -234,7 +231,7 @@ public class HUD extends Module {
 
             VisualHelper.TXT.drawStringWithShadow(label,
                     display.getScaledWidth() - VisualHelper.TXT.getStringWidth(label) - 1f,
-                    display.getScaledHeight() - y, potion.getLiquidColor());
+                    display.getScaledHeight() - y, potion.getLiquidColor() | 0xFF000000);
 
             y += 18f;
         }

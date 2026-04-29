@@ -20,6 +20,8 @@ public class StorageESP extends Module {
     private final BooleanProperty normalChests = new BooleanProperty("NormalChests", new String[]{"chests"}, true);
     private final BooleanProperty trappedChests = new BooleanProperty("TrappedChests", new String[]{"traps"}, true);
     private final BooleanProperty enderChests = new BooleanProperty("EnderChests", new String[]{"ender"}, true);
+    private final BooleanProperty hoppers = new BooleanProperty("Hoppers", new String[]{"hopper"}, true);
+    private final BooleanProperty brewingStands = new BooleanProperty("BrewingStands", new String[]{"brewing"}, true);
     private final BooleanProperty furnaces = new BooleanProperty("Furnaces", new String[0], true);
     private final BooleanProperty droppers = new BooleanProperty("Droppers", new String[0], true);
     private final BooleanProperty dispensers = new BooleanProperty("Dispensers", new String[0], true);
@@ -32,6 +34,8 @@ public class StorageESP extends Module {
         getPropertyManager().add(normalChests);
         getPropertyManager().add(trappedChests);
         getPropertyManager().add(enderChests);
+        getPropertyManager().add(hoppers);
+        getPropertyManager().add(brewingStands);
         getPropertyManager().add(furnaces);
         getPropertyManager().add(droppers);
         getPropertyManager().add(dispensers);
@@ -59,6 +63,8 @@ public class StorageESP extends Module {
         }
 
         included |= (tile instanceof TileEntityEnderChest && enderChests.getValue())
+                || (tile instanceof TileEntityHopper && hoppers.getValue())
+                || (tile instanceof TileEntityBrewingStand && brewingStands.getValue())
                 || (tile instanceof TileEntityFurnace && furnaces.getValue())
                 || (tile instanceof TileEntityDropper && droppers.getValue())
                 || (tile instanceof TileEntityDispenser && dispensers.getValue())
@@ -105,15 +111,40 @@ public class StorageESP extends Module {
     public int getTileColor(TileEntity tile) {
         if (tile instanceof TileEntityChest) {
             TileEntityChest chest = (TileEntityChest) tile;
+            if (chest.getChestType() == 0) {
+                return 0xFFFFFF00; // Normal
+            }
 
-            return chest.getChestType() == 0 ? 0xFFFFFF00 : 0xFFF46607;
+            return 0xFFFF6700; // Trapped
         }
 
-        if (tile instanceof TileEntityEnderChest) return 0xFFFF00FF;
-        if (tile instanceof TileEntityFurnace) return 0xFF424242;
-        if (tile instanceof TileEntityDropper) return 0xFFAAAAAA;
-        if (tile instanceof TileEntityDispenser) return 0xFF696969;
-        if (tile instanceof BlockJukebox.TileEntityJukebox) return 0xFF0099FF;
+        if (tile instanceof TileEntityEnderChest) {
+            return 0xFFFF00FF;
+        }
+
+        if (tile instanceof TileEntityHopper) {
+            return 0xFFAAAAAA;
+        }
+
+        if (tile instanceof TileEntityBrewingStand) {
+            return 0xFF676900;
+        }
+
+        if (tile instanceof TileEntityFurnace) {
+            return 0xFF424242;
+        }
+
+        if (tile instanceof TileEntityDropper) {
+            return 0xFF676767;
+        }
+
+        if (tile instanceof TileEntityDispenser) {
+            return 0xFF696969;
+        }
+
+        if (tile instanceof BlockJukebox.TileEntityJukebox) {
+            return 0xFF0099FF;
+        }
 
         return 0xFFFFFFFF;
     }

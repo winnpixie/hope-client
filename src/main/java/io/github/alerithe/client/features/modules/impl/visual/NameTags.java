@@ -85,8 +85,8 @@ public class NameTags extends Module {
             String text = getText(entity);
             float width = VisualHelper.TXT.getStringWidth(text);
 
-            VisualHelper.GFX.drawBorderedSquare(x - (width / 2f) - 1f, y - 1f, width + 2f, VisualHelper.TXT.getFontHeight() + 1f,
-                    1f, 0x69000000, 0x69FFFFFF);
+            VisualHelper.GFX.drawBorderedSquare(x - (width / 2f) - 1f, y - 1f, width + 2f, VisualHelper.TXT.getFontHeight() + 2f,
+                    1f, 0x42000000, 0x42FFFFFF);
             VisualHelper.TXT.drawString(text, x - (width / 2f), y, 0xFFFFFFFF);
         }
     }

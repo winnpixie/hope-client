@@ -37,13 +37,11 @@ public class VisualHelper {
     private static final Frustum frustum = new Frustum();
 
     // Fonts
-    //public static final TextRenderer TXT = new MinecraftTextRenderer();
     public static final TextRenderer TXT = new AWTTextRenderer(new Font("Helvetica", Font.PLAIN, 18));
 
     // Graphics Device
     public static final DrawDevice GFX = new MinecraftDrawDevice();
     public static final BufferedDrawDevice GFX_BUFFERED = new BufferedDrawDevice();
-    //public static final GraphicsRenderer GFX = new ImmediateGraphicsRenderer();
 
     private VisualHelper() {
     }

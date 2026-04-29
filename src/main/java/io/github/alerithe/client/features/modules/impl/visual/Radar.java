@@ -55,9 +55,9 @@ public class Radar extends Module {
         float centerX = rX + (rWidth / 2f);
         float centerY = rY + (rHeight / 2f);
 
-        VisualHelper.GFX_BUFFERED.begin(4);
+        VisualHelper.GFX_BUFFERED.begin(GL11.GL_TRIANGLE_FAN);
 
-        VisualHelper.GFX_BUFFERED.drawBorderedSquare(rX, rY, rWidth, rHeight, 1f, 0xFF111111, 0xFF333333); // Background
+        VisualHelper.GFX_BUFFERED.drawSimpleBorderedSquare(rX, rY, rWidth, rHeight, 1f, 0xFF111111, 0xFF333333); // Background
         VisualHelper.GFX_BUFFERED.drawSquare(rX, centerY - 0.5f, rWidth, 1f, 0xFF333333); // Horizontal Bar
         VisualHelper.GFX_BUFFERED.drawSquare(centerX - 0.5f, rY, 1f, rHeight, 0xFF333333); // Vertical Bar
         VisualHelper.GFX_BUFFERED.drawSquare(centerX - 1f, centerY - 1f, 2, 2, 0xFFFFFFFF); // Player
@@ -93,7 +93,7 @@ public class Radar extends Module {
                     EntityHelper.getColor(entity));
         }
 
-        VisualHelper.GFX_BUFFERED.end(GL11.GL_TRIANGLE_FAN);
+        VisualHelper.GFX_BUFFERED.end();
     }
 
     private boolean qualifies(Entity entity) {

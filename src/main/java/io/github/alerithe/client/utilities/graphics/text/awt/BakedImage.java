@@ -1,10 +1,10 @@
 package io.github.alerithe.client.utilities.graphics.text.awt;
 
+import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.image.BufferedImage;
 import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 
 class BakedImage {
     final int textureId;
@@ -26,8 +26,7 @@ class BakedImage {
         int[] pixels = new int[width * height];
         image.getRGB(0, 0, width, height, pixels, 0, width);
 
-        ByteBuffer buffer = ByteBuffer.allocateDirect(4 * (width * height))
-                .order(ByteOrder.nativeOrder());
+        ByteBuffer buffer = BufferUtils.createByteBuffer(4 * (width * height));
         for (int iy = 0; iy < height; iy++) {
             for (int ix = 0; ix < width; ix++) {
                 int color = pixels[ix + iy * width];

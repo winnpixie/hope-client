@@ -1,5 +1,6 @@
 package io.github.alerithe.client.utilities.graphics.drawing;
 
+import net.minecraft.client.renderer.GlStateManager;
 import org.lwjgl.opengl.GL11;
 
 public class ImmediateDrawDevice implements DrawDevice {
@@ -13,11 +14,11 @@ public class ImmediateDrawDevice implements DrawDevice {
             return;
         }
 
-        GL11.glColor4f(r / 255f, g / 255f, b / 255f, a / 255f);
+        GlStateManager.color(r / 255f, g / 255f, b / 255f, a / 255f);
 
-        GL11.glDisable(GL11.GL_TEXTURE_2D);
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        GlStateManager.disableTexture2D();
+        GlStateManager.enableBlend();
+        GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
 
         GL11.glBegin(GL11.GL_TRIANGLE_FAN);
         GL11.glVertex2d(left, top);
@@ -26,8 +27,8 @@ public class ImmediateDrawDevice implements DrawDevice {
         GL11.glVertex2d(right, top);
         GL11.glEnd();
 
-        GL11.glDisable(GL11.GL_BLEND);
-        GL11.glEnable(GL11.GL_TEXTURE_2D);
+        GlStateManager.disableBlend();
+        GlStateManager.enableTexture2D();
     }
 
     @Override
@@ -40,11 +41,11 @@ public class ImmediateDrawDevice implements DrawDevice {
             return;
         }
 
-        GL11.glColor4f(r / 255f, g / 255f, b / 255f, a / 255f);
+        GlStateManager.color(r / 255f, g / 255f, b / 255f, a / 255f);
 
-        GL11.glDisable(GL11.GL_TEXTURE_2D);
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        GlStateManager.disableTexture2D();
+        GlStateManager.enableBlend();
+        GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
 
         // Bottom Square
         GL11.glBegin(GL11.GL_LINE_LOOP);
@@ -74,8 +75,8 @@ public class ImmediateDrawDevice implements DrawDevice {
         GL11.glVertex3d(startX, endY, endZ);
         GL11.glEnd();
 
-        GL11.glDisable(GL11.GL_BLEND);
-        GL11.glEnable(GL11.GL_TEXTURE_2D);
+        GlStateManager.disableBlend();
+        GlStateManager.enableTexture2D();
     }
 
     @Override
@@ -88,18 +89,18 @@ public class ImmediateDrawDevice implements DrawDevice {
             return;
         }
 
-        GL11.glColor4f(r / 255f, g / 255f, b / 255f, a / 255f);
+        GlStateManager.color(r / 255f, g / 255f, b / 255f, a / 255f);
 
-        GL11.glDisable(GL11.GL_TEXTURE_2D);
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        GlStateManager.disableTexture2D();
+        GlStateManager.enableBlend();
+        GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
 
         GL11.glBegin(GL11.GL_LINES);
         GL11.glVertex3d(startX, startY, startZ);
         GL11.glVertex3d(endX, endY, endZ);
         GL11.glEnd();
 
-        GL11.glDisable(GL11.GL_BLEND);
-        GL11.glEnable(GL11.GL_TEXTURE_2D);
+        GlStateManager.disableBlend();
+        GlStateManager.enableTexture2D();
     }
 }
