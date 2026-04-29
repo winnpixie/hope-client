@@ -42,7 +42,7 @@ public class Box extends StorageESPMode {
         for (TileEntity tile : tiles) {
             AxisAlignedBB aabb = module.getTileBoundingBox(tile);
 
-            VisualHelper.MC_GFX.drawPrism(aabb.minX, aabb.minY, aabb.minZ,
+            VisualHelper.GFX.drawPrism(aabb.minX, aabb.minY, aabb.minZ,
                     aabb.maxX, aabb.maxY, aabb.maxZ,
                     module.getTileColor(tile));
         }

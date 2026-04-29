@@ -83,11 +83,11 @@ public class NameTags extends Module {
             float y = position[1];
 
             String text = getText(entity);
-            float width = VisualHelper.HELVETICA.getStringWidth(text);
+            float width = VisualHelper.TXT.getStringWidth(text);
 
-            VisualHelper.MC_GFX.drawBorderedSquare(x - (width / 2f) - 1f, y - 1f, width + 2f, VisualHelper.HELVETICA.getFontHeight() + 1f,
+            VisualHelper.GFX.drawBorderedSquare(x - (width / 2f) - 1f, y - 1f, width + 2f, VisualHelper.TXT.getFontHeight() + 1f,
                     1f, 0x69000000, 0x69FFFFFF);
-            VisualHelper.HELVETICA.drawString(text, x - (width / 2f), y, 0xFFFFFFFF);
+            VisualHelper.TXT.drawString(text, x - (width / 2f), y, 0xFFFFFFFF);
         }
     }
 

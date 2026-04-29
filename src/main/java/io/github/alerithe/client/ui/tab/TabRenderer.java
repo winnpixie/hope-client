@@ -36,18 +36,18 @@ public class TabRenderer extends TabComponent {
     private float drawCategories(float xOffset) {
         float width = 0;
         for (Module.Type type : Module.Type.values()) {
-            width = MathHelper.max(width, VisualHelper.HELVETICA.getStringWidth(type.getLabel()) + 9);
+            width = MathHelper.max(width, VisualHelper.TXT.getStringWidth(type.getLabel()) + 9);
         }
 
         float x = xOffset + 1;
-        float y = VisualHelper.HELVETICA.getFontHeight() + 1f;
+        float y = VisualHelper.TXT.getFontHeight() + 1f;
         for (Module.Type type : Module.Type.values()) {
             boolean active = getContainer().getType() == type;
-            VisualHelper.MC_GFX.drawSquare(x, y, width, VisualHelper.HELVETICA.getFontHeight() + 3f,
+            VisualHelper.GFX.drawSquare(x, y, width, VisualHelper.TXT.getFontHeight() + 3f,
                     active ? Client.ACCENT_COLOR : BACKGROUND_COLOR);
-            VisualHelper.HELVETICA.drawString(type.getLabel(), x + 2, y + 2,
+            VisualHelper.TXT.drawString(type.getLabel(), x + 2, y + 2,
                     active ? ACTIVE_COLOR : TEXT_COLOR);
-            y += VisualHelper.HELVETICA.getFontHeight() + 3f;
+            y += VisualHelper.TXT.getFontHeight() + 3f;
         }
 
         return width;
@@ -57,17 +57,17 @@ public class TabRenderer extends TabComponent {
         List<Module> modules = getContainer().getModules();
         float width = 0;
         for (Module module : modules) {
-            width = MathHelper.max(width, VisualHelper.HELVETICA.getStringWidth(module.getName()) + 4);
+            width = MathHelper.max(width, VisualHelper.TXT.getStringWidth(module.getName()) + 4);
         }
 
         float x = xOffset + 1;
-        float y = VisualHelper.HELVETICA.getFontHeight() + 1f;
+        float y = VisualHelper.TXT.getFontHeight() + 1f;
         for (Module module : modules) {
-            VisualHelper.MC_GFX.drawSquare(x, y, width, VisualHelper.HELVETICA.getFontHeight() + 3f,
+            VisualHelper.GFX.drawSquare(x, y, width, VisualHelper.TXT.getFontHeight() + 3f,
                     getContainer().getModule() == module ? Client.ACCENT_COLOR : BACKGROUND_COLOR);
-            VisualHelper.HELVETICA.drawString(module.getName(), x + 2, y + 2,
+            VisualHelper.TXT.drawString(module.getName(), x + 2, y + 2,
                     module.isEnabled() ? ACTIVE_COLOR : TEXT_COLOR);
-            y += VisualHelper.HELVETICA.getFontHeight() + 3f;
+            y += VisualHelper.TXT.getFontHeight() + 3f;
         }
 
         return width;
@@ -77,17 +77,17 @@ public class TabRenderer extends TabComponent {
         List<Property<?>> properties = getContainer().getProperties();
         float width = 0;
         for (Property<?> property : properties) {
-            width = MathHelper.max(width, VisualHelper.HELVETICA.getStringWidth(format(property)) + 4);
+            width = MathHelper.max(width, VisualHelper.TXT.getStringWidth(format(property)) + 4);
         }
 
         float x = xOffset + 1;
-        float y = VisualHelper.HELVETICA.getFontHeight() + 1f;
+        float y = VisualHelper.TXT.getFontHeight() + 1f;
         for (Property<?> property : properties) {
-            VisualHelper.MC_GFX.drawSquare(x, y, width, VisualHelper.HELVETICA.getFontHeight() + 3f,
+            VisualHelper.GFX.drawSquare(x, y, width, VisualHelper.TXT.getFontHeight() + 3f,
                     getContainer().getProperty() == property ? Client.ACCENT_COLOR : BACKGROUND_COLOR);
-            VisualHelper.HELVETICA.drawString(format(property), x + 2, y + 2,
+            VisualHelper.TXT.drawString(format(property), x + 2, y + 2,
                     TEXT_COLOR);
-            y += VisualHelper.HELVETICA.getFontHeight() + 3f;
+            y += VisualHelper.TXT.getFontHeight() + 3f;
         }
 
         return width;

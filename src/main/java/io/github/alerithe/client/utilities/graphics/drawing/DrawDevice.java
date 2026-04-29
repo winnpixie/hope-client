@@ -1,6 +1,6 @@
 package io.github.alerithe.client.utilities.graphics.drawing;
 
-public interface GraphicsDevice {
+public interface DrawDevice {
     default void drawBorderedSquare(double x, double y, double width, double height, double borderSize, int color, int borderColor) {
         drawBorderedRect(x, y, x + width, y + height, borderSize, color, borderColor);
     }

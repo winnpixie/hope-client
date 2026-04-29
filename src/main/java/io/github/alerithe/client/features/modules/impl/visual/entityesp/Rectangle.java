@@ -2,7 +2,6 @@ package io.github.alerithe.client.features.modules.impl.visual.entityesp;
 
 import io.github.alerithe.client.Client;
 import io.github.alerithe.client.events.game.EventDraw;
-import io.github.alerithe.client.features.friends.Friend;
 import io.github.alerithe.client.features.modules.impl.visual.EntityESP;
 import io.github.alerithe.client.utilities.EntityHelper;
 import io.github.alerithe.client.utilities.GameHelper;
@@ -11,8 +10,8 @@ import io.github.alerithe.client.utilities.WorldHelper;
 import io.github.alerithe.client.utilities.graphics.VisualHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.util.AxisAlignedBB;
+import org.lwjgl.opengl.GL11;
 
 import java.util.Comparator;
 import java.util.Map;
@@ -44,6 +43,8 @@ public class Rectangle extends EntityESPMode {
 
     @Override
     public void onOverlayDraw(EventDraw.Overlay event) {
+        VisualHelper.GFX_BUFFERED.begin(4);
+
         for (Map.Entry<Entity, float[]> projection : projections.entrySet()) {
             Entity entity = projection.getKey();
             float[] bounds = projection.getValue();
@@ -53,20 +54,18 @@ public class Rectangle extends EntityESPMode {
             float width = bounds[2] - bounds[0];
             float height = bounds[3] - bounds[1];
 
-            VisualHelper.MC_GFX.drawBorderedSquare(x + 0.5f, y + 0.5f, width - 1f, height - 1f, 1.5f,
+            VisualHelper.GFX_BUFFERED.drawBorderedSquare(x + 0.5f, y + 0.5f, width - 1f, height - 1f, 1.5f,
                     0x00000000, 0xFF000000);
-            VisualHelper.MC_GFX.drawBorderedSquare(x, y, width, height, 0.5f,
+            VisualHelper.GFX_BUFFERED.drawBorderedSquare(x, y, width, height, 0.5f,
                     0x00000000,
                     Client.FRIEND_MANAGER.find(entity.getName()) == null ? 0xFFFFFFFF : 0xFF00FFFF);
-
-            if (module.showNames.getValue()) {
-                drawName(entity, x, y, width);
-            }
 
             if (module.showHealth.getValue()) {
                 drawHealth(entity, x, y, height);
             }
         }
+
+        VisualHelper.GFX_BUFFERED.end(GL11.GL_TRIANGLE_FAN);
     }
 
     private double[][] getBoundingBoxVertices(Entity entity, float partialTicks) {
@@ -112,22 +111,6 @@ public class Rectangle extends EntityESPMode {
         return bounds;
     }
 
-    private void drawName(Entity entity, float x, float y, float width) {
-        String text = entity.getDisplayName().getFormattedText();
-        if (entity instanceof EntityItem) {
-            text = ((EntityItem) entity).getEntityItem().getDisplayName();
-        } else {
-            Friend friend = Client.FRIEND_MANAGER.find(entity.getName());
-            if (friend != null) {
-                text = String.format("\247b%s", friend.getAliases()[0]);
-            }
-        }
-
-        VisualHelper.HELVETICA.drawStringWithShadow(text,
-                x + ((width - VisualHelper.HELVETICA.getStringWidth(text)) / 2f),
-                y - VisualHelper.HELVETICA.getFontHeight() - 2f, -1);
-    }
-
     private void drawHealth(Entity entity, float x, float y, float height) {
         if (!(entity instanceof EntityLivingBase)) {
             return;
@@ -141,7 +124,7 @@ public class Rectangle extends EntityESPMode {
         }
 
         float healthBarHeight = height * MathHelper.clamp(health / maxHealth, 0f, 1f);
-        VisualHelper.MC_GFX.drawBorderedSquare(x - 2.5f, y + height - healthBarHeight - 0.5f, 0.5f, healthBarHeight + 1f,
+        VisualHelper.GFX_BUFFERED.drawBorderedSquare(x - 2.5f, y + height - healthBarHeight - 0.5f, 0.5f, healthBarHeight + 1f,
                 0.5f, EntityHelper.getHealthColor(living), 0xFF000000);
     }
 }

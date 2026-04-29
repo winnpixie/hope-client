@@ -8,6 +8,7 @@ import io.github.alerithe.client.utilities.graphics.VisualHelper;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
+import org.lwjgl.opengl.GL11;
 
 import java.util.Comparator;
 import java.util.Map;
@@ -41,6 +42,8 @@ public class Rectangle extends StorageESPMode {
 
     @Override
     public void onOverlayDraw(EventDraw.Overlay event) {
+        VisualHelper.GFX_BUFFERED.begin(4);
+
         for (Map.Entry<TileEntity, float[]> projection : projections.entrySet()) {
             TileEntity tile = projection.getKey();
             float[] bounds = projection.getValue();
@@ -50,11 +53,13 @@ public class Rectangle extends StorageESPMode {
             float width = bounds[2] - bounds[0];
             float height = bounds[3] - bounds[1];
 
-            VisualHelper.MC_GFX.drawBorderedSquare(x + 0.5f, y + 0.5f, width - 1f, height - 1f,
+            VisualHelper.GFX_BUFFERED.drawBorderedSquare(x + 0.5f, y + 0.5f, width - 1f, height - 1f,
                     1.5f, 0x00000000, 0xFF000000);
-            VisualHelper.MC_GFX.drawBorderedSquare(x, y, width, height,
+            VisualHelper.GFX_BUFFERED.drawBorderedSquare(x, y, width, height,
                     0.5f, 0x00000000, module.getTileColor(tile));
         }
+
+        VisualHelper.GFX_BUFFERED.end(GL11.GL_TRIANGLE_FAN);
     }
 
     private double[][] getProjectionVertices(TileEntity tile) {

@@ -14,6 +14,7 @@ import io.github.alerithe.client.utilities.graphics.VisualHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import org.lwjgl.opengl.GL11;
 
 public class Radar extends Module {
     private final BooleanProperty players = new BooleanProperty("Players", new String[0], true);
@@ -54,10 +55,12 @@ public class Radar extends Module {
         float centerX = rX + (rWidth / 2f);
         float centerY = rY + (rHeight / 2f);
 
-        VisualHelper.MC_GFX.drawBorderedSquare(rX, rY, rWidth, rHeight, 1f, 0xFF111111, 0xFF333333); // Background
-        VisualHelper.MC_GFX.drawSquare(rX, centerY - 0.5f, rWidth, 1f, 0xFF333333); // Horizontal Bar
-        VisualHelper.MC_GFX.drawSquare(centerX - 0.5f, rY, 1f, rHeight, 0xFF333333); // Vertical Bar
-        VisualHelper.MC_GFX.drawSquare(centerX - 1f, centerY - 1f, 2, 2, 0xFFFFFFFF); // Player
+        VisualHelper.GFX_BUFFERED.begin(4);
+
+        VisualHelper.GFX_BUFFERED.drawBorderedSquare(rX, rY, rWidth, rHeight, 1f, 0xFF111111, 0xFF333333); // Background
+        VisualHelper.GFX_BUFFERED.drawSquare(rX, centerY - 0.5f, rWidth, 1f, 0xFF333333); // Horizontal Bar
+        VisualHelper.GFX_BUFFERED.drawSquare(centerX - 0.5f, rY, 1f, rHeight, 0xFF333333); // Vertical Bar
+        VisualHelper.GFX_BUFFERED.drawSquare(centerX - 1f, centerY - 1f, 2, 2, 0xFFFFFFFF); // Player
 
         float maxDist = size.getValue() / 2f;
         for (Entity entity : WorldHelper.getWorld().loadedEntityList) {
@@ -84,12 +87,13 @@ public class Radar extends Module {
                             - MathHelper.lerpf(EntityHelper.getUser().prevRotationYawHead,
                             EntityHelper.getUser().rotationYawHead, event.getPartialTicks()));
 
-            VisualHelper.MC_GFX.drawSquare(
+            VisualHelper.GFX_BUFFERED.drawSquare(
                     centerX - 1f - (vector[0] * dist), centerY - 1f - (vector[1] * dist),
                     2f, 2f,
                     EntityHelper.getColor(entity));
-
         }
+
+        VisualHelper.GFX_BUFFERED.end(GL11.GL_TRIANGLE_FAN);
     }
 
     private boolean qualifies(Entity entity) {

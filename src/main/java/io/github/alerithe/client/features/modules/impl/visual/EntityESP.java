@@ -25,7 +25,6 @@ public class EntityESP extends Module {
     private final BooleanProperty invisibles = new BooleanProperty("Invisibles", new String[]{"invis"}, true);
     private final BooleanProperty items = new BooleanProperty("Items", new String[0], false);
     public final BooleanProperty showHealth = new BooleanProperty("ShowHealth", new String[]{"healthbar", "health"}, true);
-    public final BooleanProperty showNames = new BooleanProperty("ShowNames", new String[]{"names"}, true);
 
     public EntityESP() {
         super("EntityESP", new String[]{"esp"}, Type.VISUAL);
@@ -38,7 +37,6 @@ public class EntityESP extends Module {
         getPropertyManager().add(invisibles);
         getPropertyManager().add(items);
         getPropertyManager().add(showHealth);
-        getPropertyManager().add(showNames);
     }
 
     @Subscribe
@@ -49,13 +47,6 @@ public class EntityESP extends Module {
     @Subscribe
     public void onWorldDraw(EventDraw.World event) {
         mode.getValue().onWorldDraw(event);
-    }
-
-    @Subscribe
-    public void onTagDraw(EventDraw.Tag event) {
-        if (showNames.getValue() && qualifies(event.getEntity())) {
-            event.cancel();
-        }
     }
 
     public boolean qualifies(Entity entity) {

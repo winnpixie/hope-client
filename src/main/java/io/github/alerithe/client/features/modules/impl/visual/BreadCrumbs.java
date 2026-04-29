@@ -69,7 +69,7 @@ public class BreadCrumbs extends Module {
         GL11.glEnable(GL11.GL_LINE_SMOOTH);
         GL11.glLineWidth(2f);
 
-        ByteBuffer buffer = ByteBuffer.allocateDirect((4 * 3 * count) + (4 * count))
+        ByteBuffer vbo = ByteBuffer.allocateDirect(((4 * 3) + 4) * count)
                 .order(ByteOrder.nativeOrder());
 
         for (double[] position : positions) {
@@ -82,14 +82,14 @@ public class BreadCrumbs extends Module {
             double z = position[2] - GameHelper.getGame().getRenderManager().viewerPosZ;
 
             // Color
-            buffer
+            vbo
                     .put((byte) channels[0])
                     .put((byte) channels[1])
                     .put((byte) channels[2])
                     .put((byte) channels[3]);
 
             // Vertex
-            buffer
+            vbo
                     .putFloat((float) x)
                     .putFloat((float) y)
                     .putFloat((float) z);
@@ -98,8 +98,8 @@ public class BreadCrumbs extends Module {
         GL11.glEnableClientState(GL11.GL_COLOR_ARRAY);
         GL11.glEnableClientState(GL11.GL_VERTEX_ARRAY);
 
-        buffer.flip();
-        GL11.glInterleavedArrays(GL11.GL_C4UB_V3F, 16, buffer);
+        vbo.flip();
+        GL11.glInterleavedArrays(GL11.GL_C4UB_V3F, 16, vbo);
 
         GL11.glDrawArrays(GL11.GL_LINE_STRIP, 0, count);
 

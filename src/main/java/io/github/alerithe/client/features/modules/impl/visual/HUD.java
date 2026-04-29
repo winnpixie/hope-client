@@ -40,12 +40,12 @@ public class HUD extends Module {
     private final BooleanProperty rightClicks = new BooleanProperty("RightClicksPerSecond", new String[]{"rcps"}, true);
 
     private final Comparator<Module> moduleComparator = Comparator.comparingDouble(module ->
-            -VisualHelper.HELVETICA.getStringWidth(module.getName()));
+            -VisualHelper.TXT.getStringWidth(module.getName()));
     private final Comparator<PotionEffect> potionComparator = Comparator.comparingDouble(effect -> {
         Potion potion = Potion.potionTypes[effect.getPotionID()];
         String text = String.format("%s %s", I18n.format(potion.getName()), formatPotionEffect(effect));
 
-        return -VisualHelper.HELVETICA.getStringWidth(text);
+        return -VisualHelper.TXT.getStringWidth(text);
     });
     private final List<Long> leftClickTimes = new ArrayList<>();
     private final List<Long> rightTickTimes = new ArrayList<>();
@@ -144,7 +144,7 @@ public class HUD extends Module {
             text += "\2477]";
         }
 
-        VisualHelper.HELVETICA.drawStringWithShadow(text, 1, 1, Client.ACCENT_COLOR);
+        VisualHelper.TXT.drawStringWithShadow(text, 1, 1, Client.ACCENT_COLOR);
     }
 
     private void drawArrayList(ScaledResolution display) {
@@ -165,16 +165,16 @@ public class HUD extends Module {
 
         float y = 2;
         for (Module module : enabled) {
-            float textWidth = VisualHelper.HELVETICA.getStringWidth(module.getName());
+            float textWidth = VisualHelper.TXT.getStringWidth(module.getName());
             float x = display.getScaledWidth() - textWidth;
 
-            VisualHelper.MC_GFX.drawSquare(x - 4, y - 2, textWidth + 4, VisualHelper.HELVETICA.getFontHeight() + 4,
+            VisualHelper.GFX.drawSquare(x - 4, y - 2, textWidth + 4, VisualHelper.TXT.getFontHeight() + 4,
                     Client.ACCENT_COLOR);
-            VisualHelper.MC_GFX.drawSquare(x - 3, y - 2, textWidth + 3, VisualHelper.HELVETICA.getFontHeight() + 3,
+            VisualHelper.GFX.drawSquare(x - 3, y - 2, textWidth + 3, VisualHelper.TXT.getFontHeight() + 3,
                     0xFF111111);
 
-            VisualHelper.HELVETICA.drawStringWithShadow(module.getName(), x - 1, y, -1);
-            y += VisualHelper.HELVETICA.getFontHeight() + 3;
+            VisualHelper.TXT.drawStringWithShadow(module.getName(), x - 1, y, -1);
+            y += VisualHelper.TXT.getFontHeight() + 3;
         }
     }
 
@@ -202,7 +202,7 @@ public class HUD extends Module {
 
         builder.append(" \2477]");
 
-        VisualHelper.HELVETICA.drawStringWithShadow(builder.toString(), 2, display.getScaledHeight() - getLowerOffset(), -1);
+        VisualHelper.TXT.drawStringWithShadow(builder.toString(), 2, display.getScaledHeight() - getLowerOffset(), -1);
     }
 
     private String formatPotionEffect(PotionEffect effect) {
@@ -229,11 +229,11 @@ public class HUD extends Module {
 
             GameHelper.getGame().getTextureManager().bindTexture(GuiContainer.inventoryBackground);
             int potionIndex = potion.getStatusIconIndex();
-            Gui.drawTexturedModalRect2(display.getScaledWidth() - VisualHelper.HELVETICA.getStringWidth(label) - 20,
+            Gui.drawTexturedModalRect2(display.getScaledWidth() - VisualHelper.TXT.getStringWidth(label) - 20,
                     display.getScaledHeight() - y - 5, potionIndex % 8 * 18.0, 198 + potionIndex / 8 * 18.0, 18, 18);
 
-            VisualHelper.HELVETICA.drawStringWithShadow(label,
-                    display.getScaledWidth() - VisualHelper.HELVETICA.getStringWidth(label) - 1f,
+            VisualHelper.TXT.drawStringWithShadow(label,
+                    display.getScaledWidth() - VisualHelper.TXT.getStringWidth(label) - 1f,
                     display.getScaledHeight() - y, potion.getLiquidColor());
 
             y += 18f;
@@ -242,7 +242,7 @@ public class HUD extends Module {
 
     private static float getLowerOffset() {
         return 1f + (GameHelper.getGame().ingameGUI.getChatGUI().getChatOpen() ?
-                VisualHelper.HELVETICA.getFontHeight() * 2f + 4f : VisualHelper.HELVETICA.getFontHeight());
+                VisualHelper.TXT.getFontHeight() * 2f + 4f : VisualHelper.TXT.getFontHeight());
     }
 
     @Subscribe

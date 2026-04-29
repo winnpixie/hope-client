@@ -1,11 +1,11 @@
 package io.github.alerithe.client.utilities.graphics;
 
 import io.github.alerithe.client.utilities.GameHelper;
-import io.github.alerithe.client.utilities.graphics.drawing.GraphicsDevice;
-import io.github.alerithe.client.utilities.graphics.drawing.MinecraftGraphicsDevice;
-import io.github.alerithe.client.utilities.graphics.text.AWTTextRenderer;
-import io.github.alerithe.client.utilities.graphics.text.MinecraftTextRenderer;
+import io.github.alerithe.client.utilities.graphics.drawing.BufferedDrawDevice;
+import io.github.alerithe.client.utilities.graphics.drawing.DrawDevice;
+import io.github.alerithe.client.utilities.graphics.drawing.MinecraftDrawDevice;
 import io.github.alerithe.client.utilities.graphics.text.TextRenderer;
+import io.github.alerithe.client.utilities.graphics.text.awt.AWTTextRenderer;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.culling.Frustum;
@@ -37,11 +37,13 @@ public class VisualHelper {
     private static final Frustum frustum = new Frustum();
 
     // Fonts
-    public static final TextRenderer MC_FONT = new MinecraftTextRenderer();
-    public static final TextRenderer HELVETICA = new AWTTextRenderer(new Font("Helvetica", Font.PLAIN, 18));
+    //public static final TextRenderer TXT = new MinecraftTextRenderer();
+    public static final TextRenderer TXT = new AWTTextRenderer(new Font("Helvetica", Font.PLAIN, 18));
 
     // Graphics Device
-    public static final GraphicsDevice MC_GFX = new MinecraftGraphicsDevice();
+    public static final DrawDevice GFX = new MinecraftDrawDevice();
+    public static final BufferedDrawDevice GFX_BUFFERED = new BufferedDrawDevice();
+    //public static final GraphicsRenderer GFX = new ImmediateGraphicsRenderer();
 
     private VisualHelper() {
     }

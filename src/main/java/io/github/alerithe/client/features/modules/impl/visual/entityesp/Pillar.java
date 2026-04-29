@@ -56,7 +56,7 @@ public class Pillar extends EntityESPMode {
             AxisAlignedBB aabb = new AxisAlignedBB(x - entity.width / 2d, y, z - entity.width / 2d,
                     x + entity.width / 2d, y + entity.height + 0.2, z + entity.width / 2d);
 
-            VisualHelper.MC_GFX.drawPrism(aabb.minX, aabb.minY, aabb.minZ,
+            VisualHelper.GFX.drawPrism(aabb.minX, aabb.minY, aabb.minZ,
                     aabb.maxX, aabb.maxY, aabb.maxZ,
                     EntityHelper.getColor(entity));
 
