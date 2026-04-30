@@ -2,7 +2,6 @@ package io.github.alerithe.client.ui.alts;
 
 import io.github.alerithe.client.utilities.SessionHelper;
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.util.Session;
@@ -14,11 +13,17 @@ import java.net.URI;
 import java.util.UUID;
 
 public class GuiDirectLogin extends GuiScreen {
+    private final GuiScreen parent;
+
     private GuiButton modeButton;
     private GuiTextField username;
     private GuiPasswordField password;
     private String message;
     private int mode;
+
+    public GuiDirectLogin(GuiScreen parent) {
+        this.parent = parent;
+    }
 
     @Override
     public void initGui() {
@@ -95,7 +100,7 @@ public class GuiDirectLogin extends GuiScreen {
                 }
                 break;
             case 99:
-                mc.displayGuiScreen(new GuiMainMenu());
+                mc.displayGuiScreen(parent);
                 break;
             default:
                 break;
