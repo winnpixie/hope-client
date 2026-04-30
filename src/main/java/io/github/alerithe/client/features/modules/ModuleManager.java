@@ -96,6 +96,7 @@ public class ModuleManager extends FeatureManager<Module> {
         add(new StorageESP());
         add(new TabUI());
         add(new Tracers());
+        add(new WhatAmILookingAt()); // TODO: Finish
 
         // World
         add(new AutoBridge());
@@ -116,6 +117,7 @@ public class ModuleManager extends FeatureManager<Module> {
         add(new FireUnwork());
         add(new GameSpeed());
         add(new MiddleClickFriend());
+        add(new MurderMystery()); // TODO: Finish
         add(new PingSpoof());
         add(new TextSpammer()); // TODO: Finish
 

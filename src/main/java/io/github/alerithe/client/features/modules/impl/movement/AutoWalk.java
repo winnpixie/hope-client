@@ -30,27 +30,27 @@ public class AutoWalk extends Module {
 
     @Subscribe
     public void onPreUpdate(EventUpdate.Pre event) {
-        if (forwards.getValue()) KeyBinding.setKeyBindState(GameHelper.getSettings().keyBindForward, true);
+        if (forwards.getValue()) KeyBinding.setKeyBindState(GameHelper.getSettings().keyBindForward.getKeyCode(), true);
 
-        if (backwards.getValue()) KeyBinding.setKeyBindState(GameHelper.getSettings().keyBindBack, true);
+        if (backwards.getValue()) KeyBinding.setKeyBindState(GameHelper.getSettings().keyBindBack.getKeyCode(), true);
 
-        if (left.getValue()) KeyBinding.setKeyBindState(GameHelper.getSettings().keyBindLeft, true);
+        if (left.getValue()) KeyBinding.setKeyBindState(GameHelper.getSettings().keyBindLeft.getKeyCode(), true);
 
-        if (right.getValue()) KeyBinding.setKeyBindState(GameHelper.getSettings().keyBindRight, true);
+        if (right.getValue()) KeyBinding.setKeyBindState(GameHelper.getSettings().keyBindRight.getKeyCode(), true);
     }
 
     private void updateKeyStates() {
         // Forward
-        KeyBinding.setKeyBindState(GameHelper.getSettings().keyBindForward,
+        KeyBinding.setKeyBindState(GameHelper.getSettings().keyBindForward.getKeyCode(),
                 GameSettings.isKeyDown(GameHelper.getSettings().keyBindForward));
         // Back
-        KeyBinding.setKeyBindState(GameHelper.getSettings().keyBindBack,
+        KeyBinding.setKeyBindState(GameHelper.getSettings().keyBindBack.getKeyCode(),
                 GameSettings.isKeyDown(GameHelper.getSettings().keyBindBack));
         // Left
-        KeyBinding.setKeyBindState(GameHelper.getSettings().keyBindLeft,
+        KeyBinding.setKeyBindState(GameHelper.getSettings().keyBindLeft.getKeyCode(),
                 GameSettings.isKeyDown(GameHelper.getSettings().keyBindLeft));
         // Right
-        KeyBinding.setKeyBindState(GameHelper.getSettings().keyBindRight,
+        KeyBinding.setKeyBindState(GameHelper.getSettings().keyBindRight.getKeyCode(),
                 GameSettings.isKeyDown(GameHelper.getSettings().keyBindRight));
     }
 }

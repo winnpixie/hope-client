@@ -15,7 +15,7 @@ public class SourceEngine extends FlightMode {
         EntityHelper.getUser().setSpeed(EntityHelper.getUser().isUserMoving() ? module.moveSpeed.getValue() : 0);
 
         float forward = Math.signum(EntityHelper.getUser().movementInput.moveForward);
-        EntityHelper.getUser().motionY = -MathHelper.deg2Rad * EntityHelper.getUser().rotationPitch * forward;
+        EntityHelper.getUser().motionY = -(Math.PI / 180.0) * EntityHelper.getUser().rotationPitch * forward;
 
         if (forward == 0F) return;
         if (EntityHelper.getUser().rotationPitch >= 90.0 || EntityHelper.getUser().rotationPitch <= -90.0) {

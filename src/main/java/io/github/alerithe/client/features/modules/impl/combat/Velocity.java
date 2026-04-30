@@ -45,9 +45,9 @@ public class Velocity extends Module {
 
             S27PacketExplosion packet = (S27PacketExplosion) event.getPacket();
             Vec3 motion = new Vec3(
-                    packet.getMotionX() * (horizontalPercent.getValue() / 100.0),
-                    packet.getMotionY() * (verticalPercent.getValue() / 100.0),
-                    packet.getMotionZ() * (horizontalPercent.getValue() / 100.0));
+                    packet.func_149149_c() * (horizontalPercent.getValue() / 100.0),
+                    packet.func_149144_d() * (verticalPercent.getValue() / 100.0),
+                    packet.func_149147_e() * (horizontalPercent.getValue() / 100.0));
             event.setPacket(new S27PacketExplosion(packet.getX(), packet.getY(), packet.getZ(), packet.getStrength(),
                     packet.getAffectedBlockPositions(), motion));
         }

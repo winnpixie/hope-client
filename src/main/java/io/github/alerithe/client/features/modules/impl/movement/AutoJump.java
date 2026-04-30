@@ -20,13 +20,13 @@ public class AutoJump extends Module {
 
     @Override
     public void onDisable() {
-        KeyBinding.setKeyBindState(GameHelper.getSettings().keyBindJump,
+        KeyBinding.setKeyBindState(GameHelper.getSettings().keyBindJump.getKeyCode(),
                 GameSettings.isKeyDown(GameHelper.getSettings().keyBindJump));
     }
 
     @Subscribe
     public void onPreUpdate(EventUpdate.Pre event) {
-        KeyBinding.setKeyBindState(GameHelper.getSettings().keyBindJump,
+        KeyBinding.setKeyBindState(GameHelper.getSettings().keyBindJump.getKeyCode(),
                 !withInput.getValue() || EntityHelper.getUser().isUserMoving());
     }
 }

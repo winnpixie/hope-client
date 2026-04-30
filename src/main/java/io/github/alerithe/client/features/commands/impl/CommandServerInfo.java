@@ -53,7 +53,7 @@ public class CommandServerInfo extends Command {
                 if (event.getPacket() instanceof S3APacketTabComplete) {
                     S3APacketTabComplete packet = (S3APacketTabComplete) event.getPacket();
                     Set<String> plugins = new HashSet<>();
-                    for (String match : packet.getMatches()) {
+                    for (String match : packet.func_149630_c()) {
                         if (!match.contains(":") || !match.startsWith("/")) continue;
 
                         plugins.add(match.substring(1).split(":")[0].toLowerCase());

@@ -226,8 +226,8 @@ public class HUD extends Module {
 
             GameHelper.getGame().getTextureManager().bindTexture(GuiContainer.inventoryBackground);
             int potionIndex = potion.getStatusIconIndex();
-            Gui.drawTexturedModalRect2(display.getScaledWidth() - VisualHelper.TXT.getStringWidth(label) - 20,
-                    display.getScaledHeight() - y - 5, potionIndex % 8 * 18.0, 198 + potionIndex / 8 * 18.0, 18, 18);
+            //Gui.drawTexturedModalRect2(display.getScaledWidth() - VisualHelper.TXT.getStringWidth(label) - 20,
+            //        display.getScaledHeight() - y - 5, potionIndex % 8 * 18.0, 198 + potionIndex / 8 * 18.0, 18, 18);
 
             VisualHelper.TXT.drawStringWithShadow(label,
                     display.getScaledWidth() - VisualHelper.TXT.getStringWidth(label) - 1f,

@@ -12,7 +12,6 @@ import net.minecraft.stats.StatFileWriter;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
-import optifine.Config;
 
 public class LocalPlayer extends EntityPlayerSP {
     public LocalPlayer(Minecraft mcIn, World worldIn, NetHandlerPlayClient netHandler, StatFileWriter statFile) {
@@ -51,16 +50,6 @@ public class LocalPlayer extends EntityPlayerSP {
         float pitch = prevRotationPitch + (rotationPitch - prevRotationPitch) * partialTicks;
         float yaw = prevRotationYaw + (rotationYaw - prevRotationYaw) * partialTicks;
         return this.getVectorForRotation(pitch, yaw);
-    }
-
-    @Override
-    public float getFovModifier() {
-        float fovModifier = super.getFovModifier();
-        if (!Config.zoomMode) {
-            return fovModifier;
-        }
-
-        return fovModifier / 4f;
     }
 
     public boolean isInLiquid() {
@@ -130,7 +119,7 @@ public class LocalPlayer extends EntityPlayerSP {
     }
 
     public float[] getLookVector(float yaw) {
-        yaw *= MathHelper.deg2Rad;
+        yaw *= (float) (Math.PI / 180.0);
 
         return new float[]{
                 -MathHelper.sin(yaw),

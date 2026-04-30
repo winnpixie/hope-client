@@ -87,7 +87,7 @@ public class Client {
         }
 
         try {
-            GameHelper.getGame().setSession(SessionHelper.logInWithMicrosoft(username, password));
+            GameHelper.getGame().session = SessionHelper.logInWithMicrosoft(username, password);
         } catch (Exception e) {
             LOGGER.warn("Error logging in from system properties", e);
         }

@@ -12,6 +12,6 @@ public class Legit extends SprintMode {
 
     @Override
     public void onPreUpdate(EventUpdate.Pre event) {
-        KeyBinding.setKeyBindState(GameHelper.getSettings().keyBindSprint, true);
+        KeyBinding.setKeyBindState(GameHelper.getSettings().keyBindSprint.getKeyCode(), true);
     }
 }

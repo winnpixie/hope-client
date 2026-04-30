@@ -18,7 +18,7 @@ public class PredictJump extends StepMode {
 
     @Override
     public void onPreUpdate(EventUpdate.Pre event) {
-        KeyBinding.setKeyBindState(GameHelper.getSettings().keyBindJump,
+        KeyBinding.setKeyBindState(GameHelper.getSettings().keyBindJump.getKeyCode(),
                 GameSettings.isKeyDown(GameHelper.getSettings().keyBindJump));
 
         if (!EntityHelper.getUser().isUserMoving()) return;
@@ -83,7 +83,7 @@ public class PredictJump extends StepMode {
         oz = z - (heading[1] * 0.125);
         if (!isNotFullBlock(WorldHelper.getBlockState(new BlockPos(ox, y + 2, oz)))) return false;
 
-        KeyBinding.setKeyBindState(GameHelper.getSettings().keyBindJump, true);
+        KeyBinding.setKeyBindState(GameHelper.getSettings().keyBindJump.getKeyCode(), true);
         return true;
     }
 }

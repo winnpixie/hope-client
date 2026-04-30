@@ -52,7 +52,7 @@ application {
     run {
         workingDir = 'run'
         jvmArgs = [
-                '-Xmx4G', '-Xms4G',
+                '-Xmx2G', '-Xms2G',
                 '-Djava.library.path=../natives',
                 '-Dclient.no_tts=true',
                 '-Dmc.email=', '-Dmc.pass=',

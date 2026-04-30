@@ -24,21 +24,21 @@ public class NoRotate extends Module {
                     packet.getX(), packet.getY(), packet.getZ(),
                     EntityHelper.getUser().rotationYaw,
                     EntityHelper.getUser().rotationPitch,
-                    packet.getFlags()));
+                    packet.func_179834_f()));
         } else if (event.getPacket() instanceof S14PacketEntity.S17PacketEntityLookMove) {
             S14PacketEntity.S17PacketEntityLookMove packet = (S14PacketEntity.S17PacketEntityLookMove) event.getPacket();
-            if (packet.getEntityId() != EntityHelper.getUser().getEntityId()) return;
+            if (packet.entityId != EntityHelper.getUser().getEntityId()) return;
 
-            event.setPacket(new S14PacketEntity.S17PacketEntityLookMove(packet.getEntityId(),
-                    packet.getX(), packet.getY(), packet.getZ(),
+            event.setPacket(new S14PacketEntity.S17PacketEntityLookMove(packet.entityId,
+                    packet.func_149062_c(), packet.func_149061_d(), packet.func_149064_e(),
                     (byte) (EntityHelper.getUser().rotationYaw * 256f / 360f),
                     (byte) (EntityHelper.getUser().rotationPitch * 256f / 360f),
                     packet.getOnGround()));
         } else if (event.getPacket() instanceof S14PacketEntity.S16PacketEntityLook) {
             S14PacketEntity.S16PacketEntityLook packet = (S14PacketEntity.S16PacketEntityLook) event.getPacket();
-            if (packet.getEntityId() != EntityHelper.getUser().getEntityId()) return;
+            if (packet.entityId != EntityHelper.getUser().getEntityId()) return;
 
-            event.setPacket(new S14PacketEntity.S16PacketEntityLook(packet.getEntityId(),
+            event.setPacket(new S14PacketEntity.S16PacketEntityLook(packet.entityId,
                     (byte) (EntityHelper.getUser().rotationYaw * 256f / 360f),
                     (byte) (EntityHelper.getUser().rotationPitch * 256f / 360f),
                     packet.getOnGround()));

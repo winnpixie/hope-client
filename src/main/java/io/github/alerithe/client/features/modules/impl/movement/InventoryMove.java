@@ -57,22 +57,22 @@ public class InventoryMove extends Module {
 
     private void updateKeyStates() {
         // Forward
-        KeyBinding.setKeyBindState(GameHelper.getSettings().keyBindForward,
+        KeyBinding.setKeyBindState(GameHelper.getSettings().keyBindForward.getKeyCode(),
                 GameSettings.isKeyDown(GameHelper.getSettings().keyBindForward));
         // Back
-        KeyBinding.setKeyBindState(GameHelper.getSettings().keyBindBack,
+        KeyBinding.setKeyBindState(GameHelper.getSettings().keyBindBack.getKeyCode(),
                 GameSettings.isKeyDown(GameHelper.getSettings().keyBindBack));
         // Left
-        KeyBinding.setKeyBindState(GameHelper.getSettings().keyBindLeft,
+        KeyBinding.setKeyBindState(GameHelper.getSettings().keyBindLeft.getKeyCode(),
                 GameSettings.isKeyDown(GameHelper.getSettings().keyBindLeft));
         // Right
-        KeyBinding.setKeyBindState(GameHelper.getSettings().keyBindRight,
+        KeyBinding.setKeyBindState(GameHelper.getSettings().keyBindRight.getKeyCode(),
                 GameSettings.isKeyDown(GameHelper.getSettings().keyBindRight));
         // Jump
-        KeyBinding.setKeyBindState(GameHelper.getSettings().keyBindJump,
+        KeyBinding.setKeyBindState(GameHelper.getSettings().keyBindJump.getKeyCode(),
                 GameSettings.isKeyDown(GameHelper.getSettings().keyBindJump));
         // Sneak
-        KeyBinding.setKeyBindState(GameHelper.getSettings().keyBindSneak,
+        KeyBinding.setKeyBindState(GameHelper.getSettings().keyBindSneak.getKeyCode(),
                 GameSettings.isKeyDown(GameHelper.getSettings().keyBindSneak));
     }
 }

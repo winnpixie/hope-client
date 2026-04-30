@@ -30,7 +30,7 @@ public class AutoSprint extends Module {
 
     @Override
     public void onDisable() {
-        KeyBinding.setKeyBindState(GameHelper.getSettings().keyBindSprint,
+        KeyBinding.setKeyBindState(GameHelper.getSettings().keyBindSprint.getKeyCode(),
                 GameSettings.isKeyDown(GameHelper.getSettings().keyBindSprint));
     }
 

@@ -170,8 +170,8 @@ public class EntityHelper {
         double hypotenuse = Math.sqrt((deltaX * deltaX) + (deltaZ * deltaZ));
 
         return new float[]{
-                (float) (MathHelper.func_181159_b(deltaZ, deltaX) * 180d / Math.PI) - 90f,
-                (float) (-(MathHelper.func_181159_b(deltaY, hypotenuse) * 180d / Math.PI))
+                (float) (MathHelper.atan2(deltaZ, deltaX) * 180d / Math.PI) - 90f,
+                (float) (-(MathHelper.atan2(deltaY, hypotenuse) * 180d / Math.PI))
         };
     }
 

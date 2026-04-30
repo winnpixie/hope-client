@@ -8,6 +8,7 @@ import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.util.Session;
 import org.lwjgl.input.Keyboard;
 
+import java.awt.*;
 import java.io.IOException;
 import java.net.URI;
 import java.util.UUID;
@@ -26,11 +27,11 @@ public class GuiDirectLogin extends GuiScreen {
             message = "[Cracked] " + message;
         }
 
-        username = new GuiTextField(0, fontRenderer, width / 2 - 100, height / 2 - 30, 200, 20);
+        username = new GuiTextField(0, fontRendererObj, width / 2 - 100, height / 2 - 30, 200, 20);
         username.setMaxStringLength(32767);
         username.setFocused(true);
 
-        password = new GuiPasswordField(1, fontRenderer, width / 2 - 100, height / 2 + 10, 200, 20);
+        password = new GuiPasswordField(1, fontRendererObj, width / 2 - 100, height / 2 + 10, 200, 20);
         password.setMaxStringLength(32767);
 
         buttonList.add(new GuiButton(0, width / 2 - 100, height / 2 + 35, 98, 20, "Log In"));
@@ -81,7 +82,7 @@ public class GuiDirectLogin extends GuiScreen {
                     user = user.substring(0, 16);
                 }
 
-                mc.setSession(new Session(user, UUID.randomUUID().toString(), "", "legacy"));
+                mc.session = new Session(user, UUID.randomUUID().toString(), "", "legacy");
                 message = String.format("[Cracked] \247eCurrent User : \247r%s", mc.getSession().getUsername());
                 break;
             case 3:
@@ -130,12 +131,12 @@ public class GuiDirectLogin extends GuiScreen {
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         drawDefaultBackground();
-        drawCenteredString(fontRenderer, message, width / 2, 10, -1);
+        drawCenteredString(fontRendererObj, message, width / 2, 10, -1);
 
-        fontRenderer.drawStringWithShadow("Username", this.width / 2f - 100f, this.height / 2f - 40f, -1);
+        fontRendererObj.drawStringWithShadow("Username", this.width / 2f - 100f, this.height / 2f - 40f, -1);
         username.drawTextBox();
 
-        fontRenderer.drawStringWithShadow("Password", this.width / 2f - 100f, this.height / 2f, -1);
+        fontRendererObj.drawStringWithShadow("Password", this.width / 2f - 100f, this.height / 2f, -1);
         password.drawTextBox();
 
         super.drawScreen(mouseX, mouseY, partialTicks);
@@ -158,7 +159,11 @@ public class GuiDirectLogin extends GuiScreen {
                         session = SessionHelper.logInWithMicrosoft(deviceCode -> {
                             message = String.format("\247eVISIT: \247f%s", deviceCode.getDirectVerificationUri());
 
-                            openWebLink(URI.create(deviceCode.getDirectVerificationUri()));
+                            try {
+                                Desktop.getDesktop().browse(URI.create(deviceCode.getDirectVerificationUri()));
+                            } catch (IOException ignored) {
+                                // ignore
+                            }
                         });
                         break;
                     case 1: // Microsoft Credentials
@@ -176,7 +181,7 @@ public class GuiDirectLogin extends GuiScreen {
                     throw new IllegalStateException("session should not be null!");
                 }
 
-                mc.setSession(session);
+                mc.session = session;
                 message = String.format("\247eCurrent User : \247r%s", mc.getSession().getUsername());
             } catch (Exception e) {
                 message = String.format("\247c%s", e.getMessage());
