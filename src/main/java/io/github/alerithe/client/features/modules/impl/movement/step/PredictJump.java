@@ -1,6 +1,6 @@
 package io.github.alerithe.client.features.modules.impl.movement.step;
 
-import io.github.alerithe.client.events.game.EventUpdate;
+import io.github.alerithe.client.events.game.EventMoveUpdate;
 import io.github.alerithe.client.features.modules.impl.movement.Step;
 import io.github.alerithe.client.utilities.EntityHelper;
 import io.github.alerithe.client.utilities.GameHelper;
@@ -17,12 +17,13 @@ public class PredictJump extends StepMode {
     }
 
     @Override
-    public void onPreUpdate(EventUpdate.Pre event) {
+    public void onPreUpdate(EventMoveUpdate.Pre event) {
         KeyBinding.setKeyBindState(GameHelper.getSettings().keyBindJump.getKeyCode(),
                 GameSettings.isKeyDown(GameHelper.getSettings().keyBindJump));
 
         if (!EntityHelper.getUser().isUserMoving()) return;
         if (!EntityHelper.getUser().onGround) return;
+        if (!EntityHelper.getUser().isInLiquid()) return;
 
         float[] heading = EntityHelper.getUser().getMoveVector();
 
@@ -47,24 +48,13 @@ public class PredictJump extends StepMode {
             return state.getValue(BlockSnow.LAYERS) > 5;
         }
 
-        if (block instanceof BlockStairs) return true;
-        if (block instanceof BlockCactus) return true;
-        if (block instanceof BlockChest) return true;
-        if (block instanceof BlockEnderChest) return true;
-        if (block instanceof BlockEnchantmentTable) return true;
-
-        return false;
-    }
-
-    private boolean isNotFullBlock(IBlockState state) {
-        if (state == null) return true; // probably? lol
-
-        Block block = state.getBlock();
-        if (block.isFullBlock()) return false;
-        if (block instanceof BlockSlab) return false;
-        if (block instanceof BlockStairs) return false;
-
-        return true;
+        return block instanceof BlockGlass
+                || block instanceof BlockStainedGlass
+                || block instanceof BlockStairs
+                || block instanceof BlockCactus
+                || block instanceof BlockChest
+                || block instanceof BlockEnderChest
+                || block instanceof BlockEnchantmentTable;
     }
 
     private boolean tryJump(float[] heading, double offset) {
@@ -76,12 +66,12 @@ public class PredictJump extends StepMode {
         double oz = z + (heading[1] * offset);
 
         if (!isFullBlock(WorldHelper.getBlockState(new BlockPos(ox, y, oz)))) return false;
-        if (!isNotFullBlock(WorldHelper.getBlockState(new BlockPos(ox, y + 2, oz)))) return false;
-        if (!isNotFullBlock(WorldHelper.getBlockState(new BlockPos(ox, y + 1, oz)))) return false;
+        if (isFullBlock(WorldHelper.getBlockState(new BlockPos(ox, y + 2, oz)))) return false;
+        if (isFullBlock(WorldHelper.getBlockState(new BlockPos(ox, y + 1, oz)))) return false;
 
         ox = x - (heading[0] * 0.125);
         oz = z - (heading[1] * 0.125);
-        if (!isNotFullBlock(WorldHelper.getBlockState(new BlockPos(ox, y + 2, oz)))) return false;
+        if (isFullBlock(WorldHelper.getBlockState(new BlockPos(ox, y + 2, oz)))) return false;
 
         KeyBinding.setKeyBindState(GameHelper.getSettings().keyBindJump.getKeyCode(), true);
         return true;

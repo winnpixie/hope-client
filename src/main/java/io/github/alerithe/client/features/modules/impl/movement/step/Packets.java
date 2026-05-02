@@ -1,7 +1,7 @@
 package io.github.alerithe.client.features.modules.impl.movement.step;
 
 import io.github.alerithe.client.events.game.EventPacket;
-import io.github.alerithe.client.events.game.EventUpdate;
+import io.github.alerithe.client.events.game.EventMoveUpdate;
 import io.github.alerithe.client.features.modules.impl.movement.Step;
 import io.github.alerithe.client.utilities.EntityHelper;
 import io.github.alerithe.client.utilities.NetworkHelper;
@@ -18,7 +18,7 @@ public class Packets extends StepMode {
     }
 
     @Override
-    public void onPreUpdate(EventUpdate.Pre event) {
+    public void onPreUpdate(EventMoveUpdate.Pre event) {
         if (!EntityHelper.getUser().isCollidedHorizontally) return;
         if (EntityHelper.getUser().movementInput.jump) return;
         if (EntityHelper.getUser().isInLiquid()) return;

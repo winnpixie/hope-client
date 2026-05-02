@@ -1,6 +1,6 @@
 package io.github.alerithe.client.features.modules.impl.world.waterwalk;
 
-import io.github.alerithe.client.events.game.EventUpdate;
+import io.github.alerithe.client.events.game.EventMoveUpdate;
 import io.github.alerithe.client.utilities.EntityHelper;
 import io.github.alerithe.client.utilities.WorldHelper;
 import net.minecraft.block.BlockLiquid;
@@ -12,7 +12,7 @@ public class Bounce extends WaterWalkMode {
     }
 
     @Override
-    public void onPreUpdate(EventUpdate.Pre event) {
+    public void onPreUpdate(EventMoveUpdate.Pre event) {
         if (EntityHelper.getUser().isSneaking()) return;
 
         BlockPos playerLoc = new BlockPos(EntityHelper.getUser());

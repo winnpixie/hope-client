@@ -4,7 +4,7 @@ import io.github.alerithe.client.events.bus.Subscribe;
 import io.github.alerithe.client.events.game.EventBlockCollision;
 import io.github.alerithe.client.events.game.EventBlockPush;
 import io.github.alerithe.client.events.game.EventOpaqueBlockCheck;
-import io.github.alerithe.client.events.game.EventUpdate;
+import io.github.alerithe.client.events.game.EventMoveUpdate;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.features.modules.impl.world.phase.Alerithe;
 import io.github.alerithe.client.features.modules.impl.world.phase.Lemon;
@@ -21,7 +21,7 @@ public class Phase extends Module {
     }
 
     @Subscribe
-    public void onPreUpdate(EventUpdate.Pre event) {
+    public void onPreUpdate(EventMoveUpdate.Pre event) {
         mode.getValue().onPreUpdate(event);
     }
 

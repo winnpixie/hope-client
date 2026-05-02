@@ -2,7 +2,7 @@ package io.github.alerithe.client.features.modules.impl.combat;
 
 import io.github.alerithe.client.Client;
 import io.github.alerithe.client.events.bus.Subscribe;
-import io.github.alerithe.client.events.game.EventUpdate;
+import io.github.alerithe.client.events.game.EventTick;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.features.properties.impl.BooleanProperty;
 import io.github.alerithe.client.features.properties.impl.IntProperty;
@@ -41,12 +41,15 @@ public class AutoAttack extends Module {
     }
 
     @Subscribe
-    private void onPreUpdate(EventUpdate.Pre event) {
+    private void onTickStart(EventTick.Start event) {
+        if (!event.isInGame()) return;
         if (GameHelper.getGame().objectMouseOver == null) return;
         if (GameHelper.getGame().objectMouseOver.entityHit == null) return;
 
         Entity entity = GameHelper.getGame().objectMouseOver.entityHit;
-        if (!qualifies(entity)) return;
+        if (!qualifies(entity)) {
+            return;
+        }
 
         if (!timer.hasPassed(1000 / MathHelper.getRandomInt(minAps.getValue(), maxAps.getValue()))) return;
 

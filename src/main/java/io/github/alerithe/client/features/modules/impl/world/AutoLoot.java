@@ -2,7 +2,7 @@ package io.github.alerithe.client.features.modules.impl.world;
 
 import io.github.alerithe.client.events.bus.Subscribe;
 import io.github.alerithe.client.events.game.EventGameScreen;
-import io.github.alerithe.client.events.game.EventUpdate;
+import io.github.alerithe.client.events.game.EventMoveUpdate;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.features.properties.impl.IntProperty;
 import io.github.alerithe.client.utilities.EntityHelper;
@@ -34,7 +34,7 @@ public class AutoLoot extends Module {
     }
 
     @Subscribe
-    public void onPreUpdate(EventUpdate.Pre event) {
+    public void onPreUpdate(EventMoveUpdate.Pre event) {
         if (!(GameHelper.getGame().currentScreen instanceof GuiChest)) return;
 
         GuiChest gui = (GuiChest) GameHelper.getGame().currentScreen;

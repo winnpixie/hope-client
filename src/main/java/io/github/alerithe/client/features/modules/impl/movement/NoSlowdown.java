@@ -2,7 +2,7 @@ package io.github.alerithe.client.features.modules.impl.movement;
 
 import io.github.alerithe.client.events.bus.Subscribe;
 import io.github.alerithe.client.events.game.EventSlowdown;
-import io.github.alerithe.client.events.game.EventUpdate;
+import io.github.alerithe.client.events.game.EventMoveUpdate;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.features.properties.impl.BooleanProperty;
 import io.github.alerithe.client.utilities.EntityHelper;
@@ -45,7 +45,7 @@ public class NoSlowdown extends Module {
     }
 
     @Subscribe
-    public void onPreUpdate(EventUpdate.Pre event) {
+    public void onPreUpdate(EventMoveUpdate.Pre event) {
         if (!packets.getValue()) return;
         if (!EntityHelper.getUser().onGround) return;
         if (!EntityHelper.getUser().isUserMoving()) return;
@@ -57,7 +57,7 @@ public class NoSlowdown extends Module {
     }
 
     @Subscribe
-    public void onPostUpdate(EventUpdate.Post event) {
+    public void onPostUpdate(EventMoveUpdate.Post event) {
         if (!block) return;
         if (!EntityHelper.getUser().isBlocking()) return;
 

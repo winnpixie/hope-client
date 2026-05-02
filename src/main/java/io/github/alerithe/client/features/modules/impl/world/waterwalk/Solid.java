@@ -1,7 +1,7 @@
 package io.github.alerithe.client.features.modules.impl.world.waterwalk;
 
 import io.github.alerithe.client.events.game.EventBlockCollision;
-import io.github.alerithe.client.events.game.EventUpdate;
+import io.github.alerithe.client.events.game.EventMoveUpdate;
 import io.github.alerithe.client.utilities.EntityHelper;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.util.AxisAlignedBB;
@@ -14,7 +14,7 @@ public class Solid extends WaterWalkMode {
     }
 
     @Override
-    public void onPreUpdate(EventUpdate.Pre event) {
+    public void onPreUpdate(EventMoveUpdate.Pre event) {
         if (!isOnLiquid) return;
 
         if (EntityHelper.getUser().ticksExisted % 2 == 0) {

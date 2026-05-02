@@ -1,7 +1,7 @@
 package io.github.alerithe.client.features.modules.impl.movement;
 
 import io.github.alerithe.client.events.bus.Subscribe;
-import io.github.alerithe.client.events.game.EventUpdate;
+import io.github.alerithe.client.events.game.EventMoveUpdate;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.features.properties.impl.BooleanProperty;
 import io.github.alerithe.client.utilities.EntityHelper;
@@ -25,7 +25,7 @@ public class AutoJump extends Module {
     }
 
     @Subscribe
-    public void onPreUpdate(EventUpdate.Pre event) {
+    public void onPreUpdate(EventMoveUpdate.Pre event) {
         KeyBinding.setKeyBindState(GameHelper.getSettings().keyBindJump.getKeyCode(),
                 !withInput.getValue() || EntityHelper.getUser().isUserMoving());
     }

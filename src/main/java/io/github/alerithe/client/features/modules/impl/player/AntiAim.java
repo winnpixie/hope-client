@@ -1,7 +1,7 @@
 package io.github.alerithe.client.features.modules.impl.player;
 
 import io.github.alerithe.client.events.bus.Subscribe;
-import io.github.alerithe.client.events.game.EventUpdate;
+import io.github.alerithe.client.events.game.EventMoveUpdate;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.features.modules.impl.player.antiaim.RotationMode;
 import io.github.alerithe.client.features.modules.impl.player.antiaim.pitch.Headless;
@@ -27,7 +27,7 @@ public class AntiAim extends Module {
     }
 
     @Subscribe
-    public void onPreUpdate(EventUpdate.Pre event) {
+    public void onPreUpdate(EventMoveUpdate.Pre event) {
         yawMode.getValue().onPreUpdate(event);
         pitchMode.getValue().onPreUpdate(event);
     }

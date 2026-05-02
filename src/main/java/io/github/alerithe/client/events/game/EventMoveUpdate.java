@@ -2,8 +2,8 @@ package io.github.alerithe.client.events.game;
 
 import io.github.alerithe.client.events.bus.CancellableEvent;
 
-public class EventUpdate extends CancellableEvent {
-    public static class Pre extends EventUpdate {
+public class EventMoveUpdate extends CancellableEvent {
+    public static class Pre extends EventMoveUpdate {
         private double y;
         private float yaw;
         private float pitch;
@@ -49,6 +49,6 @@ public class EventUpdate extends CancellableEvent {
         }
     }
 
-    public static class Post extends EventUpdate {
+    public static class Post extends EventMoveUpdate {
     }
 }

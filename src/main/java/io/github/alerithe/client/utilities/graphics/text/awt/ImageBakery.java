@@ -50,7 +50,7 @@ class ImageBakery {
 
                 if (shadow) {
                     Graphics2D shadowGraphics = (Graphics2D) graphics.create();
-                    shadowGraphics.setColor(newBrightness(shadowGraphics.getColor(), 0.1f));
+                    shadowGraphics.setColor(AWTHelper.newBrightness(shadowGraphics.getColor(), 0.1f));
                     shadowGraphics.drawString(segment, x + 1f, y + 1f);
                     shadowGraphics.dispose();
                 }
@@ -67,7 +67,7 @@ class ImageBakery {
                 }
 
                 if (newColor != null) {
-                    graphics.setColor(newAlpha(newColor, originalColor.getAlpha()));
+                    graphics.setColor(AWTHelper.newAlpha(newColor, originalColor.getAlpha()));
                 }
 
                 i++;
@@ -82,7 +82,7 @@ class ImageBakery {
 
             if (shadow) {
                 Graphics2D shadowGraphics = (Graphics2D) graphics.create();
-                shadowGraphics.setColor(newBrightness(shadowGraphics.getColor(), 0.1f));
+                shadowGraphics.setColor(AWTHelper.newBrightness(shadowGraphics.getColor(), 0.1f));
                 shadowGraphics.drawString(segment, x + 1f, y + 1f);
                 shadowGraphics.dispose();
             }
@@ -93,19 +93,6 @@ class ImageBakery {
         graphics.dispose();
 
         return new BakedImage(image);
-    }
-
-    private static Color newAlpha(Color color, int alpha) {
-        return new Color(color.getRed(), color.getGreen(), color.getBlue(), alpha);
-    }
-
-    private static Color newBrightness(Color color, float brightness) {
-        return new Color(
-                (color.getRed() * brightness) / 255f,
-                (color.getGreen() * brightness) / 255f,
-                (color.getBlue() * brightness) / 255f,
-                color.getAlpha() / 255f
-        );
     }
 
     private static int getStyle(char c, int original) {

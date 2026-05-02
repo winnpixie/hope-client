@@ -1,7 +1,7 @@
 package io.github.alerithe.client.features.modules.impl.player;
 
 import io.github.alerithe.client.events.bus.Subscribe;
-import io.github.alerithe.client.events.game.EventUpdate;
+import io.github.alerithe.client.events.game.EventMoveUpdate;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.features.properties.impl.IntProperty;
 import io.github.alerithe.client.utilities.EntityHelper;
@@ -9,21 +9,28 @@ import io.github.alerithe.client.utilities.NetworkHelper;
 import net.minecraft.network.play.client.C03PacketPlayer;
 
 public class FastHeal extends Module {
-    private final IntProperty minHealth = new IntProperty("HP", new String[]{"health"}, 6, 1, 19);
+    private final IntProperty hp = new IntProperty("HP", new String[]{"health"}, 6, 1, 19);
 
     public FastHeal() {
         super("FastHeal", new String[]{"regen"}, Type.PLAYER);
 
-        getPropertyManager().add(minHealth);
+        getPropertyManager().add(hp);
     }
 
     @Subscribe
-    public void onPreUpdate(EventUpdate.Pre event) {
-        if (EntityHelper.getUser().getHealth() > minHealth.getValue()) return;
-        if (EntityHelper.getUser().getFoodStats().getFoodLevel() < 17) return;
-        if (!EntityHelper.getUser().onGround) return;
+    public void onPreUpdate(EventMoveUpdate.Pre event) {
+        float health = EntityHelper.getUser().getHealth();
+        if (health <= 0f || health > hp.getValue()) {
+            return;
+        }
+        if (EntityHelper.getUser().getFoodStats().getFoodLevel() < 17) {
+            return;
+        }
+        if (!EntityHelper.getUser().onGround) {
+            return;
+        }
 
-        for (int i = 0; i < 20 - EntityHelper.getUser().getHealth(); i++) {
+        for (int i = 0; i < 20 - health; i++) {
             NetworkHelper.sendPacket(new C03PacketPlayer(true));
         }
     }

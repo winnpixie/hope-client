@@ -34,4 +34,22 @@ public class AWTHelper {
 
     private AWTHelper() {
     }
+
+    static Color newAlpha(Color color, int alpha) {
+        return new Color(
+                color.getRed(),
+                color.getGreen(),
+                color.getBlue(),
+                alpha
+        );
+    }
+
+    static Color newBrightness(Color color, float brightness) {
+        return new Color(
+                (color.getRed() * brightness) / 255f,
+                (color.getGreen() * brightness) / 255f,
+                (color.getBlue() * brightness) / 255f,
+                color.getAlpha() / 255f
+        );
+    }
 }

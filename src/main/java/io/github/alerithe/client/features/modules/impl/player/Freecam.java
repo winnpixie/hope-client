@@ -39,7 +39,7 @@ public class Freecam extends Module {
     }
 
     @Subscribe
-    public void onPreUpdate(EventUpdate.Pre event) {
+    public void onPreUpdate(EventMoveUpdate.Pre event) {
         EntityHelper.getUser().setSpeed(EntityHelper.getUser().isUserMoving() ? 2 : 0);
 
         if (EntityHelper.getUser().movementInput.jump) {

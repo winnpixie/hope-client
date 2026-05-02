@@ -1,7 +1,7 @@
 package io.github.alerithe.client.features.modules.impl.player;
 
 import io.github.alerithe.client.events.bus.Subscribe;
-import io.github.alerithe.client.events.game.EventUpdate;
+import io.github.alerithe.client.events.game.EventMoveUpdate;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.features.properties.impl.IntProperty;
 import io.github.alerithe.client.utilities.EntityHelper;
@@ -20,7 +20,7 @@ public class QuickConsume extends Module {
     }
 
     @Subscribe
-    public void onPreUpdate(EventUpdate.Pre event) {
+    public void onPreUpdate(EventMoveUpdate.Pre event) {
         if (EntityHelper.getUser().isUsingItem() && isUsable(EntityHelper.getUser().getItemInUse())
                 && EntityHelper.getUser().onGround && EntityHelper.getUser().getItemInUseDuration() >= useTicks.getValue()) {
             for (int i = 0; i < (32 - useTicks.getValue()); i++) {

@@ -1,7 +1,7 @@
 package io.github.alerithe.client.features.modules.impl.player;
 
 import io.github.alerithe.client.events.bus.Subscribe;
-import io.github.alerithe.client.events.game.EventUpdate;
+import io.github.alerithe.client.events.game.EventMoveUpdate;
 import io.github.alerithe.client.features.modules.Module;
 
 public class NoHunger extends Module {
@@ -10,7 +10,7 @@ public class NoHunger extends Module {
     }
 
     @Subscribe
-    public void onPreUpdate(EventUpdate.Pre event) {
+    public void onPreUpdate(EventMoveUpdate.Pre event) {
         event.setOnGround(false);
     }
 }

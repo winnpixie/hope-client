@@ -1,7 +1,7 @@
 package io.github.alerithe.client.features.modules.impl.world.phase;
 
 import io.github.alerithe.client.events.game.EventBlockCollision;
-import io.github.alerithe.client.events.game.EventUpdate;
+import io.github.alerithe.client.events.game.EventMoveUpdate;
 import io.github.alerithe.client.utilities.EntityHelper;
 import io.github.alerithe.client.utilities.NetworkHelper;
 import io.github.alerithe.client.utilities.WorldHelper;
@@ -14,7 +14,7 @@ public class Alerithe extends PhaseMode {
     }
 
     @Override
-    public void onPreUpdate(EventUpdate.Pre event) {
+    public void onPreUpdate(EventMoveUpdate.Pre event) {
         if (EntityHelper.getUser().isUserMoving()) {
             EntityHelper.getUser().setSprinting(false);
             float[] vector = EntityHelper.getUser().getMoveVector();

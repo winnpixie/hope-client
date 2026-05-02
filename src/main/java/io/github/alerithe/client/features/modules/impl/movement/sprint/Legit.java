@@ -1,6 +1,6 @@
 package io.github.alerithe.client.features.modules.impl.movement.sprint;
 
-import io.github.alerithe.client.events.game.EventUpdate;
+import io.github.alerithe.client.events.game.EventMoveUpdate;
 import io.github.alerithe.client.features.modules.impl.movement.AutoSprint;
 import io.github.alerithe.client.utilities.GameHelper;
 import net.minecraft.client.settings.KeyBinding;
@@ -11,7 +11,7 @@ public class Legit extends SprintMode {
     }
 
     @Override
-    public void onPreUpdate(EventUpdate.Pre event) {
+    public void onPreUpdate(EventMoveUpdate.Pre event) {
         KeyBinding.setKeyBindState(GameHelper.getSettings().keyBindSprint.getKeyCode(), true);
     }
 }

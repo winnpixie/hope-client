@@ -2,7 +2,7 @@ package io.github.alerithe.client.features.modules.impl.movement;
 
 import io.github.alerithe.client.events.bus.Subscribe;
 import io.github.alerithe.client.events.game.EventPacket;
-import io.github.alerithe.client.events.game.EventUpdate;
+import io.github.alerithe.client.events.game.EventMoveUpdate;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.features.modules.impl.movement.step.*;
 import io.github.alerithe.client.features.properties.impl.BooleanProperty;
@@ -35,7 +35,7 @@ public class Step extends Module {
     }
 
     @Subscribe
-    public void onPreUpdate(EventUpdate.Pre event) {
+    public void onPreUpdate(EventMoveUpdate.Pre event) {
         EntityHelper.getUser().stepHeight = oldStepHeight;
 
         mode.getValue().onPreUpdate(event);

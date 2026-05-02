@@ -2,7 +2,7 @@ package io.github.alerithe.client.features.modules.impl.visual;
 
 import io.github.alerithe.client.events.bus.Subscribe;
 import io.github.alerithe.client.events.game.EventDraw;
-import io.github.alerithe.client.events.game.EventUpdate;
+import io.github.alerithe.client.events.game.EventMoveUpdate;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.features.properties.impl.BooleanProperty;
 import io.github.alerithe.client.utilities.EntityHelper;
@@ -36,7 +36,7 @@ public class BreadCrumbs extends Module {
     }
 
     @Subscribe
-    private void onPostUpdate(EventUpdate.Post event) {
+    private void onPostUpdate(EventMoveUpdate.Post event) {
         if (!EntityHelper.getUser().hasMoved()) {
             return;
         }

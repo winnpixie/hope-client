@@ -1,6 +1,6 @@
 package io.github.alerithe.client.features.modules.impl.movement.speeds;
 
-import io.github.alerithe.client.events.game.EventUpdate;
+import io.github.alerithe.client.events.game.EventMoveUpdate;
 import io.github.alerithe.client.utilities.EntityHelper;
 import io.github.alerithe.client.utilities.WorldHelper;
 
@@ -10,7 +10,7 @@ public class Alerithe extends SpeedMode {
     }
 
     @Override
-    public void onPreUpdate(EventUpdate.Pre event) {
+    public void onPreUpdate(EventMoveUpdate.Pre event) {
         if (!EntityHelper.getUser().isUserMoving()) return;
         if (!EntityHelper.getUser().onGround) return;
         if (EntityHelper.getUser().movementInput.jump) return;

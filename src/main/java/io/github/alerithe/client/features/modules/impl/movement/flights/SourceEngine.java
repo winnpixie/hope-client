@@ -1,9 +1,8 @@
 package io.github.alerithe.client.features.modules.impl.movement.flights;
 
-import io.github.alerithe.client.events.game.EventUpdate;
+import io.github.alerithe.client.events.game.EventMoveUpdate;
 import io.github.alerithe.client.features.modules.impl.movement.Flight;
 import io.github.alerithe.client.utilities.EntityHelper;
-import net.minecraft.util.MathHelper;
 
 public class SourceEngine extends FlightMode {
     public SourceEngine(Flight module) {
@@ -11,7 +10,7 @@ public class SourceEngine extends FlightMode {
     }
 
     @Override
-    public void onPreUpdate(EventUpdate.Pre event) {
+    public void onPreUpdate(EventMoveUpdate.Pre event) {
         EntityHelper.getUser().setSpeed(EntityHelper.getUser().isUserMoving() ? module.moveSpeed.getValue() : 0);
 
         float forward = Math.signum(EntityHelper.getUser().movementInput.moveForward);

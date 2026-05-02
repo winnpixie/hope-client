@@ -1,6 +1,6 @@
 package io.github.alerithe.client.features.modules.impl.player.antiaim.yaw;
 
-import io.github.alerithe.client.events.game.EventUpdate;
+import io.github.alerithe.client.events.game.EventMoveUpdate;
 import io.github.alerithe.client.features.modules.impl.player.antiaim.RotationMode;
 import io.github.alerithe.client.utilities.EntityHelper;
 import io.github.alerithe.client.utilities.MathHelper;
@@ -11,7 +11,7 @@ public class LBYBreaker extends RotationMode {
     }
 
     @Override
-    public void onPreUpdate(EventUpdate.Pre event) {
+    public void onPreUpdate(EventMoveUpdate.Pre event) {
         if (EntityHelper.getUser().ticksExisted % 10 == 0) {
             event.setYaw(event.getYaw() + 90f);
             return;

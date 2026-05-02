@@ -1,6 +1,6 @@
 package io.github.alerithe.client.features.modules.impl.movement.flights;
 
-import io.github.alerithe.client.events.game.EventUpdate;
+import io.github.alerithe.client.events.game.EventMoveUpdate;
 import io.github.alerithe.client.features.modules.impl.movement.Flight;
 import io.github.alerithe.client.utilities.EntityHelper;
 import io.github.alerithe.client.utilities.NetworkHelper;
@@ -12,7 +12,7 @@ public class SkyHigh extends FlightMode {
     }
 
     @Override
-    public void onPreUpdate(EventUpdate.Pre event) {
+    public void onPreUpdate(EventMoveUpdate.Pre event) {
         // This is the maximum move you can make in one tick to not trigger Bukkit's PlayerMoveEvent
         double maxMoveDelta = 1.0 / 16.1;
         float[] moveVec = EntityHelper.getUser().getLookVector();

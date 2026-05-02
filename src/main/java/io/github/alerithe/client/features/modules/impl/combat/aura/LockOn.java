@@ -1,6 +1,6 @@
 package io.github.alerithe.client.features.modules.impl.combat.aura;
 
-import io.github.alerithe.client.events.game.EventUpdate;
+import io.github.alerithe.client.events.game.EventMoveUpdate;
 import io.github.alerithe.client.features.modules.impl.combat.KillAura;
 import io.github.alerithe.client.utilities.MathHelper;
 import io.github.alerithe.client.utilities.Stopwatch;
@@ -13,7 +13,7 @@ public class LockOn extends AuraMode {
     }
 
     @Override
-    public void onPreUpdate(EventUpdate.Pre event) {
+    public void onPreUpdate(EventMoveUpdate.Pre event) {
         if (module.target != null && !module.qualifies(module.target)) module.target = null;
 
         if (!module.near.isEmpty() && module.target == null) module.target = module.near.get(0);

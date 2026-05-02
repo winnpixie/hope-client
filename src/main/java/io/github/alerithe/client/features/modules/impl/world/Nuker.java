@@ -1,7 +1,7 @@
 package io.github.alerithe.client.features.modules.impl.world;
 
 import io.github.alerithe.client.events.bus.Subscribe;
-import io.github.alerithe.client.events.game.EventUpdate;
+import io.github.alerithe.client.events.game.EventMoveUpdate;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.features.modules.impl.world.nuker.Creative;
 import io.github.alerithe.client.features.modules.impl.world.nuker.NukerMode;
@@ -18,12 +18,12 @@ public class Nuker extends Module {
     }
 
     @Subscribe
-    public void onPreUpdate(EventUpdate.Pre event) {
+    public void onPreUpdate(EventMoveUpdate.Pre event) {
         mode.getValue().onPreUpdate(event);
     }
 
     @Subscribe
-    public void onPostUpdate(EventUpdate.Post event) {
+    public void onPostUpdate(EventMoveUpdate.Post event) {
         mode.getValue().onPostUpdate(event);
     }
 }

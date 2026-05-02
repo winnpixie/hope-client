@@ -1,6 +1,6 @@
 package io.github.alerithe.client.features.modules.impl.player.antiaim.pitch;
 
-import io.github.alerithe.client.events.game.EventUpdate;
+import io.github.alerithe.client.events.game.EventMoveUpdate;
 import io.github.alerithe.client.features.modules.impl.player.antiaim.RotationMode;
 
 public class Headless extends RotationMode {
@@ -9,7 +9,7 @@ public class Headless extends RotationMode {
     }
 
     @Override
-    public void onPreUpdate(EventUpdate.Pre event) {
+    public void onPreUpdate(EventMoveUpdate.Pre event) {
         event.setPitch(180f);
     }
 }

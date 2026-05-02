@@ -1,6 +1,6 @@
 package io.github.alerithe.client.features.modules.impl.combat.aura;
 
-import io.github.alerithe.client.events.game.EventUpdate;
+import io.github.alerithe.client.events.game.EventMoveUpdate;
 import io.github.alerithe.client.features.modules.impl.combat.KillAura;
 
 public class Tick extends AuraMode {
@@ -11,7 +11,7 @@ public class Tick extends AuraMode {
     }
 
     @Override
-    public void onPreUpdate(EventUpdate.Pre event) {
+    public void onPreUpdate(EventMoveUpdate.Pre event) {
         module.target = null;
 
         if (module.near.isEmpty()) {
