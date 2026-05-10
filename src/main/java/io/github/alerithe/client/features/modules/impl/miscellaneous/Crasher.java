@@ -32,14 +32,18 @@ public class Crasher extends Module {
 
     @Subscribe
     public void onStartTick(EventTick.Start event) {
-        if (!event.isInGame()) return;
+        if (!event.isInGame()) {
+            return;
+        }
 
         sendBoxerCrash();
         sendParalyzeCrash();
     }
 
     private void sendBoxerCrash() {
-        if (!boxer.getValue()) return;
+        if (!boxer.getValue()) {
+            return;
+        }
 
         for (int i = 0; i < bpt.getValue(); i++) {
             NetworkHelper.sendPacket(new C0APacketAnimation());

@@ -6,28 +6,17 @@ import io.github.alerithe.client.events.game.EventMoveUpdate;
 import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.features.properties.impl.BooleanProperty;
 import io.github.alerithe.client.features.properties.impl.IntProperty;
-import io.github.alerithe.client.utilities.EntityHelper;
-import io.github.alerithe.client.utilities.GameHelper;
-import io.github.alerithe.client.utilities.Stopwatch;
-import io.github.alerithe.client.utilities.WorldHelper;
-import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
+import io.github.alerithe.client.utilities.*;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.Vec3;
-
-import java.util.Arrays;
-import java.util.List;
 
 public class AutoBridge extends Module {
     private final BooleanProperty tower = new BooleanProperty("Tower", new String[0], true);
     private final IntProperty bps = new IntProperty("BPS", new String[]{"cps", "speed"},
             9, 1, 20);
 
-    private final List<Block> blacklist = Arrays.asList(Blocks.cocoa, Blocks.water, Blocks.flowing_water, Blocks.lava,
-            Blocks.flowing_lava, Blocks.air, Blocks.flower_pot, Blocks.red_flower, Blocks.yellow_flower,
-            Blocks.tallgrass);
     private final Stopwatch timer = new Stopwatch();
 
     private Data data;
@@ -54,20 +43,17 @@ public class AutoBridge extends Module {
         event.setPitch(90f);
 
         double px = EntityHelper.getUser().posX;
-        double py = EntityHelper.getUser().posY - 1;
+        double py = EntityHelper.getUser().posY - 0.5;
         double pz = EntityHelper.getUser().posZ;
 
         BlockPos below = new BlockPos(px, py, pz);
-        Block blockBelow = WorldHelper.getBlock(below);
-
-        if (!blacklist.contains(blockBelow)) return;
-
+        if (WorldHelper.isFullBlock(below)) return;
 
         data = makeData(below);
         if (data == null) return;
 
-        float[] angles = EntityHelper.getRotationToBlock(data.pos);
-        event.setYaw(angles[0]);
+        float[] angles = RotationHelper.getRotationToBlock(data.pos);
+        event.setYaw(event.getYaw() + RotationHelper.getAngleDelta(angles[0], event.getYaw()));
         event.setPitch(angles[1]);
     }
 
@@ -99,21 +85,30 @@ public class AutoBridge extends Module {
         event.cancel();
     }
 
+    // now this part is simple
     private Data makeData(BlockPos pos) {
-        // now this part is simple
-        if (!blacklist.contains(WorldHelper.getBlock(pos.add(0, -1, 0)))) { // Down
+        // Down
+        if (WorldHelper.isFullBlock(pos.add(0, -1, 0))) {
             return new Data(pos.add(0, -1, 0), EnumFacing.UP);
         }
-        if (!blacklist.contains(WorldHelper.getBlock(pos.add(1, 0, 0)))) { // East
+
+        // East
+        if (WorldHelper.isFullBlock(pos.add(1, 0, 0))) {
             return new Data(pos.add(1, 0, 0), EnumFacing.WEST);
         }
-        if (!blacklist.contains(WorldHelper.getBlock(pos.add(0, 0, 1)))) { // South
+
+        // South
+        if (WorldHelper.isFullBlock(pos.add(0, 0, 1))) {
             return new Data(pos.add(0, 0, 1), EnumFacing.NORTH);
         }
-        if (!blacklist.contains(WorldHelper.getBlock(pos.add(-1, 0, 0)))) { // West
+
+        // West
+        if (WorldHelper.isFullBlock(pos.add(-1, 0, 0))) {
             return new Data(pos.add(-1, 0, 0), EnumFacing.EAST);
         }
-        if (!blacklist.contains(WorldHelper.getBlock(pos.add(0, 0, -1)))) { // North
+
+        // North
+        if (WorldHelper.isFullBlock(pos.add(0, 0, -1))) {
             return new Data(pos.add(0, 0, -1), EnumFacing.SOUTH);
         }
 

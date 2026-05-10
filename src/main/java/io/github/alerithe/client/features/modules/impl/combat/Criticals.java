@@ -29,7 +29,10 @@ public class Criticals extends Module {
         if (!EntityHelper.getUser().onGround) return;
 
         if (!packets.getValue()) {
-            EntityHelper.getUser().motionY = 0.42;
+            if (!EntityHelper.getUser().isInLiquid()) {
+                EntityHelper.getUser().jump();
+            }
+
             return;
         }
 

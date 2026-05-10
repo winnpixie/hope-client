@@ -85,8 +85,8 @@ public class KillAura extends Module {
         if (look.getValue()) {
             float[] angles = getRotationsToTarget(target);
             float offsetValue = angleOffset.getValue().floatValue();
-            float yawDelta = (((angles[0] - (event.getYaw() % 360)) + 180f) % 360f) - 180f;
-            event.setYaw(event.getYaw() + yawDelta + MathHelper.getRandomFloat(-offsetValue, offsetValue));
+            event.setYaw(event.getYaw() + RotationHelper.getAngleDelta(angles[0], event.getYaw())
+                    + MathHelper.getRandomFloat(-offsetValue, offsetValue));
             event.setPitch(MathHelper.clamp(angles[1] + MathHelper.getRandomFloat(-offsetValue, offsetValue), -90f, 90f));
 
             if (cameraLock.getValue()) {
@@ -148,17 +148,17 @@ public class KillAura extends Module {
     }
 
     private float[] getRotationsToTarget(Entity target) {
-        if (!smartAngles.getValue()) return EntityHelper.getRotationToEntity(target);
+        if (!smartAngles.getValue()) return RotationHelper.getRotationToEntity(target);
 
         double yDiff = target.posY - EntityHelper.getUser().posY;
         if (yDiff > 0.4) {
-            return EntityHelper.getRotationToPosition(
+            return RotationHelper.getRotationToPosition(
                     target.posX,
                     target.posY + (target.getEyeHeight() / (yDiff / 0.4)),
                     target.posZ);
         }
 
-        return EntityHelper.getRotationToEntity(target);
+        return RotationHelper.getRotationToEntity(target);
     }
 
     public void attack(Entity entity) {
@@ -177,7 +177,7 @@ public class KillAura extends Module {
         private static class AngleSort extends SortingMode {
             public AngleSort() {
                 super("Angle", new String[0], Comparator.comparingDouble(entity ->
-                        EntityHelper.getRotationToEntity(entity)[0]));
+                        RotationHelper.getRotationToEntity(entity)[0]));
             }
         }
 

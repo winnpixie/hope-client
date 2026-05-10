@@ -1,7 +1,7 @@
 package io.github.alerithe.client.utilities;
 
 import io.github.alerithe.client.extensions.LocalPlayer;
-import net.minecraft.block.Block;
+import net.minecraft.block.*;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.entity.Entity;
@@ -29,6 +29,34 @@ public class WorldHelper {
 
     public static IBlockState getBlockState(BlockPos pos) {
         return getWorld().getBlockState(pos);
+    }
+
+    public static boolean isFullBlock(BlockPos pos) {
+        return isFullBlock(getBlockState(pos));
+    }
+
+    public static boolean isFullBlock(IBlockState state) {
+        if (state == null) return false;
+
+        Block block = state.getBlock();
+        if (block.isFullBlock()) return true;
+
+        if (block instanceof BlockSlab) {
+            return state.getValue(BlockSlab.HALF) == BlockSlab.EnumBlockHalf.TOP;
+        }
+
+        if (block instanceof BlockSnow) {
+            return state.getValue(BlockSnow.LAYERS) > 5;
+        }
+
+        return block instanceof BlockGlass
+                || block instanceof BlockStainedGlass
+                || block instanceof BlockStairs
+                || block instanceof BlockCactus
+                || block instanceof BlockChest
+                || block instanceof BlockEnderChest
+                || block instanceof BlockSlime
+                || block instanceof BlockEnchantmentTable;
     }
 
     public static double distance(Entity end) {

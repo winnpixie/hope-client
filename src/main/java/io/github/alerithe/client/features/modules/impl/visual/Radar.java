@@ -6,10 +6,7 @@ import io.github.alerithe.client.features.modules.Module;
 import io.github.alerithe.client.features.modules.impl.combat.AntiBot;
 import io.github.alerithe.client.features.properties.impl.BooleanProperty;
 import io.github.alerithe.client.features.properties.impl.IntProperty;
-import io.github.alerithe.client.utilities.EntityHelper;
-import io.github.alerithe.client.utilities.GameHelper;
-import io.github.alerithe.client.utilities.MathHelper;
-import io.github.alerithe.client.utilities.WorldHelper;
+import io.github.alerithe.client.utilities.*;
 import io.github.alerithe.client.utilities.graphics.VisualHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
@@ -83,7 +80,7 @@ public class Radar extends Module {
 
             float dist = (float) Math.sqrt(sqDist);
             float[] vector = EntityHelper.getUser().getLookVector(
-                    EntityHelper.getRotationToEntity(entity)[0]
+                    RotationHelper.getRotationToEntity(entity)[0]
                             - MathHelper.lerpf(EntityHelper.getUser().prevRotationYawHead,
                             EntityHelper.getUser().rotationYawHead, event.getPartialTicks()));
 
