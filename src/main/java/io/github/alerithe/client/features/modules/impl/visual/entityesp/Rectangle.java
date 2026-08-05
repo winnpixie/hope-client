@@ -102,10 +102,10 @@ public class Rectangle extends EntityESPMode {
                 continue;
             }
 
-            bounds[0] = MathHelper.min(bounds[0], projection[0]);
-            bounds[1] = MathHelper.min(bounds[1], projection[1]);
-            bounds[2] = MathHelper.max(bounds[2], projection[0]);
-            bounds[3] = MathHelper.max(bounds[3], projection[1]);
+            bounds[0] = Math.min(bounds[0], projection[0]);
+            bounds[1] = Math.min(bounds[1], projection[1]);
+            bounds[2] = Math.max(bounds[2], projection[0]);
+            bounds[3] = Math.max(bounds[3], projection[1]);
         }
 
         return bounds;

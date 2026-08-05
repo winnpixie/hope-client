@@ -12,6 +12,8 @@ public class Collapsible extends ElementEventListener {
 
     @Override
     public void onMouseDown(int mouseX, int mouseY, int button) {
-        if (button == 1) container.getNormalStyle().setVisible(!container.getNormalStyle().isVisible());
+        if (button == 1) {
+            container.getNormalStyle().setVisible(!container.getNormalStyle().isVisible());
+        }
     }
 }

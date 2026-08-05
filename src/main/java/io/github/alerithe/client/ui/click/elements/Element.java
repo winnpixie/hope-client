@@ -107,10 +107,10 @@ public class Element {
             if (!child.getNormalStyle().isVisible()) continue;
 
             float[] childBounds = child.getBounds();
-            bounds[0] = MathHelper.min(bounds[0], childBounds[0]);
-            bounds[1] = MathHelper.min(bounds[1], childBounds[1]);
-            bounds[2] = MathHelper.max(bounds[2], childBounds[2]);
-            bounds[3] = MathHelper.max(bounds[3], childBounds[3]);
+            bounds[0] = Math.min(bounds[0], childBounds[0]);
+            bounds[1] = Math.min(bounds[1], childBounds[1]);
+            bounds[2] = Math.max(bounds[2], childBounds[2]);
+            bounds[3] = Math.max(bounds[3], childBounds[3]);
         }
 
         return bounds;

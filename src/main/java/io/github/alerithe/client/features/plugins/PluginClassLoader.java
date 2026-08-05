@@ -46,9 +46,9 @@ public class PluginClassLoader extends URLClassLoader {
         try (ByteArrayOutputStream output = new ByteArrayOutputStream();
              InputStream is = jar.getInputStream(entry)) {
             byte[] buffer = new byte[8192]; // 8K buffer
-            int read;
-            while ((read = is.read(buffer)) != -1) {
-                output.write(buffer, 0, read);
+            int len;
+            while ((len = is.read(buffer)) != -1) {
+                output.write(buffer, 0, len);
             }
 
             classData = output.toByteArray();

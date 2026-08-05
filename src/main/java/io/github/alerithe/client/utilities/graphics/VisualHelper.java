@@ -4,6 +4,7 @@ import io.github.alerithe.client.utilities.GameHelper;
 import io.github.alerithe.client.utilities.graphics.drawing.BufferedDrawDevice;
 import io.github.alerithe.client.utilities.graphics.drawing.DrawDevice;
 import io.github.alerithe.client.utilities.graphics.drawing.MinecraftDrawDevice;
+import io.github.alerithe.client.utilities.graphics.text.MinecraftTextRenderer;
 import io.github.alerithe.client.utilities.graphics.text.TextRenderer;
 import io.github.alerithe.client.utilities.graphics.text.awt.AWTTextRenderer;
 import net.minecraft.client.gui.ScaledResolution;
@@ -17,6 +18,8 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
 
 import java.awt.*;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
@@ -37,11 +40,28 @@ public class VisualHelper {
     private static final Frustum frustum = new Frustum();
 
     // Fonts
-    public static final TextRenderer TXT = new AWTTextRenderer(new Font("Helvetica", Font.PLAIN, 18));
+    public static final TextRenderer TXT;
 
     // Graphics Device
     public static final DrawDevice GFX = new MinecraftDrawDevice();
     public static final BufferedDrawDevice GFX_BUFFERED = new BufferedDrawDevice();
+
+    static {
+        {
+            TextRenderer textRenderer = new MinecraftTextRenderer();
+            try (InputStream fontStream = VisualHelper.class.getResourceAsStream("/NotoSans-Regular.ttf")) {
+                if (fontStream == null) {
+                    throw new IOException("fontStream == null ???");
+                }
+
+                Font notoSans = Font.createFont(Font.TRUETYPE_FONT, fontStream);
+                textRenderer = new AWTTextRenderer(notoSans.deriveFont(Font.PLAIN, 18));
+            } catch (FontFormatException | IOException ex) {
+                ex.printStackTrace();
+            }
+            TXT = textRenderer;
+        }
+    }
 
     private VisualHelper() {
     }

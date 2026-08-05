@@ -8,5 +8,5 @@ public class MurderMystery extends Module {
     }
 
     // Hypixel-specific module
-    // TODO: Highlight murderer and gold ingots
+    // TODO: Highlight murderer (after showing a sword) and gold ingots
 }

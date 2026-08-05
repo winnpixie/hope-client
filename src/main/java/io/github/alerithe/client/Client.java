@@ -41,6 +41,7 @@ public class Client {
     }
 
     private Client() {
+        // NOTE: HOST + \0 + 127.0.0.1 + \0 + UUID
     }
 
     public static void load() {

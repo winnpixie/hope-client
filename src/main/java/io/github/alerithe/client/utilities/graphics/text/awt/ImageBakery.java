@@ -15,8 +15,8 @@ class ImageBakery {
         Rectangle2D bounds = font.getStringBounds(text, context.getFontRenderContext());
         LineMetrics metrics = font.getLineMetrics(text, context.getFontRenderContext());
 
-        int width = (int) MathHelper.max(MathHelper.ceil(bounds.getWidth()), 1) + 1;
-        int height = (int) MathHelper.max(MathHelper.ceil(bounds.getHeight()), 1) + 1;
+        int width = (int) Math.max(MathHelper.ceil(bounds.getWidth()), 1) + 1;
+        int height = (int) Math.max(MathHelper.ceil(bounds.getHeight()), 1) + 1;
         BufferedImage image = AWTHelper.DISPLAY.createCompatibleImage(width, height, Transparency.TRANSLUCENT);
 
         Graphics2D graphics = image.createGraphics();

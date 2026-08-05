@@ -23,7 +23,7 @@ public class Radar extends Module {
     private final IntProperty x = new IntProperty("X", new String[0],
             2, 0, 8192);
     private final IntProperty y = new IntProperty("Y", new String[0],
-            100, 0, 8192);
+            110, 0, 8192);
     private final IntProperty size = new IntProperty("Size", new String[0],
             64, 25, 512);
 

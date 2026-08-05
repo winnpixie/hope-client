@@ -10,64 +10,16 @@ public class MathHelper {
     private MathHelper() {
     }
 
-    public static int min(int a, int b) {
-        return a < b ? a : b;
-    }
-
-    public static int max(int a, int b) {
-        return a > b ? a : b;
-    }
-
-    public static int abs(int val) {
-        return val < 0 ? -val : val;
-    }
-
     public static int clamp(int value, int min, int max) {
         return value < min ? min : value > max ? max : value;
-    }
-
-    public static long min(long a, long b) {
-        return a < b ? a : b;
-    }
-
-    public static long max(long a, long b) {
-        return a > b ? a : b;
-    }
-
-    public static long abs(long val) {
-        return val < 0 ? -val : val;
     }
 
     public static long clamp(long value, long min, long max) {
         return value < min ? min : value > max ? max : value;
     }
 
-    public static float min(float a, float b) {
-        return a < b ? a : b;
-    }
-
-    public static float max(float a, float b) {
-        return a > b ? a : b;
-    }
-
-    public static float abs(float val) {
-        return val < 0f ? -val : val;
-    }
-
     public static float clamp(float value, float min, float max) {
         return value < min ? min : value > max ? max : value;
-    }
-
-    public static double min(double a, double b) {
-        return a < b ? a : b;
-    }
-
-    public static double max(double a, double b) {
-        return a > b ? a : b;
-    }
-
-    public static double abs(double val) {
-        return val < 0.0 ? -val : val;
     }
 
     public static double clamp(double value, double min, double max) {

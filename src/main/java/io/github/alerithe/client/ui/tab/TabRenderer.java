@@ -36,7 +36,7 @@ public class TabRenderer extends TabComponent {
     private float drawCategories(float xOffset) {
         float width = 0;
         for (Module.Type type : Module.Type.values()) {
-            width = MathHelper.max(width, VisualHelper.TXT.getStringWidth(type.getLabel()) + 9);
+            width = Math.max(width, VisualHelper.TXT.getStringWidth(type.getLabel()) + 9);
         }
 
         float x = xOffset + 1;
@@ -57,7 +57,7 @@ public class TabRenderer extends TabComponent {
         List<Module> modules = getContainer().getModules();
         float width = 0;
         for (Module module : modules) {
-            width = MathHelper.max(width, VisualHelper.TXT.getStringWidth(module.getName()) + 4);
+            width = Math.max(width, VisualHelper.TXT.getStringWidth(module.getName()) + 4);
         }
 
         float x = xOffset + 1;
@@ -77,7 +77,7 @@ public class TabRenderer extends TabComponent {
         List<Property<?>> properties = getContainer().getProperties();
         float width = 0;
         for (Property<?> property : properties) {
-            width = MathHelper.max(width, VisualHelper.TXT.getStringWidth(format(property)) + 4);
+            width = Math.max(width, VisualHelper.TXT.getStringWidth(format(property)) + 4);
         }
 
         float x = xOffset + 1;

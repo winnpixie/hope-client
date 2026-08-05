@@ -117,7 +117,7 @@ public class HUD extends Module {
             } else {
                 long oldestTick = serverTickTimes.get(0);
                 long latestTick = serverTickTimes.get(serverTickTimes.size() - 1);
-                double tps = 20.0 / MathHelper.max((latestTick - oldestTick) / (1000.0 * (serverTickTimes.size() - 1)), 1.0);
+                double tps = 20.0 / Math.max((latestTick - oldestTick) / (1000.0 * (serverTickTimes.size() - 1)), 1.0);
 
                 text += String.format("%.2f", tps);
             }
