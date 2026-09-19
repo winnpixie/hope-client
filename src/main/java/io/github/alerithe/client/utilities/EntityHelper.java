@@ -76,9 +76,7 @@ public class EntityHelper {
 
     public static int getHealthColor(EntityLivingBase living) {
         float health = getTotalHealth(living);
-        float maxHealth = living.getMaxHealth();
-        if (maxHealth <= 0f) maxHealth = health + 1;
-
+        float maxHealth = Math.max(1f, living.getMaxHealth());
         float percent = health / maxHealth;
 
         if (percent <= 0.2) {

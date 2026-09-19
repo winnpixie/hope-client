@@ -2,7 +2,6 @@ package io.github.alerithe.client.features.modules.impl.visual.storageesp;
 
 import io.github.alerithe.client.events.game.EventDraw;
 import io.github.alerithe.client.features.modules.impl.visual.StorageESP;
-import io.github.alerithe.client.utilities.MathHelper;
 import io.github.alerithe.client.utilities.WorldHelper;
 import io.github.alerithe.client.utilities.graphics.VisualHelper;
 import net.minecraft.tileentity.TileEntity;
@@ -53,9 +52,9 @@ public class Rectangle extends StorageESPMode {
             float width = bounds[2] - bounds[0];
             float height = bounds[3] - bounds[1];
 
-            VisualHelper.GFX.drawBorderedSquare(x + 0.5f, y + 0.5f, width - 1f, height - 1f,
+            VisualHelper.GFX_BUFFERED.drawBorderedSquare(x + 0.5f, y + 0.5f, width - 1f, height - 1f,
                     1.5f, 0x00000000, 0xFF000000);
-            VisualHelper.GFX.drawBorderedSquare(x, y, width, height,
+            VisualHelper.GFX_BUFFERED.drawBorderedSquare(x, y, width, height,
                     0.5f, 0x00000000, module.getTileColor(tile));
         }
 

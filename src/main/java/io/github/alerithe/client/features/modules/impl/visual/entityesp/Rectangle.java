@@ -54,9 +54,9 @@ public class Rectangle extends EntityESPMode {
             float width = bounds[2] - bounds[0];
             float height = bounds[3] - bounds[1];
 
-            VisualHelper.GFX.drawBorderedSquare(x + 0.5f, y + 0.5f, width - 1f, height - 1f, 1.5f,
+            VisualHelper.GFX_BUFFERED.drawBorderedSquare(x + 0.5f, y + 0.5f, width - 1f, height - 1f, 1.5f,
                     0x00000000, 0xFF000000);
-            VisualHelper.GFX.drawBorderedSquare(x, y, width, height, 0.5f,
+            VisualHelper.GFX_BUFFERED.drawBorderedSquare(x, y, width, height, 0.5f,
                     0x00000000,
                     Client.FRIEND_MANAGER.find(entity.getName()) == null ? 0xFFFFFFFF : 0xFF00FFFF);
 
@@ -118,13 +118,10 @@ public class Rectangle extends EntityESPMode {
 
         EntityLivingBase living = (EntityLivingBase) entity;
         float health = living.getHealth() + living.getAbsorptionAmount();
-        float maxHealth = living.getMaxHealth();
-        if (maxHealth <= 0f) {
-            maxHealth = health + 1;
-        }
+        float maxHealth = Math.max(1f, living.getMaxHealth());
 
         float healthBarHeight = height * MathHelper.clamp(health / maxHealth, 0f, 1f);
-        VisualHelper.GFX.drawSimpleBorderedSquare(x - 2.5f, y + height - healthBarHeight - 0.5f, 0.5f, healthBarHeight + 1f,
+        VisualHelper.GFX_BUFFERED.drawSimpleBorderedSquare(x - 2.5f, y + height - healthBarHeight - 0.5f, 0.5f, healthBarHeight + 1f,
                 0.5f, EntityHelper.getHealthColor(living), 0xFF000000);
     }
 }

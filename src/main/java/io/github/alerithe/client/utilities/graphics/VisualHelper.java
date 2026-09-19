@@ -47,18 +47,17 @@ public class VisualHelper {
     public static final BufferedDrawDevice GFX_BUFFERED = new BufferedDrawDevice();
 
     static {
-        {
-            TextRenderer textRenderer = new MinecraftTextRenderer();
-            try (InputStream fontStream = VisualHelper.class.getResourceAsStream("/NotoSans-Regular.ttf")) {
-                if (fontStream == null) {
-                    throw new IOException("fontStream == null ???");
-                }
-
-                Font notoSans = Font.createFont(Font.TRUETYPE_FONT, fontStream);
-                textRenderer = new AWTTextRenderer(notoSans.deriveFont(Font.PLAIN, 18));
-            } catch (FontFormatException | IOException ex) {
-                ex.printStackTrace();
+        TextRenderer textRenderer = new MinecraftTextRenderer();
+        try (InputStream fontStream = VisualHelper.class.getResourceAsStream("/NotoSans-Regular.ttf")) {
+            if (fontStream == null) {
+                throw new IOException("fontStream == null ???");
             }
+
+            Font notoSans = Font.createFont(Font.TRUETYPE_FONT, fontStream);
+            textRenderer = new AWTTextRenderer(notoSans.deriveFont(Font.PLAIN, 18));
+        } catch (FontFormatException | IOException ex) {
+            ex.printStackTrace();
+        } finally {
             TXT = textRenderer;
         }
     }
