@@ -7,6 +7,9 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.MathHelper;
 
 public class RotationHelper {
+    public static final double DEG_TO_RAD = Math.PI / 180.0;
+    public static final double RAD_TO_DEG = 180.0 / Math.PI;
+
     private RotationHelper() {
     }
 

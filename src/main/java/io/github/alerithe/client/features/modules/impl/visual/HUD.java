@@ -11,7 +11,6 @@ import io.github.alerithe.client.features.properties.impl.BooleanProperty;
 import io.github.alerithe.client.utilities.*;
 import io.github.alerithe.client.utilities.graphics.VisualHelper;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
@@ -249,7 +248,8 @@ public class HUD extends Module {
         }
 
         if (realPing.getValue()) {
-            if (!waitingForPong) {
+            if (Stopwatch.getNow() - pingRequestTime > 1000
+                    && !waitingForPong) {
                 NetworkHelper.sendPacket(new C16PacketClientStatus(C16PacketClientStatus.EnumState.REQUEST_STATS));
                 pingRequestTime = Stopwatch.getNow();
 

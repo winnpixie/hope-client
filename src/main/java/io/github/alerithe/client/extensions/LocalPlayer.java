@@ -4,6 +4,7 @@ import io.github.alerithe.client.Client;
 import io.github.alerithe.client.events.game.EventBlockPush;
 import io.github.alerithe.client.events.game.EventChat;
 import io.github.alerithe.client.events.game.EventOpaqueBlockCheck;
+import io.github.alerithe.client.utilities.RotationHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.network.NetHandlerPlayClient;
@@ -119,7 +120,7 @@ public class LocalPlayer extends EntityPlayerSP {
     }
 
     public float[] getLookVector(float yaw) {
-        yaw *= (float) (Math.PI / 180.0);
+        yaw *= (float) RotationHelper.DEG_TO_RAD;
 
         return new float[]{
                 -MathHelper.sin(yaw),

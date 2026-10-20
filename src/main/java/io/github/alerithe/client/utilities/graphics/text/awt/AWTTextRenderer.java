@@ -50,7 +50,7 @@ public class AWTTextRenderer implements TextRenderer {
 
     @Override
     public float getFontHeight() {
-        return (float) font.getStringBounds(" ", context.getFontRenderContext()).getHeight() / 2f;
+        return (float) font.getStringBounds("0", context.getFontRenderContext()).getHeight() / 2f;
     }
 
     @Override

@@ -9,11 +9,11 @@ import io.github.alerithe.client.features.modules.impl.combat.AntiBot;
 import io.github.alerithe.client.features.properties.impl.BooleanProperty;
 import io.github.alerithe.client.utilities.*;
 import io.github.alerithe.client.utilities.graphics.VisualHelper;
-import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 
 import java.util.Comparator;
 import java.util.Map;
@@ -110,22 +110,23 @@ public class NameTags extends Module {
         String text = entity.getDisplayName().getFormattedText();
 
         if (entity instanceof EntityItem) {
-            text = ((EntityItem) entity).getEntityItem().getDisplayName();
-        } else {
-            Friend friend = Client.FRIEND_MANAGER.find(entity.getName());
-            if (friend != null) {
-                text = String.format("\247b%s", friend.getAliases()[0]);
+            EntityItem item = (EntityItem) entity;
+            ItemStack stack = item.getEntityItem();
+            if (stack == null) {
+                return text;
             }
+
+            return String.format("%s \2477x\247f%d", stack.getDisplayName(), stack.stackSize);
+        }
+
+        Friend friend = Client.FRIEND_MANAGER.find(entity.getName());
+        if (friend != null) {
+            text = String.format("\247b%s", friend.getAliases()[0]);
         }
 
         if (ping.getValue() && entity instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) entity;
-            if (player.getGameProfile() != null) {
-                NetworkPlayerInfo npi = NetworkHelper.getInfo(player);
-                if (npi != null) {
-                    text = String.format("\247a%dms\247r %s", npi.getResponseTime(), text);
-                }
-            }
+            text = String.format("\247a%dms\247r %s", NetworkHelper.getPing(player), text);
         }
 
         if (showHealth.getValue() && entity instanceof EntityLivingBase) {

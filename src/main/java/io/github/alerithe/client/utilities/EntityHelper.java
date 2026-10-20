@@ -66,10 +66,15 @@ public class EntityHelper {
             return 0xFF00FFFF;
         }
 
-        if (isPlayer(entity)) return 0xFFFF0000;
-        if (isHostile(entity)) return 0xFFFF6600;
-        if (isAnimal(entity)) return 0xFF00FF00;
-        if (isPassive(entity)) return 0xFFFFFF00;
+        if (isPlayer(entity)) {
+            return 0xFFFF0000;
+        } else if (isHostile(entity)) {
+            return 0xFFFF6600;
+        } else if (isAnimal(entity)) {
+            return 0xFF00FF00;
+        } else if (isPassive(entity)) {
+            return 0xFFFFFF00;
+        }
 
         return 0xFFFF00FF;
     }
@@ -96,9 +101,7 @@ public class EntityHelper {
 
     public static char getHealthColorCode(EntityLivingBase living) {
         float health = getTotalHealth(living);
-        float maxHealth = living.getMaxHealth();
-        if (maxHealth <= 0f) maxHealth = health + 1;
-
+        float maxHealth = Math.max(1f, living.getMaxHealth());
         float percent = health / maxHealth;
 
         if (percent <= 0.2) {

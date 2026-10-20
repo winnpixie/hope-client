@@ -61,9 +61,9 @@ public class AutoAttack extends Module {
         return ((this.players.getValue() && EntityHelper.isOtherPlayer(entity) && !AntiBot.isBot((EntityPlayer) entity))
                 || (this.hostiles.getValue() && EntityHelper.isHostile(entity))
                 || (this.animals.getValue() && EntityHelper.isAnimal(entity))
-                || (this.passive.getValue() && EntityHelper.isPassive(entity))
+                || (this.passive.getValue() && EntityHelper.isPassive(entity)))
                 && (this.invisibles.getValue() || !entity.isInvisible())
-                && EntityHelper.hasHeartBeat(entity))
+                && EntityHelper.hasHeartBeat(entity)
                 && (attackFriends.getValue() || Client.FRIEND_MANAGER.find(entity.getName()) == null);
     }
 }

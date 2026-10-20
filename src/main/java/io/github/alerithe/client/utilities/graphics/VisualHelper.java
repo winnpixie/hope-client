@@ -55,6 +55,7 @@ public class VisualHelper {
 
             Font notoSans = Font.createFont(Font.TRUETYPE_FONT, fontStream);
             textRenderer = new AWTTextRenderer(notoSans.deriveFont(Font.PLAIN, 18));
+            textRenderer = new AWTTextRenderer(new Font("Helvetica", Font.PLAIN, 18));
         } catch (FontFormatException | IOException ex) {
             ex.printStackTrace();
         } finally {

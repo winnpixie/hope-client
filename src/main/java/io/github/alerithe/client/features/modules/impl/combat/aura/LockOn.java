@@ -14,13 +14,21 @@ public class LockOn extends AuraMode {
 
     @Override
     public void onPreUpdate(EventMoveUpdate.Pre event) {
-        if (module.target != null && !module.qualifies(module.target)) module.target = null;
+        if (module.target != null && !module.qualifies(module.target)) {
+            module.target = null;
+        }
 
-        if (!module.near.isEmpty() && module.target == null) module.target = module.near.get(0);
+        if (!module.near.isEmpty() && module.target == null) {
+            module.target = module.near.get(0);
+        }
 
-        if (module.target == null) return;
-        if (!timer.hasPassed(1000 / MathHelper.getRandomInt(module.minAps.getValue(), module.maxAps.getValue())))
+        if (module.target == null) {
             return;
+        }
+
+        if (!timer.hasPassed(1000 / MathHelper.getRandomInt(module.minAps.getValue(), module.maxAps.getValue()))) {
+            return;
+        }
 
         module.attacking = true;
         timer.reset();

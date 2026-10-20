@@ -11,12 +11,13 @@ public class Creative extends FlightMode {
 
     @Override
     public void onPreUpdate(EventMoveUpdate.Pre event) {
-        EntityHelper.getUser().setSpeed(EntityHelper.getUser().isUserMoving() ? module.moveSpeed.getValue() : 0);
+        double speed = module.moveSpeed.getValue();
+        EntityHelper.getUser().setSpeed(EntityHelper.getUser().isUserMoving() ? speed : 0.0);
 
         if (EntityHelper.getUser().movementInput.jump) {
-            EntityHelper.getUser().motionY = 0.5;
+            EntityHelper.getUser().motionY = speed / 2.0;
         } else if (EntityHelper.getUser().movementInput.sneak) {
-            EntityHelper.getUser().motionY = -0.5;
+            EntityHelper.getUser().motionY = -(speed / 2.0);
         } else {
             EntityHelper.getUser().motionY = 0;
         }
