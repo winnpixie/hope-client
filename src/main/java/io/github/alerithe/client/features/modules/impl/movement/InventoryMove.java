@@ -15,9 +15,9 @@ import org.lwjgl.input.Keyboard;
 
 public class InventoryMove extends Module {
     private final DoubleProperty yawSpeed = new DoubleProperty("YawSpeed", new String[]{"yaw"},
-            5.0, 0.1, 1.0);
+            5.0, 0.1, 10.0);
     private final DoubleProperty pitchSpeed = new DoubleProperty("PitchSpeed", new String[]{"pitch"},
-            5.0, 0.1, 1.0);
+            5.0, 0.1, 10.0);
 
     public InventoryMove() {
         super("InventoryMove", new String[]{"invmove", "screenwalk"}, Type.MOVEMENT);

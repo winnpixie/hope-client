@@ -3,6 +3,7 @@ package io.github.alerithe.client.features.modules.impl.player;
 import io.github.alerithe.client.events.bus.Subscribe;
 import io.github.alerithe.client.events.game.*;
 import io.github.alerithe.client.features.modules.Module;
+import io.github.alerithe.client.features.properties.impl.DoubleProperty;
 import io.github.alerithe.client.utilities.EntityHelper;
 import io.github.alerithe.client.utilities.GameHelper;
 import io.github.alerithe.client.utilities.WorldHelper;
@@ -11,6 +12,8 @@ import net.minecraft.network.play.client.*;
 import net.minecraft.network.play.server.S08PacketPlayerPosLook;
 
 public class Freecam extends Module {
+    private final DoubleProperty speed = new DoubleProperty("Speed", new String[0], 2.0, 1.0, 10.0);
+
     private EntityOtherPlayerMP clone;
 
     public Freecam() {
@@ -30,7 +33,7 @@ public class Freecam extends Module {
 
     @Override
     public void onDisable() {
-        EntityHelper.getUser().setSpeed(0);
+        EntityHelper.getUser().setSpeed(0.0);
 
         EntityHelper.getUser().copyLocationAndAnglesFrom(clone);
         EntityHelper.getUser().rotationYawHead = clone.rotationYawHead;
@@ -40,14 +43,24 @@ public class Freecam extends Module {
 
     @Subscribe
     public void onPreUpdate(EventMoveUpdate.Pre event) {
-        EntityHelper.getUser().setSpeed(EntityHelper.getUser().isUserMoving() ? 2 : 0);
+        if (clone != null) {
+            event.setX(clone.posX);
+            event.setY(clone.posY);
+            event.setZ(clone.posZ);
+
+            event.setYaw(clone.rotationYaw);
+            event.setPitch(clone.rotationPitch);
+            event.setOnGround(clone.onGround);
+        }
+
+        EntityHelper.getUser().setSpeed(EntityHelper.getUser().isUserMoving() ? speed.getValue() : 0.0);
 
         if (EntityHelper.getUser().movementInput.jump) {
             EntityHelper.getUser().motionY = 0.75;
         } else if (EntityHelper.getUser().movementInput.sneak) {
             EntityHelper.getUser().motionY = -0.75;
         } else {
-            EntityHelper.getUser().motionY = 0;
+            EntityHelper.getUser().motionY = 0.0;
         }
     }
 
@@ -80,10 +93,14 @@ public class Freecam extends Module {
     @Subscribe
     public void onPacketRead(EventPacket.Read event) {
         // FIXME: Process other entity move packets
-        if (!(event.getPacket() instanceof S08PacketPlayerPosLook)) return;
+        if (!(event.getPacket() instanceof S08PacketPlayerPosLook)) {
+            return;
+        }
 
         S08PacketPlayerPosLook packet = (S08PacketPlayerPosLook) event.getPacket();
-        if (clone == null) return;
+        if (clone == null) {
+            return;
+        }
 
         clone.setPositionAndRotation(packet.getX(), packet.getY(), packet.getZ(), packet.getYaw(), packet.getPitch());
         clone.rotationYawHead = packet.getYaw();
