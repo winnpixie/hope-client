@@ -29,9 +29,9 @@ class ImageBakery {
         Font currentFont = font;
         graphics.setFont(currentFont);
 
-        int length = text.length();
         float x = 0f;
         float y = metrics.getAscent();
+        int length = text.length();
         int next = 0;
         int len = 0;
         for (int i = 0; i < length; i++) {
@@ -108,7 +108,6 @@ class ImageBakery {
         }
     }
 
-    // TODO: Return vanilla color values
     private static Color getColor(char c, Color base) {
         switch (c) {
             case '0':

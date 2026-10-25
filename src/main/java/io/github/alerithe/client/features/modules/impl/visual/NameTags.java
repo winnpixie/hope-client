@@ -14,6 +14,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import org.lwjgl.opengl.GL11;
 
 import java.util.Comparator;
 import java.util.Map;
@@ -85,8 +86,11 @@ public class NameTags extends Module {
             String text = getText(entity);
             float width = VisualHelper.TXT.getStringWidth(text);
 
-            VisualHelper.GFX.drawBorderedSquare(x - (width / 2f) - 1f, y - 1f, width + 2f, VisualHelper.TXT.getFontHeight() + 2f,
+            // is batching actually better than immediate mode?
+            VisualHelper.GFX_BUFFERED.begin(GL11.GL_TRIANGLE_FAN);
+            VisualHelper.GFX_BUFFERED.drawBorderedSquare(x - (width / 2f) - 1f, y - 1f, width + 2f, VisualHelper.TXT.getFontHeight() + 2f,
                     1f, 0x42000000, 0x42FFFFFF);
+            VisualHelper.GFX_BUFFERED.end();
             VisualHelper.TXT.drawString(text, x - (width / 2f), y, 0xFFFFFFFF);
         }
     }

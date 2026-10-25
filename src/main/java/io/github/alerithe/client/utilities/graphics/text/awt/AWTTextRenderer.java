@@ -106,13 +106,7 @@ public class AWTTextRenderer implements TextRenderer {
         char[] stripped = new char[length];
 
         int len = 0;
-        boolean ctrl = false;
         for (int i = 0; i < length; i++) {
-            if (ctrl) {
-                ctrl = false;
-                continue;
-            }
-
             char ch = str.charAt(i);
             if (ch == '\u00A7' && i + 1 < length) {
                 char c = Character.toLowerCase(str.charAt(i + 1));
@@ -120,7 +114,7 @@ public class AWTTextRenderer implements TextRenderer {
                         || (c >= '0' && c <= '9')
                         || (c >= 'k' && c <= 'o')
                         || c == 'r') {
-                    ctrl = true;
+                    i++;
                     continue;
                 }
             }

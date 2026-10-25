@@ -14,7 +14,16 @@ public class RotationHelper {
     }
 
     public static float getAngleDelta(float to, float from) {
-        return (((to - (from % 360)) + 180f) % 360f) - 180f;
+        float delta = to - from;
+        delta %= 360f;
+
+        if (delta > 180f) {
+            delta -= 360f;
+        } else if (delta < -180f) {
+            delta += 360f;
+        }
+
+        return delta;
     }
 
     public static float[] getRotationToBlock(BlockPos end) {
