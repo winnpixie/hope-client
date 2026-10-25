@@ -42,7 +42,7 @@ public class HUD extends Module {
             -VisualHelper.TXT.getStringWidth(module.getName()));
     private final Comparator<PotionEffect> potionComparator = Comparator.comparingDouble(effect -> {
         Potion potion = Potion.potionTypes[effect.getPotionID()];
-        String text = String.format("%s %s", I18n.format(potion.getName()), formatPotionEffect(effect));
+        String text = I18n.format(potion.getName()) + " " + formatPotionEffect(effect);
 
         return -VisualHelper.TXT.getStringWidth(text);
     });
@@ -89,19 +89,19 @@ public class HUD extends Module {
     }
 
     private void drawInfo(ScaledResolution display) {
-        String text = String.format("\247o%s \247f%s \247r", Client.NAME, Client.BUILD);
+        String text = "\247o" + Client.NAME + " \247f" + Client.BUILD + " \247r";
 
         // FPS
         if (frameRate.getValue()) {
-            text += String.format(" \2477[\247f%d FPS\2477]", Minecraft.getDebugFPS());
+            text += " \2477[\247f" + Minecraft.getDebugFPS() + " FPS\2477]";
         }
 
         // Ping
         if (latency.getValue()) {
-            text += String.format(" \2477[\247f%dms", NetworkHelper.getPing());
+            text += " \2477[\247f" + NetworkHelper.getPing() + "ms";
 
             if (realPing.getValue()) {
-                text += String.format(" : %dms", pongResponseTime);
+                text += " | " + pongResponseTime + "ms";
             }
 
             text += "\2477]";
@@ -134,7 +134,7 @@ public class HUD extends Module {
 
             if (rightClicks.getValue()) {
                 if (leftClicks.getValue()) {
-                    text += " : ";
+                    text += " | ";
                 }
 
                 text += rightTickTimes.size();
@@ -167,7 +167,7 @@ public class HUD extends Module {
             float textWidth = VisualHelper.TXT.getStringWidth(module.getName());
             float x = display.getScaledWidth() - textWidth;
 
-            VisualHelper.GFX.drawSquare(x - 3, y - 2, textWidth + 3, VisualHelper.TXT.getFontHeight() + 3,
+            VisualHelper.GFX.drawSimpleRect(x - 3, y - 2, textWidth + 3, VisualHelper.TXT.getFontHeight() + 3,
                     0x42000000);
 
             VisualHelper.TXT.drawStringWithShadow(module.getName(), x - 1, y, -1);
@@ -204,8 +204,9 @@ public class HUD extends Module {
 
     private String formatPotionEffect(PotionEffect effect) {
         int amp = effect.getAmplifier() + 1;
-        return String.format("\2476%s \2477%s", amp > 0 && amp < 11
-                ? I18n.format("enchantment.level." + amp) : amp, Potion.getDurationString(effect));
+        return "\2476"
+                + ((amp > 0 && amp < 11) ? I18n.format("enchantment.level." + amp) : amp)
+                + " \2477" + Potion.getDurationString(effect);
     }
 
     private void drawPotionEffects(ScaledResolution display) {

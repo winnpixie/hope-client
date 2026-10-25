@@ -24,7 +24,7 @@ public class Profile {
             case OPTIFINE:
                 try {
                     return http.send(http.newRequest()
-                                    .setUrl(String.format("http://s.optifine.net/capes/%s.png", name))
+                                    .setUrl("http://s.optifine.net/capes/" + name + ".png")
                                     .build())
                             .getStatus().getCode() == 200;
                 } catch (HttpException ioe) {

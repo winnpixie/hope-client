@@ -1,7 +1,7 @@
 package io.github.alerithe.client.utilities;
 
+import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.text.DecimalFormat;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class MathHelper {
@@ -26,24 +26,25 @@ public class MathHelper {
         return value < min ? min : value > max ? max : value;
     }
 
+    // Do I really need floor and ceil for doubles?
     public static int floor(float value) {
-        int ivalue = (int) value;
-        return ivalue > value ? ivalue - 1 : ivalue;
+        int n = (int) value;
+        return n > value ? n - 1 : n;
     }
 
     public static long floor(double value) {
-        long lvalue = (long) value;
-        return lvalue > value ? lvalue - 1 : lvalue;
+        long n = (long) value;
+        return n > value ? n - 1 : n;
     }
 
     public static int ceil(float value) {
-        int ivalue = (int) value;
-        return ivalue < value ? ivalue + 1 : ivalue;
+        int n = (int) value;
+        return n < value ? n + 1 : n;
     }
 
     public static long ceil(double value) {
-        long lvalue = (long) value;
-        return lvalue < value ? lvalue + 1 : lvalue;
+        long n = (long) value;
+        return n < value ? n + 1 : n;
     }
 
     // Linear interpolation, https://en.wikipedia.org/wiki/Linear_interpolation
@@ -56,7 +57,7 @@ public class MathHelper {
         return (1.0 - t) * v0 + t * v1;
     }
 
-    public static boolean isInt(String value) {
+    public static boolean isInteger(String value) {
         try {
             Integer.parseInt(value);
             return true;
@@ -66,10 +67,20 @@ public class MathHelper {
         }
     }
 
+    public static boolean isLong(String value) {
+        try {
+            Long.parseLong(value);
+            return true;
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public static boolean isFloat(String value) {
         try {
-            Float.parseFloat(value);
-            return true;
+            float n = Float.parseFloat(value);
+            return !Float.isNaN(n) && !Float.isInfinite(n);
         } catch (NumberFormatException e) {
             e.printStackTrace();
             return false;
@@ -78,39 +89,55 @@ public class MathHelper {
 
     public static boolean isDouble(String value) {
         try {
-            Double.parseDouble(value);
-            return true;
+            double n = Double.parseDouble(value);
+            return !Double.isNaN(n) && !Double.isInfinite(n);
         } catch (NumberFormatException e) {
             e.printStackTrace();
             return false;
         }
     }
 
-    public static float round(float value, int places) {
-        DecimalFormat decFormat = new DecimalFormat();
-        decFormat.setRoundingMode(RoundingMode.HALF_UP);
-        decFormat.setMaximumFractionDigits(places);
-
-        return Float.parseFloat(decFormat.format(value));
+    public static float round(float value, int decimalPlaces) {
+        return new BigDecimal(Float.toString(value))
+                .setScale(decimalPlaces, RoundingMode.HALF_UP)
+                .floatValue();
     }
 
-    public static double round(double value, int places) {
-        DecimalFormat decFormat = new DecimalFormat();
-        decFormat.setRoundingMode(RoundingMode.HALF_UP);
-        decFormat.setMaximumFractionDigits(places);
-
-        return Double.parseDouble(decFormat.format(value));
+    public static double round(double value, int decimalPlaces) {
+        return BigDecimal.valueOf(value)
+                .setScale(decimalPlaces, RoundingMode.HALF_UP)
+                .doubleValue();
     }
 
-    public static int getRandomInt(int min, int max) {
+    public static int randomInt(int min, int max) {
+        if (min >= max) {
+            return min;
+        }
+
         return LOCAL_RANDOM.nextInt(min, max);
     }
 
-    public static float getRandomFloat(float min, float max) {
+    public static long randomLong(long min, long max) {
+        if (min >= max) {
+            return min;
+        }
+
+        return LOCAL_RANDOM.nextLong(min, max);
+    }
+
+    public static float randomFloat(float min, float max) {
+        if (min >= max) {
+            return min;
+        }
+
         return min + (LOCAL_RANDOM.nextFloat() * (max - min));
     }
 
-    public static double getRandomDouble(double min, double max) {
+    public static double randomDouble(double min, double max) {
+        if (min >= max) {
+            return min;
+        }
+
         return LOCAL_RANDOM.nextDouble(min, max);
     }
 }

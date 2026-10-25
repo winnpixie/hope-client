@@ -26,7 +26,7 @@ public class LockOn extends AuraMode {
             return;
         }
 
-        if (!timer.hasPassed(1000 / MathHelper.getRandomInt(module.minAps.getValue(), module.maxAps.getValue()))) {
+        if (!timer.hasPassed(1000 / MathHelper.randomInt(module.minAps.getValue(), module.maxAps.getValue()))) {
             return;
         }
 

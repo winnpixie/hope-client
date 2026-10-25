@@ -3,10 +3,7 @@ package io.github.alerithe.client.features.modules.impl.player;
 import io.github.alerithe.client.events.bus.Subscribe;
 import io.github.alerithe.client.events.game.EventPacket;
 import io.github.alerithe.client.features.modules.Module;
-import io.github.alerithe.client.utilities.EntityHelper;
-import io.github.alerithe.client.utilities.GameHelper;
-import io.github.alerithe.client.utilities.NetworkHelper;
-import io.github.alerithe.client.utilities.WorldHelper;
+import io.github.alerithe.client.utilities.*;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.client.*;
@@ -16,6 +13,7 @@ import java.util.Deque;
 
 public class Blink extends Module {
     private final Deque<Packet<?>> packetDeque = new ArrayDeque<>();
+    private final Stopwatch stopwatch = new Stopwatch();
 
     private EntityOtherPlayerMP clone;
     private long startTime;
@@ -33,7 +31,7 @@ public class Blink extends Module {
         clone.rotationYawHead = EntityHelper.getUser().rotationYawHead;
         WorldHelper.getWorld().addEntityToWorld(clone.getEntityId(), clone);
 
-        startTime = System.currentTimeMillis();
+        stopwatch.reset();
     }
 
     @Override
@@ -46,8 +44,8 @@ public class Blink extends Module {
             NetworkHelper.sendPacket(packetDeque.poll());
         }
 
-        GameHelper.printChatMessage(String.format("%dms elapsed, %d packets captured.",
-                System.currentTimeMillis() - startTime, packetCount));
+        GameHelper.printChatMessage(stopwatch.getElapsed() + "ms elapsed, "
+                + packetCount + " packet(s) captured.");
     }
 
     @Subscribe

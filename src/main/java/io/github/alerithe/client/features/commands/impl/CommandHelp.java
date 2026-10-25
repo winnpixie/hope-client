@@ -23,11 +23,11 @@ public class CommandHelp extends Command {
             Command command = Client.COMMAND_MANAGER.find(args[0]);
 
             if (command != null) {
-                GameHelper.printChatMessage(String.format("\247eHelp for command '%s':", command.getName()));
-                GameHelper.printChatMessage(String.format("Usage: .%s %s", command.getName(), command.getUsage()));
-                GameHelper.printChatMessage(String.format("Aliases: %s", Arrays.toString(command.getAliases())));
+                GameHelper.printChatMessage("\247eHelp for command '" + command.getName() + "':");
+                GameHelper.printChatMessage("Usage: ." + command.getName() + " " + command.getUsage());
+                GameHelper.printChatMessage("Aliases: " + Arrays.toString(command.getAliases()));
                 return;
-            } else if (MathHelper.isInt(args[0])) {
+            } else if (MathHelper.isInteger(args[0])) {
                 page = Integer.parseInt(args[0]);
             } else {
                 GameHelper.printChatMessage(ErrorMessages.INVALID_ARG_TYPE);
@@ -36,14 +36,14 @@ public class CommandHelp extends Command {
         }
 
         int pageCount = MathHelper.ceil(Client.COMMAND_MANAGER.getElements().size() / (float) COMMANDS_PER_PAGE); // 7 COMMANDS PER PAGE
-        GameHelper.printChatMessage(String.format("\247eCommands (Page %d/%d)", page, pageCount));
+        GameHelper.printChatMessage("\247eCommands (Page " + page + "/" + pageCount + ")");
         GameHelper.printChatMessage("\2477<arg> = Required, [arg] = Optional");
         for (int i = 0; i < COMMANDS_PER_PAGE; i++) {
             int idx = i + ((page - 1) * COMMANDS_PER_PAGE);
             if (idx > Client.COMMAND_MANAGER.getElements().size() - 1) break;
 
             Command command = Client.COMMAND_MANAGER.getElements().get(idx);
-            GameHelper.printChatMessage(String.format("\247a> \247r.%s %s", command.getName(), command.getUsage()));
+            GameHelper.printChatMessage("\247a> \247r." + command.getName() + " " + command.getUsage());
         }
     }
 }

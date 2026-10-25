@@ -26,6 +26,6 @@ public class CommandVClip extends Command {
         double distance = Double.parseDouble(args[0]);
         EntityHelper.getUser().setPosition(EntityHelper.getUser().posX, EntityHelper.getUser().posY + distance,
                 EntityHelper.getUser().posZ);
-        GameHelper.printChatMessage(String.format("Teleported %f blocks vertically.", distance));
+        GameHelper.printChatMessage("Teleported " + distance + " block(s) vertically.");
     }
 }

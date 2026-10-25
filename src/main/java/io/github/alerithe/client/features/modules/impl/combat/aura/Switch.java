@@ -28,7 +28,7 @@ public class Switch extends AuraMode {
 
         module.target = module.near.get(index);
 
-        if (!timer.hasPassed(1000 / MathHelper.getRandomInt(module.minAps.getValue(), module.maxAps.getValue())))
+        if (!timer.hasPassed(1000 / MathHelper.randomInt(module.minAps.getValue(), module.maxAps.getValue())))
             return;
 
         module.attacking = true;

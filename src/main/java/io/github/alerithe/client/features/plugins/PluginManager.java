@@ -30,7 +30,7 @@ public class PluginManager extends FeatureManager<Plugin> {
         Client.LOGGER.info("Registered {} plugin(s)", getElements().size());
 
         getElements().forEach(plugin -> {
-            plugin.getLogger().info(() -> String.format("Loading %s v%s", plugin.getName(), plugin.getManifest().getVersion()));
+            plugin.getLogger().info(() -> "Loading " + plugin.getName() + " ver. " + plugin.getManifest().getVersion());
             plugin.onLoad();
         });
     }
@@ -87,7 +87,7 @@ public class PluginManager extends FeatureManager<Plugin> {
     @Override
     public void save() {
         getElements().forEach(plugin -> {
-            plugin.getLogger().info(() -> String.format("Unloading %s", plugin.getName()));
+            plugin.getLogger().info(() -> "Unloading " + plugin.getName());
             plugin.onExit();
 
             try {

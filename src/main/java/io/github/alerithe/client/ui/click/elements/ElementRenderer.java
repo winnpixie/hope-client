@@ -46,7 +46,7 @@ public class ElementRenderer {
         float elementWidth = element.getWidth();
         float elementHeight = element.getHeight();
 
-        VisualHelper.GFX.drawSquare(elementX, elementY, elementWidth, elementHeight, style.getBackgroundColor());
+        VisualHelper.GFX.drawSimpleRect(elementX, elementY, elementWidth, elementHeight, style.getBackgroundColor());
     }
 
     private void drawBorders(BorderStyle style) {
@@ -61,7 +61,7 @@ public class ElementRenderer {
         float borderRight = style.getRight();
 
         if (borderTop > 0) {
-            VisualHelper.GFX.drawSquare(elementX,
+            VisualHelper.GFX.drawSimpleRect(elementX,
                     elementY - borderTop,
                     elementWidth + borderRight,
                     borderTop,
@@ -69,7 +69,7 @@ public class ElementRenderer {
         }
 
         if (borderBottom > 0) {
-            VisualHelper.GFX.drawSquare(elementX - borderLeft,
+            VisualHelper.GFX.drawSimpleRect(elementX - borderLeft,
                     elementY + elementHeight,
                     elementWidth + borderLeft,
                     borderTop,
@@ -77,7 +77,7 @@ public class ElementRenderer {
         }
 
         if (borderLeft > 0) {
-            VisualHelper.GFX.drawSquare(elementX - borderLeft,
+            VisualHelper.GFX.drawSimpleRect(elementX - borderLeft,
                     elementY - borderTop,
                     borderLeft,
                     elementHeight + borderTop,
@@ -85,7 +85,7 @@ public class ElementRenderer {
         }
 
         if (borderRight > 0) {
-            VisualHelper.GFX.drawSquare(elementX + elementWidth,
+            VisualHelper.GFX.drawSimpleRect(elementX + elementWidth,
                     elementY,
                     borderRight,
                     elementHeight + borderBottom,

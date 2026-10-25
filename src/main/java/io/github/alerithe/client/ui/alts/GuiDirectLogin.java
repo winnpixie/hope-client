@@ -27,7 +27,7 @@ public class GuiDirectLogin extends GuiScreen {
 
     @Override
     public void initGui() {
-        message = String.format("\247eCurrent User : \247r%s", mc.getSession().getUsername());
+        message = "\247eCurrent User : \247r" + mc.getSession().getUsername();
         if (mc.getSession().getToken().isEmpty()) {
             message = "[Cracked] " + message;
         }
@@ -88,7 +88,7 @@ public class GuiDirectLogin extends GuiScreen {
                 }
 
                 mc.session = new Session(user, UUID.randomUUID().toString(), "", "legacy");
-                message = String.format("[Cracked] \247eCurrent User : \247r%s", mc.getSession().getUsername());
+                message = "[Cracked] \247eCurrent User : \247r" + mc.getSession().getUsername();
                 break;
             case 3:
                 String text = getClipboardString();
@@ -162,7 +162,7 @@ public class GuiDirectLogin extends GuiScreen {
                 switch (mode) {
                     case 0: // Microsoft OAuth
                         session = SessionHelper.logInWithMicrosoft(deviceCode -> {
-                            message = String.format("\247eVISIT: \247f%s", deviceCode.getDirectVerificationUri());
+                            message = "\247eVISIT: \247f" + deviceCode.getDirectVerificationUri();
 
                             try {
                                 Desktop.getDesktop().browse(URI.create(deviceCode.getDirectVerificationUri()));
@@ -187,9 +187,9 @@ public class GuiDirectLogin extends GuiScreen {
                 }
 
                 mc.session = session;
-                message = String.format("\247eCurrent User : \247r%s", mc.getSession().getUsername());
+                message = "\247eCurrent User : \247r" + mc.getSession().getUsername();
             } catch (Exception e) {
-                message = String.format("\247c%s", e.getMessage());
+                message = "\247c" + e.getMessage();
             }
         }).start();
     }

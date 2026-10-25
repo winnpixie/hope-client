@@ -28,17 +28,17 @@ public class CommandServerInfo extends Command {
         }
 
         GameHelper.printChatMessage("\247eServer Information:");
-        GameHelper.printChatMessage(String.format("Name in List: \247e%s", GameHelper.getGame().getCurrentServerData().serverName));
+        GameHelper.printChatMessage("Name in List: \247e" + GameHelper.getGame().getCurrentServerData().serverName);
 
         String[] ipAndPort = GameHelper.getGame().getCurrentServerData().serverIP.split(":");
         String addr = ipAndPort[0];
         int port = ipAndPort.length > 1 ? Integer.parseInt(ipAndPort[1]) : 25565;
-        GameHelper.printChatMessage(String.format("IP: \247e%s", addr));
-        GameHelper.printChatMessage(String.format("Port: \247e%s", port));
-        GameHelper.printChatMessage(String.format("Brand: \247e%s", EntityHelper.getUser().getClientBrand()));
+        GameHelper.printChatMessage("IP: \247e" + addr);
+        GameHelper.printChatMessage("Port: \247e" + port);
+        GameHelper.printChatMessage("Brand: \247e" + EntityHelper.getUser().getClientBrand());
 
         if (args.length > 0) {
-            GameHelper.printChatMessage(String.format("Searching for plugins that begin with '%s'...", args[0]));
+            GameHelper.printChatMessage("Searching for plugins that begin with '" + args[0] + "'...");
             NetworkHelper.sendPacket(new C14PacketTabComplete("/" + args[0]));
         } else {
             GameHelper.printChatMessage("Searching for plugins...");
@@ -59,7 +59,7 @@ public class CommandServerInfo extends Command {
                         plugins.add(match.substring(1).split(":")[0].toLowerCase());
                     }
 
-                    GameHelper.printChatMessage(String.format("Detected \247a(%d)\247r Plugins", plugins.size()));
+                    GameHelper.printChatMessage("Detected \247a(" + plugins.size() + ")\247r plugin(s)");
                     GameHelper.printChatMessage("\247a" + String.join("\247f, \247a", plugins));
                     Client.EVENT_BUS.unsubscribe(this);
                 } else if (timer.hasPassed(20000)) {

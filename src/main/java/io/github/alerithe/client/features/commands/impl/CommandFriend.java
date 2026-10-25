@@ -24,14 +24,13 @@ public class CommandFriend extends Command {
         switch (args[0].toLowerCase()) {
             case "add": {
                 if (Client.FRIEND_MANAGER.find(args[1]) != null) {
-                    GameHelper.printChatMessage(String.format("\247cFriend '%s' already exists.", args[1]));
+                    GameHelper.printChatMessage("\247cFriend '" + args[1] + "' already exists.");
                     break;
                 }
 
                 Friend friend = new Friend(args[1], args.length > 2 ? args[2] : args[1]);
                 Client.FRIEND_MANAGER.add(friend);
-                GameHelper.printChatMessage(String.format("Added friend '%s' under the alias '%s'.",
-                        friend.getName(), friend.getAliases()[0]));
+                GameHelper.printChatMessage("\247aAdded friend '" + friend.getName() + "' under the alias '" + friend.getAliases()[0] + "'.");
                 break;
             }
             case "remove": {
@@ -42,7 +41,7 @@ public class CommandFriend extends Command {
                 }
 
                 Client.FRIEND_MANAGER.remove(friend);
-                GameHelper.printChatMessage(String.format("Removed friend '%s'.", friend.getName()));
+                GameHelper.printChatMessage("\247cRemoved friend '" + friend.getName() + "'.");
                 break;
             }
             case "rename": {
@@ -59,8 +58,7 @@ public class CommandFriend extends Command {
 
                 String newAlias = args[2];
                 friend.getAliases()[0] = newAlias;
-                GameHelper.printChatMessage(String.format("'%s' is now known as '%s'.", friend.getName(),
-                        newAlias));
+                GameHelper.printChatMessage(friend.getName() + "' is now known as '" + newAlias + "'.");
                 break;
             }
             case "get": {
@@ -70,12 +68,11 @@ public class CommandFriend extends Command {
                     break;
                 }
 
-                GameHelper.printChatMessage(String.format("'%s' is known as '%s'.", friend.getName(),
-                        friend.getAliases()[0]));
+                GameHelper.printChatMessage("'" + friend.getName() + "' is known as '" + friend.getAliases()[0] + "'.");
                 break;
             }
             case "list": {
-                if (!MathHelper.isInt(args[1])) {
+                if (!MathHelper.isInteger(args[1])) {
                     GameHelper.printChatMessage(ErrorMessages.INVALID_ARG_TYPE);
                     break;
                 }
@@ -92,14 +89,14 @@ public class CommandFriend extends Command {
     private void listFriends(int page) {
         int pageCount = (Client.FRIEND_MANAGER.getElements().size() - 1) / COMMANDS_PER_PAGE; // 7 FRIENDS PER PAGE
 
-        GameHelper.printChatMessage(String.format("\247eFriends (Page %d/%d)", page, pageCount + 1));
+        GameHelper.printChatMessage("\247eFriends (Page " + page + "/" + (pageCount + 1) + ")");
         GameHelper.printChatMessage("\2477Name (Alias)");
         for (int i = 0; i < COMMANDS_PER_PAGE; i++) {
             int idx = i + ((page - 1) * COMMANDS_PER_PAGE);
             if (idx > Client.FRIEND_MANAGER.getElements().size() - 1) break;
 
             Friend friend = Client.FRIEND_MANAGER.getElements().get(idx);
-            GameHelper.printChatMessage(String.format("%s (%s)", friend.getName(), friend.getAliases()[0]));
+            GameHelper.printChatMessage(friend.getName() + " (" + friend.getAliases()[0] + ")");
         }
     }
 }

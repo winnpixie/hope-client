@@ -27,6 +27,6 @@ public class CommandBind extends Command {
 
         int key = Keyboard.getKeyIndex(args[1].toUpperCase());
         keybind.setKey(key);
-        GameHelper.printChatMessage(String.format("%s is now bound to %s.", keybind.getName(), Keyboard.getKeyName(key)));
+        GameHelper.printChatMessage(keybind.getName() + " is now bound to " + Keyboard.getKeyName(key) + ".");
     }
 }

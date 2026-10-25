@@ -29,7 +29,7 @@ public class AutoClicker extends Module {
         if (!event.isInGame()) return;
         if (GameHelper.getGame().currentScreen != null) return;
         if (!GameSettings.isKeyDown(GameHelper.getSettings().keyBindAttack)) return;
-        if (!timer.hasPassed(1000 / MathHelper.getRandomInt(minCps.getValue(), maxCps.getValue()))) return;
+        if (!timer.hasPassed(1000 / MathHelper.randomInt(minCps.getValue(), maxCps.getValue()))) return;
 
         timer.reset();
         GameHelper.getGame().clickMouse();

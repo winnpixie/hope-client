@@ -19,7 +19,7 @@ public class Module extends Feature {
         this.type = type;
         this.propertyManager = new PropertyManager();
 
-        propertyManager.setDataPath(Client.MODULE_MANAGER.getDataPath().resolve(String.format("%s.properties", getName())));
+        propertyManager.setDataPath(Client.MODULE_MANAGER.getDataPath().resolve(getName() + ".properties"));
 
         visibility.setValue(type.equals(Type.VISUAL));
         propertyManager.add(visibility);

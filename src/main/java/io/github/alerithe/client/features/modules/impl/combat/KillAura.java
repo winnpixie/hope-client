@@ -86,8 +86,8 @@ public class KillAura extends Module {
             float[] angles = getRotationsToTarget(target);
             float offsetValue = angleOffset.getValue().floatValue();
             event.setYaw(event.getYaw() + RotationHelper.getAngleDelta(angles[0], event.getYaw())
-                    + MathHelper.getRandomFloat(-offsetValue, offsetValue));
-            event.setPitch(MathHelper.clamp(angles[1] + MathHelper.getRandomFloat(-offsetValue, offsetValue), -90f, 90f));
+                    + MathHelper.randomFloat(-offsetValue, offsetValue));
+            event.setPitch(MathHelper.clamp(angles[1] + MathHelper.randomFloat(-offsetValue, offsetValue), -90f, 90f));
 
             if (cameraLock.getValue()) {
                 EntityHelper.getUser().rotationYaw = event.getYaw();

@@ -22,7 +22,7 @@ public class CommandEntityInfo extends Command {
         Entity target = null;
         switch (args[0].toLowerCase()) {
             case "id":
-                if (!MathHelper.isInt(args[1])) {
+                if (!MathHelper.isInteger(args[1])) {
                     GameHelper.printChatMessage(ErrorMessages.INVALID_ARG_TYPE);
                     return;
                 }

@@ -51,7 +51,7 @@ public class AutoAttack extends Module {
             return;
         }
 
-        if (!timer.hasPassed(1000 / MathHelper.getRandomInt(minAps.getValue(), maxAps.getValue()))) return;
+        if (!timer.hasPassed(1000 / MathHelper.randomInt(minAps.getValue(), maxAps.getValue()))) return;
 
         timer.reset();
         GameHelper.getGame().clickMouse();

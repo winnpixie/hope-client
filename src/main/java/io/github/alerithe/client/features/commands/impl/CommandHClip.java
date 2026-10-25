@@ -27,6 +27,6 @@ public class CommandHClip extends Command {
         float[] vector = EntityHelper.getUser().getMoveVector();
         EntityHelper.getUser().setPosition(EntityHelper.getUser().posX + (vector[0] * distance), EntityHelper.getUser().posY,
                 EntityHelper.getUser().posZ + (vector[1] * distance));
-        GameHelper.printChatMessage(String.format("Teleported %f blocks horizontally.", distance));
+        GameHelper.printChatMessage("Teleported " + distance + " block(s) horizontally.");
     }
 }

@@ -196,7 +196,7 @@ public class WindowedUI extends GuiScreen {
 
                 intProp.addChangeListener(prop -> {
                     valueSlider.setValue(prop.getValue());
-                    valueLbl.setText(String.format("%d", prop.getValue()));
+                    valueLbl.setText(Integer.toString(prop.getValue()));
                 });
 
                 propElem = valueSlider;

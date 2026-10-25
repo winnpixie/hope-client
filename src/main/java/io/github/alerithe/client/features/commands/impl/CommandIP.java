@@ -29,10 +29,10 @@ public class CommandIP extends Command {
                 try {
                     InetAddress[] resolutions = InetAddress.getAllByName(target);
 
-                    GameHelper.printChatMessage(String.format("\247e%d address(es) found:", resolutions.length));
+                    GameHelper.printChatMessage("\247e" + resolutions.length + " address(es) found:");
                     for (int i = 0; i < resolutions.length; i++) {
                         InetAddress address = resolutions[i];
-                        GameHelper.printChatMessage(String.format("\247e[%d]\247r %s", i, address.getHostAddress()));
+                        GameHelper.printChatMessage("\247e[" + i + "]\247r " + address.getHostAddress());
                     }
                 } catch (UnknownHostException uhe) {
                     GameHelper.printChatMessage("\247cNo addresses available");
@@ -43,7 +43,7 @@ public class CommandIP extends Command {
             case "query":
                 try {
                     http.sendAsync(http.newRequest()
-                                    .setUrl(String.format("https://ipinfo.io/%s/json", target))
+                                    .setUrl("https://ipinfo.io/" + target + "/json")
                                     .setHeader("User-Agent", "query")
                                     .build())
                             .whenComplete(((response, throwable) -> {
@@ -51,7 +51,7 @@ public class CommandIP extends Command {
                                     return;
                                 }
 
-                                GameHelper.printChatMessage(String.format("\247eQuery for\247r %s", target));
+                                GameHelper.printChatMessage("\247eQuery for\247r " + target);
                                 GameHelper.printChatMessage(response.getBodyAsString());
                             }));
                 } catch (HttpException he) {

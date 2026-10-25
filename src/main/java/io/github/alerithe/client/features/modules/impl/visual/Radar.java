@@ -54,10 +54,10 @@ public class Radar extends Module {
 
         VisualHelper.GFX_BUFFERED.begin(GL11.GL_TRIANGLE_FAN);
 
-        VisualHelper.GFX_BUFFERED.drawSimpleBorderedSquare(rX, rY, rWidth, rHeight, 1f, 0xFF111111, 0xFF333333); // Background
-        VisualHelper.GFX_BUFFERED.drawSquare(rX, centerY - 0.5f, rWidth, 1f, 0xFF333333); // Horizontal Bar
-        VisualHelper.GFX_BUFFERED.drawSquare(centerX - 0.5f, rY, 1f, rHeight, 0xFF333333); // Vertical Bar
-        VisualHelper.GFX_BUFFERED.drawSquare(centerX - 1f, centerY - 1f, 2, 2, 0xFFFFFFFF); // Player
+        VisualHelper.GFX_BUFFERED.drawBorderedSimpleRectFast(rX, rY, rWidth, rHeight, 1f, 0xFF111111, 0xFF333333); // Background
+        VisualHelper.GFX_BUFFERED.drawSimpleRect(rX, centerY - 0.5f, rWidth, 1f, 0xFF333333); // Horizontal Bar
+        VisualHelper.GFX_BUFFERED.drawSimpleRect(centerX - 0.5f, rY, 1f, rHeight, 0xFF333333); // Vertical Bar
+        VisualHelper.GFX_BUFFERED.drawSimpleRect(centerX - 1f, centerY - 1f, 2, 2, 0xFFFFFFFF); // Player
 
         float maxDist = size.getValue() / 2f;
         for (Entity entity : WorldHelper.getWorld().loadedEntityList) {
@@ -84,7 +84,7 @@ public class Radar extends Module {
                             - MathHelper.lerpf(EntityHelper.getUser().prevRotationYawHead,
                             EntityHelper.getUser().rotationYawHead, event.getPartialTicks()));
 
-            VisualHelper.GFX_BUFFERED.drawSquare(
+            VisualHelper.GFX_BUFFERED.drawSimpleRect(
                     centerX - 1f - (vector[0] * dist), centerY - 1f - (vector[1] * dist),
                     2f, 2f,
                     EntityHelper.getColor(entity));

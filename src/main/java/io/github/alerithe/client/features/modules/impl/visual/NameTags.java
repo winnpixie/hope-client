@@ -88,7 +88,7 @@ public class NameTags extends Module {
 
             // is batching actually better than immediate mode?
             VisualHelper.GFX_BUFFERED.begin(GL11.GL_TRIANGLE_FAN);
-            VisualHelper.GFX_BUFFERED.drawBorderedSquare(x - (width / 2f) - 1f, y - 1f, width + 2f, VisualHelper.TXT.getFontHeight() + 2f,
+            VisualHelper.GFX_BUFFERED.drawBorderedSimpleRect(x - (width / 2f) - 1f, y - 1f, width + 2f, VisualHelper.TXT.getFontHeight() + 2f,
                     1f, 0x42000000, 0x42FFFFFF);
             VisualHelper.GFX_BUFFERED.end();
             VisualHelper.TXT.drawString(text, x - (width / 2f), y, 0xFFFFFFFF);
@@ -120,17 +120,17 @@ public class NameTags extends Module {
                 return text;
             }
 
-            return String.format("%s \2477x\247f%d", stack.getDisplayName(), stack.stackSize);
+            return stack.getDisplayName() + " \2477x\247f" + stack.stackSize;
         }
 
         Friend friend = Client.FRIEND_MANAGER.find(entity.getName());
         if (friend != null) {
-            text = String.format("\247b%s", friend.getAliases()[0]);
+            text = "\247b" + friend.getAliases()[0];
         }
 
         if (ping.getValue() && entity instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) entity;
-            text = String.format("\247a%dms\247r %s", NetworkHelper.getPing(player), text);
+            text = "\247a" + NetworkHelper.getPing(player) + "ms\247r " + text;
         }
 
         if (showHealth.getValue() && entity instanceof EntityLivingBase) {

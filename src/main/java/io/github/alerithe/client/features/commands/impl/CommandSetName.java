@@ -24,6 +24,6 @@ public class CommandSetName extends Command {
 
         Session old = GameHelper.getGame().getSession();
         GameHelper.getGame().session = new Session(args[0], old.getPlayerID(), old.getToken(), old.getSessionType().name());
-        GameHelper.printChatMessage(String.format("Your name is now %s, reconnect for it to take effect.", args[0]));
+        GameHelper.printChatMessage("Your name is now " + args[0] + ", reconnect for it to take effect.");
     }
 }

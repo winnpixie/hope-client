@@ -19,7 +19,7 @@ public class PropertyManager extends FeatureManager<Property<?>> {
                 if (property instanceof BooleanProperty) {
                     ((BooleanProperty) property).setValue(Boolean.parseBoolean(data[1]));
                 } else if (property instanceof IntProperty) {
-                    if (MathHelper.isInt(data[1])) ((IntProperty) property).setValue(Integer.parseInt(data[1]));
+                    if (MathHelper.isInteger(data[1])) ((IntProperty) property).setValue(Integer.parseInt(data[1]));
                 } else if (property instanceof DoubleProperty) {
                     if (MathHelper.isDouble(data[1])) ((DoubleProperty) property).setValue(Double.parseDouble(data[1]));
                 } else if (property instanceof ObjectProperty) {

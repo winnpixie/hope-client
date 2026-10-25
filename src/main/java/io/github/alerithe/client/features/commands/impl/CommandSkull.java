@@ -33,6 +33,6 @@ public class CommandSkull extends Command {
         compound.setString("SkullOwner", args[0]);
         stack.setTagCompound(compound);
         NetworkHelper.sendPacket(new C10PacketCreativeInventoryAction(slot, stack));
-        GameHelper.printChatMessage(String.format("Gave you the skull of %s", args[0]));
+        GameHelper.printChatMessage("Gave you the skull of " + args[0]);
     }
 }

@@ -70,9 +70,10 @@ public class Client {
             SPEECH_ENGINE.cleanUp();
         });
 
-        if (!System.getProperty("client.no_tts", "").equalsIgnoreCase("true")) {
-            SPEECH_ENGINE.queue(String.format("Hello, %s. Welcome to %s client, built for Minecraft 1 point 8 point 8",
-                    GameHelper.getGame().getSession().getUsername(), Client.NAME));
+        if (!Boolean.getBoolean("client.no_tts")) {
+            SPEECH_ENGINE.queue("Hello, " + GameHelper.getGame().getSession().getUsername()
+                    + ". Welcome to " + Client.NAME
+                    + " client, built for Minecraft 1 point 8 point 9");
         }
 
         // Debug log-in

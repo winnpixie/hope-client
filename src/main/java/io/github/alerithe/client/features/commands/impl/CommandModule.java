@@ -38,7 +38,7 @@ public class CommandModule extends Command {
         if (property instanceof BooleanProperty) {
             ((BooleanProperty) property).setValue(Boolean.parseBoolean(args[2]));
         } else if (property instanceof IntProperty) {
-            if (MathHelper.isInt(args[2])) ((IntProperty) property).setValue(Integer.parseInt(args[2]));
+            if (MathHelper.isInteger(args[2])) ((IntProperty) property).setValue(Integer.parseInt(args[2]));
         } else if (property instanceof DoubleProperty) {
             if (MathHelper.isDouble(args[2])) ((DoubleProperty) property).setValue(Double.parseDouble(args[2]));
         } else if (property instanceof ObjectProperty) {
@@ -49,6 +49,6 @@ public class CommandModule extends Command {
             ((StringProperty) property).setValue(String.join(" ", Arrays.copyOfRange(args, 2, args.length)));
         }
 
-        GameHelper.printChatMessage(String.format("%s is now %s.", property.getName(), property.getValue().toString()));
+        GameHelper.printChatMessage(property.getName() + " is now " + property.getValue());
     }
 }

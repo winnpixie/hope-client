@@ -16,7 +16,7 @@ public class CommandPlugins extends Command {
     public void execute(String[] args) {
         List<Plugin> plugins = Client.PLUGIN_MANAGER.getElements();
         int pluginCount = plugins.size();
-        GameHelper.printChatMessage(String.format("\247ePlugins (%d)", pluginCount));
+        GameHelper.printChatMessage("\247ePlugins (" + pluginCount + ")");
 
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < pluginCount; i++) {

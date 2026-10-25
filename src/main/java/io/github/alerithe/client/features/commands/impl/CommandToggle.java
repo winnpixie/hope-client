@@ -25,6 +25,6 @@ public class CommandToggle extends Command {
         }
 
         module.toggle();
-        GameHelper.printChatMessage(String.format("%s is now %s.", module.getName(), module.isEnabled() ? "ON" : "OFF"));
+        GameHelper.printChatMessage(module.getName() + " is now " + (module.isEnabled() ? "ON" : "OFF") + ".");
     }
 }

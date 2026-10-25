@@ -9,7 +9,7 @@ import io.github.alerithe.mojang.Profile;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Date;
+import java.time.Instant;
 
 public class CommandWhois extends Command {
     public CommandWhois() {
@@ -39,7 +39,7 @@ public class CommandWhois extends Command {
                 if (entry.changedToAt == 0) {
                     GameHelper.printChatMessage("\247e-\247r " + entry.name + " \247e(original)");
                 } else {
-                    GameHelper.printChatMessage("\247e-\247r " + entry.name + " \247e(" + new Date(entry.changedToAt) + ")");
+                    GameHelper.printChatMessage("\247e-\247r " + entry.name + " \247e(" + Instant.ofEpochMilli(entry.changedToAt) + ")");
                 }
             }
         } catch (Exception e) {
@@ -51,7 +51,7 @@ public class CommandWhois extends Command {
     private boolean hasOptiFineCape(String username) {
         HttpURLConnection conn = null;
         try {
-            conn = (HttpURLConnection) new URL(String.format("http://s.optifine.net/capes/%s.png", username)).openConnection();
+            conn = (HttpURLConnection) new URL("http://s.optifine.net/capes/" + username + ".png").openConnection();
             conn.setUseCaches(false);
 
             return conn.getResponseCode() == 200;

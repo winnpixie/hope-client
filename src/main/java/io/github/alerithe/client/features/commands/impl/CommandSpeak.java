@@ -20,6 +20,6 @@ public class CommandSpeak extends Command {
         String statement = String.join(" ", args);
         Client.SPEECH_ENGINE.queue(statement);
 
-        GameHelper.printChatMessage(String.format("\247eAdded to queue:\247r %s", statement));
+        GameHelper.printChatMessage("\247eAdded to queue:\247r " + statement);
     }
 }

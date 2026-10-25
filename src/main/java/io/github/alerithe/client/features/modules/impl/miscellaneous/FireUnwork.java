@@ -21,7 +21,7 @@ public class FireUnwork extends Module {
         if (!(packet.getStack().getItem() instanceof ItemFirework)) return;
 
         event.setPacket(new C08PacketPlayerBlockPlacement(packet.getPosition(), packet.getPlacedBlockDirection(),
-                packet.getStack(), packet.getPlacedBlockOffsetX() + MathHelper.getRandomInt(-16, 16),
-                packet.getPlacedBlockOffsetY(), packet.getPlacedBlockOffsetZ() + MathHelper.getRandomInt(-16, 16)));
+                packet.getStack(), packet.getPlacedBlockOffsetX() + MathHelper.randomInt(-16, 16),
+                packet.getPlacedBlockOffsetY(), packet.getPlacedBlockOffsetZ() + MathHelper.randomInt(-16, 16)));
     }
 }
